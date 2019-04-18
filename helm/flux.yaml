@@ -1,0 +1,21 @@
+helmOperator:
+  create: true
+  createCRD: false
+  repository: weaveworks/helm-operator
+git:
+  pollInterval: 1m
+registry:
+  pollInterval: 1m
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: spot
+              operator: DoesNotExist
+additionalArgs:
+  - "--connect=ws://fluxcloud"
+memcached:
+  createClusterIP: false
+image:
+  repository: weaveworks/flux

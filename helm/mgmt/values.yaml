@@ -1,0 +1,13 @@
+# Default values for mgmt.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+azure:
+  tenantID: 
+  clientID: required
+  clientSecret: required
+  emailDomain: 
+
+domain: 
+legoEmail: 
+teamName:

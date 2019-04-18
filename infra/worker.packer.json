@@ -1,0 +1,52 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "region": "apt-southeast-2",
+        "cluster_version": "1.12"
+    },
+    "builders": [
+        {
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "type": "amazon-ebs",
+            "region": "ap-southeast-2",
+            "source_ami_filter": {
+                "filters": {
+                    "name": "amazon-eks-node-{{user `cluster_version`}}-v*"
+                },
+                "owners": [
+                    "602401143452"
+                ],
+                "most_recent": true
+            },
+            "instance_type": "t2.micro",
+            "ssh_username": "ec2-user",
+            "ami_name": "eks-node-{{user `cluster_version`}}-{{timestamp}}",
+            "ami_users": [
+                "451924316694",
+                "538673716275"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "pause_before": "30s",
+            "type": "shell",
+            "inline": [
+                "sudo yum update --security -y",
+                "sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm",
+                "curl -O https://inspector-agent.amazonaws.com/linux/latest/install",
+                "sudo bash install"
+            ],
+            "expect_disconnect": true
+        },
+        {
+            "pause_before": "60s",
+            "type": "shell",
+            "inline": [
+                "echo $(sudo apt-get --just-print upgrade | grep -i security | awk '{print $2}' | awk '!seen[$0]++')"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+autoDiscoverAwsRegion: true
+autoDiscoverAwsVpcID: true
+clusterName: dev-eks-datacube
+podAnnotations:
+  iam.amazonaws.com/role: eks-alb

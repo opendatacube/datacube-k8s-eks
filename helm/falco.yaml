@@ -1,0 +1,10 @@
+falco:
+  logLevel: info
+  priority: notice
+  jsonOutput: true
+  programOutput:
+    enabled: false
+    keepAlive: false
+    program: "\"jq '{text: .output}' | curl -d @- -X POST https://hooks.slack.com/services/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\""
+  # remove the default rules file because we overwrite it
+  rulesFile: [/etc/falco/falco_rules.local.yaml, /etc/falco/rules.d]

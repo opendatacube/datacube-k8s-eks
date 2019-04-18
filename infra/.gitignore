@@ -1,0 +1,8 @@
+.terraform
+terraform.tfstate*
+**/*.zip
+aws-auth.yaml
+db-creds.yaml
+cluster_defaults.yaml
+coredns_config.yaml
+*.backup

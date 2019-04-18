@@ -1,0 +1,14 @@
+awsRegion: ap-southeast-2
+cloudProvider: aws
+autoDiscovery:
+  clusterName: dev-eks-datacube
+rbac:
+  create: true
+podAnnotations:
+  iam.amazonaws.com/role: eks-autoscaler
+serviceMonitor:
+  enabled: true
+sslCertPath: /etc/kubernetes/pki/ca.crt
+extraArgs:
+  balance-similar-node-groups: true
+  skip-nodes-with-system-pods: false

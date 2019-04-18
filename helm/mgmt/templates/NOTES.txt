@@ -1,0 +1,5 @@
+Management Plane installed!
+https://dashboard.mgmt.{{ .Values.domain }}
+https://monitor.mgmt.{{ .Values.domain }}
+https://alert.mgmt.{{ .Values.domain }}
+https://prometheus.mgmt.{{ .Values.domain }}

@@ -1,0 +1,14 @@
+global:
+  externalDatabase:
+    create: true
+    # these get overwritten
+    # database:
+    # password:
+    # username:
+setup:
+  dockerArgs: ["/bin/bash", "-c", "cd setup; ./create-db.sh"]
+# don't create anything accidentally
+wms:
+  enabled: false
+data_orchestration:
+  enabled: false
