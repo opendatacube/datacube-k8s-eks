@@ -83,7 +83,7 @@ This will leave a helm chart called `ows` that you can adjust the variables for 
 ## Run index job
 
 ```bash
-make run-index  template=index-job name=nrt"
+make run-index  template=index-job name=index-s3.yaml"
 ```
 
 Will run index job defined by nrt.yaml file in jobs/
