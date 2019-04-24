@@ -1,10 +1,7 @@
 #! /usr/bin/env bash
 
-while getopts ":n:t:" o; do
+while getopts ":t:" o; do
     case "${o}" in
-        n)
-            name=${OPTARG}
-            ;;
         t)
             template=${OPTARG}
             ;;

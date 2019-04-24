@@ -22,7 +22,7 @@ setup-orchestration:
 # use like "make run template=index-job name=nrt"
 run-index:
 	@cd jobs; \
-	/usr/bin/env bash ./run-index.sh  -t $(template) -n $(name)
+	/usr/bin/env bash ./run-index.sh  -t $(template)
 
 create-db:
 	@cd jobs; \
