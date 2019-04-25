@@ -11,6 +11,7 @@ for running datacube applications.
 [Helm](https://github.com/kubernetes/helm#install)
 [Terraform](https://www.terraform.io/downloads.html)
 [Packer](https://www.packer.io/downloads.html)
+[AWS CLI](https://aws.amazon.com/cli/)
 
 ## A Publicaly routable Route 53 hosted zone
 This will be used to enable your cluster to talk to itself, and for automatic assignment of application DNS entries.
