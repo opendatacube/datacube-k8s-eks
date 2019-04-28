@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: geoscienceaustralia/dea-kops
+    steps:
+      - checkout
+      - run:
+          name: Lint Terraform for cluster
+          command: tflint --var-file workspaces/$WORKSPACE/terraform.tfvars
+          environment:
+            WORKSPACE: datakube-dev
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
