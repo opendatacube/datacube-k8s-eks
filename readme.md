@@ -1,68 +1,18 @@
-# DataKube
+# Datacube Kubernetes EKS
 
-This repository will build and manage a production scale kubernetes cluster
+This repository will build and manage a production scale kubernetes cluster using the AWS EKS engine
 for running datacube applications.
 
 ---
 
 # Requirements
 
-[Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-[Helm](https://github.com/kubernetes/helm#install)
-[Terraform](https://www.terraform.io/downloads.html)
-[Packer](https://www.packer.io/downloads.html)
-
-## A Publicaly routable Route 53 hosted zone
-This will be used to enable your cluster to talk to itself, and for automatic assignment of application DNS entries.
-
-## A service account
-```bash
-aws iam create-group --group-name kops
-
-aws iam create-group --group-name kops-full
-
-aws iam create-group --group-name kops-custom
-
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonRoute53FullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/IAMFullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonVPCFullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonRDSFullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/CloudFrontFullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAccess --group-name kops-full
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonSSMFullAccess  --group-name kops-full
-
-aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly --group-name kops
-
-DOCUMENT="{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "kms:Decrypt",
-                "kms:Encrypt"
-            ],
-            "Resource": "arn:aws:kms:*:*:key/*"
-        }
-    ]
-}"
-
-aws iam create-policy --policy-name KMS_Encrypt_Decrypt --description Encrypt and Decrypt using any KMS Key --policy-document $DOCUMENT
-
-aws iam attach-group-policy --policy-arn arn:aws:iam::$ACCOUNT_ID:policy/KMS_Encrypt_Decrypt --group-name kops-custom
-
-aws iam create-user --user-name kops
-
-aws iam add-user-to-group --user-name kops --group-name kops-full
-aws iam add-user-to-group --user-name kops --group-name kops
-aws iam add-user-to-group --user-name kops --group-name kops-custom
-
-aws iam create-access-key --user-name kops
-```
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Helm](https://github.com/kubernetes/helm#install)
+- [Terraform](https://www.terraform.io/downloads.html)
+- [Packer](https://www.packer.io/downloads.html)
+- A Publicaly routable Route 53 hosted zone
+    This will be used to enable your cluster to talk to itself, and for automatic assignment of application DNS entries.
 
 ---
 
