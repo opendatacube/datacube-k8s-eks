@@ -5,7 +5,7 @@
 This repository will build and manage a production scale kubernetes cluster using the AWS EKS engine
 for running datacube applications.
 
-[![circleci](https://circleci.com/gh/opendatacube/datacube-k8s-eks.svg?style=shield&circle-token=:circle-ci-badge-token)](https://circleci.com/gh/opendatacube/datacube-k8s-eks/tree/master)
+[![Master](https://circleci.com/gh/opendatacube/datacube-k8s-eks/tree/master.svg?style=shield)](https://circleci.com/gh/opendatacube/datacube-k8s-eks/tree/master)
 
 ---
 
