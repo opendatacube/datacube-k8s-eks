@@ -1,7 +1,11 @@
 # Datacube Kubernetes EKS
 
+:warning: This is still a work in progress and doesn't have an official release :warning:
+
 This repository will build and manage a production scale kubernetes cluster using the AWS EKS engine
 for running datacube applications.
+
+[![circleci](https://circleci.com/gh/opendatacube/datacube-k8s-eks.svg?style=shield&circle-token=:circle-ci-badge-token)(https://circleci.com/gh/opendatacube/datacube-k8s-eks/tree/master)
 
 ---
 
@@ -12,8 +16,8 @@ for running datacube applications.
 - [Terraform](https://www.terraform.io/downloads.html)
 - [Packer](https://www.packer.io/downloads.html)
 - [AWS CLI](https://aws.amazon.com/cli/)
-- A Publicaly routable Route 53 hosted zone
-    This will be used to enable your cluster to talk to itself, and for automatic assignment of application DNS entries.
+- [A Public Route53 Hosted Zone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingHostedZone.html)
+  - This will be used to enable your cluster to talk to itself, and for automatic assignment of application DNS entries.
 
 ---
 
