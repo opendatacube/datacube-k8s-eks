@@ -80,7 +80,7 @@ elif [ "$current_nodegroup" == "green" ] || [ "$current_nodegroup" == "blue" ];t
     -var "$current_nodegroup$suffix=$current_image"
 
     # Configure local kubernetes config
-    terraform output kubeconfig > ~/.kube/config-eks
+    terraform output kubeconfig > "$HOME/.kube/config-eks"
     terraform output cluster_defaults > cluster_defaults.yaml
 
     export OLD_KUBECONFIG=$KUBECONFIG
@@ -152,6 +152,9 @@ elif [ "$current_nodegroup" == "green" ] || [ "$current_nodegroup" == "blue" ];t
     new_nodegroup=`terraform output current_nodegroup`
 
     echo "Info: Worker patching successful, current node_group is now $new_nodegroup"
+
+    echo "setting kubeconfig to previous"
+    KUBECONFIG=$OLD_KUBECONFIG
 else
     echo "Error: I'm not sure what you want me to do"
     exit 1
