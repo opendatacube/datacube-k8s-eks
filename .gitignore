@@ -1,2 +1,11 @@
 tools/
 testing/
+infra/secrets.yaml
+./secrets.yaml
+*.pem
+*.crt
+*.key
+.DS_Store
+*.tgz
+requirements.lock
+clair-scan.json
