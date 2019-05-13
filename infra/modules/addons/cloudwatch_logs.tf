@@ -12,7 +12,7 @@ variable "cw_log_retention" {
 
 resource "aws_cloudwatch_log_group" "datakube" {
   count             = "${var.cloudwatch_logs_enabled}"
-  name              = "${var.cw_log_group}"
+  name              = "${var.cluster_name}-${var.cw_log_group}"
   retention_in_days = "${var.cw_log_retention}"
 
   tags {
@@ -25,7 +25,7 @@ resource "aws_cloudwatch_log_group" "datakube" {
 # Fluentd
 resource "aws_iam_role" "fluentd" {
   count = "${var.cloudwatch_logs_enabled}"
-  name  = "eks-fluentd"
+  name  = "${var.cluster_name}-fluentd"
 
   assume_role_policy = <<EOF
 {
@@ -54,7 +54,7 @@ EOF
 
 resource "aws_iam_role_policy" "fluentd" {
   count = "${var.cloudwatch_logs_enabled}"
-  name  = "fluentd"
+  name  = "${var.cluster_name}-fluentd"
   role  = "${aws_iam_role.fluentd.id}"
 
   policy = <<EOF

@@ -7,7 +7,7 @@ variable "alb_ingress_enabled" {
 
 resource "aws_iam_role" "alb" {
   count = "${var.alb_ingress_enabled}"
-  name  = "eks-alb"
+  name  = "${var.cluster_name}-alb"
 
   assume_role_policy = <<EOF
 {
@@ -36,7 +36,7 @@ EOF
 
 resource "aws_iam_role_policy" "alb" {
   count = "${var.alb_ingress_enabled}"
-  name  = "alb"
+  name  = "${var.cluster_name}-alb"
   role  = "${aws_iam_role.alb.id}"
 
   policy = <<EOF

@@ -7,7 +7,7 @@ variable "cluster_autoscaler_enabled" {
 
 resource "aws_iam_role" "autoscaler" {
   count = "${var.cluster_autoscaler_enabled}"
-  name  = "eks-autoscaler"
+  name  = "${var.cluster_name}-autoscaler"
 
   assume_role_policy = <<EOF
 {
@@ -36,7 +36,7 @@ EOF
 
 resource "aws_iam_role_policy" "autoscaler" {
   count = "${var.cluster_autoscaler_enabled}"
-  name  = "autoscaler"
+  name  = "${var.cluster_name}-autoscaler"
   role  = "${aws_iam_role.autoscaler.id}"
 
   policy = <<EOF

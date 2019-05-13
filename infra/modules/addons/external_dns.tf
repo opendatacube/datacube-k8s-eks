@@ -7,7 +7,7 @@ variable "external_dns_enabled" {
 
 resource "aws_iam_role" "external_dns" {
   count = "${var.external_dns_enabled}"
-  name  = "eks-external-dns"
+  name  = "${var.cluster_name}-external-dns"
 
   assume_role_policy = <<EOF
 {
@@ -36,7 +36,7 @@ EOF
 
 resource "aws_iam_role_policy" "external_dns" {
   count = "${var.external_dns_enabled}"
-  name  = "external-dns"
+  name  = "${var.cluster_name}-external-dns"
   role  = "${aws_iam_role.external_dns.id}"
 
   policy = <<EOF

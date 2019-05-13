@@ -5,7 +5,7 @@
 # Create a subnet group and rds
 
 resource "aws_db_subnet_group" "default" {
-  name       = "db"
+  name       = "${var.cluster}-db"
   subnet_ids = ["${var.database_subnet_group}"]
 
   tags {

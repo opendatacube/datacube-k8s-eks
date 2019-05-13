@@ -7,7 +7,7 @@ variable "datacube_wps_enabled" {
 
 resource "aws_iam_role" "wps" {
   count = "${var.datacube_wps_enabled}"
-  name  = "eks-wps"
+  name  = "${var.cluster_name}-wps"
 
   assume_role_policy = <<EOF
 {
@@ -36,7 +36,7 @@ EOF
 
 resource "aws_iam_role_policy" "wps" {
   count = "${var.datacube_wps_enabled}"
-  name  = "wps"
+  name  = "${var.cluster_name}-wps"
   role  = "${aws_iam_role.wps.id}"
 
   policy = <<EOF

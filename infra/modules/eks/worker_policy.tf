@@ -18,7 +18,7 @@ POLICY
 }
 
 resource "aws_iam_policy" "eks-kube2iam" {
-  name        = "eks-kube2iam"
+  name        = "${var.cluster_name}-kube2iam"
   path        = "/"
   description = "Enables Kube2iam to assume roles"
 
@@ -59,6 +59,6 @@ resource "aws_iam_role_policy_attachment" "eks-node-AmazonEC2ContainerRegistryRe
 }
 
 resource "aws_iam_instance_profile" "eks-node" {
-  name = "terraform-eks-eks"
+  name = "terraform-eks-${var.cluster_name}"
   role = "${aws_iam_role.eks-node.name}"
 }
