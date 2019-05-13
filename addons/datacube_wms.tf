@@ -1,13 +1,9 @@
 # ======================================
-# External DNS
+# WMS
 
-variable "external_dns_enabled" {
-  default = false
-}
-
-resource "aws_iam_role" "external_dns" {
-  count = "${var.external_dns_enabled}"
-  name  = "${var.cluster_name}-external-dns"
+resource "aws_iam_role" "wms" {
+  count = "${var.datacube_wms_enabled}"
+  name  = "${var.cluster_name}-wms"
 
   assume_role_policy = <<EOF
 {
@@ -34,10 +30,10 @@ resource "aws_iam_role" "external_dns" {
 EOF
 }
 
-resource "aws_iam_role_policy" "external_dns" {
-  count = "${var.external_dns_enabled}"
-  name  = "${var.cluster_name}-external-dns"
-  role  = "${aws_iam_role.external_dns.id}"
+resource "aws_iam_role_policy" "wms" {
+  count = "${var.datacube_wms_enabled}"
+  name  = "${var.cluster_name}-wms"
+  role  = "${aws_iam_role.wms.id}"
 
   policy = <<EOF
 {
@@ -45,21 +41,23 @@ resource "aws_iam_role_policy" "external_dns" {
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets"
-      ],
+      "Action": ["S3:ListBucket"],
       "Resource": [
-        "arn:aws:route53:::hostedzone/*"
+        "arn:aws:s3:::dea-public-data"
       ]
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "route53:ListHostedZones",
-        "route53:ListResourceRecordSets"
-      ],
+      "Action": ["S3:GetObject"],
       "Resource": [
-        "*"
+        "arn:aws:s3:::dea-public-data/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:*"],
+      "Resource": [
+        "arn:aws:s3:::datacube-index-dump/*"
       ]
     }
   ]

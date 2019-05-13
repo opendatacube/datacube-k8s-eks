@@ -1,13 +1,9 @@
 # ======================================
-# WMS
+# WPS
 
-variable "datacube_wms_enabled" {
-  default = false
-}
-
-resource "aws_iam_role" "wms" {
-  count = "${var.datacube_wms_enabled}"
-  name  = "${var.cluster_name}-wms"
+resource "aws_iam_role" "wps" {
+  count = "${var.datacube_wps_enabled}"
+  name  = "${var.cluster_name}-wps"
 
   assume_role_policy = <<EOF
 {
@@ -34,10 +30,10 @@ resource "aws_iam_role" "wms" {
 EOF
 }
 
-resource "aws_iam_role_policy" "wms" {
-  count = "${var.datacube_wms_enabled}"
-  name  = "${var.cluster_name}-wms"
-  role  = "${aws_iam_role.wms.id}"
+resource "aws_iam_role_policy" "wps" {
+  count = "${var.datacube_wps_enabled}"
+  name  = "${var.cluster_name}-wps"
+  role  = "${aws_iam_role.wps.id}"
 
   policy = <<EOF
 {
@@ -59,9 +55,16 @@ resource "aws_iam_role_policy" "wms" {
     },
     {
       "Effect": "Allow",
-      "Action": ["s3:*"],
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObjectAcl",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObjectAcl"
+      ],
       "Resource": [
-        "arn:aws:s3:::datacube-index-dump/*"
+        "arn:aws:s3:::dea-wps-results",
+        "arn:aws:s3:::dea-wps-results/*"
       ]
     }
   ]

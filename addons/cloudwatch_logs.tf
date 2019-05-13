@@ -1,19 +1,18 @@
-variable "cloudwatch_logs_enabled" {
-  default = false
-}
+resource "kubernetes_namespace" "fluentd" {
+  count = "${var.cloudwatch_logs_enabled ? 1 : 0}"
+  metadata {
+    name = "fluentd"
 
-variable "cw_log_group" {
-  default = "datacube"
-}
-
-variable "cw_log_retention" {
-  default = 90
+    labels {
+        managed-by = "Terraform"
+    }
+  }
 }
 
 resource "aws_cloudwatch_log_group" "datakube" {
-  count             = "${var.cloudwatch_logs_enabled}"
-  name              = "${var.cluster_name}-${var.cw_log_group}"
-  retention_in_days = "${var.cw_log_retention}"
+  count             = "${var.cloudwatch_logs_enabled ? 1 : 0}"
+  name              = "${var.cluster_name}-${var.cloudwatch_log_group}"
+  retention_in_days = "${var.cloudwatch_log_retention}"
 
   tags {
     cluster = "${var.cluster_name}"
@@ -23,8 +22,40 @@ resource "aws_cloudwatch_log_group" "datakube" {
 
 # ======================================
 # Fluentd
+
+
+resource "helm_release" "fluentd-cloudwatch" {
+  count      = "${var.cloudwatch_logs_enabled ? 1 : 0}"
+  name       = "fluentd-cloudwatch"
+  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  chart      = "fluentd-cloudwatch"
+  namespace  = "fluentd"
+
+  values = [
+    "${file("${path.module}/config/fluentd-cloudwatch.yaml")}",
+  ]
+
+  set {
+    name = "awsRole"
+    value = "${var.cluster_name}-fluentd"
+  }
+
+  set {
+    name = "logGroupName"
+    value = "${var.cluster_name}"
+  }
+
+  set {
+    name = "awsRegion"
+    value = "${data.aws_region.current.name}"
+  }
+
+  # Uses kube2iam for credentials
+  depends_on = ["helm_release.kube2iam", "aws_iam_role.fluentd", "aws_iam_role_policy.fluentd", "kubernetes_namespace.fluentd"]
+}
+
 resource "aws_iam_role" "fluentd" {
-  count = "${var.cloudwatch_logs_enabled}"
+  count = "${var.cloudwatch_logs_enabled ? 1 : 0}"
   name  = "${var.cluster_name}-fluentd"
 
   assume_role_policy = <<EOF

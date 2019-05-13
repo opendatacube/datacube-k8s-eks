@@ -9,10 +9,6 @@ admin_access_CIDRs = {
   "Everywhere" = "0.0.0.0/0"
 }
 
-users = [
-  "user/tbutler",
-]
-
 # Data Orchestration
 bucket = "dea-public-data"
 
@@ -21,7 +17,7 @@ services = ["ows"]
 topic_arn = "arn:aws:sns:ap-southeast-2:538673716275:DEANewData"
 
 # Cloudfront CDN
-cloudfront_enabled = false
+cloudfront_enabled = true
 
 cached_app_domain = "services"
 

@@ -109,15 +109,3 @@ module "db" {
   cluster   = "${var.cluster_name}"
   workspace = "${terraform.workspace}"
 }
-
-module "addons" {
-  source                     = "modules/addons"
-  cluster_name               = "${var.cluster_name}"
-  owner                      = "owner"
-  alb_ingress_enabled        = "${var.addon_alb_ingress_enabled}"
-  cloudwatch_logs_enabled    = "${var.addon_cloudwatch_logging_enabled}"
-  cluster_autoscaler_enabled = "${var.addon_cluster_autoscaler_enabled}"
-  datacube_wms_enabled       = "${var.addon_datacube_wms_enabled}"
-  datacube_wps_enabled       = "${var.addon_datacube_wps_enabled}"
-  external_dns_enabled       = "${var.addon_external_dns_enabled}"
-}

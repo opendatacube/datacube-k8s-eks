@@ -1,13 +1,9 @@
 # ======================================
-# WPS
+# External DNS
 
-variable "datacube_wps_enabled" {
-  default = false
-}
-
-resource "aws_iam_role" "wps" {
-  count = "${var.datacube_wps_enabled}"
-  name  = "${var.cluster_name}-wps"
+resource "aws_iam_role" "external_dns" {
+  count = "${var.external_dns_enabled}"
+  name  = "${var.cluster_name}-external-dns"
 
   assume_role_policy = <<EOF
 {
@@ -34,10 +30,10 @@ resource "aws_iam_role" "wps" {
 EOF
 }
 
-resource "aws_iam_role_policy" "wps" {
-  count = "${var.datacube_wps_enabled}"
-  name  = "${var.cluster_name}-wps"
-  role  = "${aws_iam_role.wps.id}"
+resource "aws_iam_role_policy" "external_dns" {
+  count = "${var.external_dns_enabled}"
+  name  = "${var.cluster_name}-external-dns"
+  role  = "${aws_iam_role.external_dns.id}"
 
   policy = <<EOF
 {
@@ -45,30 +41,21 @@ resource "aws_iam_role_policy" "wps" {
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": ["S3:ListBucket"],
+      "Action": [
+        "route53:ChangeResourceRecordSets"
+      ],
       "Resource": [
-        "arn:aws:s3:::dea-public-data"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["S3:GetObject"],
-      "Resource": [
-        "arn:aws:s3:::dea-public-data/*"
+        "arn:aws:route53:::hostedzone/*"
       ]
     },
     {
       "Effect": "Allow",
       "Action": [
-        "s3:PutObject",
-        "s3:GetObjectAcl",
-        "s3:GetObject",
-        "s3:ListBucket",
-        "s3:PutObjectAcl"
+        "route53:ListHostedZones",
+        "route53:ListResourceRecordSets"
       ],
       "Resource": [
-        "arn:aws:s3:::dea-wps-results",
-        "arn:aws:s3:::dea-wps-results/*"
+        "*"
       ]
     }
   ]

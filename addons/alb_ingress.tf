@@ -1,12 +1,44 @@
 # ======================================
 # ALB Ingress controller
 
-variable "alb_ingress_enabled" {
-  default = false
+resource "kubernetes_namespace" "ingress-controller" {
+  count = "${var.alb_ingress_enabled ? 1 : 0}"
+  metadata {
+    name = "ingress-controller"
+
+    labels {
+        managed-by = "Terraform"
+    }
+  }
+}
+
+resource "helm_release" "alb-ingress" {
+  count      = "${var.alb_ingress_enabled ? 1 : 0}"
+  name       = "alb-ingress"
+  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  chart      = "aws-alb-ingress-controller"
+  namespace  = "ingress-controller"
+
+  values = [
+    "${file("${path.module}/config/alb-ingress.yaml")}",
+  ]
+
+  set {
+    name  = "clusterName"
+    value = "${var.cluster_name}"
+  }
+
+  set {
+    name = "podAnnotations.iam\\.amazonaws\\.com/role"
+    value = "${var.cluster_name}-alb"
+  }
+
+  # Uses kube2iam for credentials
+  depends_on = ["helm_release.kube2iam", "aws_iam_role.alb", "aws_iam_role_policy.alb", "kubernetes_namespace.ingress-controller"]
 }
 
 resource "aws_iam_role" "alb" {
-  count = "${var.alb_ingress_enabled}"
+  count = "${var.alb_ingress_enabled ? 1 : 0}"
   name  = "${var.cluster_name}-alb"
 
   assume_role_policy = <<EOF
@@ -35,7 +67,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "alb" {
-  count = "${var.alb_ingress_enabled}"
+  count = "${var.alb_ingress_enabled ? 1 : 0}"
   name  = "${var.cluster_name}-alb"
   role  = "${aws_iam_role.alb.id}"
 
