@@ -23,6 +23,12 @@ then
     terraform destroy -var-file="workspaces/$1/terraform.tfvars" \
     -var 'blue_nodes_enabled=0' \
     -var 'green_nodes_enabled=1' \
+    -target=module.blue_nodes \
+    -target=module.green_nodes
+
+    terraform destroy -var-file="workspaces/$1/terraform.tfvars" \
+    -var 'blue_nodes_enabled=0' \
+    -var 'green_nodes_enabled=1'
 #
 # Patch the cluster if it exists
 #
