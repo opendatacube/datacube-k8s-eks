@@ -16,17 +16,27 @@ rm -rf .terraform
 terraform init -backend-config workspaces/$1/backend.cfg
 
 # ask terraform what the current nodegroup is
-current_nodegroup=`terraform output current_nodegroup || ''`
+current_nodegroup=`terraform output current_nodegroup || echo ""`
 
+if [ "$2" == "--destroy" ]
+then
+    terraform destroy -var-file="workspaces/$1/terraform.tfvars" \
+    -var 'blue_nodes_enabled=0' \
+    -var 'green_nodes_enabled=1' \
 #
 # Patch the cluster if it exists
 #
-if [ -z "$current_nodegroup" ] || [ "$2" == "--no-patch" ]; then
+elif [ -z "$current_nodegroup" ] || [ "$2" == "--no-patch" ]; then
     echo "Info: Creating cluster"
 
     #
     # Create the cluster if it doesn't exist
     #
+    terraform apply -auto-approve -input=false -var-file="workspaces/$1/terraform.tfvars" \
+    -var 'blue_nodes_enabled=0' \
+    -var 'green_nodes_enabled=1' \
+    -target=module.eks
+
     terraform apply -auto-approve -input=false -var-file="workspaces/$1/terraform.tfvars" \
     -var 'blue_nodes_enabled=0' \
     -var 'green_nodes_enabled=1'
@@ -35,11 +45,7 @@ if [ -z "$current_nodegroup" ] || [ "$2" == "--no-patch" ]; then
     terraform output kubeconfig > ~/.kube/config-eks
     terraform output cluster_defaults > cluster_defaults.yaml
 
-
-    export OLD_KUBECONFIG=$KUBECONFIG
-    export KUBECONFIG="$HOME/.kube/config-eks"
-    kubectl config get-contexts -o name
-    kubectl config use-context aws
+    aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
 
     # Set up aws-auth
     terraform output config_map_aws_auth > aws-auth.yaml
@@ -56,7 +62,8 @@ if [ -z "$current_nodegroup" ] || [ "$2" == "--no-patch" ]; then
     for pod in "${dns_pods[@]}"
     do
         # Reload without outage
-        kubectl exec -n kube-system $pod -- kill -SIGUSR1 1  
+        kubectl delete -n kube-system pod/$pod
+        sleep 5
     done
 
     helm init --service-account tiller --wait
@@ -83,10 +90,7 @@ elif [ "$current_nodegroup" == "green" ] || [ "$current_nodegroup" == "blue" ];t
     terraform output kubeconfig > "$HOME/.kube/config-eks"
     terraform output cluster_defaults > cluster_defaults.yaml
 
-    export OLD_KUBECONFIG=$KUBECONFIG
-    export KUBECONFIG="$HOME/.kube/config-eks"
-    kubectl config get-contexts -o name
-    kubectl config use-context aws
+    aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
 
     # Remove any existing taints from failed patch runs 
     kubectl taint nodes --all=true key:NoSchedule- || echo "Removed Taints"

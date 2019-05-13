@@ -5,6 +5,10 @@ init:
 	@cd infra; \
 	./deploy.sh $(cluster) --no-patch;
 
+destroy:
+	@cd infra; \
+	./deploy.sh $(cluster) --destroy;
+
 patch:
 	@cd infra; \
 	./deploy.sh $(cluster);
