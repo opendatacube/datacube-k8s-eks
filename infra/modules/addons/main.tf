@@ -15,7 +15,7 @@ data "aws_region" "current" {}
 
 resource "helm_release" "kube2iam" {
   name       = "kube2iam"
-  repository = "{data.helm_repository.stable.metadata.0.name}"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "kube2iam"
   namespace  = "kube-system"
 

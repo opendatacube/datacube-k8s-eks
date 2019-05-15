@@ -17,8 +17,8 @@ resource "kubernetes_namespace" "ingress-controller" {
 
 resource "helm_release" "alb-ingress" {
   name       = "alb-ingress"
-  repository = "{data.helm_repository.incubator.metadata.0.name}"
-  chart      = "alb-ingress"
+  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  chart      = "aws-alb-ingress-controller"
   namespace  = "ingress-controller"
 
   set {

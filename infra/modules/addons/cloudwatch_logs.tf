@@ -37,7 +37,7 @@ resource "aws_cloudwatch_log_group" "datakube" {
 
 resource "helm_release" "fluentd-cloudwatch" {
   name       = "fluentd-cloudwatch"
-  repository = "{data.helm_repository.incubator.metadata.0.name}"
+  repository = "${data.helm_repository.incubator.metadata.0.name}"
   chart      = "fluentd-cloudwatch"
   namespace  = "fluentd"
 

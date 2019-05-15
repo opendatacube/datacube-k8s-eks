@@ -17,7 +17,7 @@ resource "kubernetes_namespace" "cluster-autoscaler" {
 
 resource "helm_release" "cluster_autoscaler" {
   name       = "fluentd-cloudwatch"
-  repository = "{data.helm_repository.stable.metadata.0.name}"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "cluster-autoscaler"
   namespace  = "cluster-autoscaler"
 
