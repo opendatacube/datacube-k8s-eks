@@ -12,14 +12,6 @@ output "current_nodegroup" {
   value = "${var.green_nodes_enabled ? "green" : "blue"}"
 }
 
-output "blue_ami_image_id" {
-  value = "${module.blue_nodes.ami_image_id}"
-}
-
-output "green_ami_image_id" {
-  value = "${module.green_nodes.ami_image_id}"
-}
-
 output "cluster_name" {
   value = "${var.cluster_name}"
 }

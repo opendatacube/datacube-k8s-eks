@@ -68,11 +68,11 @@ variable "default_worker_instance_type" {
   default = "m4.large"
 }
 
-variable "min_nodes" {
+variable "min_nodes_per_az" {
   default = 2
 }
 
-variable "max_nodes" {
+variable "max_nodes_per_az" {
   default = 6
 }
 
@@ -80,11 +80,11 @@ variable "spot_nodes_enabled" {
   default = false
 }
 
-variable "min_spot_nodes" {
+variable "min_spot_nodes_per_az" {
   default = 0
 }
 
-variable "max_spot_nodes" {
+variable "max_spot_nodes_per_az" {
   default = 2
 }
 
@@ -96,11 +96,11 @@ variable "dask_nodes_enabled" {
   default = false
 }
 
-variable "min_dask_spot_nodes" {
+variable "min_dask_spot_nodes_per_az" {
   default = 0
 }
 
-variable "max_dask_spot_nodes" {
+variable "max_dask_spot_nodes_per_az" {
   default = 2
 }
 

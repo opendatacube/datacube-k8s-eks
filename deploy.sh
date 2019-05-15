@@ -11,9 +11,16 @@ if [ -z $1 ]; then
     exit 1
 fi
 
+export WORKSPACE=$1
+
 # ensure we have a clean terraform environment
 rm -rf .terraform
-terraform init -backend-config workspaces/$1/backend.cfg
+terraform init -backend-config workspaces/$WORKSPACE/backend.cfg infra
+
+
+
+
+
 
 # ask terraform what the current nodegroup is
 current_nodegroup=`terraform output current_nodegroup || echo ""`
