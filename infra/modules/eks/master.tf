@@ -4,7 +4,7 @@ resource "aws_eks_cluster" "eks" {
 
   vpc_config {
     security_group_ids = ["${aws_security_group.eks-cluster.id}"]
-    subnet_ids         = ["${var.eks_subnet_ids}"]
+    subnet_ids         = ["${aws_subnet.eks.*.id}"]
   }
 
   depends_on = [
