@@ -5,6 +5,46 @@ variable "alb_ingress_enabled" {
   default = false
 }
 
+resource "kubernetes_namespace" "ingress-controller" {
+  metadata {
+    name = "ingress-controller"
+
+    labels {
+        managed-by = "Terraform"
+    }
+  }
+}
+
+resource "helm_release" "alb-ingress" {
+  name       = "alb-ingress"
+  repository = "{data.helm_repository.incubator.metadata.0.name}"
+  chart      = "alb-ingress"
+  namespace  = "ingress-controller"
+
+  set {
+    name  = "clusterName"
+    value = "${var.cluster_name}"
+  }
+
+  set {
+    name = "podAnnotations.iam\\.amazonaws\\.com/role"
+    value = "${var.cluster_name}-alb"
+  }
+
+  set {
+    name = "autoDiscoverAwsRegion"
+    value = "true"
+  }
+
+  set {
+    name = "autoDiscoverAwsVpcID"
+    value = "true"
+  }
+
+  # Uses kube2iam for credentials
+  depends_on = ["helm_release.kube2iam", "aws_iam_role.alb", "aws_iam_role_policy.alb", "kubernetes_namespace.ingress-controller"]
+}
+
 resource "aws_iam_role" "alb" {
   count = "${var.alb_ingress_enabled}"
   name  = "${var.cluster_name}-alb"

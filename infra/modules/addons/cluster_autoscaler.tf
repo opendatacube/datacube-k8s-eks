@@ -5,6 +5,47 @@ variable "cluster_autoscaler_enabled" {
   default = false
 }
 
+resource "kubernetes_namespace" "cluster-autoscaler" {
+  metadata {
+    name = "cluster-autoscaler"
+
+    labels {
+        managed-by = "Terraform"
+    }
+  }
+}
+
+resource "helm_release" "cluster_autoscaler" {
+  name       = "fluentd-cloudwatch"
+  repository = "{data.helm_repository.stable.metadata.0.name}"
+  chart      = "cluster-autoscaler"
+  namespace  = "cluster-autoscaler"
+
+  values = [
+    "${file("${path.module}/config/autoscaler.yaml")}",
+  ]
+
+
+  set {
+    name = "podAnnotations.iam\\.amazonaws\\.com/role"
+    value = "${var.cluster_name}-autoscaler"
+  }
+
+  set {
+    name = "autoDiscovery.clusterName"
+    value = "${var.cluster_name}"
+  }
+
+  set {
+    name = "awsRegion"
+    value = "${data.aws_region.current.name}"
+  }
+
+  # Uses kube2iam for credentials
+  depends_on = ["helm_release.kube2iam", "aws_iam_role.autoscaler", "aws_iam_role_policy.autoscaler", "kubernetes_namespace.cluster-autoscaler"]
+}
+
+
 resource "aws_iam_role" "autoscaler" {
   count = "${var.cluster_autoscaler_enabled}"
   name  = "${var.cluster_name}-autoscaler"

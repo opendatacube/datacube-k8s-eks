@@ -1,0 +1,14 @@
+image:
+  repository: fluent/fluentd-kubernetes-daemonset
+  tag: v1.3-debian-cloudwatch
+rbac:
+  create: true
+extraVars:
+  - "{ name: FLUENT_UID, value: '0' }"
+resources:
+  limits:
+    cpu: 100m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 200Mi
