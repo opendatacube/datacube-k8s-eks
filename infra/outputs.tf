@@ -8,10 +8,6 @@ output "kubeconfig" {
   sensitive = true
 }
 
-output "current_nodegroup" {
-  value = "${var.green_nodes_enabled ? "green" : "blue"}"
-}
-
 output "cluster_name" {
   value = "${var.cluster_name}"
 }
