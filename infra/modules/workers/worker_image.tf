@@ -29,7 +29,7 @@ USERDATA
 
 resource "aws_launch_configuration" "eks" {
   count                       = "${var.nodes_enabled}"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   iam_instance_profile        = "${var.node_instance_profile}"
   image_id                    = "${local.ami_id}"
   instance_type               = "${var.default_worker_instance_type}"
@@ -59,7 +59,7 @@ resource "aws_launch_template" "spot" {
 
   network_interfaces {
     subnet_id                   = "${var.nodes_subnet_group[count.index]}"
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     security_groups             = ["${var.node_security_group}"]
   }
 
