@@ -1,6 +1,10 @@
 # ======================================
 # WMS
 
+variable "datacube_wms_enabled" {
+  default = false
+}
+
 resource "aws_iam_role" "wms" {
   count = "${var.datacube_wms_enabled}"
   name  = "${var.cluster_name}-wms"

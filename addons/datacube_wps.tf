@@ -1,6 +1,10 @@
 # ======================================
 # WPS
 
+variable "datacube_wps_enabled" {
+  default = false
+}
+
 resource "aws_iam_role" "wps" {
   count = "${var.datacube_wps_enabled}"
   name  = "${var.cluster_name}-wps"

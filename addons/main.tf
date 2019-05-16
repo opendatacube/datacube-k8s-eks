@@ -2,6 +2,8 @@ data "aws_eks_cluster" "eks" {
   name = "${var.cluster_name}"
 }
 
+data "aws_caller_identity" "current" {}
+
 provider "helm" {
   kubernetes {
     config_context = "${data.aws_eks_cluster.eks.arn}"

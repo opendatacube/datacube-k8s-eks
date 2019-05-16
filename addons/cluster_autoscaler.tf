@@ -1,6 +1,10 @@
 # ======================================
 # Autoscaler
 
+variable "cluster_autoscaler_enabled" {
+  default = false
+}
+
 resource "kubernetes_namespace" "cluster-autoscaler" {
   count = "${var.cluster_autoscaler_enabled ? 1 : 0}"
   metadata {

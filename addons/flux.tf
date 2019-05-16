@@ -1,3 +1,34 @@
+# Flux Addon
+# ==========
+
+variable "flux_enabled" {
+  default = false
+}
+
+variable "flux_git_repo_url" {
+  type = "string"
+  description = "URL pointing to the git repository that flux will monitor and commit to"
+  default = "git@github.com:opendatacube/datacube-k8s-eks"
+}
+
+variable "flux_git_branch" {
+  type = "string"
+  description = "Branch of the specified git repository to monitor and commit to"
+  default = "dev"
+}
+
+variable "flux_git_path" {
+  type = "string"
+  description = "Relative path inside specified git repository to search for manifest files"
+  default = ""
+}
+
+variable "flux_git_label" {
+  type = "string"
+  description = "Label prefix that is used to track flux syncing inside the git repository"
+  default = "flux-sync"
+}
+
 resource "kubernetes_namespace" "flux" {
   count = "${var.flux_enabled ? 1 : 0}"
   metadata {

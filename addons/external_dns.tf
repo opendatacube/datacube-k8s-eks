@@ -1,6 +1,10 @@
 # ======================================
 # External DNS
 
+variable "external_dns_enabled" {
+  default = false
+}
+
 resource "aws_iam_role" "external_dns" {
   count = "${var.external_dns_enabled}"
   name  = "${var.cluster_name}-external-dns"

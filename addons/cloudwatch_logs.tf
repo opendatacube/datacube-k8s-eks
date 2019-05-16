@@ -1,3 +1,17 @@
+variable "cloudwatch_logs_enabled" {
+  default = false
+}
+
+variable "cloudwatch_log_group" {
+  default     = "datakube"
+  description = "the name of your log group, will need to match fluentd config"
+}
+
+variable "cloudwatch_log_retention" {
+  default     = 90
+  description = "The number of days to keep logs"
+}
+
 resource "kubernetes_namespace" "fluentd" {
   count = "${var.cloudwatch_logs_enabled ? 1 : 0}"
   metadata {
