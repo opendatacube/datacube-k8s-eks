@@ -17,7 +17,7 @@ module "vpc" {
   name = "${var.cluster_name}-vpc"
   cidr = "${var.vpc_cidr}"
 
-  azs              = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
+  azs              = "${var.availability_zones}"
   public_subnets   = "${var.public_subnet_cidrs}"
   private_subnets  = "${var.private_subnet_cidrs}"
   database_subnets = "${var.database_subnet_cidrs}"

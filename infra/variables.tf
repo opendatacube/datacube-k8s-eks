@@ -193,6 +193,12 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "availability_zones" {
+  type = "list"
+  description = "List of AWS availability zones to create subnets in"
+  default = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
+}
+
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = "list"
