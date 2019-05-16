@@ -34,7 +34,6 @@ module "vpc" {
     "kubernetes.io/role/elb"            = "1"
   }
 
-  # Use nat instances instead
   enable_nat_gateway           = true
   create_database_subnet_group = true
   enable_s3_endpoint           = true
