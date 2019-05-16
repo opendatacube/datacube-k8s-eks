@@ -25,7 +25,6 @@ aws eks --region $(terraform output region) update-kubeconfig --name $(terraform
 
 # Set up aws-auth
 terraform output config_map_aws_auth > aws-auth.yaml
-terraform output database_credentials > db-creds.yaml
 
 kubectl apply -f aws-auth.yaml
 popd
