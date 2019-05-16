@@ -39,6 +39,7 @@ terraform apply -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/t
 
 popd
 pushd infra
+terraform output database_credentials > db-creds.yaml
 
 kubectl apply -f db-creds.yaml
 kubectl apply -f tiller.yaml
