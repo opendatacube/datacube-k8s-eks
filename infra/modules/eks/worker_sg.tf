@@ -12,7 +12,7 @@ resource "aws_security_group" "eks-node" {
 
   tags = "${
     map(
-     "Name", "terraform-eks-eks-node",
+     "Name", "${var.cluster_name}-node",
      "kubernetes.io/cluster/${var.cluster_name}", "owned",
     )
   }"

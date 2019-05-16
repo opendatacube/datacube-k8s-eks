@@ -11,7 +11,7 @@ data "aws_ami" "eks-worker" {
 # EKS currently documents this required userdata for EKS worker nodes to
 # properly configure Kubernetes applications on the EC2 instance.
 # We utilize a Terraform local here to simplify Base64 encoding this
-# information into the AutoScaling Launch Configuration.
+# information into the AutoScaling Launch Template.
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
   # return first non-empty value
@@ -27,15 +27,22 @@ set -o xtrace
 USERDATA
 }
 
-resource "aws_launch_configuration" "eks" {
-  count                       = "${var.nodes_enabled}"
-  associate_public_ip_address = true
-  iam_instance_profile        = "${var.node_instance_profile}"
-  image_id                    = "${local.ami_id}"
-  instance_type               = "${var.default_worker_instance_type}"
-  name_prefix                 = "${var.cluster_name}"
-  security_groups             = ["${var.node_security_group}"]
-  user_data_base64            = "${base64encode(local.eks-node-userdata)}"
+resource "aws_launch_template" "node" {
+  count         = "${local.nodes_enabled * length(var.nodes_subnet_group) }"
+  name_prefix   = "${var.cluster_name}"
+  image_id      = "${data.aws_ami.eks-worker.id}"
+  user_data     = "${base64encode(local.eks-node-userdata)}"
+  instance_type = "${var.default_worker_instance_type}"
+
+  iam_instance_profile {
+    name = "${var.node_instance_profile}"
+  }
+
+  network_interfaces {
+    subnet_id                   = "${var.nodes_subnet_group[count.index]}"
+    associate_public_ip_address = true
+    security_groups             = ["${var.node_security_group}"]
+  }
 
   lifecycle {
     create_before_destroy = true
@@ -43,18 +50,18 @@ resource "aws_launch_configuration" "eks" {
 }
 
 resource "aws_launch_template" "spot" {
-  count       = "${var.nodes_enabled * length(var.nodes_subnet_group) }"
-  name_prefix = "${var.cluster_name}"
-  image_id    = "${data.aws_ami.eks-worker.id}"
-
-  #vpc_security_group_ids = ["${var.node_security_group}"]
-  user_data = "${base64encode(local.eks-node-userdata)}"
-
-  #this will be overwritten later
+  count         = "${local.spot_enabled * length(var.nodes_subnet_group) }"
+  name_prefix   = "${var.cluster_name}"
+  image_id      = "${data.aws_ami.eks-worker.id}"
+  user_data     = "${base64encode(local.eks-node-userdata)}"
   instance_type = "${var.default_worker_instance_type}"
 
   iam_instance_profile {
     name = "${var.node_instance_profile}"
+  }
+
+  instance_market_options {
+    market_type = "spot"
   }
 
   network_interfaces {

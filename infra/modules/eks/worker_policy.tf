@@ -59,6 +59,6 @@ resource "aws_iam_role_policy_attachment" "eks-node-AmazonEC2ContainerRegistryRe
 }
 
 resource "aws_iam_instance_profile" "eks-node" {
-  name = "terraform-eks-${var.cluster_name}"
+  name = "${var.cluster_name}-node"
   role = "${aws_iam_role.eks-node.name}"
 }

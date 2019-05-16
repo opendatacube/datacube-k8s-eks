@@ -9,6 +9,10 @@ admin_access_CIDRs = {
   "Everywhere" = "0.0.0.0/0"
 }
 
+users = [
+  "user/tbutler",
+]
+
 # Data Orchestration
 bucket = "dea-public-data"
 
@@ -17,7 +21,7 @@ services = ["ows"]
 topic_arn = "arn:aws:sns:ap-southeast-2:538673716275:DEANewData"
 
 # Cloudfront CDN
-cloudfront_enabled = true
+cloudfront_enabled = false
 
 cached_app_domain = "services"
 
@@ -29,30 +33,19 @@ cloudfront_log_bucket = "dea-cloudfront-logs-dev.s3.amazonaws.com"
 
 create_certificate = true
 
-# Worker instances - General Node
-default_worker_instance_type = "m4.xlarge"
+# Worker instances
+
+default_worker_instance_type = "m4.large"
+
+spot_nodes_enabled = false
 
 min_nodes_per_az = 1
 
-max_nodes_per_az = 1
+desired_nodes_per_az = 1
 
-# Worker instances - Spot Nodes
-spot_nodes_enabled = true
+max_nodes_per_az = 2
 
-min_spot_nodes_per_az = 0
-
-max_spot_nodes_per_az = 6
-
-max_spot_price = "0.30"
-
-# Worker instances - Dask Nodes
-dask_nodes_enabled = false
-
-min_dask_spot_nodes_per_az = 0
-
-max_dask_spot_nodes_per_az = 6
-
-max_dask_spot_price = "0.30"
+max_spot_price = "0.4"
 
 # Database config
 
