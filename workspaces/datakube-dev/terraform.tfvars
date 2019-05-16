@@ -17,7 +17,7 @@ services = ["ows"]
 topic_arn = "arn:aws:sns:ap-southeast-2:538673716275:DEANewData"
 
 # Cloudfront CDN
-cloudfront_enabled = true
+cloudfront_enabled = false
 
 cached_app_domain = "services"
 
@@ -53,8 +53,10 @@ db_multi_az = false
 
 # Addons - Kubernetes logs to cloudwatch
 
-cloudwatch_logging_enabled = true
+cloudwatch_logs_enabled = true
 
 cloudwatch_log_group = "datakube"
 
 cloudwatch_log_retention = 90
+
+alb_ingress_enabled = true
