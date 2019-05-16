@@ -17,7 +17,6 @@ export WORKSPACE=$1
 pushd infra
 rm -rf .terraform
 terraform init -backend-config ../workspaces/$WORKSPACE/backend.cfg 
-terraform plan -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
 terraform apply -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
 
 # Configure local kubernetes config
@@ -25,7 +24,6 @@ aws eks --region $(terraform output region) update-kubeconfig --name $(terraform
 
 # Set up aws-auth
 terraform output config_map_aws_auth > aws-auth.yaml
-
 kubectl apply -f aws-auth.yaml
 popd
 
@@ -34,14 +32,11 @@ pushd nodes
 rm -rf .terraform
 terraform init -backend-config ../workspaces/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
-terraform plan -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
 terraform apply -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
-
 popd
+
 pushd infra
 terraform output database_credentials > db-creds.yaml
-
 kubectl apply -f db-creds.yaml
 kubectl apply -f tiller.yaml
-
 popd
