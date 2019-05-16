@@ -14,7 +14,7 @@ variable "default_worker_instance_type" {
 }
 
 variable "node_group_name" {
-  default = "green"
+  default = "eks"
 }
 
 variable "nodes_subnet_group" {
@@ -37,11 +37,15 @@ variable "nodes_enabled" {
 }
 
 variable "min_nodes" {
-  default = 2
+  default = 1
+}
+
+variable "desired_nodes" {
+  default = 1
 }
 
 variable "max_nodes" {
-  default = 6
+  default = 2
 }
 
 # Spot Config
@@ -49,31 +53,11 @@ variable "spot_nodes_enabled" {
   default = false
 }
 
-variable "min_spot_nodes" {
-  default = 0
-}
-
-variable "max_spot_nodes" {
-  default = 6
-}
-
 variable "max_spot_price" {
   default = "0.40"
 }
 
-# Dask Config
-variable "dask_nodes_enabled" {
-  default = false
-}
-
-variable "min_dask_spot_nodes" {
-  default = 0
-}
-
-variable "max_dask_spot_nodes" {
-  default = 6
-}
-
-variable "max_dask_spot_price" {
-  default = "0.40"
+locals {
+  nodes_enabled = "${var.spot_nodes_enabled != true ? 1 : 0}"
+  spot_enabled  = "${var.spot_nodes_enabled == true ? 1 : 0}"
 }

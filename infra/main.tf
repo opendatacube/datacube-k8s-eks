@@ -23,15 +23,15 @@ module "vpc" {
   database_subnets = "${var.database_subnet_cidrs}"
 
   private_subnet_tags = {
-    "SubnetType"                        = "Private"
+    "SubnetType"                                = "Private"
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"   = "1"
+    "kubernetes.io/role/internal-elb"           = "1"
   }
 
   public_subnet_tags = {
-    "SubnetType"                        = "Utility"
+    "SubnetType"                                = "Utility"
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"            = "1"
+    "kubernetes.io/role/elb"                    = "1"
   }
 
   enable_nat_gateway           = true
@@ -108,64 +108,6 @@ module "db" {
   owner     = "${var.owner}"
   cluster   = "${var.cluster_name}"
   workspace = "${terraform.workspace}"
-}
-
-module "green_nodes" {
-  source = "modules/workers"
-
-  # Standard variables for each worker group
-  cluster_name          = "${var.cluster_name}"
-  owner                 = "${var.owner}"
-  eks_cluster_version   = "${module.eks.eks_cluster_version}"
-  api_endpoint          = "${module.eks.api_endpoint}"
-  cluster_ca            = "${module.eks.cluster_ca}"
-  nodes_subnet_group    = "${module.vpc.private_subnets}"
-  node_security_group   = "${module.eks.node_security_group}"
-  node_instance_profile = "${module.eks.node_instance_profile}"
-  min_nodes             = "${var.min_nodes}"
-  max_nodes             = "${var.max_nodes}"
-  min_spot_nodes        = "${var.min_spot_nodes}"
-  max_spot_nodes        = "${var.max_spot_nodes}"
-  max_spot_price        = "${var.max_spot_price}"
-  min_dask_spot_nodes   = "${var.min_dask_spot_nodes}"
-  max_dask_spot_nodes   = "${var.max_dask_spot_nodes}"
-  max_dask_spot_price   = "${var.max_dask_spot_price}"
-
-  # Different vars
-  node_group_name    = "green"
-  nodes_enabled      = "${var.green_nodes_enabled}"
-  spot_nodes_enabled = "${local.green_spot_nodes_enabled}"
-  dask_nodes_enabled = "${local.green_dask_nodes_enabled}"
-  ami_image_id       = "${var.green_ami_image_id}"
-}
-
-module "blue_nodes" {
-  source = "modules/workers"
-
-  # Standard variables for each worker group
-  cluster_name          = "${var.cluster_name}"
-  owner                 = "${var.owner}"
-  eks_cluster_version   = "${module.eks.eks_cluster_version}"
-  api_endpoint          = "${module.eks.api_endpoint}"
-  cluster_ca            = "${module.eks.cluster_ca}"
-  nodes_subnet_group    = "${module.vpc.private_subnets}"
-  node_security_group   = "${module.eks.node_security_group}"
-  node_instance_profile = "${module.eks.node_instance_profile}"
-  min_nodes             = "${var.min_nodes}"
-  max_nodes             = "${var.max_nodes}"
-  min_spot_nodes        = "${var.min_spot_nodes}"
-  max_spot_nodes        = "${var.max_spot_nodes}"
-  max_spot_price        = "${var.max_spot_price}"
-  min_dask_spot_nodes   = "${var.min_dask_spot_nodes}"
-  max_dask_spot_nodes   = "${var.max_dask_spot_nodes}"
-  max_dask_spot_price   = "${var.max_dask_spot_price}"
-
-  # Different vars
-  node_group_name    = "blue"
-  nodes_enabled      = "${var.blue_nodes_enabled}"
-  spot_nodes_enabled = "${local.blue_spot_nodes_enabled}"
-  dask_nodes_enabled = "${local.blue_dask_nodes_enabled}"
-  ami_image_id       = "${var.blue_ami_image_id}"
 }
 
 module "addons" {

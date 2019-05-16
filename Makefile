@@ -2,12 +2,10 @@ create-servers:
 	packer build packer/compute.packer.json
 
 init:
-	@cd infra; \
-	./deploy.sh $(cluster) --no-patch;
+	./create.sh $(cluster)
 
 destroy:
-	@cd infra; \
-	./deploy.sh $(cluster) --destroy;
+	./destroy.sh $(cluster)
 
 patch:
 	@cd infra; \

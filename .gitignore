@@ -9,3 +9,5 @@ infra/secrets.yaml
 *.tgz
 requirements.lock
 clair-scan.json
+.terraform
+terraform.tfstate*
