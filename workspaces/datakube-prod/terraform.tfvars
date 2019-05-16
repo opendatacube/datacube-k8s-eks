@@ -5,7 +5,9 @@ owner = "deacepticons"
 
 cluster_name = "dev-eks-datacube"
 
-admin_ip_addresses = "0.0.0.0/0"
+admin_access_CIDRs = {
+  "Everywhere" = "0.0.0.0/0"
+}
 
 # Data Orchestration
 bucket = "dea-public-data"
@@ -25,30 +27,19 @@ custom_aliases = []
 
 cloudfront_log_bucket = "dea-cloudfront-logs-dev.s3.amazonaws.com"
 
-# Worker instances - General Node
+# Worker instances
+
 default_worker_instance_type = "m4.large"
+
+spot_nodes_enabled = false
 
 min_nodes_per_az = 1
 
-max_nodes_per_az = 6
+desired_nodes_per_az = 1
 
-# Worker instances - Spot Nodes
-spot_nodes_enabled = false
+max_nodes_per_az = 2
 
-min_spot_nodes_per_az = 0
-
-max_spot_nodes_per_az = 6
-
-max_spot_price = "0.30"
-
-# Worker instances - Dask Nodes
-dask_nodes_enabled = false
-
-min_dask_spot_nodes_per_az = 0
-
-max_dask_spot_nodes_per_az = 6
-
-max_dask_spot_price = "0.30"
+max_spot_price = "0.4"
 
 # Database config
 

@@ -9,10 +9,6 @@ admin_access_CIDRs = {
   "Everywhere" = "0.0.0.0/0"
 }
 
-users = [
-  "user/tbutler",
-]
-
 # Data Orchestration
 bucket = "dea-public-data"
 
