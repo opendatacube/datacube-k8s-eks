@@ -40,7 +40,7 @@ resource "aws_launch_template" "node" {
 
   network_interfaces {
     subnet_id                   = "${var.nodes_subnet_group[count.index]}"
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     security_groups             = ["${var.node_security_group}"]
   }
 
@@ -66,7 +66,7 @@ resource "aws_launch_template" "spot" {
 
   network_interfaces {
     subnet_id                   = "${var.nodes_subnet_group[count.index]}"
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     security_groups             = ["${var.node_security_group}"]
   }
 
