@@ -15,7 +15,7 @@ data "aws_eks_cluster" "eks" {
 
 data "aws_vpcs" "vpcs" {
   tags = {
-    Name = "${var.cluster_name}-node"
+    Name = "${var.cluster_name}-vpc"
   }
 }
 
@@ -23,7 +23,7 @@ data "aws_subnet_ids" "nodes" {
   vpc_id = "${element(data.aws_vpcs.vpcs.ids, 0)}"
 
   tags = {
-    Name = "${var.cluster_name}-node"
+    SubnetType = "Private"
   }
 }
 
