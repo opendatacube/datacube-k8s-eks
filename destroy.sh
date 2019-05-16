@@ -21,6 +21,8 @@ terraform init -backend-config ../workspaces/$WORKSPACE/backend.cfg
 terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
 terraform destroy -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
 
+popd
+
 # delete worker nodes
 pushd nodes
 rm -rf .terraform

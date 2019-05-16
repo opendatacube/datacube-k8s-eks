@@ -16,7 +16,7 @@ variable "min_nodes_per_az" {
   default = 1
 }
 
-variable "desirede_nodes_per_az" {
+variable "desired_nodes_per_az" {
   default = 1
 }
 
@@ -39,8 +39,8 @@ variable "cluster_name" {}
 
 variable "owner" {
   default = "opendatacube.org"
-variable "region" {
-
 }
+
+variable "region" {
 
 }
