@@ -21,7 +21,6 @@ terraform plan -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars
 terraform apply -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
 
 # Configure local kubernetes config
-terraform output kubeconfig > ~/.kube/config-eks
 aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
 
 # Set up aws-auth
