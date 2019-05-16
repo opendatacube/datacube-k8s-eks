@@ -14,18 +14,35 @@ fi
 export WORKSPACE=$1
 
 # build network and EKS masters
-# rm -rf .terraform
-# terraform init -backend-config workspaces/$WORKSPACE/backend.cfg infra
-# terraform plan -input=false -var-file="workspaces/$1/terraform.tfvars" infra
-# terraform apply -auto-approve -input=false -var-file="workspaces/$1/terraform.tfvars" infra
-
-# build blue worker nodes
-
+pushd infra
 rm -rf .terraform
-terraform init -backend-config workspaces/$WORKSPACE/backend.cfg nodes
+terraform init -backend-config ../workspaces/$WORKSPACE/backend.cfg 
+terraform plan -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
+terraform apply -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
+
+# Configure local kubernetes config
+terraform output kubeconfig > ~/.kube/config-eks
+aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
+
+# Set up aws-auth
+terraform output config_map_aws_auth > aws-auth.yaml
+terraform output database_credentials > db-creds.yaml
+
+kubectl apply -f aws-auth.yaml
+popd
+
+# build worker nodes
+pushd nodes
+rm -rf .terraform
+terraform init -backend-config ../workspaces/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
-terraform plan -input=false -var-file="workspaces/$1/terraform.tfvars" nodes
-terraform apply -auto-approve -input=false -var-file="workspaces/$1/terraform.tfvars" nodes
+terraform plan -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
+terraform apply -auto-approve -input=false -var-file="../workspaces/$WORKSPACE/terraform.tfvars" 
 
+popd
+pushd infra
 
+kubectl apply -f db-creds.yaml
+kubectl apply -f tiller.yaml
 
+popd

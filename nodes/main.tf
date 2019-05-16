@@ -1,3 +1,12 @@
+terraform {
+  required_version = ">= 0.11.0"
+
+  backend "s3" {
+    # Force encryption
+    encrypt = true
+  }
+}
+
 # Find the resources we want to use 
 # that were created as part of the eks stack
 data "aws_eks_cluster" "eks" {
