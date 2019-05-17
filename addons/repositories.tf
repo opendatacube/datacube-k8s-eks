@@ -6,14 +6,44 @@ data "helm_repository" "stable" {
 data "helm_repository" "incubator" {
   name = "incubator"
   url  = "https://kubernetes-charts-incubator.storage.googleapis.com"
+  depends_on = ["null_resource.repo_add_incubator"]
 }
 
 data "helm_repository" "coreos" {
   name = "coreos"
   url  = "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
+  depends_on = ["null_resource.repo_add_coreos"]
 }
 
 data "helm_repository" "weaveworks" {
   name = "weaveworks"
   url  = "https://weaveworks.github.io/flux"
+  depends_on = ["null_resource.repo_add_weaveworks"]
+}
+
+
+# Until patched, Helm must be inited on the client
+resource "null_resource" "helm_init_client" {
+    provisioner "local-exec" {
+      command = "helm init --client-only"
+  }
+}
+
+# Helm repo data sources still require to be added through `helm repo add`
+resource "null_resource" "repo_add_incubator" {
+  provisioner "local-exec" {
+    command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com"
+  }
+}
+
+resource "null_resource" "repo_add_coreos" {
+  provisioner "local-exec" {
+    command = "helm repo add coreos https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
+  }
+}
+
+resource "null_resource" "repo_add_weaveworks" {
+  provisioner "local-exec" {
+    command = "helm repo add weaveworks https://weaveworks.github.io/flux"
+  }
 }

@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 
 provider "helm" {
   kubernetes {
-    config_context = "${data.aws_eks_cluster.eks.arn}"
+    config_context = "${true ? data.aws_eks_cluster.eks.arn : null_resource.helm_init_client.id}"
   }
   install_tiller = "${var.install_tiller}"
   service_account = "${var.tiller_service_account}"
