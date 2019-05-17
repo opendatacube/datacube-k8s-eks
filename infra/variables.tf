@@ -80,41 +80,6 @@ variable "db_multi_az" {
   default = false
 }
 
-# Add-ons
-variable "addon_cloudwatch_logging_enabled" {
-  default = true
-}
-
-variable "addon_cloudwatch_log_group" {
-  default     = "datakube"
-  description = "the name of your log group, will need to match fluentd config"
-}
-
-variable "addon_cloudwatch_log_retention" {
-  default     = 90
-  description = "The number of days to keep logs"
-}
-
-variable "addon_alb_ingress_enabled" {
-  default = true
-}
-
-variable "addon_cluster_autoscaler_enabled" {
-  default = true
-}
-
-variable "addon_datacube_wms_enabled" {
-  default = true
-}
-
-variable "addon_datacube_wps_enabled" {
-  default = true
-}
-
-variable "addon_external_dns_enabled" {
-  default = true
-}
-
 # VPC & subnets
 # ===========
 variable "vpc_cidr" {

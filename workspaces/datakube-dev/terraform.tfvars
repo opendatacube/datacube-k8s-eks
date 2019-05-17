@@ -9,10 +9,6 @@ admin_access_CIDRs = {
   "Everywhere" = "0.0.0.0/0"
 }
 
-users = [
-  "user/tbutler",
-]
-
 # Data Orchestration
 bucket = "dea-public-data"
 
@@ -57,8 +53,10 @@ db_multi_az = false
 
 # Addons - Kubernetes logs to cloudwatch
 
-cloudwatch_logging_enabled = true
+cloudwatch_logs_enabled = true
 
 cloudwatch_log_group = "datakube"
 
 cloudwatch_log_retention = 90
+
+alb_ingress_enabled = true

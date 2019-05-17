@@ -1,0 +1,7 @@
+cloudProvider: aws
+rbac:
+  create: true
+sslCertPath: /etc/kubernetes/pki/ca.crt
+extraArgs:
+  balance-similar-node-groups: true
+  skip-nodes-with-system-pods: false
