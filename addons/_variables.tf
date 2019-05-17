@@ -14,3 +14,7 @@ variable "tiller_service_account" {
   description = "The service account that tiller will use"
   default = "tiller"
 }
+
+variable "region" {
+
+}
