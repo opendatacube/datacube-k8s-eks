@@ -39,8 +39,9 @@ variable "cluster_name" {}
 
 variable "owner" {
   default = "opendatacube.org"
+}
+
 variable "region" {
 
 }
 
-}
