@@ -42,6 +42,7 @@ resource "aws_launch_template" "node" {
     subnet_id                   = "${var.nodes_subnet_group[count.index]}"
     associate_public_ip_address = false
     security_groups             = ["${var.node_security_group}"]
+    delete_on_termination       = true
   }
 
   lifecycle {
@@ -68,6 +69,7 @@ resource "aws_launch_template" "spot" {
     subnet_id                   = "${var.nodes_subnet_group[count.index]}"
     associate_public_ip_address = false
     security_groups             = ["${var.node_security_group}"]
+    delete_on_termination       = true
   }
 
   lifecycle {
