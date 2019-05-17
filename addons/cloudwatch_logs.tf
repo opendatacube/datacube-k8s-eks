@@ -51,7 +51,7 @@ resource "helm_release" "fluentd-cloudwatch" {
 
   set {
     name = "awsRole"
-    value = "${var.cluster_name}-fluentd"
+    value = "${aws_iam_role.fluentd.name}"
   }
 
   set {
