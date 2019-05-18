@@ -2,24 +2,24 @@ create-servers:
 	packer build packer/compute.packer.json
 
 init:
-	./create.sh $(cluster) $(workspaces)
+	./create.sh $(workspace) $(workspaces)
 
 destroy:
-	./destroy.sh $(cluster) $(workspaces)
+	./destroy.sh $(workspace) $(workspaces)
 
 patch:
 	@cd infra; \
-	./deploy.sh $(cluster) $(workspaces);
+	./deploy.sh $(workspace) $(workspaces);
 
 setup:
 	@cd helm; \
-	/bin/bash deploy.sh $(cluster) $(workspaces);
+	/bin/bash deploy.sh $(workspace) $(workspaces);
 	@cd scripts; \
-	/bin/bash ./create-cluster-defaults-secret.sh
+	/bin/bash ./create-workspace-defaults-secret.sh
 
 setup-orchestration:
 	@cd infra/orchestration; \
-	./deploy.sh $(cluster) $(workspaces)
+	./deploy.sh $(workspace) $(workspaces)
 
 # use like "make run template=index-job name=nrt"
 run-index:
@@ -39,4 +39,4 @@ test:
 
 test-infra:
 	@cd infra; \
-	./test.sh $(cluster) $(workspaces)
+	./test.sh $(workspace) $(workspaces)

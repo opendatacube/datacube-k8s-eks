@@ -7,7 +7,7 @@ set -e
 # 
 
 if [ -z $1 ] || [ -z $2 ]; then
-    echo "Error: cluster variable is not set, I don't know which cluster you want to delete"
+    echo "Error: workspace and/or workspaces path variable is not set, I don't know which workspace you want to destroy"
     exit 1
 fi
 

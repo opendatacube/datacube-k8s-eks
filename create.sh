@@ -7,7 +7,7 @@ set -e
 # 
 
 if [ -z $1 ] || [ -z $2 ]; then
-    echo "Error: workspace and/or workspace path variables not set, I don't know which cluster you want to create"
+    echo "Error: workspace and/or workspaces path variables not set, I don't know which workspace you want to create"
     exit 1
 fi
 

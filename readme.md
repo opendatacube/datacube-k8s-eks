@@ -25,9 +25,13 @@ for running datacube applications.
 
 ## Deploy Kubernetes Cluster
 ```bash
-make init cluster=<cluster name>
-make setup cluster=<cluster name>
+make init workspace=<workspace name> workspaces=<workspaces path>
 ```
+## Destroy Kubernetes Cluster
+```bash
+make destroy workspace=<workspace name> workspaces=<workspaces path>
+```
+
 
 ## Create a database
 ```bash
