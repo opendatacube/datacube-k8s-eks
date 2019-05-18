@@ -16,7 +16,7 @@ export WORKSPACESPATH=$2
 
 # build network and EKS masters
 pushd infra
-# rm -rf .terraform
+rm -rf .terraform
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
 
@@ -30,7 +30,7 @@ popd
 
 # build worker nodes
 pushd nodes
-# rm -rf .terraform
+rm -rf .terraform
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
@@ -44,7 +44,7 @@ kubectl apply -f tiller.yaml
 popd
 
 pushd addons
-# rm -rf .terraform
+rm -rf .terraform
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 

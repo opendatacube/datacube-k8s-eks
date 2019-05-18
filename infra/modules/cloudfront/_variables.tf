@@ -64,7 +64,6 @@ variable "enable" {
 }
 
 variable "log_bucket" {
-  default     = "dea-cloudfront-logs.s3.amazonaws.com"
   description = "S3 Bucket to store logs"
 }
 
