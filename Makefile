@@ -9,7 +9,7 @@ destroy:
 
 patch:
 	@cd infra; \
-	./deploy.sh $(workspace) $(workspaces);
+	./deploy.sh $(workspace) $(path);
 
 setup:
 	@cd helm; \
