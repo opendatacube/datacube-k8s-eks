@@ -19,7 +19,7 @@ setup:
 
 setup-orchestration:
 	@cd infra/orchestration; \
-	./deploy.sh $(workspace) $(workspaces)
+	./deploy.sh $(workspace) $(path)
 
 # use like "make run template=index-job name=nrt"
 run-index:
