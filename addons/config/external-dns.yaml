@@ -1,0 +1,32 @@
+## This controls which types of resource external-dns should 'watch' for new
+## DNS entries.
+sources:
+  - service
+  - ingress
+## Limit possible target zones by domain suffixes (optional)
+#         - --domain-filter=mgmt.{{ .Values.domain }}
+#        - --domain-filter=app.{{ .Values.domain }}
+# TODO Both the fixes in this file require an understanding of the mgmt and app domains, host names and certificates being created
+# TODO Fix target domain suffixes
+domainFilters: ["mgmt.easi-eo.solutions","app.easi-eo.solutions","easi-eo.solutions"]
+## The DNS provider where the DNS records will be created (options: aws, google, inmemory, azure, rfc2136 )
+provider: aws
+## Modify how DNS records are sychronized between sources and providers (options: sync, upsert-only )
+# TODO: Change to sync?
+policy: upsert-only
+# Registry to use for ownership (txt or noop)
+registry: "txt"
+# When using the TXT registry, a name that identifies this instance of ExternalDNS
+# TODO Fix owner
+txtOwnerId: "easihub"
+# Create rbac resources
+rbac:
+  ## If true, create & use RBAC resources
+  ##
+  create: true
+  # Beginning with Kubernetes 1.8, the api is stable and v1 can be used.
+  apiVersion: v1
+
+  ## Ignored if rbac.create is true
+  ##
+  serviceAccountName: external-dns

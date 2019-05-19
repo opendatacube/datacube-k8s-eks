@@ -1,8 +1,27 @@
 # ======================================
 # External DNS
-
 variable "external_dns_enabled" {
   default = false
+}
+
+resource "helm_release" "external-dns" {
+    count      = "${var.external_dns_enabled ? 1 : 0}"
+    name       = "external-dns"
+    repository = "${data.helm_repository.stable.metadata.0.name}"
+    chart      = "stable/external-dns"
+    namespace = "ingress-controller"
+
+    values = [
+        "${file("${path.module}/config/external-dns.yaml")}"
+    ]
+
+    set {
+      name = "podAnnotations.iam\\.amazonaws\\.com/role"
+      value = "${var.cluster_name}-external-dns"
+    }
+
+    # Uses kube2iam for credentials
+    depends_on = ["helm_release.kube2iam", "aws_iam_role.external_dns", "aws_iam_role_policy.external_dns", "kubernetes_namespace.ingress-controller"]
 }
 
 resource "aws_iam_role" "external_dns" {
