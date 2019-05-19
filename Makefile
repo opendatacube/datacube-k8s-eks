@@ -5,7 +5,7 @@ create:
 	./create.sh $(workspace) $(path)
 
 destroy:
-	./destroy.sh $(workspace) $(workspaces)
+	./destroy.sh $(workspace) $(path)
 
 patch:
 	@cd infra; \
