@@ -1,6 +1,7 @@
 data "helm_repository" "stable" {
   name = "stable"
   url  = "https://kubernetes-charts.storage.googleapis.com"
+  depends_on = ["null_resource.helm_init_client"]
 }
 
 data "helm_repository" "incubator" {
@@ -28,7 +29,7 @@ resource "null_resource" "helm_init_client" {
       command = "helm init --client-only"
   }
   triggers = {
-    uuid = "$uuid()"
+    uuid = "${uuid()}"
   }
 }
 

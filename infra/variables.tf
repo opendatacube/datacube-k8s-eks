@@ -80,6 +80,11 @@ variable "db_multi_az" {
   default = false
 }
 
+variable "store_db_credentials" {
+  default = false
+  description = "If true, db credentials will be stored in a kubernetes secret"
+}
+
 # VPC & subnets
 # ===========
 variable "vpc_cidr" {

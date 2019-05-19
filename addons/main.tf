@@ -1,3 +1,17 @@
+terraform {
+  required_version = ">= 0.11.0"
+
+  backend "s3" {
+    # Force encryption
+    encrypt = true
+  }
+}
+
+provider "aws" {
+  region      = "${var.region}"
+  max_retries = 10
+}
+
 data "aws_eks_cluster" "eks" {
   name = "${var.cluster_name}"
 }
@@ -24,6 +38,10 @@ resource "helm_release" "kube2iam" {
   repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "kube2iam"
   namespace  = "kube-system"
+
+  values = [
+    "${file("${path.module}/config/kube2iam.yaml")}",
+  ]
 
   set {
     name  = "extraArgs.base-role-arn"
