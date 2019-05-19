@@ -13,7 +13,7 @@ patch:
 
 setup:
 	@cd helm; \
-	/bin/bash deploy.sh $(workspace) $(workspaces);
+	/bin/bash deploy.sh $(workspace) $(path);
 	@cd scripts; \
 	/bin/bash ./create-workspace-defaults-secret.sh
 
