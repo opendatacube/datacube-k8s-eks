@@ -2,7 +2,7 @@ create-servers:
 	packer build packer/compute.packer.json
 
 create:
-	./create.sh $(workspace) $(workspaces)
+	./create.sh $(workspace) $(path)
 
 destroy:
 	./destroy.sh $(workspace) $(workspaces)
