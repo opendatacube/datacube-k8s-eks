@@ -1,11 +1,16 @@
 create-servers:
 	packer build packer/compute.packer.json
 
-create:
-	./create.sh $(workspace) $(path)
+apply:
+	./apply.sh $(workspace) $(path)
 
 destroy:
 	./destroy.sh $(workspace) $(path)
+
+clean-terraform:
+	rm -rf infra/.terraform; \
+	rm -rf nodes/.terraform; \
+	rm -rf addons/.terraform
 
 patch:
 	@cd infra; \
