@@ -16,7 +16,6 @@ module "vpc" {
 
   name = "${var.cluster_name}-vpc"
   cidr = "${var.vpc_cidr}"
-# TODO aws_availability_zones used above, but var.availability_zones is used here. Any reason?
   azs              = "${data.aws_availability_zones.available.names}"
   public_subnets   = "${var.public_subnet_cidrs}"
   private_subnets  = "${var.private_subnet_cidrs}"

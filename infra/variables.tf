@@ -63,13 +63,6 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
-# TODO Replace with terraform data provider that can get the list of availability zones for the selected region
-# variable "availability_zones" {
-#   type = "list"
-#   description = "List of AWS availability zones to create subnets in"
-#   default = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
-# }
-
 # TODO Cloud posse have an terraform method for calculating the subnet ids. Might make life easier.
 # TODO default CIDRS assume 3 availability zones which isn't always true
 variable "public_subnet_cidrs" {
