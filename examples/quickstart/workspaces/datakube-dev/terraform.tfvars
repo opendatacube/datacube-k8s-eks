@@ -10,25 +10,9 @@ admin_access_CIDRs = {
 # Data Orchestration
 bucket = "datakube-data"
 
-services = ["ows"]
-
 topic_arn = "arn:aws:sns:ap-southeast-2:538673716275:DEANewData"
 
-# Cloudfront CDN
-cloudfront_enabled = false
-
-cached_app_domain = "services"
-
-#app_zone = "my.domain.name"
-
-custom_aliases = []
-
-cloudfront_log_bucket = "datakube-cloudfront-logs-dev.s3.amazonaws.com"
-
-create_certificate = true
-
 # Worker instances
-
 default_worker_instance_type = "m4.large"
 
 spot_nodes_enabled = false

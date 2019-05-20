@@ -16,8 +16,8 @@ module "vpc" {
 
   name = "${var.cluster_name}-vpc"
   cidr = "${var.vpc_cidr}"
-
-  azs              = "${var.availability_zones}"
+# TODO aws_availability_zones used above, but var.availability_zones is used here. Any reason?
+  azs              = "${data.aws_availability_zones.available.names}"
   public_subnets   = "${var.public_subnet_cidrs}"
   private_subnets  = "${var.private_subnet_cidrs}"
   database_subnets = "${var.database_subnet_cidrs}"
@@ -56,40 +56,6 @@ module "eks" {
   users              = "${var.users}"
 }
 
-# Hosted zones for apps
-module "mgmt_zone" {
-  source       = "modules/hosted_zone"
-  domain       = "${var.mgmt_domain}"
-  zone         = "${var.app_zone}"
-  owner        = "${var.owner}"
-  cluster_name = "${var.cluster_name}"
-}
-
-module "app_zone" {
-  source       = "modules/hosted_zone"
-  domain       = "${var.app_domain}"
-  zone         = "${var.app_zone}"
-  owner        = "${var.owner}"
-  cluster_name = "${var.cluster_name}"
-}
-
-# Cloudfront for caching
-module "cloudfront" {
-  source                  = "modules/cloudfront"
-  app_domain              = "*.${var.cached_app_domain}"
-  app_zone                = "${var.app_zone}"
-  origin_domain           = "alb.app.${var.app_zone}"
-  origin_id               = "${var.cluster_name}_${terraform.workspace}_origin"
-  origin_protocol_policy  = "http-only"
-  enable_distribution     = true
-  enable                  = "${var.cloudfront_enabled}"
-  log_bucket              = "${var.cloudfront_log_bucket}"
-  log_prefix              = "${var.cluster_name}_${terraform.workspace}"
-  default_allowed_methods = ["GET", "HEAD", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"]
-  custom_aliases          = "${var.custom_aliases}"
-  create_certificate      = "${var.create_certificate}"
-}
-
 # Database
 module "db" {
   source = "modules/database_layer"
@@ -98,8 +64,8 @@ module "db" {
   vpc_id                = "${module.vpc.vpc_id}"
   database_subnet_group = "${module.vpc.database_subnets}"
 
-  dns_name               = "${var.db_dns_name}"
-  zone                   = "${var.db_dns_zone}"
+  hostname               = "${var.db_hostname}"
+  domain_name            = "${var.db_domain_name}"
   db_name                = "${var.db_name}"
   rds_is_multi_az        = "${var.db_multi_az}"
   access_security_groups = ["${module.eks.node_security_group}"]

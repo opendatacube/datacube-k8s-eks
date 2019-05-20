@@ -24,34 +24,10 @@ variable "users" {
   type        = "list"
 }
 
-# Cloudfront Config for apps with CDN Cache
 
-variable "cloudfront_enabled" {
-  default = true
-}
-
-variable "app_domain" {
-  default     = "app"
-  description = "The wildcard domain used to host our apps"
-}
-
-variable "cached_app_domain" {
-  default     = "services"
-  description = "The wildcard domain used to host our apps that will have CDN"
-}
-
-variable "mgmt_domain" {
-  default     = "mgmt"
-  description = "The wildcard domain used to host our apps that will have Authentication"
-}
-
-variable "app_zone" {
-  description = "The hosted zone to create the app domain"
-}
-
-variable "custom_aliases" {
-  type    = "list"
-  default = []
+variable "domain_name" {
+  description = "The domain name to be used by for applications deployed to the cluster and using ingress"
+  type        = "string"
 }
 
 variable "cloudfront_log_bucket" {
@@ -60,15 +36,15 @@ variable "cloudfront_log_bucket" {
 }
 
 variable "create_certificate" {
-  default = true
+  default = false
 }
 
 # Database
-variable "db_dns_name" {
+variable "db_hostname" {
   default = "database"
 }
 
-variable "db_dns_zone" {
+variable "db_domain_name" {
   default = "internal"
 }
 
@@ -87,12 +63,15 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
-variable "availability_zones" {
-  type = "list"
-  description = "List of AWS availability zones to create subnets in"
-  default = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
-}
+# TODO Replace with terraform data provider that can get the list of availability zones for the selected region
+# variable "availability_zones" {
+#   type = "list"
+#   description = "List of AWS availability zones to create subnets in"
+#   default = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
+# }
 
+# TODO Cloud posse have an terraform method for calculating the subnet ids. Might make life easier.
+# TODO default CIDRS assume 3 availability zones which isn't always true
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = "list"

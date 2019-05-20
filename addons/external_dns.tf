@@ -11,14 +11,35 @@ resource "helm_release" "external-dns" {
     chart      = "stable/external-dns"
     namespace = "ingress-controller"
 
-    values = [
-        "${file("${path.module}/config/external-dns.yaml")}"
-    ]
+    values = [<<EOF
+## This controls which types of resource external-dns should 'watch' for new
+## DNS entries.
+sources:
+  - service
+  - ingress
+## Limit possible target zones by domain suffixes (optional)
+domainFilters: ["${var.domain_name}"]
+## The DNS provider where the DNS records will be created (options: aws, google, inmemory, azure, rfc2136 )
+provider: aws
+## Modify how DNS records are sychronized between sources and providers (options: sync, upsert-only )
+policy: sync
+# Registry to use for ownership (txt or noop)
+registry: "txt"
+# When using the TXT registry, a name that identifies this instance of ExternalDNS
+txtOwnerId: "${var.txtOwnerId}"
+# Create rbac resources
+rbac:
+  ## If true, create & use RBAC resources
+  ##
+  create: true
+  # Beginning with Kubernetes 1.8, the api is stable and v1 can be used.
+  apiVersion: v1
 
-    set {
-      name = "podAnnotations.iam\\.amazonaws\\.com/role"
-      value = "${var.cluster_name}-external-dns"
-    }
+  ## Ignored if rbac.create is true
+  ##
+  serviceAccountName: external-dns
+EOF
+    ]
 
     # Uses kube2iam for credentials
     depends_on = ["helm_release.kube2iam", "aws_iam_role.external_dns", "aws_iam_role_policy.external_dns", "kubernetes_namespace.ingress-controller"]
