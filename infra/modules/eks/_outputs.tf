@@ -45,7 +45,3 @@ output "node_role_arn" {
 output "cluster_name" {
   value = "${aws_eks_cluster.eks.name}"
 }
-
-output "config_map_aws_auth" {
-  value = "test"
-}
