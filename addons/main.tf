@@ -1,17 +1,3 @@
-terraform {
-  required_version = ">= 0.11.0"
-
-  backend "s3" {
-    # Force encryption
-    encrypt = true
-  }
-}
-
-provider "aws" {
-  region      = "${var.region}"
-  max_retries = 10
-}
-
 data "aws_eks_cluster" "eks" {
   name = "${var.cluster_name}"
 }
