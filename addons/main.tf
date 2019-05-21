@@ -6,7 +6,8 @@ data "aws_caller_identity" "current" {}
 
 provider "helm" {
   kubernetes {
-    config_context = "${true ? data.aws_eks_cluster.eks.arn : null_resource.helm_init_client.id}"
+#    config_context = "${true ? data.aws_eks_cluster.eks.arn : null_resource.helm_init_client.id}"
+    config_context = "${data.aws_eks_cluster.eks.arn}"
   }
   install_tiller = "${var.install_tiller}"
   service_account = "${kubernetes_service_account.tiller.metadata.0.name}"
@@ -33,6 +34,8 @@ resource "helm_release" "kube2iam" {
     name  = "extraArgs.base-role-arn"
     value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/"
   }
+
+  depends_on = ["kubernetes_service_account.tiller", "kubernetes_cluster_role_binding.tiller_clusterrolebinding"]
 }
 
 resource "kubernetes_service_account" "tiller" {

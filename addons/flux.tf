@@ -71,5 +71,5 @@ resource "helm_release" "flux" {
     value = "${var.flux_git_label}"
   }
 
-  depends_on = ["kubernetes_namespace.flux"] 
+  depends_on = ["kubernetes_service_account.tiller", , "kubernetes_cluster_role_binding.tiller_clusterrolebinding", "kubernetes_namespace.flux"] 
 }
