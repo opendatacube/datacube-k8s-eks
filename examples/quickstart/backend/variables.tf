@@ -4,5 +4,4 @@ variable "region" {
 
 variable "backend_name" {
     description = "The name used for creation of backend resources like the terraform state bucket"
-    default = "datakube-eks"
 }
