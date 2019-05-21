@@ -1,7 +1,5 @@
 # Cluster config
-region = "ap-southeast-2"
-
-owner = "deacepticons"
+owner = "datakube-owner"
 
 cluster_name = "dev-eks-datacube"
 
@@ -10,27 +8,11 @@ admin_access_CIDRs = {
 }
 
 # Data Orchestration
-bucket = "dea-public-data"
-
-services = ["ows"]
+bucket = "datakube-data"
 
 topic_arn = "arn:aws:sns:ap-southeast-2:538673716275:DEANewData"
 
-# Cloudfront CDN
-cloudfront_enabled = false
-
-cached_app_domain = "services"
-
-app_zone = "dev.dea.ga.gov.au"
-
-custom_aliases = []
-
-cloudfront_log_bucket = "dea-cloudfront-logs-dev.s3.amazonaws.com"
-
-create_certificate = true
-
 # Worker instances
-
 default_worker_instance_type = "m4.large"
 
 spot_nodes_enabled = false
@@ -53,7 +35,7 @@ db_multi_az = false
 
 # Addons - Kubernetes logs to cloudwatch
 
-cloudwatch_logs_enabled = true
+cloudwatch_logs_enabled = false
 
 cloudwatch_log_group = "datakube"
 

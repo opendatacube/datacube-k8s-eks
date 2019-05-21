@@ -1,25 +1,30 @@
 create-servers:
 	packer build packer/compute.packer.json
 
-init:
-	./create.sh $(cluster)
+apply:
+	./apply.sh $(workspace) $(path)
 
 destroy:
-	./destroy.sh $(cluster)
+	./destroy.sh $(workspace) $(path)
+
+clean-terraform:
+	rm -rf infra/.terraform; \
+	rm -rf nodes/.terraform; \
+	rm -rf addons/.terraform
 
 patch:
 	@cd infra; \
-	./deploy.sh $(cluster);
+	./deploy.sh $(workspace) $(path);
 
 setup:
 	@cd helm; \
-	/bin/bash deploy.sh $(cluster);
+	/bin/bash deploy.sh $(workspace) $(path);
 	@cd scripts; \
-	/bin/bash ./create-cluster-defaults-secret.sh
+	/bin/bash ./create-workspace-defaults-secret.sh
 
 setup-orchestration:
 	@cd infra/orchestration; \
-	./deploy.sh $(cluster)
+	./deploy.sh $(workspace) $(path)
 
 # use like "make run template=index-job name=nrt"
 run-index:
@@ -39,4 +44,4 @@ test:
 
 test-infra:
 	@cd infra; \
-	./test.sh $(cluster)
+	./test.sh $(workspace) $(workspaces)

@@ -23,11 +23,15 @@ for running datacube applications.
 
 # Deployment steps
 
-## Deploy Kubernetes Cluster
+## Apply changes to Kubernetes Cluster - includes creation
 ```bash
-make init cluster=<cluster name>
-make setup cluster=<cluster name>
+make apply workspace=<workspace name> workspaces=<workspaces path>
 ```
+## Destroy Kubernetes Cluster
+```bash
+make destroy workspace=<workspace name> workspaces=<workspaces path>
+```
+
 
 ## Create a database
 ```bash
