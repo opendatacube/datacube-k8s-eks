@@ -6,7 +6,7 @@ output "db_password" {
   value = "${random_string.password.result}"
 }
 
-output "db_dns" {
+output "db_hostname" {
   value      = "${aws_db_instance.db.address}"
   depends_on = ["aws_db_instance.db"]
 }

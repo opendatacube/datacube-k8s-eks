@@ -85,14 +85,14 @@ variable "db_port_num" {
 # Route53 DNS
 #--------------------------------------------------------------
 
-variable "dns_name" {
+variable "hostname" {
   default     = "database"
   description = "Database url prefix"
 }
 
-variable "zone" {
+variable "domain_name" {
   default     = "internal"
-  description = "Route53 Zone suffix"
+  description = "Route53 Zone domain name suffix"
 }
 
 #--------------------------------------------------------------

@@ -11,20 +11,6 @@ output "region" {
   value = "${var.region}"
 }
 
-output "cluster_defaults" {
-  value = <<EOF
-global:
-  domain: services.${var.app_zone}
-  clusterSecret: ${var.cluster_name}
-  externalDatabase:
-    host: ${module.db.db_dns}
-    port: ${module.db.port}
-    credsFromSecret: ${var.cluster_name}
-EOF
-
-  sensitive = true
-}
-
 output "database_credentials" {
   value = <<EOF
 apiVersion: v1
@@ -49,7 +35,7 @@ data:
     .:53 {
         errors
         health
-        rewrite name database.local ${module.db.db_dns}
+        rewrite name database.local ${module.db.db_hostname}
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           upstream
