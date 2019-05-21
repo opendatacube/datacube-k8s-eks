@@ -26,7 +26,7 @@ policy: sync
 # Registry to use for ownership (txt or noop)
 registry: "txt"
 # When using the TXT registry, a name that identifies this instance of ExternalDNS
-txtOwnerId: "${var.txtOwnerId}"
+txtOwnerId: "${var.txt_owner_id}"
 # Create rbac resources
 rbac:
   ## If true, create & use RBAC resources
