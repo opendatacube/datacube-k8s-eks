@@ -45,3 +45,12 @@ variable "region" {
 
 }
 
+variable "current_node_group" {
+  type = "string"
+  default = "blue"
+}
+
+variable "enabled_groups" {
+  type = "list"
+  default = ["blue"]
+}

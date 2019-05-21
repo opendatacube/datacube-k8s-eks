@@ -28,6 +28,8 @@ popd
 # build worker nodes
 pushd nodes
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
+# this is no longer only 'blue' workers nodes, however maintain the $WORKSPACE-blue for backwards compatibility
+# with older stacks
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
 popd

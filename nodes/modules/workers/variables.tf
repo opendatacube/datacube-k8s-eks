@@ -56,8 +56,3 @@ variable "spot_nodes_enabled" {
 variable "max_spot_price" {
   default = "0.40"
 }
-
-locals {
-  nodes_enabled = "${var.spot_nodes_enabled != true ? 1 : 0}"
-  spot_enabled  = "${var.spot_nodes_enabled == true ? 1 : 0}"
-}
