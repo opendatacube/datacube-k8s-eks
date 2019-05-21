@@ -12,7 +12,7 @@ if [ -z $1 ] || [ -z $2 ]; then
 fi
 
 export WORKSPACE=$1
-export WORKSPACESPATH=$(realpath $2)
+export WORKSPACESPATH=$2
 
 # delete addons
 pushd addons
