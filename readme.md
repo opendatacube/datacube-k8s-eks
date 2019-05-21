@@ -27,6 +27,13 @@ for running datacube applications.
 ```bash
 make apply workspace=<workspace name> workspaces=<workspaces path>
 ```
+
+For example
+
+```bash
+make apply workspace=datakube-dev workspaces=$(pwd)/examples/quickstart/workspaces
+```
+
 ## Destroy Kubernetes Cluster
 ```bash
 make destroy workspace=<workspace name> workspaces=<workspaces path>
