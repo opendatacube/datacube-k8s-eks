@@ -12,7 +12,7 @@ if [ -z $1 ] || [ -z $2 ]; then
 fi
 
 export WORKSPACE=$1
-export WORKSPACESPATH=$2
+export WORKSPACESPATH=$(realpath $2)
 
 # build network and EKS masters
 pushd infra
@@ -30,10 +30,6 @@ pushd nodes
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
-popd
-
-pushd infra
-
 popd
 
 pushd addons

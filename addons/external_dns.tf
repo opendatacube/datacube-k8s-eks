@@ -11,6 +11,11 @@ resource "helm_release" "external-dns" {
     chart      = "stable/external-dns"
     namespace = "ingress-controller"
 
+    set {
+      name = "podAnnotations.iam\\.amazonaws\\.com/role"
+      value = "${var.cluster_name}-external-dns"
+    }
+
     values = [<<EOF
 ## This controls which types of resource external-dns should 'watch' for new
 ## DNS entries.

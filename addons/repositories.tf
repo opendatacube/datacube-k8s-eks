@@ -22,8 +22,7 @@ data "helm_repository" "weaveworks" {
   depends_on = ["null_resource.repo_add_weaveworks"]
 }
 
-
-# Until patched, Helm must be inited on the client
+# Initialize and destroy helm / tiller
 resource "null_resource" "helm_init_client" {
   provisioner "local-exec" {
     command = "helm init --wait --service-account ${kubernetes_cluster_role_binding.tiller_clusterrolebinding.subject.0.name}"
@@ -37,29 +36,29 @@ resource "null_resource" "helm_init_client" {
 }
 
 # Helm repo data sources still require to be added through `helm repo add`
-resource "null_resource" "repo_add_incubator" {
-  provisioner "local-exec" {
-    command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com"
-  }
-  triggers = {
-    id = "${null_resource.helm_init_client.id}"
-  }
-}
+# resource "null_resource" "repo_add_incubator" {
+#   provisioner "local-exec" {
+#     command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com"
+#   }
+#   triggers = {
+#     id = "${null_resource.helm_init_client.id}"
+#   }
+# }
 
-resource "null_resource" "repo_add_coreos" {
-  provisioner "local-exec" {
-    command = "helm repo add coreos https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
-  }
-  triggers = {
-    id = "${null_resource.helm_init_client.id}"
-  }
-}
+# resource "null_resource" "repo_add_coreos" {
+#   provisioner "local-exec" {
+#     command = "helm repo add coreos https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
+#   }
+#   triggers = {
+#     id = "${null_resource.helm_init_client.id}"
+#   }
+# }
 
-resource "null_resource" "repo_add_weaveworks" {
-  provisioner "local-exec" {
-    command = "helm repo add weaveworks https://weaveworks.github.io/flux"
-  }
-  triggers = {
-    id = "${null_resource.helm_init_client.id}"
-  }
-}
+# resource "null_resource" "repo_add_weaveworks" {
+#   provisioner "local-exec" {
+#     command = "helm repo add weaveworks https://weaveworks.github.io/flux"
+#   }
+#   triggers = {
+#     id = "${null_resource.helm_init_client.id}"
+#   }
+# }
