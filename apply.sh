@@ -32,10 +32,6 @@ terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSP
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
 popd
 
-pushd infra
-
-popd
-
 pushd addons
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
