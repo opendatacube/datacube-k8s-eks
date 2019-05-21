@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.11.0"
+}
+
 data "aws_eks_cluster" "eks" {
   name = "${var.cluster_name}"
 }
@@ -8,8 +12,7 @@ provider "helm" {
   kubernetes {
     config_context = "${true ? data.aws_eks_cluster.eks.arn : null_resource.helm_init_client.id}"
   }
-  install_tiller = "${var.install_tiller}"
-  service_account = "${kubernetes_service_account.tiller.metadata.0.name}"
+  install_tiller = false
 }
 
 provider "kubernetes" {

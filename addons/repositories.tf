@@ -25,12 +25,15 @@ data "helm_repository" "weaveworks" {
 
 # Until patched, Helm must be inited on the client
 resource "null_resource" "helm_init_client" {
-    provisioner "local-exec" {
-      command = "helm init --client-only"
+  provisioner "local-exec" {
+    command = "helm init --wait --service-account ${kubernetes_cluster_role_binding.tiller_clusterrolebinding.subject.0.name}"
   }
-  triggers = {
-    uuid = "${uuid()}"
+
+  provisioner "local-exec" {
+    when = "destroy"
+    command = "kubectl delete deployment/tiller-deploy -n kube-system || true"
   }
+
 }
 
 # Helm repo data sources still require to be added through `helm repo add`
