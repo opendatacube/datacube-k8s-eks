@@ -1,30 +1,3 @@
-locals {
-  config_map_aws_auth = <<CONFIGMAPAWSAUTH
-
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: aws-auth
-  namespace: kube-system
-data:
-  mapRoles: |
-    - rolearn: ${aws_iam_role.eks-node.arn}
-      username: system:node:{{EC2PrivateDNSName}}
-      groups:
-        - system:bootstrappers
-        - system:nodes
-    - rolearn: ${aws_iam_role.eks-user.arn}
-      username: cluster-admin
-      groups:
-        - system:masters
-CONFIGMAPAWSAUTH
-}
-
-output "config_map_aws_auth" {
-  value = "${local.config_map_aws_auth}"
-}
-
 output "node_instance_profile" {
   value = "${aws_iam_instance_profile.eks-node.id}"
 }
@@ -33,6 +6,7 @@ output "node_security_group" {
   value = "${aws_security_group.eks-node.id}"
 }
 
+# TODO Commented out, can these be removed now?
 # output "nodes_subnet_group" {
 #   value = "${aws_subnet.eks.*.id}"
 # }
@@ -63,4 +37,12 @@ output "cluster_ca" {
 
 output "user_role_arn" {
   value = "${aws_iam_role.eks-user.arn}"
+}
+
+output "node_role_arn" {
+  value = "${aws_iam_role.eks-node.arn}"
+}
+
+output "cluster_name" {
+  value = "${aws_eks_cluster.eks.name}"
 }

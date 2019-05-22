@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.11.0"
+}
+
 data "aws_eks_cluster" "eks" {
   name = "${var.cluster_name}"
 }
@@ -6,10 +10,10 @@ data "aws_caller_identity" "current" {}
 
 provider "helm" {
   kubernetes {
-    config_context = "${data.aws_eks_cluster.eks.arn}"
+   config_context = "${data.aws_eks_cluster.eks.arn}"
   }
-  install_tiller = "${var.install_tiller}"
-  service_account = "${var.tiller_service_account}"
+  # Tiller is installed on cluster and intialized by null_resource.helm_init_client
+  install_tiller = false
 }
 
 provider "kubernetes" {
@@ -32,5 +36,35 @@ resource "helm_release" "kube2iam" {
   set {
     name  = "extraArgs.base-role-arn"
     value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/"
+  }
+
+  depends_on = ["kubernetes_service_account.tiller",
+                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+                "null_resource.helm_init_client"]
+}
+
+resource "kubernetes_service_account" "tiller" {
+  metadata {
+    name      = "tiller"
+    namespace = "kube-system"
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "tiller_clusterrolebinding" {
+  metadata {
+    name = "tiller-clusterrolebinding"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account.tiller.metadata.0.name}"
+    namespace = "kube-system"
+  }
+
+  role_ref {
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+    api_group = "rbac.authorization.k8s.io"
+
   }
 }

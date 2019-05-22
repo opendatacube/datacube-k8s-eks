@@ -74,3 +74,14 @@ module "db" {
   cluster   = "${var.cluster_name}"
   workspace = "${terraform.workspace}"
 }
+
+module "setup" {
+  source = "modules/setup"
+     
+  cluster_name      = "${module.eks.cluster_name}"
+  region            = "${var.region}"
+  db_username       = "${module.db.db_username}"
+  db_password       = "${module.db.db_password}"
+  node_role_arn     = "${module.eks.node_role_arn}"
+  user_role_arn     = "${module.eks.user_role_arn}"
+}

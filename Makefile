@@ -44,4 +44,4 @@ test:
 
 test-infra:
 	@cd infra; \
-	./test.sh $(workspace) $(workspaces)
+	./test.sh $(workspace) $(path)

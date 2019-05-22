@@ -37,7 +37,13 @@ resource "helm_release" "alb-ingress" {
   }
 
   # Uses kube2iam for credentials
-  depends_on = ["helm_release.kube2iam", "aws_iam_role.alb", "aws_iam_role_policy.alb", "kubernetes_namespace.ingress-controller"]
+  depends_on = ["helm_release.kube2iam",
+                "aws_iam_role.alb",
+                "aws_iam_role_policy.alb",
+                "kubernetes_namespace.ingress-controller",
+                "kubernetes_service_account.tiller",
+                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+                "null_resource.helm_init_client"]
 }
 
 resource "aws_iam_role" "alb" {
