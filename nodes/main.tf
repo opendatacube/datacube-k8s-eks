@@ -64,7 +64,7 @@ module "green" {
   spot_nodes_enabled    = "${local.green_enabled && var.spot_nodes_enabled}"
   max_spot_price        = "${var.max_spot_price}"
   nodes_enabled         = "${local.green_enabled}"
-  desired_nodes         = 1
+  desired_nodes         = "${var.desired_nodes_per_az}"
 }
 
 module "blue" {
@@ -85,5 +85,5 @@ module "blue" {
   ami_image_id          = "${var.ami_image_id}"
   spot_nodes_enabled    = "${local.blue_enabled && var.spot_nodes_enabled}"
   max_spot_price        = "${var.max_spot_price}"
-  desired_nodes         = 1
+  desired_nodes         = "${var.desired_nodes_per_az}"
 }
