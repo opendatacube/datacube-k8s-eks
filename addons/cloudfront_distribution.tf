@@ -30,6 +30,7 @@ variable "cf_certificate_create" {
 }
 
 variable "cf_log_bucket" {
+  default     = ""
   description = "The name of the bucket to store cf logs in"
 }
 
