@@ -1,11 +1,20 @@
 # Worker node config
 
+variable "ami_image_id" {
+  default = ""
+  description = "Overwrites the default ami (latest Amazon EKS)"
+}
+
 variable "node_group_name" {
   default = "eks"
 }
 
 variable "default_worker_instance_type" {
   default = "m4.large"
+}
+
+variable "group_enabled" {
+  default = false
 }
 
 variable "spot_nodes_enabled" {
@@ -28,13 +37,6 @@ variable "max_spot_price" {
   default = "0.40"
 }
 
-variable "ami_image_id" {
-  description = "Overwrites the default ami (latest Amazon EKS)"
-  default     = ""
-}
-
-# Data sources
-
 variable "cluster_name" {}
 
 variable "owner" {
@@ -43,14 +45,4 @@ variable "owner" {
 
 variable "region" {
 
-}
-
-variable "current_node_group" {
-  type = "string"
-  default = "blue"
-}
-
-variable "enabled_groups" {
-  type = "list"
-  default = ["blue"]
 }

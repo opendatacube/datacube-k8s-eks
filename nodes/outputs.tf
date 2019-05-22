@@ -1,3 +1,3 @@
-output "current_node_group" {
-  value = "${var.current_node_group}"
+output "enabled" {
+  value = "${var.group_enabled}"
 }
