@@ -82,20 +82,20 @@ provider "aws" {
 
 resource "aws_acm_certificate" "cert" {
   provider          = "aws.us"
-  count             = "${var.cf_certificate_create * var.cf_create}"
+  count             = "${var.cf_certificate_create * var.cf_enable}"
   domain_name       = "${var.cf_dns_record}.${var.domain_name}"
   validation_method = "DNS"
 }
 
 # Automatically validate the cert using DNS validation
 data "aws_route53_zone" "zone" {
-  count        = "${var.cf_certificate_create * var.cf_create}"
+  count        = "${var.cf_certificate_create * var.cf_enable}"
   name         = "${var.domain_name}"
   private_zone = false
 }
 
 resource "aws_route53_record" "cert_validation" {
-  count   = "${var.cf_certificate_create * var.cf_create}"
+  count   = "${var.cf_certificate_create * var.cf_enable}"
   name    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_type}"
   zone_id = "${data.aws_route53_zone.zone.id}"
@@ -106,14 +106,16 @@ resource "aws_route53_record" "cert_validation" {
 resource "aws_acm_certificate_validation" "cert" {
   provider = "aws.us"
 
-  count                   = "${var.cf_certificate_create * var.cf_create}"
+  count                   = "${var.cf_certificate_create * var.cf_enable}"
   certificate_arn         = "${aws_acm_certificate.cert.arn}"
   validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}"]
 }
 
 locals {
   # set certificate_arn to either the existing cert of the generated cert
-  certificate_arn = "${coalesce(join("", var.cf_certificate_arn), join("", aws_acm_certificate_validation.cert.*.certificate_arn) )}"
+  certificate_arn = "${coalesce(join("", list(var.cf_certificate_arn)), join("", aws_acm_certificate_validation.cert.*.certificate_arn) )}"
+
+  origin_domain = "${var.cf_origin_dns_record}.${var.domain_name}"
 
   # Creates a basic cloudfront disribution with a custom (i.e. not S3) origin
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
@@ -122,7 +124,7 @@ locals {
 
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
-  count  = "${var.cf_log_bucket_create * var.cf_create}"
+  count  = "${var.cf_log_bucket_create * var.cf_enable}"
   bucket = "${var.cf_log_bucket}"
   region = "${var.region}"
   acl    = "private"
@@ -145,7 +147,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   count = "${var.cf_enable ? 1 : 0}"
 
   origin {
-    domain_name = "${var.cf_origin_domain}"
+    domain_name = "${local.origin_domain}"
     origin_id   = "${var.cluster_name}_${terraform.workspace}_origin"
 
     custom_origin_config {
