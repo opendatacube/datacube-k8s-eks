@@ -25,18 +25,18 @@ for running datacube applications.
 
 ## Apply changes to Kubernetes Cluster - includes creation
 ```bash
-make apply workspace=<workspace name> workspaces=<workspaces path>
+make apply workspace=<workspace name> path=<workspaces path>
 ```
 
 For example
 
 ```bash
-make apply workspace=datakube-dev workspaces=$(pwd)/examples/quickstart/workspaces
+make apply workspace=datakube-dev path=$(pwd)/examples/quickstart/workspaces
 ```
 
 ## Destroy Kubernetes Cluster
 ```bash
-make destroy workspace=<workspace name> workspaces=<workspaces path>
+make destroy workspace=<workspace name> path=<workspaces path>
 ```
 
 
