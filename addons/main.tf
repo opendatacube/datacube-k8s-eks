@@ -10,9 +10,9 @@ data "aws_caller_identity" "current" {}
 
 provider "helm" {
   kubernetes {
-#    config_context = "${true ? data.aws_eks_cluster.eks.arn : null_resource.helm_init_client.id}"
-    config_context = "${data.aws_eks_cluster.eks.arn}"
+   config_context = "${data.aws_eks_cluster.eks.arn}"
   }
+  # Tiller is installed on cluster and intialized by null_resource.helm_init_client
   install_tiller = false
 }
 
@@ -38,11 +38,12 @@ resource "helm_release" "kube2iam" {
     value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/"
   }
 
-  depends_on = ["kubernetes_service_account.tiller", "kubernetes_cluster_role_binding.tiller_clusterrolebinding"]
+  depends_on = ["kubernetes_service_account.tiller",
+                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+                "null_resource.helm_init_client"]
 }
 
 resource "kubernetes_service_account" "tiller" {
-  count = "${var.install_tiller ? 1 : 0}"
   metadata {
     name      = "tiller"
     namespace = "kube-system"
@@ -50,7 +51,6 @@ resource "kubernetes_service_account" "tiller" {
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_clusterrolebinding" {
-  count = "${var.install_tiller ? 1 : 0}"
   metadata {
     name = "tiller-clusterrolebinding"
   }

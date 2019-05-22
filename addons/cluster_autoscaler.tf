@@ -44,7 +44,13 @@ resource "helm_release" "cluster_autoscaler" {
   }
 
   # Uses kube2iam for credentials
-  depends_on = ["helm_release.kube2iam", "aws_iam_role.autoscaler", "aws_iam_role_policy.autoscaler", "kubernetes_namespace.cluster-autoscaler"]
+  depends_on = ["helm_release.kube2iam",
+                "aws_iam_role.autoscaler",
+                "aws_iam_role_policy.autoscaler",
+                "kubernetes_namespace.cluster-autoscaler",
+                "kubernetes_service_account.tiller",
+                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+                "null_resource.helm_init_client"]
 }
 
 

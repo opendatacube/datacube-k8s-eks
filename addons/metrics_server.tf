@@ -16,5 +16,7 @@ resource "helm_release" "metrics_server" {
     "${file("${path.module}/config/metrics-server.yaml")}",
   ]
 
-  depends_on = ["kubernetes_service_account.tiller", "kubernetes_cluster_role_binding.tiller_clusterrolebinding"]
+  depends_on = ["kubernetes_service_account.tiller",
+                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+                "null_resource.helm_init_client"]
 }

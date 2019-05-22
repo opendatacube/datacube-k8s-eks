@@ -77,10 +77,13 @@ resource "helm_release" "flux" {
     command = "kubectl delete crd/helmreleases.flux.weave.works"
   }
 
-    provisioner "local-exec" {
+  provisioner "local-exec" {
     when = "destroy"
     command = "kubectl delete crd/fluxhelmreleases.helm.integrations.flux.weave.works"
   }
 
-  depends_on = ["kubernetes_namespace.flux"] 
+  depends_on = ["kubernetes_namespace.flux",
+                "kubernetes_service_account.tiller",
+                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+                "null_resource.helm_init_client"] 
 }
