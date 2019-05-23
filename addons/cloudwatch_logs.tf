@@ -14,11 +14,12 @@ variable "cloudwatch_log_retention" {
 
 resource "kubernetes_namespace" "fluentd" {
   count = "${var.cloudwatch_logs_enabled ? 1 : 0}"
+
   metadata {
     name = "fluentd"
 
     labels {
-        managed-by = "Terraform"
+      managed-by = "Terraform"
     }
   }
 }
@@ -37,11 +38,10 @@ resource "aws_cloudwatch_log_group" "datakube" {
 # ======================================
 # Fluentd
 
-
 resource "helm_release" "fluentd-cloudwatch" {
   count      = "${var.cloudwatch_logs_enabled ? 1 : 0}"
   name       = "fluentd-cloudwatch"
-  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  repository = "incubator"
   chart      = "fluentd-cloudwatch"
   namespace  = "fluentd"
 
@@ -50,28 +50,29 @@ resource "helm_release" "fluentd-cloudwatch" {
   ]
 
   set {
-    name = "awsRole"
+    name  = "awsRole"
     value = "${aws_iam_role.fluentd.name}"
   }
 
   set {
-    name = "logGroupName"
+    name  = "logGroupName"
     value = "${var.cluster_name}"
   }
 
   set {
-    name = "awsRegion"
+    name  = "awsRegion"
     value = "${data.aws_region.current.name}"
   }
 
   # Uses kube2iam for credentials
   depends_on = ["helm_release.kube2iam",
-                "aws_iam_role.fluentd",
-                "aws_iam_role_policy.fluentd",
-                "kubernetes_namespace.fluentd",
-                "kubernetes_service_account.tiller",
-                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-                "null_resource.helm_init_client"]
+    "aws_iam_role.fluentd",
+    "aws_iam_role_policy.fluentd",
+    "kubernetes_namespace.fluentd",
+    "kubernetes_service_account.tiller",
+    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.helm_init_client",
+  ]
 }
 
 resource "aws_iam_role" "fluentd" {

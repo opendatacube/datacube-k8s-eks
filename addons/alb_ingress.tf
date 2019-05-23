@@ -6,11 +6,12 @@ variable "alb_ingress_enabled" {
 
 resource "kubernetes_namespace" "ingress-controller" {
   count = "${var.alb_ingress_enabled ? 1 : 0}"
+
   metadata {
     name = "ingress-controller"
 
     labels {
-        managed-by = "Terraform"
+      managed-by = "Terraform"
     }
   }
 }
@@ -18,7 +19,7 @@ resource "kubernetes_namespace" "ingress-controller" {
 resource "helm_release" "alb-ingress" {
   count      = "${var.alb_ingress_enabled ? 1 : 0}"
   name       = "alb-ingress"
-  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  repository = "incubator"
   chart      = "aws-alb-ingress-controller"
   namespace  = "ingress-controller"
 
@@ -32,18 +33,19 @@ resource "helm_release" "alb-ingress" {
   }
 
   set {
-    name = "podAnnotations.iam\\.amazonaws\\.com/role"
+    name  = "podAnnotations.iam\\.amazonaws\\.com/role"
     value = "${var.cluster_name}-alb"
   }
 
   # Uses kube2iam for credentials
   depends_on = ["helm_release.kube2iam",
-                "aws_iam_role.alb",
-                "aws_iam_role_policy.alb",
-                "kubernetes_namespace.ingress-controller",
-                "kubernetes_service_account.tiller",
-                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-                "null_resource.helm_init_client"]
+    "aws_iam_role.alb",
+    "aws_iam_role_policy.alb",
+    "kubernetes_namespace.ingress-controller",
+    "kubernetes_service_account.tiller",
+    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.helm_init_client",
+  ]
 }
 
 resource "aws_iam_role" "alb" {

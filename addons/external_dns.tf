@@ -5,18 +5,18 @@ variable "external_dns_enabled" {
 }
 
 resource "helm_release" "external-dns" {
-    count      = "${var.external_dns_enabled ? 1 : 0}"
-    name       = "external-dns"
-    repository = "${data.helm_repository.stable.metadata.0.name}"
-    chart      = "stable/external-dns"
-    namespace = "ingress-controller"
+  count      = "${var.external_dns_enabled ? 1 : 0}"
+  name       = "external-dns"
+  repository = "stable"
+  chart      = "stable/external-dns"
+  namespace  = "ingress-controller"
 
-    set {
-      name = "podAnnotations.iam\\.amazonaws\\.com/role"
-      value = "${var.cluster_name}-external-dns"
-    }
+  set {
+    name  = "podAnnotations.iam\\.amazonaws\\.com/role"
+    value = "${var.cluster_name}-external-dns"
+  }
 
-    values = [<<EOF
+  values = [<<EOF
 ## This controls which types of resource external-dns should 'watch' for new
 ## DNS entries.
 sources:
@@ -44,16 +44,17 @@ rbac:
   ##
   serviceAccountName: external-dns
 EOF
-    ]
+  ]
 
-    # Uses kube2iam for credentials
-    depends_on = ["helm_release.kube2iam",
-                  "aws_iam_role.external_dns",
-                  "aws_iam_role_policy.external_dns",
-                  "kubernetes_namespace.ingress-controller",
-                  "kubernetes_service_account.tiller", 
-                  "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-                  "null_resource.helm_init_client"]
+  # Uses kube2iam for credentials
+  depends_on = ["helm_release.kube2iam",
+    "aws_iam_role.external_dns",
+    "aws_iam_role_policy.external_dns",
+    "kubernetes_namespace.ingress-controller",
+    "kubernetes_service_account.tiller",
+    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.helm_init_client",
+  ]
 }
 
 resource "aws_iam_role" "external_dns" {
