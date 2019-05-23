@@ -7,11 +7,12 @@ variable "cluster_autoscaler_enabled" {
 
 resource "kubernetes_namespace" "cluster-autoscaler" {
   count = "${var.cluster_autoscaler_enabled ? 1 : 0}"
+
   metadata {
     name = "cluster-autoscaler"
 
     labels {
-        managed-by = "Terraform"
+      managed-by = "Terraform"
     }
   }
 }
@@ -19,7 +20,7 @@ resource "kubernetes_namespace" "cluster-autoscaler" {
 resource "helm_release" "cluster_autoscaler" {
   count      = "${var.cluster_autoscaler_enabled ? 1 : 0}"
   name       = "cluster-autoscaler"
-  repository = "${data.helm_repository.stable.metadata.0.name}"
+  repository = "stable"
   chart      = "cluster-autoscaler"
   namespace  = "cluster-autoscaler"
 
@@ -27,32 +28,31 @@ resource "helm_release" "cluster_autoscaler" {
     "${file("${path.module}/config/autoscaler.yaml")}",
   ]
 
-
   set {
-    name = "podAnnotations.iam\\.amazonaws\\.com/role"
+    name  = "podAnnotations.iam\\.amazonaws\\.com/role"
     value = "${var.cluster_name}-autoscaler"
   }
 
   set {
-    name = "autoDiscovery.clusterName"
+    name  = "autoDiscovery.clusterName"
     value = "${var.cluster_name}"
   }
 
   set {
-    name = "awsRegion"
+    name  = "awsRegion"
     value = "${data.aws_region.current.name}"
   }
 
   # Uses kube2iam for credentials
   depends_on = ["helm_release.kube2iam",
-                "aws_iam_role.autoscaler",
-                "aws_iam_role_policy.autoscaler",
-                "kubernetes_namespace.cluster-autoscaler",
-                "kubernetes_service_account.tiller",
-                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-                "null_resource.helm_init_client"]
+    "aws_iam_role.autoscaler",
+    "aws_iam_role_policy.autoscaler",
+    "kubernetes_namespace.cluster-autoscaler",
+    "kubernetes_service_account.tiller",
+    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.helm_init_client",
+  ]
 }
-
 
 resource "aws_iam_role" "autoscaler" {
   count = "${var.cluster_autoscaler_enabled ? 1 : 0}"

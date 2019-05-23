@@ -6,44 +6,45 @@ variable "flux_enabled" {
 }
 
 variable "flux_git_repo_url" {
-  type = "string"
+  type        = "string"
   description = "URL pointing to the git repository that flux will monitor and commit to"
-  default = "git@github.com:opendatacube/datacube-k8s-eks"
+  default     = "git@github.com:opendatacube/datacube-k8s-eks"
 }
 
 variable "flux_git_branch" {
-  type = "string"
+  type        = "string"
   description = "Branch of the specified git repository to monitor and commit to"
-  default = "dev"
+  default     = "dev"
 }
 
 variable "flux_git_path" {
-  type = "string"
+  type        = "string"
   description = "Relative path inside specified git repository to search for manifest files"
-  default = ""
+  default     = ""
 }
 
 variable "flux_git_label" {
-  type = "string"
+  type        = "string"
   description = "Label prefix that is used to track flux syncing inside the git repository"
-  default = "flux-sync"
+  default     = "flux-sync"
 }
 
 resource "kubernetes_namespace" "flux" {
   count = "${var.flux_enabled ? 1 : 0}"
+
   metadata {
     name = "flux"
 
     labels {
-        managed-by = "Terraform"
+      managed-by = "Terraform"
     }
   }
 }
 
 resource "helm_release" "flux" {
-  count = "${var.flux_enabled ? 1 : 0}"
+  count      = "${var.flux_enabled ? 1 : 0}"
   name       = "flux"
-  repository = "${data.helm_repository.weaveworks.metadata.0.name}"
+  repository = "weaveworks"
   chart      = "flux"
   namespace  = "flux"
 
@@ -52,38 +53,39 @@ resource "helm_release" "flux" {
   ]
 
   set {
-    name = "git.url"
+    name  = "git.url"
     value = "${var.flux_git_repo_url}"
   }
 
   set {
-    name = "git.branch"
+    name  = "git.branch"
     value = "${var.flux_git_branch}"
   }
 
   set {
-    name = "git.path"
+    name  = "git.path"
     value = "${var.flux_git_path}"
   }
 
   set {
-    name = "git.label"
+    name  = "git.label"
     value = "${var.flux_git_label}"
   }
 
   # Cleanup crds
   provisioner "local-exec" {
-    when = "destroy"
+    when    = "destroy"
     command = "kubectl delete crd/helmreleases.flux.weave.works"
   }
 
   provisioner "local-exec" {
-    when = "destroy"
+    when    = "destroy"
     command = "kubectl delete crd/fluxhelmreleases.helm.integrations.flux.weave.works"
   }
 
   depends_on = ["kubernetes_namespace.flux",
-                "kubernetes_service_account.tiller",
-                "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-                "null_resource.helm_init_client"] 
+    "kubernetes_service_account.tiller",
+    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.helm_init_client",
+  ]
 }
