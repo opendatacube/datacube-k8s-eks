@@ -1,7 +1,0 @@
-extraArgs:
-  base-role-arn: "arn:aws:iam::0123456789:role/"
-host:
-  iptables: true
-  interface: eni+
-rbac:
-  create: true
