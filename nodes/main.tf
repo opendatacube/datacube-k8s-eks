@@ -37,6 +37,16 @@ data "aws_iam_instance_profile" "node" {
   name = "${var.cluster_name}-node"
 }
 
+data "aws_autoscaling_group" "nodes" {
+  count = "${(var.group_enabled ? 1 : 0) * length(data.aws_subnet_ids.nodes.ids)}"
+  name  = "${element(module.workers.node_asg_names, count.index)}"
+}
+
+data "aws_autoscaling_group" "spots" {
+  count = "${(var.group_enabled && var.spot_nodes_enabled ? 1 : 0) * length(data.aws_subnet_ids.nodes.ids)}"
+  name  = "${element(module.workers.spot_node_asg_names, count.index)}"
+}
+
 locals {
   eks_cluster_version   = "${element(data.aws_eks_cluster.eks.*.version, 0)}"
   endpoint              = "${element(data.aws_eks_cluster.eks.*.endpoint, 0)}"

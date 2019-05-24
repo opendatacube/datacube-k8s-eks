@@ -32,15 +32,25 @@ terraform workspace select "$WORKSPACE-blue" || fail_on_workspace "$WORKSPACE-bl
 
 blue_enabled=$(terraform output enabled)
 active_node_group=$([[ "$blue_enabled" = "true" ]] && echo "blue" || echo "green")
-new_node_group=$([[ "$active_node_group" == "blue" ]] && echo "green" || echo "blue")
+new_node_group=$([[ "$active_node_group" = "blue" ]] && echo "green" || echo "blue")
 
 # Create new nodes
-terraform workspace select "$WORKSPACE-$new_node_group"
+terraform workspace select "${WORKSPACE}-${new_node_group}"
+
+echo "selected workspace ${WORKSPACE}-${new_node_group}"
+# discover desired count
+re='^[0-9]+$'
+desired_node_capacity=$(terraform output node_desired_counts | tr ',' '\n' | sort -r | head -1)
+if ! [[ $desired_node_capacity =~ re ]]; then
+    desired_node_capacity=1
+fi
+
 terraform apply -auto-approve -input=false \
     -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
     -var group_enabled=true \
     -var node_group_name="$new_node_group" \
-    -var ami_image_id="$3"
+    -var ami_image_id="$3" \
+    -var desired_nodes_per_az="$desired_node_capacity"
 
 # Drain current nodes
 ../drain_and_wait.sh "$active_node_group"
