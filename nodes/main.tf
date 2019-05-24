@@ -37,6 +37,16 @@ data "aws_iam_instance_profile" "node" {
   name = "${var.cluster_name}-node"
 }
 
+data "aws_autoscaling_group" "nodes" {
+  count = "${(var.group_enabled ? 1 : 0) * length(data.aws_subnet_ids.nodes.ids)}"
+  name  = "${element(module.workers.node_asg_names, count.index)}"
+}
+
+data "aws_autoscaling_group" "spots" {
+  count = "${(var.group_enabled && var.spot_nodes_enabled ? 1 : 0) * length(data.aws_subnet_ids.nodes.ids)}"
+  name  = "${element(module.workers.spot_node_asg_names, count.index)}"
+}
+
 locals {
   eks_cluster_version   = "${element(data.aws_eks_cluster.eks.*.version, 0)}"
   endpoint              = "${element(data.aws_eks_cluster.eks.*.endpoint, 0)}"
@@ -44,7 +54,7 @@ locals {
   node_security_group   = "${element(data.aws_security_groups.nodes.ids, 0)}"
 }
 
-module "nodes" {
+module "workers" {
   source = "modules/workers"
 
   cluster_name          = "${var.cluster_name}"
@@ -59,6 +69,8 @@ module "nodes" {
   max_nodes             = "${var.max_nodes_per_az}"
   node_group_name       = "${var.node_group_name}"
   ami_image_id          = "${var.ami_image_id}"
-  spot_nodes_enabled    = "${var.spot_nodes_enabled}"
+  spot_nodes_enabled    = "${var.group_enabled && var.spot_nodes_enabled}"
   max_spot_price        = "${var.max_spot_price}"
+  nodes_enabled         = "${var.group_enabled}"
+  desired_nodes         = "${var.desired_nodes_per_az}"
 }

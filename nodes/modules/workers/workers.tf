@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "nodes" {
-  count               = "${local.nodes_enabled * length(var.nodes_subnet_group) }"
+  count               = "${(var.nodes_enabled ? 1 : 0) * length(var.nodes_subnet_group) }"
   desired_capacity    = "${var.desired_nodes}"
   max_size            = "${var.max_nodes}"
   min_size            = "${var.min_nodes}"
@@ -44,7 +44,7 @@ resource "aws_autoscaling_group" "nodes" {
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
-  count               = "${local.spot_enabled * length(var.nodes_subnet_group) }"
+  count               = "${(var.spot_nodes_enabled ? 1 : 0) * length(var.nodes_subnet_group) }"
   desired_capacity    = "${var.desired_nodes}"
   max_size            = "${var.max_nodes}"
   min_size            = "${var.min_nodes}"

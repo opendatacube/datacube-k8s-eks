@@ -28,8 +28,18 @@ popd
 # build worker nodes
 pushd nodes
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
+
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
-terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
+terraform apply -auto-approve -input=false \
+    -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
+    -var group_enabled=true \
+    -var node_group_name=blue
+
+terraform workspace new "$WORKSPACE-green" || terraform workspace select "$WORKSPACE-green"
+terraform apply -auto-approve -input=false \
+    -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
+    -var group_enabled=false \
+    -var node_group_name=green
 popd
 
 pushd addons
