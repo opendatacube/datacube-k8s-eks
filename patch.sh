@@ -44,6 +44,8 @@ desired_node_capacity=$(terraform output node_desired_counts | tr ',' '\n' | sor
 if ! [[ $desired_node_capacity =~ re ]]; then
     desired_node_capacity=1
 fi
+# Disable cluster autoscaler, so we don't scale whilst patching
+kubectl scale deployments/cluster-autoscaler-aws-cluster-autoscaler --replicas=0 -n kube-system || echo 'Warning: cluster autoscaler not found'
 
 terraform apply -auto-approve -input=false \
     -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
@@ -60,5 +62,9 @@ terraform workspace select "$WORKSPACE-$active_node_group"
 terraform apply -auto-approve -input=false \
     -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
     -var group_enabled=false \
-    -var node_group_name="$active_node_group" 
+    -var node_group_name="$active_node_group"
+
+# Enable cluster autoscaler
+kubectl scale deployments/cluster-autoscaler-aws-cluster-autoscaler --replicas=1 -n kube-system || echo 'Warning: cluster autoscaler not found'
+
 popd
