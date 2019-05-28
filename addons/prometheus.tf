@@ -63,7 +63,7 @@ EOF
     command = "kubectl delete crd/prometheusrules.monitoring.coreos.com"
   }
 
-    provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = "destroy"
     command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
   }
