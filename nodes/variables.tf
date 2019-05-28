@@ -46,3 +46,11 @@ variable "owner" {
 variable "region" {
 
 }
+
+variable "extra_userdata" {
+  type = "string"
+  description = "Additional EC2 user data commands that will be passed to EKS nodes"
+  default = <<USERDATA
+echo ""
+USERDATA
+}

@@ -27,7 +27,7 @@ terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
 
 # Configure local kubernetes config
-aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
+aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name) --role-arn $(terraform output cluster_role)
 
 # Set up aws-auth
 popd
