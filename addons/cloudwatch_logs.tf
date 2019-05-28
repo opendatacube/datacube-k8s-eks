@@ -41,7 +41,7 @@ resource "aws_cloudwatch_log_group" "datakube" {
 resource "helm_release" "fluentd-cloudwatch" {
   count      = "${var.cloudwatch_logs_enabled ? 1 : 0}"
   name       = "fluentd-cloudwatch"
-  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  repository = "incubator"
   chart      = "fluentd-cloudwatch"
   namespace  = "fluentd"
 
@@ -71,6 +71,7 @@ resource "helm_release" "fluentd-cloudwatch" {
     "kubernetes_namespace.fluentd",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.repo_add_incubator"
   ]
 }
 

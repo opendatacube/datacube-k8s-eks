@@ -19,7 +19,7 @@ resource "kubernetes_namespace" "ingress-controller" {
 resource "helm_release" "alb-ingress" {
   count      = "${var.alb_ingress_enabled ? 1 : 0}"
   name       = "alb-ingress"
-  repository = "${data.helm_repository.incubator.metadata.0.name}"
+  repository = "incubator"
   chart      = "aws-alb-ingress-controller"
   namespace  = "ingress-controller"
 
@@ -44,6 +44,7 @@ resource "helm_release" "alb-ingress" {
     "kubernetes_namespace.ingress-controller",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
+    "null_resource.repo_add_incubator"
   ]
 }
 
