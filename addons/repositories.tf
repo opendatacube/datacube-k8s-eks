@@ -6,7 +6,7 @@ data "helm_repository" "stable" {
 
 data "helm_repository" "incubator" {
   name = "incubator"
-  url  = "https://kubernetes-charts-incubator.storage.googleapis.com"
+  url  = "https://kubernetes-charts-incubator.storage.googleapis.com/"
   depends_on = ["null_resource.repo_add_incubator"]
 }
 
@@ -38,7 +38,7 @@ resource "null_resource" "helm_init_client" {
 # Helm repo data sources still require to be added through `helm repo add`
 resource "null_resource" "repo_add_incubator" {
   provisioner "local-exec" {
-    command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com"
+    command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/"
   }
   triggers = {
     id = "${null_resource.helm_init_client.id}"
