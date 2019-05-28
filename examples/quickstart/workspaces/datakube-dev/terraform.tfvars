@@ -7,11 +7,6 @@ admin_access_CIDRs = {
   "Everywhere" = "0.0.0.0/0"
 }
 
-# Data Orchestration
-bucket = "datakube-data"
-
-topic_arn = "arn:aws:sns:ap-southeast-2:538673716275:DEANewData"
-
 # Worker instances
 default_worker_instance_type = "m4.large"
 
@@ -26,10 +21,6 @@ max_nodes_per_az = 2
 max_spot_price = "0.4"
 
 # Database config
-
-db_dns_name = "db"
-
-db_dns_zone = "internal"
 
 db_multi_az = false
 

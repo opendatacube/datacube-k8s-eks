@@ -1,5 +1,7 @@
-create-servers:
-	packer build packer/compute.packer.json
+create-backend:
+	@cd examples/quickstart/backend; \
+	terraform init; \
+	terraform apply -auto-approve -input=false -var region=$(region) -var backend_name=$(backend)
 
 apply:
 	./apply.sh $(workspace) $(path)
