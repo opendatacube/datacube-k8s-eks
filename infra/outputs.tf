@@ -7,6 +7,10 @@ output "cluster_name" {
   value = "${var.cluster_name}"
 }
 
+output "cluster_role" {
+  value = "${module.eks.user_role_arn}"
+}
+
 output "region" {
   value = "${var.region}"
 }

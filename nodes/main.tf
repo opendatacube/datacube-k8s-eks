@@ -73,4 +73,5 @@ module "workers" {
   max_spot_price        = "${var.max_spot_price}"
   nodes_enabled         = "${var.group_enabled}"
   desired_nodes         = "${var.desired_nodes_per_az}"
+  extra_userdata        = "${var.extra_userdata}"
 }
