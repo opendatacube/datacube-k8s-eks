@@ -51,4 +51,25 @@ EOF
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
     "null_resource.helm_init_client",
   ]
+
+  # Cleanup crds
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl delete crd/prometheuses.monitoring.coreos.com"
+  }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl delete crd/prometheusrules.monitoring.coreos.com"
+  }
+
+    provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
+  }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl delete crd/alertmanagers.monitoring.coreos.com"
+  }
 }
