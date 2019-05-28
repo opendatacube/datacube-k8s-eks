@@ -7,7 +7,7 @@ variable "external_dns_enabled" {
 resource "helm_release" "external-dns" {
   count      = "${var.external_dns_enabled ? 1 : 0}"
   name       = "external-dns"
-  repository = "stable"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "stable/external-dns"
   namespace  = "ingress-controller"
 
@@ -53,7 +53,6 @@ EOF
     "kubernetes_namespace.ingress-controller",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
   ]
 }
 

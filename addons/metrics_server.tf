@@ -8,7 +8,7 @@ variable "metrics_server_enabled" {
 resource "helm_release" "metrics_server" {
   count      = "${var.metrics_server_enabled ? 1 : 0}"
   name       = "metrics-server"
-  repository = "stable"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "metrics-server"
   namespace  = "kube-system"
 
@@ -18,6 +18,5 @@ resource "helm_release" "metrics_server" {
 
   depends_on = ["kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
   ]
 }

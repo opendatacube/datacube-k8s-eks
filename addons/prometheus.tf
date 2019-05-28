@@ -21,7 +21,7 @@ resource "kubernetes_namespace" "monitoring" {
 resource "helm_release" "prometheus_operator" {
   count      = "${var.prometheus_enabled  ? 1 : 0}"
   name       = "prometheus-operator"
-  repository = "stable"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "prometheus-operator"
   namespace  = "monitoring"
 
@@ -49,6 +49,5 @@ EOF
   depends_on = ["kubernetes_namespace.monitoring",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
   ]
 }

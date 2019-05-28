@@ -20,7 +20,7 @@ resource "kubernetes_namespace" "cluster-autoscaler" {
 resource "helm_release" "cluster_autoscaler" {
   count      = "${var.cluster_autoscaler_enabled ? 1 : 0}"
   name       = "cluster-autoscaler"
-  repository = "stable"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "cluster-autoscaler"
   namespace  = "cluster-autoscaler"
 
@@ -50,7 +50,6 @@ resource "helm_release" "cluster_autoscaler" {
     "kubernetes_namespace.cluster-autoscaler",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
   ]
 }
 

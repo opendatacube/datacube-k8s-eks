@@ -44,7 +44,7 @@ resource "kubernetes_namespace" "flux" {
 resource "helm_release" "flux" {
   count      = "${var.flux_enabled ? 1 : 0}"
   name       = "flux"
-  repository = "weaveworks"
+  repository = "${data.helm_repository.weaveworks.metadata.0.name}"
   chart      = "flux"
   namespace  = "flux"
 
@@ -86,6 +86,5 @@ resource "helm_release" "flux" {
   depends_on = ["kubernetes_namespace.flux",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
   ]
 }
