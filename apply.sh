@@ -14,8 +14,15 @@ fi
 export WORKSPACE=$1
 export WORKSPACESPATH=$2
 
+if [[ "$3" = "clean" ]]; then
+    CLEAN="true"
+fi
+
 # build network and EKS masters
 pushd infra
+if [ ! -z "$CLEAN" ]; then
+    rm -rf .terraform
+fi
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
 
@@ -27,6 +34,10 @@ popd
 
 # build worker nodes
 pushd nodes
+if [ ! -z "$CLEAN" ]; then
+    echo "Cleaning"
+    rm -rf .terraform
+fi
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
@@ -43,6 +54,9 @@ terraform apply -auto-approve -input=false \
 popd
 
 pushd addons
+if [ ! -z "$CLEAN" ]; then
+    rm -rf .terraform
+fi
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg 
 terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
 terraform apply -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 

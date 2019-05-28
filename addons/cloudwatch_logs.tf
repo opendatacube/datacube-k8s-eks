@@ -71,7 +71,7 @@ resource "helm_release" "fluentd-cloudwatch" {
     "kubernetes_namespace.fluentd",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
+    "null_resource.repo_add_incubator"
   ]
 }
 

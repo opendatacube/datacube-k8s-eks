@@ -86,6 +86,6 @@ resource "helm_release" "flux" {
   depends_on = ["kubernetes_namespace.flux",
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
+    "null_resource.repo_add_weaveworks"
   ]
 }
