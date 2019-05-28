@@ -14,10 +14,15 @@ fi
 export WORKSPACE=$1
 export WORKSPACESPATH=$2
 
+if [[ "$3" = "clean" ]]; then
+    CLEAN="true"
+fi
+
 # delete addons
 pushd addons
-# rm -rf .terraform
-# rm -rf terraform.tfstate.d
+if [ ! -z "$CLEAN" ]; then
+    rm -rf .terraform
+fi
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
 terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
 terraform destroy -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
@@ -26,8 +31,9 @@ popd
 
 # delete worker nodes
 pushd nodes
-# rm -rf .terraform
-# rm -rf terraform.tfstate.d
+if [ ! -z "$CLEAN" ]; then
+    rm -rf .terraform
+fi
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
 terraform workspace new "$WORKSPACE-blue" || terraform workspace select "$WORKSPACE-blue"
 terraform destroy -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars"
@@ -39,8 +45,10 @@ popd
 
 # delete network and EKS masters
 pushd infra
-# rm -rf .terraform
-# rm -rf terraform.tfstate.d 
+if [ ! -z "$CLEAN" ]; then
+    echo "cleaning"
+    rm -rf .terraform
+fi
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
 terraform destroy -auto-approve -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" 
 popd
