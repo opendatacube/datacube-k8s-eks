@@ -60,7 +60,7 @@ resource "aws_iam_role_policy_attachment" "eks-node-AmazonEC2ContainerRegistryRe
 
 resource "aws_iam_role_policy_attachment" "eks-node-AmazonEC2RoleforSSM" {
   count      = "${var.enable_ec2_ssm ? 1 : 0}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2RoleforSSM"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
   role       = "${aws_iam_role.eks-node.name}"
 }
 
