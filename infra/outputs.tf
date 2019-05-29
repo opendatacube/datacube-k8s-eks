@@ -71,7 +71,6 @@ output "user_profile" {
 [profile ${var.cluster_name}]
 source_profile = default
 role_arn = "${module.eks.user_role_arn}"
-mfa_serial = arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/<your user name>
 EOF
 
   sensitive = true
