@@ -21,3 +21,8 @@ variable "eks_subnet_ids" {
 variable "users" {
   type = "list"
 }
+
+variable "enable_ec2_ssm" {
+  default = true
+  description = "Enables the IAM policy required for AWS EC2 System Manager."
+}

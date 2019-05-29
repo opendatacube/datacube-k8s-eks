@@ -87,3 +87,11 @@ variable "database_subnet_cidrs" {
   type        = "list"
   default     = ["10.0.20.0/22", "10.0.24.0/22", "10.0.28.0/22"]
 }
+
+# EC2 Worker Roles
+# ================
+
+variable "enable_ec2_ssm" {
+  default = true
+  description = "Enables the IAM policy required for AWS EC2 System Manager in the EKS node IAM role created."
+}
