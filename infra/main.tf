@@ -53,6 +53,7 @@ module "eks" {
   cluster_name       = "${var.cluster_name}"
   admin_access_CIDRs = "${var.admin_access_CIDRs}"
   users              = "${var.users}"
+  enable_ec2_ssm     = "${var.enable_ec2_ssm}"
 }
 
 # Database
