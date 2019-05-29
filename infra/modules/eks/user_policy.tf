@@ -24,17 +24,6 @@ data "aws_iam_policy_document" "assume_role" {
       values   = ["true"]
     }
 
-    condition {
-      test     = "Bool"
-      variable = "aws:MultiFactorAuthPresent"
-      values   = ["true"]
-    }
-
-    condition {
-      test     = "NumericLessThan"
-      variable = "aws:MultiFactorAuthAge"
-      values   = ["28800"]
-    }
   }
 }
 
