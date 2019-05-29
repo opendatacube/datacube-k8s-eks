@@ -15,7 +15,7 @@ data "aws_ami" "eks-worker" {
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
   # return first non-empty value
-  ami_id = "${coalesce(var.ami_image_id, data.aws_ami.eks-worker.id)}"
+  ami_id = coalesce(var.ami_image_id, data.aws_ami.eks-worker.id)
 
   eks-node-userdata = <<USERDATA
 #!/bin/bash
@@ -26,24 +26,25 @@ set -o xtrace
    --cloud-provider=aws"
 ${var.extra_userdata}
 USERDATA
+
 }
 
 resource "aws_launch_template" "node" {
-  count         = "${(var.nodes_enabled ? 1 : 0)  * length(var.nodes_subnet_group) }"
-  name_prefix   = "${var.cluster_name}"
-  image_id      = "${local.ami_id}"
-  user_data     = "${base64encode(local.eks-node-userdata)}"
-  instance_type = "${var.default_worker_instance_type}"
+  count = var.nodes_enabled ? 1 : 0 * length(var.nodes_subnet_group)
+  name_prefix = var.cluster_name
+  image_id = local.ami_id
+  user_data = base64encode(local.eks-node-userdata)
+  instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
-    name = "${var.node_instance_profile}"
+    name = var.node_instance_profile
   }
 
   network_interfaces {
-    subnet_id                   = "${var.nodes_subnet_group[count.index]}"
+    subnet_id = var.nodes_subnet_group[count.index]
     associate_public_ip_address = false
-    security_groups             = ["${var.node_security_group}"]
-    delete_on_termination       = true
+    security_groups = [var.node_security_group]
+    delete_on_termination = true
   }
 
   lifecycle {
@@ -52,14 +53,14 @@ resource "aws_launch_template" "node" {
 }
 
 resource "aws_launch_template" "spot" {
-  count         = "${(var.spot_nodes_enabled ? 1 : 0)  * length(var.nodes_subnet_group) }"
-  name_prefix   = "${var.cluster_name}"
-  image_id      = "${local.ami_id}"
-  user_data     = "${base64encode(local.eks-node-userdata)}"
-  instance_type = "${var.default_worker_instance_type}"
+  count = var.spot_nodes_enabled ? 1 : 0 * length(var.nodes_subnet_group)
+  name_prefix = var.cluster_name
+  image_id = local.ami_id
+  user_data = base64encode(local.eks-node-userdata)
+  instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
-    name = "${var.node_instance_profile}"
+    name = var.node_instance_profile
   }
 
   instance_market_options {
@@ -67,13 +68,14 @@ resource "aws_launch_template" "spot" {
   }
 
   network_interfaces {
-    subnet_id                   = "${var.nodes_subnet_group[count.index]}"
+    subnet_id = var.nodes_subnet_group[count.index]
     associate_public_ip_address = false
-    security_groups             = ["${var.node_security_group}"]
-    delete_on_termination       = true
+    security_groups = [var.node_security_group]
+    delete_on_termination = true
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
+

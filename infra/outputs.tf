@@ -1,18 +1,18 @@
 output "kubeconfig" {
-  value     = "${module.eks.kubeconfig}"
+  value     = module.eks.kubeconfig
   sensitive = true
 }
 
 output "cluster_name" {
-  value = "${var.cluster_name}"
+  value = var.cluster_name
 }
 
 output "cluster_role" {
-  value = "${module.eks.user_role_arn}"
+  value = module.eks.user_role_arn
 }
 
 output "region" {
-  value = "${var.region}"
+  value = var.region
 }
 
 output "database_credentials" {
@@ -27,6 +27,7 @@ data:
   postgres-username: ${base64encode(module.db.db_username)} 
   postgres-password: ${base64encode(module.db.db_password)} 
 EOF
+
 
   sensitive = true
 }
@@ -60,14 +61,16 @@ metadata:
   namespace: kube-system
 
 EOF
+
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 output "user_profile" {
-  description = "You can assume this role to manage the cluster"
+description = "You can assume this role to manage the cluster"
 
-  value = <<EOF
+value = <<EOF
 
 
 [profile ${var.cluster_name}]
@@ -75,5 +78,7 @@ source_profile = default
 role_arn = "${module.eks.user_role_arn}"
 EOF
 
-  sensitive = true
+
+sensitive = true
 }
+

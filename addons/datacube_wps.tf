@@ -6,7 +6,7 @@ variable "datacube_wps_enabled" {
 }
 
 resource "aws_iam_role" "wps" {
-  count = "${var.datacube_wps_enabled}"
+  count = var.datacube_wps_enabled ? 1 : 0
   name  = "${var.cluster_name}-wps"
 
   assume_role_policy = <<EOF
@@ -32,12 +32,13 @@ resource "aws_iam_role" "wps" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "wps" {
-  count = "${var.datacube_wps_enabled}"
-  name  = "${var.cluster_name}-wps"
-  role  = "${aws_iam_role.wps.id}"
+  count = var.datacube_wps_enabled ? 1 : 0
+  name = "${var.cluster_name}-wps"
+  role = aws_iam_role.wps[0].id
 
   policy = <<EOF
 {
@@ -74,4 +75,6 @@ resource "aws_iam_role_policy" "wps" {
   ]
 }
 EOF
+
 }
+

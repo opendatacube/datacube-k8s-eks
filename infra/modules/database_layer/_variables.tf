@@ -8,14 +8,15 @@
 
 variable "database_subnet_group" {
   description = "Subnet group for the database"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "access_security_groups" {
-  type = "list"
+  type = list(string)
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+}
 
 #--------------------------------------------------------------
 # Database
@@ -39,7 +40,7 @@ variable "engine" {
 variable "engine_version" {
   description = "Engine version"
 
-  default {
+  default = {
     postgres = "9.6.11"
   }
 }
@@ -103,8 +104,12 @@ variable "db_instance_enabled" {
   description = "Create an RDS postgres instance for use by the datacube"
 }
 
-variable "cluster" {}
+variable "cluster" {
+}
 
-variable "workspace" {}
+variable "workspace" {
+}
 
-variable "owner" {}
+variable "owner" {
+}
+

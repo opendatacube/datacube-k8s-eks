@@ -3,3 +3,4 @@ resource "null_resource" "aws-eks-config" {
     command = "aws eks --region ${var.region} update-kubeconfig --name ${var.cluster_name}"
   }
 }
+

@@ -6,12 +6,12 @@ variable "prometheus_enabled" {
 }
 
 resource "kubernetes_namespace" "monitoring" {
-  count = "${var.prometheus_enabled ? 1 : 0}"
+  count = var.prometheus_enabled ? 1 : 0
 
   metadata {
     name = "monitoring"
 
-    labels {
+    labels = {
       managed-by = "Terraform"
     }
   }
@@ -19,13 +19,14 @@ resource "kubernetes_namespace" "monitoring" {
 
 # Create the prometheus operator, configure grafana dashboard ingress
 resource "helm_release" "prometheus_operator" {
-  count      = "${var.prometheus_enabled  ? 1 : 0}"
+  count      = var.prometheus_enabled ? 1 : 0
   name       = "prometheus-operator"
   repository = "stable"
   chart      = "prometheus-operator"
   namespace  = "monitoring"
 
-  values = [<<EOF
+  values = [
+    <<EOF
 grafana:
   ingress:
     enabled: ${var.alb_ingress_enabled}
@@ -34,7 +35,7 @@ grafana:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/healthcheck-path: "/metrics"
-      alb.ingress.kubernetes.io/certificate-arn: "${aws_acm_certificate_validation.wildcard_cert.0.certificate_arn}"
+      alb.ingress.kubernetes.io/certificate-arn: "${aws_acm_certificate_validation.wildcard_cert[0].certificate_arn}"
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     hosts: 
       - mgmt.${var.domain_name}
@@ -44,35 +45,39 @@ grafana:
   # force chart to generate password as prometheus-operator-grafana secret
   adminPassword: null
 EOF
-  ]
+,
+]
 
-  depends_on = ["kubernetes_namespace.monitoring",
-    "kubernetes_service_account.tiller",
-    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
-    "aws_acm_certificate_validation.wildcard_cert",
-    "helm_release.external-dns",
-    "helm_release.alb-ingress"
-  ]
+depends_on = [
+kubernetes_namespace.monitoring,
+kubernetes_service_account.tiller,
+kubernetes_cluster_role_binding.tiller_clusterrolebinding,
+null_resource.helm_init_client,
+aws_acm_certificate_validation.wildcard_cert,
+helm_release.external-dns,
+helm_release.alb-ingress
+]
 
-  # Cleanup crds
-  provisioner "local-exec" {
-    when    = "destroy"
-    command = "kubectl delete crd/prometheuses.monitoring.coreos.com"
-  }
-
-  provisioner "local-exec" {
-    when    = "destroy"
-    command = "kubectl delete crd/prometheusrules.monitoring.coreos.com"
-  }
-
-  provisioner "local-exec" {
-    when    = "destroy"
-    command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
-  }
-
-  provisioner "local-exec" {
-    when    = "destroy"
-    command = "kubectl delete crd/alertmanagers.monitoring.coreos.com"
-  }
+# Cleanup crds
+# Cleanup crds
+provisioner "local-exec" {
+when = destroy
+command = "kubectl delete crd/prometheuses.monitoring.coreos.com"
 }
+
+provisioner "local-exec" {
+when = destroy
+command = "kubectl delete crd/prometheusrules.monitoring.coreos.com"
+}
+
+provisioner "local-exec" {
+when = destroy
+command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
+}
+
+provisioner "local-exec" {
+when = destroy
+command = "kubectl delete crd/alertmanagers.monitoring.coreos.com"
+}
+}
+
