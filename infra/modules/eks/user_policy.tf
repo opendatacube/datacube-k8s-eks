@@ -23,7 +23,6 @@ data "aws_iam_policy_document" "assume_role" {
       variable = "aws:SecureTransport"
       values   = ["true"]
     }
-
   }
 }
 
@@ -31,4 +30,29 @@ resource "aws_iam_role" "eks-user" {
   name                 = "user.${var.cluster_name}"
   assume_role_policy   = "${data.aws_iam_policy_document.assume_role.json}"
   max_session_duration = "28800"
+}
+
+resource "aws_iam_policy" "user_policy" {
+  name        = "user-policy"
+  description = "Enables EKS users to get the kubeconfig file using aws cli"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "eks:DescribeCluster"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_eks_cluster.eks.arn}"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "user_policy_attach" {
+  role       = "${aws_iam_role.eks-user.name}"
+  policy_arn = "${aws_iam_policy.user_policy.arn}"
 }
