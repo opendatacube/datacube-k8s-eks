@@ -7,11 +7,11 @@ output "db_password" {
 }
 
 output "db_hostname" {
-  value      = "${aws_db_instance.db.address}"
+  value      = "${aws_db_instance.db.*.address}"
   depends_on = ["aws_db_instance.db"]
 }
 
 output "port" {
   depends_on = ["aws_db_instance.db"]
-  value      = "${aws_db_instance.db.port}"
+  value      = "${aws_db_instance.db.*.port}"
 }

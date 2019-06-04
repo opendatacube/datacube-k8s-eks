@@ -33,6 +33,9 @@ module "vpc" {
     "kubernetes.io/role/elb"                    = "1"
   }
 
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
   enable_nat_gateway           = true
   create_database_subnet_group = true
   enable_s3_endpoint           = true
@@ -60,6 +63,7 @@ module "eks" {
 module "db" {
   source = "modules/database_layer"
 
+  db_instance_enabled = "${var.db_instance_enabled}"
   # Networking
   vpc_id                = "${module.vpc.vpc_id}"
   database_subnet_group = "${module.vpc.database_subnets}"

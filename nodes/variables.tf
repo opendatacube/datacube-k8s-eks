@@ -10,7 +10,6 @@ variable "node_group_name" {
 }
 
 variable "default_worker_instance_type" {
-  default = "m4.large"
 }
 
 variable "group_enabled" {

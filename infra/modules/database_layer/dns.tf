@@ -5,6 +5,7 @@
 # Create a dns entry for the rds
 
 resource "aws_route53_zone" "zone" {
+  count      = "${(var.db_instance_enabled ? 1 : 0)}"
   name = "${var.domain_name}"
 
   vpc {
@@ -21,6 +22,7 @@ resource "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_record" "record" {
+  count      = "${(var.db_instance_enabled ? 1 : 0)}"
   name    = "${var.hostname}"
   type    = "A"
   zone_id = "${aws_route53_zone.zone.zone_id}"

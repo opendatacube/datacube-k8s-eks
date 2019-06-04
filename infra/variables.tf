@@ -40,6 +40,11 @@ variable "create_certificate" {
 }
 
 # Database
+variable "db_instance_enabled" {
+  default = true
+  description = "Create an RDS postgres instance for use by the datacube"
+}
+
 variable "db_hostname" {
   default = "database"
 }

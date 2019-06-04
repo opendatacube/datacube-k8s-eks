@@ -69,6 +69,7 @@ module "workers" {
   max_nodes             = "${var.max_nodes_per_az}"
   node_group_name       = "${var.node_group_name}"
   ami_image_id          = "${var.ami_image_id}"
+  default_worker_instance_type = "${var.default_worker_instance_type}"
   spot_nodes_enabled    = "${var.group_enabled && var.spot_nodes_enabled}"
   max_spot_price        = "${var.max_spot_price}"
   nodes_enabled         = "${var.group_enabled}"
