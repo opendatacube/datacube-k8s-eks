@@ -4,13 +4,17 @@
 
 You'll need to know how to build the cluster first this is covered in detail in the [Getting Started Guid](./getting_started.md) 
 
-You'll need a user account with mfa enabled. See the [AWS guide for setting up MFA](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html)
+You'll need either:
+1. a user account with mfa enabled. See the [AWS guide for setting up MFA](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html)
+2. an IAM Role associated with your AWS account that you want to give access to managing the k8s cluster. This scenario will also work with AWS SSO accounts since they assume IAM roles 
 
 You'll need the [aws-iam-authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
 
-We recommend using [aws-vault](https://github.com/99designs/aws-vault) as it makes assuming roles much easier on the cli
+For MFA accounts we recommend using [aws-vault](https://github.com/99designs/aws-vault) as it makes assuming roles much easier on the cli
 
 ## Add Users to your cluster
+
+*For a user account with MFA:*
 
 edit your `terraform.tfvars` file, and add your current aws user (if you already have a users section overwrite it with the following)
 
@@ -30,15 +34,18 @@ users = [
 ]
 ```
 
+*For an IAM role:*
 This field also supports roles if you aren't directly using cli users.
+You will need the IAM Role ARN that you wish to grant access to the cluster.
+It'll look something like `arn:aws:sts::0123456789012:role/YourRoleName/morestuff/possibly_more_stuff/1559711943675672000`
 
-If you're using roles it'll look like `arn:aws:sts::0123456789012:assumed-role/YourRoleName/1559711943675672000`
+You will use everything after and including the `role/`
 
-Set the role like: 
+Set the role like this: 
 
 ```config
 users = [
-  "role/YourRoleName",
+  "role/YourRoleName/morestuff/possibly_more_stuff/1559711943675672000",
 ]
 ```
 
@@ -48,7 +55,7 @@ Now apply the configuration using
 make apply
 ```
 
-The user will be allowed to access the cluster, but you'll need to configure your aws config file first to show it how.
+The user/role will be allowed to access the cluster, but you'll need to configure your aws config file first to show it how.
 
 ## Setup aws config file
 
@@ -66,7 +73,7 @@ now edit the config file and add the following section:
 [profile dev-eks]
 source_profile = default
 role_arn = arn:aws:iam::123456789012:role/user.dev-eks-datacube
-mfa_serial = arn:aws:iam::123456789012:mfa/janedoe
+mfa_serial = arn:aws:iam::123456789012:mfa/janedoe # If using a role you remove this line.
 ```
 
 `profile` defines what you want to call the local profile when calling it using the cli
@@ -75,7 +82,7 @@ mfa_serial = arn:aws:iam::123456789012:mfa/janedoe
 
 `role_arn` is the aws role we will be using to access the cluster, replace the `123456789012` with your account id
 
-`mfa_serial` is the mfa device associated with the user account (you'll need this if you've enforced mfa on your admin accounts which you should do), replace the `123456789012` with your account id, replace `janedoe` with your user name
+`mfa_serial` is the mfa device associated with the user account (you'll need this if you've enforced mfa on your admin accounts which you should do), replace the `123456789012` with your account id, replace `janedoe` with your user name. _If using a role remove this line_
 
 ## Assume the role
 
@@ -100,6 +107,14 @@ on Windows:
 ```bash
 setx AWS_DEFAULT_PROFILE dev-eks
 ```
+
+If you are using a role you have two options:
+1. add `--profile dev-eks` to your aws CLI commands e.g. `aws eks describe-cluster --name dev-eks-datacube --profile dev-eks`
+2. obtain some temporary credentials and add them to your aws `credentials` file using:
+`aws sts assume-role --role-arn arn:aws:iam::444488357543:role/user.dev-eks-datacube --role-session-name woo409-eks-role-test`
+
+Note that the aws CLI `--profile` basically does 2 for you behind the scenes but it won't last. You need to use option 2 for doing useful things with `kubectl`.
+_Session credentials from 2 are temporary and by default expire in 1 hour. You can change this using additional command line options. see `aws sts assume-role help` for details._
 
 ## Get the kubeconfig 
 
