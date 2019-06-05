@@ -145,6 +145,8 @@ You can then index some data into your datacube using the predefined template [j
 make run-index template=index-s3.yaml
 ```
 
+Follow our [additional users guide](./additonal_users.md) to add more administrators to the cluster
+
 # Tear it down
 
 When you're done with your cluster you can destroy it by running 
