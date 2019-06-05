@@ -17,16 +17,12 @@ edit your `terraform.tfvars` file, and add your current aws user (if you already
 If you don't know your username you can check by running 
 
 ```bash
-aws iam get-user
+aws sts get-caller-identity --query 'Arn' --output text
 ```
 
-```config
-users = [
-  "user/yourawsusername",
-]
-```
+It'll output your user: `arn:aws:iam::0123456789012:user/janedoe`
 
-for example:
+Copy the last section and put it in the users section of the tfvars file.
 
 ```config
 users = [
@@ -35,6 +31,16 @@ users = [
 ```
 
 This field also supports roles if you aren't directly using cli users.
+
+If you're using roles it'll look like `arn:aws:sts::0123456789012:assumed-role/YourRoleName/1559711943675672000`
+
+Set the role like: 
+
+```config
+users = [
+  "role/YourRoleName",
+]
+```
 
 Now apply the configuration using 
 
