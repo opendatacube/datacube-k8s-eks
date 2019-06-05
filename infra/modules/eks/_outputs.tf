@@ -6,19 +6,6 @@ output "node_security_group" {
   value = "${aws_security_group.eks-node.id}"
 }
 
-# TODO Commented out, can these be removed now?
-# output "nodes_subnet_group" {
-#   value = "${aws_subnet.eks.*.id}"
-# }
-
-# output "database_subnet_group" {
-#   value = "${aws_subnet.db.*.id}"
-# }
-
-# output "vpc_id" {
-#   value = "${aws_vpc.eks.id}"
-# }
-
 output "kubeconfig" {
   value = "${local.kubeconfig}"
 }
