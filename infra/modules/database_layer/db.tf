@@ -18,7 +18,7 @@ resource "aws_db_subnet_group" "default" {
 }
 
 resource "aws_db_instance" "db" {
-  count      = "${var.db_instance_enabled ? 1 : 0}"
+  count      = var.db_instance_enabled ? 1 : 0
   identifier = "db-${var.cluster}-${var.workspace}"
 
   # Instance parameters

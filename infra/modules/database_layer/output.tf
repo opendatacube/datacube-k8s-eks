@@ -7,12 +7,11 @@ output "db_password" {
 }
 
 output "db_hostname" {
-  value      = aws_db_instance.db.address
+  value      = var.db_instance_enabled ? aws_db_instance.db[0].address : ""
   depends_on = [aws_db_instance.db]
 }
 
 output "port" {
+  value      = var.db_instance_enabled ? aws_db_instance.db[0].port : ""
   depends_on = [aws_db_instance.db]
-  value      = aws_db_instance.db.port
 }
-

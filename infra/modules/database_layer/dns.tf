@@ -5,8 +5,8 @@
 # Create a dns entry for the rds
 
 resource "aws_route53_zone" "zone" {
-  count      = var.db_instance_enabled ? 1 : 0
-  name = var.domain_name
+  count = var.db_instance_enabled ? 1 : 0
+  name  = var.domain_name
 
   vpc {
     vpc_id = var.vpc_id
@@ -22,13 +22,14 @@ resource "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_record" "record" {
-
+  count   = var.db_instance_enabled ? 1 : 0
+  name    = var.hostname
   type    = "A"
-  zone_id = aws_route53_zone.zone.zone_id
+  zone_id = aws_route53_zone.zone[0].zone_id
 
   alias {
-    name                   = aws_db_instance.db.address
-    zone_id                = aws_db_instance.db.hosted_zone_id
+    name                   = aws_db_instance.db[0].address
+    zone_id                = aws_db_instance.db[0].hosted_zone_id
     evaluate_target_health = true
   }
 
