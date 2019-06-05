@@ -3,3 +3,6 @@ host:
   interface: eni+
 rbac:
   create: true
+tolerations:
+  - effect: NoSchedule
+    operator: Exists

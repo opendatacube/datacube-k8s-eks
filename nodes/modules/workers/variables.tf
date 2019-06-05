@@ -10,7 +10,6 @@ variable "owner" {
 }
 
 variable "default_worker_instance_type" {
-  default = "m4.large"
 }
 
 variable "node_group_name" {

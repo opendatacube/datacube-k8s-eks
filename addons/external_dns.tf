@@ -54,6 +54,7 @@ EOF
     "kubernetes_service_account.tiller",
     "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
     "null_resource.helm_init_client",
+    "helm_release.alb-ingress"
   ]
 }
 

@@ -31,6 +31,8 @@ EOF
   sensitive = true
 }
 
+# TODO: How to remove the coredns_config when db_instance_enabled = false
+# Current workaround is to use the var.db_hostname but this should be the original module.db.db_hostname
 output "coredns_config" {
   value = <<EOF
 apiVersion: v1
@@ -39,7 +41,7 @@ data:
     .:53 {
         errors
         health
-        rewrite name database.local ${module.db.db_hostname}
+        rewrite name database.local ${var.db_hostname}
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           upstream
