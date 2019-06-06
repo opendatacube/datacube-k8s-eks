@@ -1,7 +1,7 @@
 # Worker node config
 
 variable "ami_image_id" {
-  default = ""
+  default     = ""
   description = "Overwrites the default ami (latest Amazon EKS)"
 }
 
@@ -36,20 +36,22 @@ variable "max_spot_price" {
   default = "0.40"
 }
 
-variable "cluster_name" {}
+variable "cluster_name" {
+}
 
 variable "owner" {
   default = "opendatacube.org"
 }
 
 variable "region" {
-
 }
 
 variable "extra_userdata" {
-  type = "string"
+  type        = string
   description = "Additional EC2 user data commands that will be passed to EKS nodes"
-  default = <<USERDATA
+  default     = <<USERDATA
 echo ""
 USERDATA
+
 }
+

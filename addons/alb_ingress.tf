@@ -5,31 +5,31 @@ variable "alb_ingress_enabled" {
 }
 
 resource "kubernetes_namespace" "ingress-controller" {
-  count = "${var.alb_ingress_enabled ? 1 : 0}"
+  count = var.alb_ingress_enabled ? 1 : 0
 
   metadata {
     name = "ingress-controller"
 
-    labels {
+    labels = {
       managed-by = "Terraform"
     }
   }
 }
 
 resource "helm_release" "alb-ingress" {
-  count      = "${var.alb_ingress_enabled ? 1 : 0}"
+  count      = var.alb_ingress_enabled ? 1 : 0
   name       = "alb-ingress"
   repository = "incubator"
   chart      = "aws-alb-ingress-controller"
   namespace  = "ingress-controller"
 
   values = [
-    "${file("${path.module}/config/alb-ingress.yaml")}",
+    file("${path.module}/config/alb-ingress.yaml"),
   ]
 
   set {
     name  = "clusterName"
-    value = "${var.cluster_name}"
+    value = var.cluster_name
   }
 
   set {
@@ -38,18 +38,19 @@ resource "helm_release" "alb-ingress" {
   }
 
   # Uses kube2iam for credentials
-  depends_on = ["helm_release.kube2iam",
-    "aws_iam_role.alb",
-    "aws_iam_role_policy.alb",
-    "kubernetes_namespace.ingress-controller",
-    "kubernetes_service_account.tiller",
-    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.repo_add_incubator"
+  depends_on = [
+    helm_release.kube2iam,
+    aws_iam_role.alb,
+    aws_iam_role_policy.alb,
+    kubernetes_namespace.ingress-controller,
+    kubernetes_service_account.tiller,
+    kubernetes_cluster_role_binding.tiller_clusterrolebinding,
+    null_resource.repo_add_incubator,
   ]
 }
 
 resource "aws_iam_role" "alb" {
-  count = "${var.alb_ingress_enabled ? 1 : 0}"
+  count = var.alb_ingress_enabled ? 1 : 0
   name  = "${var.cluster_name}-alb"
 
   assume_role_policy = <<EOF
@@ -75,12 +76,13 @@ resource "aws_iam_role" "alb" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "alb" {
-  count = "${var.alb_ingress_enabled ? 1 : 0}"
-  name  = "${var.cluster_name}-alb"
-  role  = "${aws_iam_role.alb.id}"
+  count = var.alb_ingress_enabled ? 1 : 0
+  name = "${var.cluster_name}-alb"
+  role = aws_iam_role.alb[0].id
 
   policy = <<EOF
 {
@@ -211,33 +213,35 @@ resource "aws_iam_role_policy" "alb" {
   ]
 }
 EOF
+
 }
 
 # Create a wildcard cert for use on the alb
 resource "aws_acm_certificate" "wildcard_cert" {
-  count             = "${var.alb_ingress_enabled}"
-  domain_name       = "*.${var.domain_name}"
-  validation_method = "DNS"
+count             = var.alb_ingress_enabled ? 1 : 0
+domain_name       = "*.${var.domain_name}"
+validation_method = "DNS"
 }
 
 # Automatically validate the cert using DNS validation
 data "aws_route53_zone" "wildcard_zone" {
-  count        = "${var.alb_ingress_enabled}"
-  name         = "${var.domain_name}"
-  private_zone = false
+count        = var.alb_ingress_enabled ? 1 : 0
+name         = var.domain_name
+private_zone = false
 }
 
 resource "aws_route53_record" "wildcard_cert_validation" {
-  count   = "${var.alb_ingress_enabled}"
-  name    = "${aws_acm_certificate.wildcard_cert.domain_validation_options.0.resource_record_name}"
-  type    = "${aws_acm_certificate.wildcard_cert.domain_validation_options.0.resource_record_type}"
-  zone_id = "${data.aws_route53_zone.wildcard_zone.id}"
-  records = ["${aws_acm_certificate.wildcard_cert.domain_validation_options.0.resource_record_value}"]
-  ttl     = 60
+count   = var.alb_ingress_enabled ? 1 : 0
+name    = aws_acm_certificate.wildcard_cert[0].domain_validation_options[0].resource_record_name
+type    = aws_acm_certificate.wildcard_cert[0].domain_validation_options[0].resource_record_type
+zone_id = data.aws_route53_zone.wildcard_zone[0].id
+records = [aws_acm_certificate.wildcard_cert[0].domain_validation_options[0].resource_record_value]
+ttl     = 60
 }
 
 resource "aws_acm_certificate_validation" "wildcard_cert" {
-  count                   = "${var.alb_ingress_enabled}"
-  certificate_arn         = "${aws_acm_certificate.wildcard_cert.arn}"
-  validation_record_fqdns = ["${aws_route53_record.wildcard_cert_validation.fqdn}"]
+count                   = var.alb_ingress_enabled ? 1 : 0
+certificate_arn         = aws_acm_certificate.wildcard_cert[0].arn
+validation_record_fqdns = [aws_route53_record.wildcard_cert_validation[0].fqdn]
 }
+

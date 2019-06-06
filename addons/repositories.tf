@@ -1,38 +1,37 @@
 data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-  depends_on = ["null_resource.helm_init_client"]
+  name       = "stable"
+  url        = "https://kubernetes-charts.storage.googleapis.com"
+  depends_on = [null_resource.helm_init_client]
 }
 
 data "helm_repository" "incubator" {
-  name = "incubator"
-  url  = "https://kubernetes-charts-incubator.storage.googleapis.com/"
-  depends_on = ["null_resource.repo_add_incubator"]
+  name       = "incubator"
+  url        = "https://kubernetes-charts-incubator.storage.googleapis.com/"
+  depends_on = [null_resource.repo_add_incubator]
 }
 
 data "helm_repository" "coreos" {
-  name = "coreos"
-  url  = "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
-  depends_on = ["null_resource.repo_add_coreos"]
+  name       = "coreos"
+  url        = "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
+  depends_on = [null_resource.repo_add_coreos]
 }
 
 data "helm_repository" "weaveworks" {
-  name = "weaveworks"
-  url  = "https://weaveworks.github.io/flux"
-  depends_on = ["null_resource.repo_add_weaveworks"]
+  name       = "weaveworks"
+  url        = "https://weaveworks.github.io/flux"
+  depends_on = [null_resource.repo_add_weaveworks]
 }
 
 # Initialize and destroy helm / tiller
 resource "null_resource" "helm_init_client" {
   provisioner "local-exec" {
-    command = "helm init --wait --service-account ${kubernetes_cluster_role_binding.tiller_clusterrolebinding.subject.0.name}"
+    command = "helm init --wait --service-account ${kubernetes_cluster_role_binding.tiller_clusterrolebinding.subject[0].name}"
   }
 
   provisioner "local-exec" {
-    when = "destroy"
+    when    = destroy
     command = "kubectl delete deployment/tiller-deploy -n kube-system || true"
   }
-
 }
 
 # Helm repo data sources still require to be added through `helm repo add`
@@ -41,7 +40,7 @@ resource "null_resource" "repo_add_incubator" {
     command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/"
   }
   triggers = {
-    id = "${null_resource.helm_init_client.id}"
+    id = null_resource.helm_init_client.id
   }
 }
 
@@ -50,7 +49,7 @@ resource "null_resource" "repo_add_coreos" {
     command = "helm repo add coreos https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
   }
   triggers = {
-    id = "${null_resource.helm_init_client.id}"
+    id = null_resource.helm_init_client.id
   }
 }
 
@@ -59,6 +58,7 @@ resource "null_resource" "repo_add_weaveworks" {
     command = "helm repo add weaveworks https://weaveworks.github.io/flux"
   }
   triggers = {
-    id = "${null_resource.helm_init_client.id}"
+    id = null_resource.helm_init_client.id
   }
 }
+

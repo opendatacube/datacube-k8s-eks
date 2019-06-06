@@ -47,22 +47,26 @@ fi
 # Disable cluster autoscaler, so we don't scale whilst patching
 kubectl scale deployments/cluster-autoscaler-aws-cluster-autoscaler --replicas=0 -n kube-system || echo 'Warning: cluster autoscaler not found'
 
-terraform apply -auto-approve -input=false \
+terraform plan -out newgroup.plan -input=false \
     -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
     -var group_enabled=true \
     -var node_group_name="$new_node_group" \
     -var ami_image_id="$3" \
     -var desired_nodes_per_az="$desired_node_capacity"
+terraform apply -auto-approve newgroup.plan
+rm newgroup.plan
 
 # Drain current nodes
 ../drain_and_wait.sh "$active_node_group"
 
 # Destroy old nodes
 terraform workspace select "$WORKSPACE-$active_node_group"
-terraform apply -auto-approve -input=false \
+terraform plan -out oldgroup.plan -input=false \
     -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars" \
     -var group_enabled=false \
     -var node_group_name="$active_node_group"
+terraform apply -auto-approve oldgroup.plan
+rm oldgroup.plan
 
 # Enable cluster autoscaler
 kubectl scale deployments/cluster-autoscaler-aws-cluster-autoscaler --replicas=1 -n kube-system || echo 'Warning: cluster autoscaler not found'

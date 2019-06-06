@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.11.0"
+  required_version = ">= 0.12.0"
 
   backend "s3" {
     # Force encryption
@@ -8,14 +8,15 @@ terraform {
 }
 
 data "aws_eks_cluster" "eks" {
-  name = "${var.cluster_name}"
+  name = var.cluster_name
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 provider "helm" {
   kubernetes {
-    config_context = "${data.aws_eks_cluster.eks.arn}"
+    config_context = data.aws_eks_cluster.eks.arn
   }
 
   # Tiller is installed on cluster and intialized by null_resource.helm_init_client
@@ -23,11 +24,12 @@ provider "helm" {
 }
 
 provider "kubernetes" {
-  config_context_cluster = "${data.aws_eks_cluster.eks.arn}"
+  config_context_cluster = data.aws_eks_cluster.eks.arn
 }
 
 # region and kube2iam required for most add-ons
-data "aws_region" "current" {}
+data "aws_region" "current" {
+}
 
 resource "helm_release" "kube2iam" {
   name       = "kube2iam"
@@ -36,7 +38,7 @@ resource "helm_release" "kube2iam" {
   namespace  = "kube-system"
 
   values = [
-    "${file("${path.module}/config/kube2iam.yaml")}",
+    file("${path.module}/config/kube2iam.yaml"),
   ]
 
   set {
@@ -44,9 +46,10 @@ resource "helm_release" "kube2iam" {
     value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/"
   }
 
-  depends_on = ["kubernetes_service_account.tiller",
-    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
+  depends_on = [
+    kubernetes_service_account.tiller,
+    kubernetes_cluster_role_binding.tiller_clusterrolebinding,
+    null_resource.helm_init_client,
   ]
 }
 
@@ -64,7 +67,7 @@ resource "kubernetes_cluster_role_binding" "tiller_clusterrolebinding" {
 
   subject {
     kind      = "ServiceAccount"
-    name      = "${kubernetes_service_account.tiller.metadata.0.name}"
+    name      = kubernetes_service_account.tiller.metadata[0].name
     namespace = "kube-system"
   }
 
@@ -74,3 +77,4 @@ resource "kubernetes_cluster_role_binding" "tiller_clusterrolebinding" {
     api_group = "rbac.authorization.k8s.io"
   }
 }
+

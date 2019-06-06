@@ -5,7 +5,7 @@ variable "external_dns_enabled" {
 }
 
 resource "helm_release" "external-dns" {
-  count      = "${var.external_dns_enabled ? 1 : 0}"
+  count      = var.external_dns_enabled ? 1 : 0
   name       = "external-dns"
   repository = "stable"
   chart      = "stable/external-dns"
@@ -16,7 +16,8 @@ resource "helm_release" "external-dns" {
     value = "${var.cluster_name}-external-dns"
   }
 
-  values = [<<EOF
+  values = [
+    <<EOF
 ## This controls which types of resource external-dns should 'watch' for new
 ## DNS entries.
 sources:
@@ -44,25 +45,27 @@ rbac:
   ##
   serviceAccountName: external-dns
 EOF
-  ]
+,
+]
 
-  # Uses kube2iam for credentials
-  depends_on = ["helm_release.kube2iam",
-    "aws_iam_role.external_dns",
-    "aws_iam_role_policy.external_dns",
-    "kubernetes_namespace.ingress-controller",
-    "kubernetes_service_account.tiller",
-    "kubernetes_cluster_role_binding.tiller_clusterrolebinding",
-    "null_resource.helm_init_client",
-    "helm_release.alb-ingress"
-  ]
+# Uses kube2iam for credentials
+depends_on = [
+helm_release.kube2iam,
+aws_iam_role.external_dns,
+aws_iam_role_policy.external_dns,
+kubernetes_namespace.ingress-controller,
+kubernetes_service_account.tiller,
+kubernetes_cluster_role_binding.tiller_clusterrolebinding,
+null_resource.helm_init_client,
+helm_release.alb-ingress
+]
 }
 
 resource "aws_iam_role" "external_dns" {
-  count = "${var.external_dns_enabled}"
-  name  = "${var.cluster_name}-external-dns"
+count = var.external_dns_enabled ? 1 : 0
+name = "${var.cluster_name}-external-dns"
 
-  assume_role_policy = <<EOF
+assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -85,14 +88,15 @@ resource "aws_iam_role" "external_dns" {
   ]
 }
 EOF
-}
 
-resource "aws_iam_role_policy" "external_dns" {
-  count = "${var.external_dns_enabled}"
-  name  = "${var.cluster_name}-external-dns"
-  role  = "${aws_iam_role.external_dns.id}"
+  }
 
-  policy = <<EOF
+  resource "aws_iam_role_policy" "external_dns" {
+    count = var.external_dns_enabled ? 1 : 0
+    name  = "${var.cluster_name}-external-dns"
+    role  = aws_iam_role.external_dns[0].id
+
+    policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -118,4 +122,6 @@ resource "aws_iam_role_policy" "external_dns" {
   ]
 }
 EOF
-}
+
+  }
+

@@ -1,4 +1,5 @@
-variable "cluster_name" {}
+variable "cluster_name" {
+}
 
 variable "ami_image_id" {
   default = ""
@@ -17,18 +18,23 @@ variable "node_group_name" {
 }
 
 variable "nodes_subnet_group" {
-  type = "list"
+  type = list(string)
 }
 
-variable "node_instance_profile" {}
+variable "node_instance_profile" {
+}
 
-variable "eks_cluster_version" {}
+variable "eks_cluster_version" {
+}
 
-variable "node_security_group" {}
+variable "node_security_group" {
+}
 
-variable "api_endpoint" {}
+variable "api_endpoint" {
+}
 
-variable "cluster_ca" {}
+variable "cluster_ca" {
+}
 
 # Node Config
 variable "nodes_enabled" {
@@ -57,9 +63,11 @@ variable "max_spot_price" {
 }
 
 variable "extra_userdata" {
-  type = "string"
+  type        = string
   description = "Additional EC2 user data commands that will be passed to EKS nodes"
-  default = <<USERDATA
+  default     = <<USERDATA
 echo ""
 USERDATA
+
 }
+

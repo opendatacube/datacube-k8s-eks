@@ -1,8 +1,12 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 # Format our list of users
 locals {
-  accounts_arn = "${formatlist("arn:aws:iam::${data.aws_caller_identity.current.account_id}:%s", var.users)}"
+  accounts_arn = formatlist(
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:%s",
+    var.users,
+  )
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -13,8 +17,8 @@ data "aws_iam_policy_document" "assume_role" {
 
     # List of users
     principals {
-      type        = "AWS"
-      identifiers = ["${local.accounts_arn}"]
+      type = "AWS"
+      identifiers = local.accounts_arn
     }
 
     # Enforce MFA
@@ -28,9 +32,10 @@ data "aws_iam_policy_document" "assume_role" {
 
 resource "aws_iam_role" "eks-user" {
   name                 = "user.${var.cluster_name}"
-  assume_role_policy   = "${data.aws_iam_policy_document.assume_role.json}"
+  assume_role_policy   = data.aws_iam_policy_document.assume_role.json
   max_session_duration = "28800"
 }
+
 
 resource "aws_iam_policy" "user_policy" {
   name        = "user-policy"
@@ -53,6 +58,6 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "user_policy_attach" {
-  role       = "${aws_iam_role.eks-user.name}"
-  policy_arn = "${aws_iam_policy.user_policy.arn}"
+  role       = aws_iam_role.eks-user.name
+  policy_arn = aws_iam_policy.user_policy.arn
 }
