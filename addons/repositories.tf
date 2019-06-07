@@ -25,7 +25,10 @@ data "helm_repository" "weaveworks" {
 # Initialize and destroy helm / tiller
 resource "null_resource" "helm_init_client" {
   provisioner "local-exec" {
-    command = "helm init --wait --service-account ${kubernetes_cluster_role_binding.tiller_clusterrolebinding.subject[0].name}"
+    command = <<EOF
+    helm init --wait --service-account ${kubernetes_cluster_role_binding.tiller_clusterrolebinding.subject[0].name};
+    kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
+EOF
   }
 
   provisioner "local-exec" {
