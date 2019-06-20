@@ -55,6 +55,7 @@ module "eks" {
   vpc_id             = module.vpc.vpc_id
   eks_subnet_ids     = module.vpc.private_subnets
   cluster_name       = var.cluster_name
+  cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
   users              = var.users
   enable_ec2_ssm     = var.enable_ec2_ssm

@@ -11,6 +11,11 @@ variable "cluster_name" {
   default = "datacube-eks"
 }
 
+variable "cluster_version" {
+  type = "string"
+  description = "EKS Cluster version to use"
+}
+
 variable "admin_access_CIDRs" {
   description = "Locks ssh and api access to these IPs"
   type        = map(string)

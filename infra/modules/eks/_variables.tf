@@ -3,6 +3,11 @@ variable "cluster_name" {
   type    = string
 }
 
+variable "cluster_version" {
+  type = "string"
+  description = "EKS Version to use with this cluster"
+}
+
 variable "admin_access_CIDRs" {
   description = "Locks ssh and api access to these IPs"
   type        = map(string)
