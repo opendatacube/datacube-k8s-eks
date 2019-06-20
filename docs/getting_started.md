@@ -84,6 +84,8 @@ owner = "datakube-owner"
 
 cluster_name = "dev-eks-datacube"
 
+cluster_version = "1.13"
+
 admin_access_CIDRs = {
   "Everywhere" = "0.0.0.0/0"
 }
