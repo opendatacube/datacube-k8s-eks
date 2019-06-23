@@ -1,24 +1,25 @@
 variable "bucket" {
-  type = "string"
-  description = "S3 bucket to add SNS notification to"
+  type        = string
+  description = "S3 bucket with SNS topic to subscribe to"
 }
 
 variable "services" {
-  type = "list"
+  type        = list(string)
   description = "list of services that will require an SQS queue"
-  default = []
+  default     = []
 }
 
- variable "region" {
+variable "region" {
   default = "ap-southeast-2"
 }
 
-variable "name" {
-  description = "DNS name of the cluster"
-  type = "string"
+variable "cluster_name" {
+  description = "EKS Cluster name"
+  type        = string
 }
 
 variable "topic_arn" {
-  type = "string"
+  type        = string
   description = "ARN of SNS topic to subscribe to"
 }
+

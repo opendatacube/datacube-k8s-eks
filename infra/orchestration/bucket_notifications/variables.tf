@@ -1,24 +1,25 @@
- variable "region" {
+variable "region" {
   default = "ap-southeast-2"
 }
 
 variable "bucket" {
-  type = "string"
+  type        = string
   description = "S3 bucket to add SNS notification to"
 }
 
 variable "prefix" {
   description = "prefixes that should be subscribed to"
-  default = ""
+  default     = ""
 }
 
 variable "suffix" {
-  type = "string"
+  type        = string
   description = "suffix of files to subscribe to"
-  default = ".yaml"
+  default     = ".yaml"
 }
 
 variable "topic_name" {
-  type="string"
+  type        = string
   description = "name of the topic"
 }
+

@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.11.0"
+  required_version = ">= 0.12.0"
 
   backend "s3" {
     # Force encryption
@@ -8,32 +8,33 @@ terraform {
 }
 
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 data "aws_s3_bucket" "data_bucket" {
-  bucket = "${var.bucket}"
+  bucket = var.bucket
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = "${data.aws_s3_bucket.data_bucket.id}"
+  bucket = data.aws_s3_bucket.data_bucket.id
 
   topic {
-    topic_arn     = "${aws_sns_topic.bucket_topic.arn}"
+    topic_arn     = aws_sns_topic.bucket_topic.arn
     events        = ["s3:ObjectCreated:*"]
-    filter_suffix = "${var.suffix}"
-    filter_prefix = "${var.prefix}"
+    filter_suffix = var.suffix
+    filter_prefix = var.prefix
   }
 }
 
 resource "aws_sns_topic" "bucket_topic" {
-  name = "${var.topic_name}"
+  name = var.topic_name
 }
 
 resource "aws_sns_topic_policy" "bucket_topic_policy" {
-  arn = "${aws_sns_topic.bucket_topic.arn}"
+  arn = aws_sns_topic.bucket_topic.arn
 
   policy = <<POLICY
 {
@@ -73,4 +74,6 @@ resource "aws_sns_topic_policy" "bucket_topic_policy" {
   ]
 }
 POLICY
+
 }
+

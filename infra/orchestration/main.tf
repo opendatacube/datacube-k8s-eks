@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.11.0"
+  required_version = ">= 0.12.0"
 
   backend "s3" {
     # Force encryption
@@ -8,28 +8,29 @@ terraform {
 }
 
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 resource "aws_sns_topic_subscription" "sqs_subscriptions" {
-  count = "${length(var.services)}"
-  topic_arn = "${var.topic_arn}"
-  protocol = "sqs"
-  endpoint = "${element(aws_sqs_queue.queues.*.arn, count.index)}"
+  count     = length(var.services)
+  topic_arn = var.topic_arn
+  protocol  = "sqs"
+  endpoint  = element(aws_sqs_queue.queues.*.arn, count.index)
 }
 
 resource "aws_sqs_queue" "queues" {
-  count = "${length(var.services)}"
+  count = length(var.services)
 
-  name = "${element(var.services, count.index)}"
-  kms_master_key_id = "${aws_kms_alias.sqs.arn}"
+  name              = "${var.cluster_name}-${element(var.services, count.index)}"
+  kms_master_key_id = aws_kms_alias.sqs.arn
 }
 
 resource "aws_sqs_queue_policy" "queue_policy" {
-  count = "${length(var.services)}"
-  queue_url = "${element(aws_sqs_queue.queues.*.id, count.index)}"
+  count     = length(var.services)
+  queue_url = element(aws_sqs_queue.queues.*.id, count.index)
 
   policy = <<POLICY
 {
@@ -56,7 +57,7 @@ POLICY
 # ======================================
 # Orchestration Role
 resource "aws_iam_role" "orchestration" {
-  name = "kubernetes-orchestration"
+  name = "${var.cluster_name}-orchestration"
 
   assume_role_policy = <<EOF
 {
@@ -74,20 +75,21 @@ resource "aws_iam_role" "orchestration" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
       },
       "Action": "sts:AssumeRole"
     }
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "orchestration" {
-  name = "orchestration"
-  role = "${aws_iam_role.orchestration.id}"
+name = "${var.cluster_name}-orchestration"
+role = aws_iam_role.orchestration.id
 
-  policy = <<EOF
+policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -106,7 +108,7 @@ resource "aws_iam_role_policy" "orchestration" {
       "Effect": "Allow",
       "Action": ["S3:GetObject"],
       "Resource": [
-        "arn:aws:s3:::dea-public-data/*"
+        "arn:aws:s3:::${var.bucket}/*"
       ]
     },
     {
@@ -119,15 +121,16 @@ resource "aws_iam_role_policy" "orchestration" {
   ]
 }
 EOF
+
 }
 
 #======================
 # SQS Encryption
 
 resource "aws_kms_key" "sqs" {
-  description = "KMS Key for encrypting SQS Queue for ${var.bucket} notifications"
-  deletion_window_in_days = 30
-  policy = <<POLICY
+description = "KMS Key for encrypting SQS Queue for ${var.bucket} for ${var.cluster_name} notifications"
+deletion_window_in_days = 30
+policy = <<POLICY
   {
    "Version": "2012-10-17",
       "Statement": [
@@ -173,9 +176,11 @@ resource "aws_kms_key" "sqs" {
       }]
   }
 POLICY
+
 }
 
 resource "aws_kms_alias" "sqs" {
-  name = "alias/sqs-${var.bucket}"
-  target_key_id = "${aws_kms_key.sqs.key_id}"
+  name          = "alias/${var.cluster_name}-sqs-${var.bucket}"
+  target_key_id = aws_kms_key.sqs.key_id
 }
+
