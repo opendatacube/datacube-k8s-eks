@@ -1,14 +1,12 @@
-global:
-  externalDatabase:
-    create: true
-    # these get overwritten
-    # database:
-    # password:
-    # username:
-setup:
-  dockerArgs: ["/bin/bash", "-c", "cd setup; ./create-db.sh"]
-# don't create anything accidentally
+database:
+  adminSecret: psql-admin-secret
+  database: datacube
+  host: localhost
+  port: 5432
+  create: true
+  # Optional
+  # username: datacube
+  # Optional
+  # password: password
 wms:
-  enabled: false
-data_orchestration:
   enabled: false
