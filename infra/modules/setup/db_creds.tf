@@ -6,8 +6,8 @@ resource "kubernetes_secret" "db_creds" {
   }
 
   data = {
-    postgres-username = var.db_username
-    postgres-password = var.db_password
+    postgres-username = var.db_admin_username
+    postgres-password = var.db_admin_password
   }
 
   type = "Opaque"

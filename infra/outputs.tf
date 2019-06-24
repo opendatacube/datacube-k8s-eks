@@ -24,8 +24,8 @@ metadata:
   name: ${var.cluster_name}
   namespace: default
 data:
-  postgres-username: ${base64encode(module.db.db_username)} 
-  postgres-password: ${base64encode(module.db.db_password)} 
+  postgres-username: ${base64encode(module.db.db_admin_username)} 
+  postgres-password: ${base64encode(module.db.db_admin_password)} 
 EOF
 
 

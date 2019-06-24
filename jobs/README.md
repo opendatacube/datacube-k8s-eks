@@ -5,9 +5,23 @@ Creating a new psql database and user and initializing the database with datacub
 
 ### Requirements
 * A psql database server
-* A kubernetes secret with a `postgres-username` and `postgres-password` that provide admin access to the databasr server
 * A Helm client
 * Tiller initialized on the kubernetes cluster
+* A kubernetes secret with a `postgres-username` and `postgres-password` that provide admin access to the database server. A secret with the same name as your cluster is created by by Terraform if `db_instance_enabled = true` and `store_db_credentials = true` in your `terraform.tfvars`. Otherwise the secret can be created using [kubectl](https://kubernetes.io/docs/concepts/configuration/secret/) or using Terraform similar to the following:
+```terraform
+resource "kubernetes_secret" "example" {
+  metadata {
+    name = "admin-secret"
+  }
+
+  data {
+    postgres-username = "admin"
+    postgres-password = "password"
+  }
+
+  type = "Opaque"
+}
+``` 
 
 ### Installing the chart
 Create a YAML configuration file which specifies the following:
@@ -88,3 +102,18 @@ Once the job is complete, clean up the helm chart with
 ```console
 helm delete --purge wofls
 ```
+
+## Deleting a created database
+### Requirements
+* Connection to database server
+* psql client software
+
+The following steps will connect to a running WMS pod in your cluster, which contains the needed psql client software and can connect to the database server.
+```console
+kubectl exec -it <wms pod name> -- /bin/bash
+dropdb -h <RDS hostname> -p <RDS port> -U <admin username> <db_to_drop>
+# dropdb will prompt for a password, enter the admin password
+dropuser -h <RDS hostname> -p <RDS port> -U <admin username> <username_to_drop>
+# dropuser will prompt for a password, enter the admin password
+```
+

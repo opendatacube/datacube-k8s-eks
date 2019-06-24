@@ -30,7 +30,7 @@ resource "aws_db_instance" "db" {
 
   # DB parameters
   name           = var.db_name
-  username       = var.db_username
+  username       = var.db_admin_username
   password       = random_string.password.result
   engine         = var.engine
   engine_version = var.engine_version[var.engine]

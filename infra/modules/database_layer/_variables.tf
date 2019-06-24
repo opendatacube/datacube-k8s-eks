@@ -55,7 +55,7 @@ variable "db_name" {
   description = "Name of the first db"
 }
 
-variable "db_username" {
+variable "db_admin_username" {
   default = "superuser"
 }
 
