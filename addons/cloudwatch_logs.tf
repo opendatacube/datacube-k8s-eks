@@ -121,10 +121,11 @@ resource "aws_iam_role_policy" "fluentd" {
         "logs:CreateLogStream",
         "logs:PutLogEvents",
         "logs:DescribeLogGroups",
-        "logs:DescribeLogStreams"
+        "logs:DescribeLogStreams",
+        "logs:CreateLogGroup"
       ],
       "Resource": [
-        "arn:aws:logs:*:*:*"
+        "*"
       ]
     }
   ]
