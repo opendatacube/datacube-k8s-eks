@@ -18,5 +18,5 @@ make apply workspace=<cluster name> path=<path>
 ## Patching worker nodes
 We've set up automated processes to do blue / green patching of your cluster. An AMI which the worker nodes will be upgraded to is required. In order to run the node patching you can run this using the following command:
 ```bash
-make patch workspace=<cluster name> path=<path>
+make patch workspace=<cluster name> path=<path> ami=<ami>
 ```

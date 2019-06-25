@@ -16,7 +16,7 @@ clean-terraform:
 
 patch:
 	@cd infra; \
-	./patch.sh $(workspace) $(path);
+	./patch.sh $(workspace) $(path) $(ami);
 
 setup-orchestration:
 	@cd infra/orchestration; \
