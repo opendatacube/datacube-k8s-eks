@@ -1,8 +1,8 @@
-output "db_username" {
-  value = var.db_username
+output "db_admin_username" {
+  value = var.db_admin_username
 }
 
-output "db_password" {
+output "db_admin_password" {
   value = random_string.password.result
 }
 

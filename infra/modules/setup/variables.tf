@@ -8,13 +8,13 @@ variable "region" {
   description = "Region of the EKS cluster."
 }
 
-variable "db_username" {
+variable "db_admin_username" {
   type        = string
   description = "Username for the database to store in a default kubernetes secret"
   default     = ""
 }
 
-variable "db_password" {
+variable "db_admin_password" {
   type        = string
   description = "Password for the database to store in a default kubernetes secret"
   default     = ""
@@ -22,7 +22,7 @@ variable "db_password" {
 
 variable "store_db_creds" {
   default     = false
-  description = "If true, store the db_username and db_password variables in a kubernetes secret"
+  description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
 }
 
 variable "node_role_arn" {

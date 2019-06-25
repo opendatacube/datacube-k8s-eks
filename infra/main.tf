@@ -85,12 +85,12 @@ module "db" {
 module "setup" {
   source = "./modules/setup"
 
-  cluster_name   = module.eks.cluster_name
-  region         = var.region
-  db_username    = module.db.db_username
-  db_password    = module.db.db_password
-  store_db_creds = var.store_db_credentials
-  node_role_arn  = module.eks.node_role_arn
-  user_role_arn  = module.eks.user_role_arn
+  cluster_name      = module.eks.cluster_name
+  region            = var.region
+  db_admin_username = module.db.db_admin_username
+  db_admin_password = module.db.db_admin_password
+  store_db_creds    = var.store_db_credentials
+  node_role_arn     = module.eks.node_role_arn
+  user_role_arn     = module.eks.user_role_arn
 }
 
