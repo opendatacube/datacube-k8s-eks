@@ -29,7 +29,7 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 # Documenation
 
 * [Additional Users](docs/additional_users.md) - How to add users and configure access
-* [Patching](docs/patching.md) - How to keep the kubernetes nodes up to date
+* [Patching](docs/patching_upgrading.md) - How to keep the kubernetes nodes up to date
 * [Addons](docs/addons.md) - Notes on how to install and configure various addons
 * [Troubleshootin](docs/troubleshooting.md) - Workarounds to fix common issues
 

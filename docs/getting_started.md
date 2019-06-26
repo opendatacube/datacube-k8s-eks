@@ -76,7 +76,7 @@ Congratulations you're all setup and ready to build your first cluster!
 
 ## Creating your first cluster
 
-We have an example cluster definition in the quickstart folder [examples/quickstart/workspaces/terraform.tfvars](../examples/quickstart/workspaces/terraform.tfvars)
+We have an example cluster definition in the quickstart folder [examples/quickstart/workspaces/datakube-dev/terraform.tfvars](../examples/quickstart/workspaces/datakube-dev/terraform.tfvars)
 
 ```properties
 # Cluster config
@@ -118,6 +118,8 @@ cloudwatch_log_retention = 90
 alb_ingress_enabled = true
 ```
 
+_Note_: you'll have to include variable definitions for `users`, `domain_name` and `region` inside `terraform.tfvars` yourself. We've purposely left these out in the quickstart example, since they're important and don't have sensible defaults - so are likely to trip you up.
+
 This definition will create a basic kubernetes cluster with 3 nodes (1 per Availability Zone) with a PostgreSQL RDS server in a single availability zone.
 
 You can deploy it using 
@@ -147,7 +149,7 @@ You can then index some data into your datacube using the predefined template [j
 make run-index template=index-s3.yaml
 ```
 
-Follow our [additional users guide](./additonal_users.md) to add more administrators to the cluster
+Follow our [additional users guide](./additional_users.md) to add more administrators to the cluster
 
 # Tear it down
 
