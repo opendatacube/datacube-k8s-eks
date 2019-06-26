@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "terraform-state-storage-s3" {
       }
     }
  
-    tags {
+    tags = {
       Name = "S3 Remote Terraform State Store for ${var.backend_name}"
     }      
 }
@@ -39,7 +39,7 @@ resource "aws_dynamodb_table" "terraform_state_lock" {
       name = "LockID"
       type = "S"
   }
-  tags {
+  tags = {
     Name = "DynamoDB Terraform State Lock Table for ${var.backend_name}"
   }
 }
