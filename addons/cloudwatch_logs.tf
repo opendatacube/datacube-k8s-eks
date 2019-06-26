@@ -12,6 +12,10 @@ variable "cloudwatch_log_retention" {
   description = "The number of days to keep logs"
 }
 
+variable "cloudwatch_image_tag" {
+  default = "v1.4-debian-cloudwatch"
+}
+
 resource "kubernetes_namespace" "fluentd" {
   count = var.cloudwatch_logs_enabled ? 1 : 0
 
@@ -62,6 +66,11 @@ resource "helm_release" "fluentd-cloudwatch" {
   set {
     name  = "awsRegion"
     value = data.aws_region.current.name
+  }
+
+  set {
+    name = "tag"
+    value = var.cloudwatch_image_tag
   }
 
   # Uses kube2iam for credentials
