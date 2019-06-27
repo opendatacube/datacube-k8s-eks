@@ -41,10 +41,6 @@ resource "kubernetes_namespace" "flux" {
   }
 }
 
-locals {
-  flux_connect = var.fluxcloud_enabled ? "[--connect=ws://fluxcloud]" : "[]"
-}
-
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
@@ -74,11 +70,6 @@ resource "helm_release" "flux" {
   set {
     name  = "git.label"
     value = var.flux_git_label
-  }
-
-  set {
-    name  = "additionalArgs"
-    value = local.flux_connect
   }
 
   # Cleanup crds
