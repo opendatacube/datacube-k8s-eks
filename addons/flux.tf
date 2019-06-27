@@ -58,7 +58,7 @@ resource "helm_release" "flux" {
 
   set {
     name  = "git.url"
-    value = var.flux_git_repo_url
+    value = format("\"%s\"", var.flux_git_repo_url)
   }
 
   set {
