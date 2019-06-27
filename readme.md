@@ -29,7 +29,8 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 # Documenation
 
 * [Additional Users](docs/additional_users.md) - How to add users and configure access
-* [Patching](docs/patching_upgrading.md) - How to keep the kubernetes nodes up to date
+* [Patching](docs/patching_upgrading.md) - How to keep the Kubernetes nodes up to date
 * [Addons](docs/addons.md) - Notes on how to install and configure various addons
-* [Troubleshootin](docs/troubleshooting.md) - Workarounds to fix common issues
+* [Troubleshooting](docs/troubleshooting.md) - Workarounds to fix common issues
+* [Service Account](docs/service_account.md) - Creating a service account to build the infrastructure
 
