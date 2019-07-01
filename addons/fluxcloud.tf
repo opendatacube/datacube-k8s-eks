@@ -64,6 +64,12 @@ resource "kubernetes_deployment" "fluxcloud" {
 
   spec {
     replicas = 1
+    
+    selector {
+      match_labels = {
+        name = "fluxcloud"
+      }
+    }
 
     template {
       metadata {
