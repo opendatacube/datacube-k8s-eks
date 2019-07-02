@@ -12,7 +12,7 @@ variable "jhub_callback_url" {
 
 resource "aws_cognito_user_pool" "pool" {
   count = var.jhub_cognito_auth_enabled ? 1 : 0
-  name = "jhubuserpool"
+  name = "${var.cluster_name}-jhub-userpool"
   alias_attributes           = ["email"]
   auto_verified_attributes   = ["email"]
 
@@ -44,6 +44,9 @@ resource "aws_cognito_user_pool" "pool" {
     require_numbers   = true
     require_symbols   = false
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_cognito_user_pool_client" "client" {
@@ -60,7 +63,6 @@ resource "aws_cognito_user_pool_client" "client" {
 
 resource "aws_cognito_user_pool_domain" "main" {
   count = var.jhub_cognito_auth_enabled ? 1 : 0
-  domain       = "jhubdomain"
+  domain       = "${var.cluster_name}-jhub-cognito-auth"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
 }
-
