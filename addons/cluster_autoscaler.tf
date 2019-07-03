@@ -34,6 +34,11 @@ resource "helm_release" "cluster_autoscaler" {
   }
 
   set {
+    name  = "extraArgs.scale-down-unneeded-time"
+    value = var.autoscaler-scale-down-unneeded-time
+  }
+
+  set {
     name  = "autoDiscovery.clusterName"
     value = var.cluster_name
   }
