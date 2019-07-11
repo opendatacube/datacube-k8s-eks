@@ -16,10 +16,10 @@ data "helm_repository" "coreos" {
   depends_on = [null_resource.repo_add_coreos]
 }
 
-data "helm_repository" "weaveworks" {
-  name       = "weaveworks"
-  url        = "https://weaveworks.github.io/flux"
-  depends_on = [null_resource.repo_add_weaveworks]
+data "helm_repository" "fluxcd" {
+  name       = "fluxcd"
+  url        = "https://fluxcd.github.io/flux"
+  depends_on = [null_resource.repo_add_fluxcd]
 }
 
 # Initialize and destroy helm / tiller
@@ -53,12 +53,11 @@ resource "null_resource" "repo_add_coreos" {
   }
 }
 
-resource "null_resource" "repo_add_weaveworks" {
+resource "null_resource" "repo_add_fluxcd" {
   provisioner "local-exec" {
-    command = "helm repo add weaveworks https://weaveworks.github.io/flux"
+    command = "helm repo add fluxcd https://fluxcd.github.io/flux"
   }
   triggers = {
     id = null_resource.helm_init_client.id
   }
 }
-
