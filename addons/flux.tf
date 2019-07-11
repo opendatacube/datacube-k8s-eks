@@ -44,7 +44,7 @@ resource "kubernetes_namespace" "flux" {
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
-  repository = "weaveworks"
+  repository = "fluxcd"
   chart      = "flux"
   namespace  = "flux"
 
@@ -87,7 +87,7 @@ resource "helm_release" "flux" {
     kubernetes_namespace.flux,
     kubernetes_service_account.tiller,
     kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-    null_resource.repo_add_weaveworks,
+    null_resource.repo_add_fluxcd,
   ]
 }
 
