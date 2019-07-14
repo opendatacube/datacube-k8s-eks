@@ -1,6 +1,6 @@
 helmOperator:
   create: true
-  createCRD: true
+  createCRD: false
 git:
   pollInterval: 1m
 registry:
