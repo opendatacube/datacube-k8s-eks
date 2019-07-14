@@ -8,4 +8,4 @@ registry:
 additionalArgs:
   - --connect=ws://fluxcloud
 image:
-  repository: weaveworks/flux
+  repository: fluxcd/flux
