@@ -1,6 +1,6 @@
 helmOperator:
   create: true
-  createCRD: false
+  createCRD: true
 git:
   pollInterval: 1m
 registry:
@@ -8,4 +8,4 @@ registry:
 additionalArgs:
   - --connect=ws://fluxcloud
 image:
-  repository: fluxcd/flux
+  repository: weaveworks/flux
