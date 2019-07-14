@@ -44,7 +44,7 @@ resource "kubernetes_namespace" "flux" {
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
-  repository = "fluxcd"
+  repository = "weaveworks"
   chart      = "flux"
   namespace  = "flux"
 
