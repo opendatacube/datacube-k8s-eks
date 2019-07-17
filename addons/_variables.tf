@@ -18,3 +18,7 @@ variable "region" {
   type = string
 }
 
+variable "autoscaler-scale-down-unneeded-time" {
+  default = "10m"
+}
+
