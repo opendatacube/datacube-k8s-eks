@@ -63,6 +63,6 @@ resource "aws_cognito_user_pool_client" "client" {
 
 resource "aws_cognito_user_pool_domain" "main" {
   count = var.jhub_cognito_auth_enabled ? 1 : 0
-  domain       = "${var.cluster_name}-jhub-cognito-auth"
+  domain       = "${var.cluster_name}-jhub-auth"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
 }
