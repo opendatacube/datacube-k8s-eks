@@ -29,6 +29,10 @@ resource "helm_release" "cluster_autoscaler" {
   ]
 
   set {
+    name = "image.tag"
+    value = "v1.14.3"
+  }
+  set {
     name  = "podAnnotations.iam\\.amazonaws\\.com/role"
     value = "${var.cluster_name}-autoscaler"
   }
