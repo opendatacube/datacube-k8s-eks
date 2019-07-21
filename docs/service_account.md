@@ -5,6 +5,8 @@ The user that creates the EKS cluster is given special access to perform changes
 
 You should set up some automation to deploy this infrastructure using a CI platform, this page will show you how to generate a service account with the permissions needed to generate the infrastructure.
 
+These permission are an example that work and are roughly the required permissions for successful deployment. You should tailor these permissions according to your deployment needs and reduce them further, depending on your cluster configuration.
+
 ## Create the service account
 
 To create the service account you'll need to run these commands from the root folder in this repo
