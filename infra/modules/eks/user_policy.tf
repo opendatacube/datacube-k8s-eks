@@ -38,7 +38,7 @@ resource "aws_iam_role" "eks-user" {
 
 
 resource "aws_iam_policy" "user_policy" {
-  name        = "user-policy"
+  name        = "user-policy.${var.cluster_name}"
   description = "Enables EKS users to get the kubeconfig file using aws cli"
 
   policy = <<EOF
