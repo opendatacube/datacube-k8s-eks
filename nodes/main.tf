@@ -38,12 +38,12 @@ data "aws_iam_instance_profile" "node" {
 }
 
 data "aws_autoscaling_group" "nodes" {
-  count = (var.group_enabled ? 1 : 0) * length(data.aws_subnet_ids.nodes.ids)
+  count = var.group_enabled ? length(data.aws_subnet_ids.nodes.ids) : 0
   name  = element(module.workers.node_asg_names, count.index)
 }
 
 data "aws_autoscaling_group" "spots" {
-  count = (var.group_enabled && var.spot_nodes_enabled ? 1 : 0) * length(data.aws_subnet_ids.nodes.ids)
+  count = var.group_enabled && var.spot_nodes_enabled ? length(data.aws_subnet_ids.nodes.ids) : 0
   name  = element(module.workers.spot_node_asg_names, count.index)
 }
 
