@@ -3,6 +3,16 @@ variable "cluster_name" {
   description = "Name of the EKS cluster. Must be derived from the terraform resource creating the EKS cluster."
 }
 
+variable "cluster_endpoint" {
+  type        = string
+  description = "API endpoint of the EKS cluster. Must be derived from the terraform resource creating the EKS cluster."
+}
+
+variable "cluster_ca" {
+  type        = string
+  description = "Certificate of the EKS cluster. Must be derived from the terraform resource creating the EKS cluster."
+}
+
 variable "region" {
   type        = string
   description = "Region of the EKS cluster."

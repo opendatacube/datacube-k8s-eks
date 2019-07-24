@@ -86,6 +86,8 @@ module "setup" {
   source = "./modules/setup"
 
   cluster_name      = module.eks.cluster_name
+  cluster_endpoint  = module.eks.api_endpoint
+  cluster_ca        = module.eks.cluster_ca
   region            = var.region
   db_admin_username = module.db.db_admin_username
   db_admin_password = module.db.db_admin_password
