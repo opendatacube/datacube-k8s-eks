@@ -67,6 +67,8 @@ module "workers" {
   node_instance_profile        = "${var.cluster_name}-node"
   min_nodes                    = var.min_nodes_per_az
   max_nodes                    = var.max_nodes_per_az
+  min_spot_nodes               = var.min_spot_nodes_per_az
+  max_spot_nodes               = var.max_spot_nodes_per_az
   node_group_name              = var.node_group_name
   ami_image_id                 = var.ami_image_id
   default_worker_instance_type = var.default_worker_instance_type
