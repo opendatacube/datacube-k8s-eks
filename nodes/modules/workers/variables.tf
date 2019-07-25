@@ -53,6 +53,14 @@ variable "max_nodes" {
   default = 2
 }
 
+variable "min_spot_nodes" {
+  default = 0
+}
+
+variable "max_spot_nodes" {
+  default = 2
+}
+
 # Spot Config
 variable "spot_nodes_enabled" {
   default = false
