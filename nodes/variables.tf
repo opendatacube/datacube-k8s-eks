@@ -32,6 +32,14 @@ variable "max_nodes_per_az" {
   default = 2
 }
 
+variable "min_spot_nodes_per_az" {
+  default = 0
+}
+
+variable "max_spot_nodes_per_az" {
+  default = 2
+}
+
 variable "max_spot_price" {
   default = "0.40"
 }
