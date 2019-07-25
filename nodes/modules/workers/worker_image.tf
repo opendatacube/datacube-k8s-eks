@@ -22,7 +22,17 @@ locals {
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
 --kubelet-extra-args \
-  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name} \
+  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},nodetype=normal \
+   --cloud-provider=aws"
+${var.extra_userdata}
+USERDATA
+
+  eks-spot-userdata = <<USERDATA
+#!/bin/bash
+set -o xtrace
+/etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
+--kubelet-extra-args \
+  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},nodetype=spot \
    --cloud-provider=aws"
 ${var.extra_userdata}
 USERDATA
@@ -56,7 +66,7 @@ resource "aws_launch_template" "spot" {
   count = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
   name_prefix = var.cluster_name
   image_id = local.ami_id
-  user_data = base64encode(local.eks-node-userdata)
+  user_data = base64encode(local.eks-spot-userdata)
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
