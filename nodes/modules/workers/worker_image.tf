@@ -60,6 +60,13 @@ resource "aws_launch_template" "node" {
   lifecycle {
     create_before_destroy = true
   }
+
+  block_device_mappings {
+    ebs {
+      volume_size = var.volume_size
+    }
+  }
+
 }
 
 resource "aws_launch_template" "spot" {
