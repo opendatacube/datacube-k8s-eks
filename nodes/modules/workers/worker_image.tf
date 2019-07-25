@@ -62,6 +62,7 @@ resource "aws_launch_template" "node" {
   }
 
   block_device_mappings {
+    device_name = "/dev/xvda"
     ebs {
       volume_size = var.volume_size
     }
@@ -96,6 +97,7 @@ resource "aws_launch_template" "spot" {
   }
 
   block_device_mappings {
+    device_name = "/dev/xvda"
     ebs {
       volume_size = var.spot_volume_size
     }
