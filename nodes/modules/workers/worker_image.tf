@@ -22,7 +22,7 @@ locals {
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
 --kubelet-extra-args \
-  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name} \
+  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},nodetype=normal \
    --cloud-provider=aws"
 ${var.extra_userdata}
 USERDATA
