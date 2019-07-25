@@ -87,5 +87,12 @@ resource "aws_launch_template" "spot" {
   lifecycle {
     create_before_destroy = true
   }
+
+  block_device_mappings {
+    ebs {
+      volume_size = var.spot_volume_size
+    }
+  }
+
 }
 

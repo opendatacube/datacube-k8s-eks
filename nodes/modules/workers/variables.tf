@@ -61,6 +61,14 @@ variable "max_spot_nodes" {
   default = 2
 }
 
+variable "volume_size" {
+  default = 20
+}
+
+variable "spot_volume_size" {
+  default = 20
+}
+
 # Spot Config
 variable "spot_nodes_enabled" {
   default = false

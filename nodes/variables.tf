@@ -44,6 +44,14 @@ variable "max_spot_price" {
   default = "0.40"
 }
 
+variable "volume_size" {
+  default = 20
+}
+
+variable "spot_volume_size" {
+  default = 20
+}
+
 variable "cluster_name" {
 }
 
