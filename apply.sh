@@ -23,10 +23,10 @@ pushd infra
 if [ ! -z "$CLEAN" ]; then
     rm -rf .terraform
 fi
-# terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
-# terraform plan -out infra.plan -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars"
-# terraform apply -auto-approve infra.plan
-# rm infra.plan
+terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
+terraform plan -out infra.plan -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars"
+terraform apply -auto-approve infra.plan
+rm infra.plan
 
 # Configure local kubernetes config
 # aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
@@ -59,13 +59,13 @@ terraform apply -auto-approve workersgreen.plan
 rm workersgreen.plan
 popd
 
-# pushd addons
-# if [ ! -z "$CLEAN" ]; then
-#     rm -rf .terraform
-# fi
-# terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
-# terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
-# terraform plan -out addons.plan -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars"
-# terraform apply -auto-approve addons.plan
-# rm addons.plan
-# popd
+pushd addons
+if [ ! -z "$CLEAN" ]; then
+    rm -rf .terraform
+fi
+terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
+terraform workspace new "$WORKSPACE-addons" || terraform workspace select "$WORKSPACE-addons"
+terraform plan -out addons.plan -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars"
+terraform apply -auto-approve addons.plan
+rm addons.plan
+popd
