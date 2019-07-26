@@ -77,5 +77,7 @@ module "workers" {
   nodes_enabled                = var.group_enabled
   desired_nodes                = var.desired_nodes_per_az
   extra_userdata               = var.extra_userdata
+  volume_size                 = var.volume_size
+  spot_volume_size            = var.spot_volume_size
 }
 
