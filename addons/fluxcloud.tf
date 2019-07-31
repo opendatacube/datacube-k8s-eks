@@ -42,6 +42,7 @@ resource "kubernetes_service" "fluxcloud" {
   count = var.fluxcloud_enabled ? 1 : 0
   metadata {
     name = "fluxcloud"
+    namespace = "flux"
   }
 
   spec {
@@ -60,6 +61,7 @@ resource "kubernetes_deployment" "fluxcloud" {
   count = var.fluxcloud_enabled ? 1 : 0
   metadata {
     name = "fluxcloud"
+    namespace = "flux"
   }
 
   spec {
@@ -81,7 +83,7 @@ resource "kubernetes_deployment" "fluxcloud" {
       spec {
         container {
           name  = "fluxcloud"
-          image = "justinbarrick/fluxcloud:v0.3.8"
+          image = "justinbarrick/fluxcloud:v0.3.6"
 
           port {
             container_port = 3032
