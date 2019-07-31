@@ -83,7 +83,7 @@ resource "kubernetes_deployment" "fluxcloud" {
       spec {
         container {
           name  = "fluxcloud"
-          image = "justinbarrick/fluxcloud:v0.3.6"
+          image = "justinbarrick/fluxcloud:v0.3.8"
 
           port {
             container_port = 3032
