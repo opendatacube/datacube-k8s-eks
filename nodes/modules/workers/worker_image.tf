@@ -20,6 +20,7 @@ locals {
   eks-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
+# Get instance and ami id from the aws ec2 metadate endpoint 
 id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
 ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
 /etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
