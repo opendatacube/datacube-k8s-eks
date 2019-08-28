@@ -20,9 +20,11 @@ locals {
   eks-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
+id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
+ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
 /etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
 --kubelet-extra-args \
-  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},nodetype=normal \
+  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},instance-id=$id,ami-id=$ami \
    --cloud-provider=aws"
 ${var.extra_userdata}
 USERDATA
