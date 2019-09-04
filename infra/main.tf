@@ -75,6 +75,7 @@ module "db" {
   db_name                = var.db_name
   rds_is_multi_az        = var.db_multi_az
   access_security_groups = [module.eks.node_security_group]
+  storage                = var.db_storage
 
   # Tags
   owner     = var.owner

@@ -70,6 +70,12 @@ variable "store_db_credentials" {
   description = "If true, db credentials will be stored in a kubernetes secret"
 }
 
+variable "db_storage" {
+  default     = "180"
+  description = "Storage size in GB"
+}
+
+
 # VPC & subnets
 # ===========
 variable "vpc_cidr" {
