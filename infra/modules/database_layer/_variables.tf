@@ -82,6 +82,10 @@ variable "db_port_num" {
   description = "Default port for database"
 }
 
+variable "extra_sg" {
+  default = ""
+}
+
 #--------------------------------------------------------------
 # Route53 DNS
 #--------------------------------------------------------------

@@ -75,6 +75,11 @@ variable "db_storage" {
   description = "Storage size in GB"
 }
 
+variable "db_extra_sg" {
+  default = ""
+  description = "enables an extra security group to access the RDS"
+}
+
 
 # VPC & subnets
 # ===========
