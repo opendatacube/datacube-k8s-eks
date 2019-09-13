@@ -74,7 +74,8 @@ module "db" {
   domain_name            = var.db_domain_name
   db_name                = var.db_name
   rds_is_multi_az        = var.db_multi_az
-  access_security_groups = [module.eks.node_security_group]
+  # extra_sg could be empty, so we run compact on the list to remove it if it is
+  access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
   storage                = var.db_storage
 
   # Tags
