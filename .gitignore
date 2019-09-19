@@ -11,3 +11,4 @@ requirements.lock
 clair-scan.json
 .terraform
 terraform.tfstate*
+.idea
