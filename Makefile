@@ -21,12 +21,3 @@ patch:
 setup-orchestration:
 	@cd infra/orchestration; \
 	./deploy.sh $(workspace) $(path)
-
-# use like "make run template=index-job name=nrt"
-run-index:
-	@cd jobs; \
-	/usr/bin/env bash ./run-index.sh  -t $(template)
-
-create-db:
-	@cd jobs; \
-	/usr/bin/env bash ./create-db.sh -n $(name)

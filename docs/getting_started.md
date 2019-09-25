@@ -137,18 +137,6 @@ kubectl get pods --all-namespaces
 
 You can enable more addons by adding them to your `terraform.tfvars` file and running `make apply` again
 
-Create a database for your datacube apps
-
-```bash
-make create-db name=ows
-```
-
-You can then index some data into your datacube using the predefined template [jobs/index-s3.yaml](../jobs/index-s3.yaml)
-
-```bash
-make run-index template=index-s3.yaml
-```
-
 Follow our [additional users guide](./additional_users.md) to add more administrators to the cluster
 
 # Tear it down
