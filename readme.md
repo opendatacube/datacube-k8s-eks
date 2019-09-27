@@ -33,4 +33,4 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 * [Addons](docs/addons.md) - Notes on how to install and configure various addons
 * [Troubleshooting](docs/troubleshooting.md) - Workarounds to fix common issues
 * [Service Account](docs/service_account.md) - Creating a service account to build the infrastructure
-
+* [Variables](docs/variables.md) - A list of the configurable variables and what they do
