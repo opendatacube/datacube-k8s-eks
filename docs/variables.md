@@ -74,7 +74,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [dns_proportional_autoscaler_minReplica](#dns_proportional_autoscaler_minReplica)           | Addons               | No  | 2 |
 | [external_dns_enabled](#external_dns_enabled)                                               | Addons               | No  | false |
 | [flux_enabled](#flux_enabled)                                                               | Addons               | No  | false |
-| [flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/[datacube](#datacube)-k8s-eks"  |
+| [flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/datacube-k8s-eks |
 | [flux_git_branch](#flux_git_branch)                                                         | Addons               | No  | dev |
 | [flux_git_path](#flux_git_path)                                                             | Addons               | No  | "" |
 | [flux_git_label](#flux_git_label)                                                           | Addons               | No  | "flux-sync" |
@@ -86,7 +86,8 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [fluxcloud_github_url](#fluxcloud_github_url)                                               | Addons               | No  | "" |
 | [fluxcloud_commit_template](#fluxcloud_commit_template)                                     | Addons               | No  | "{{ .VCSLink }}/commit/{{ .Commit }}"  |
 | [jhub_cognito_auth_enabled](#jhub_cognito_auth_enabled)                                     | Addons               | No  | false |
-| [jhub_callback_url](#jhub_callback_url)                                                     | Addons               | No  | "https:///jhub.example.com/"[oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
+| [jhub_callback_url](#jhub_callback_url)                                                     | Addons               | No  | "https:///jhub.example.com/"
+| [oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
 | [metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false |
 | [prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false |
 
