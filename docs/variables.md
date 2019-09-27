@@ -332,39 +332,81 @@ ami_image_id = "ami-12345678901234567"
 
 ## node_group_name
 
+Seperate Autoscaling groups by group_name for doing blue / green deployments
+
+This name is used to tag instances and ASGs 
 
 ## default_worker_instance_type
 
+The Worker instance type that the cluster nodes will run, for production we recommend something with a good network, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge.
+
 ## group_enabled
+
+If the instances in this group should be created or not, useful for swapping out instances between blue/ green
 
 ## spot_nodes_enabled
 
+Creates a second set of Autoscaling groups (one per AZ) that are configured to run Spot instances, these instances are cheaper but can be removed any-time. Useful for fault tolerant processing work.
+
+You can tell pods to run on Spot nodes by setting an affinity for nodetype = spot
+
 ## min_nodes_per_az
+
+The minimum number of on-demand nodes to run per Availability Zone, because of issues with how AWS handles autoscaling we currently deploy an ASG per availability zone
 
 ## desired_nodes_per_az
 
+Desired number of nodes per AZ, only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler.
+
 ## max_nodes_per_az
+
+Max number of nodes you want to run per AZ, useful for controlling max cost of the cluster.
 
 ## min_spot_nodes_per_az
 
+The minimum number of spot nodes to run per Availability Zone, because of issues with how AWS handles autoscaling we currently deploy an ASG per availability zone
+
+Good idea to keep this at 0, and allow cluster-autoscaler to create the nodes when you need them for processing jobs
+
 ## max_spot_nodes_per_az
+
+Max number of spot you want to run per AZ, useful for controlling max cost of the cluster.
 
 ## max_spot_price
 
+the max in USD you want to pay for each spot intance per hour, This will differ depending on the instance type you've selected. 
+You can see a history of market prices for each instance type in the AWS EC2 service in the web console.
+
 ## volume_size
+
+The Disk size for your on-demand nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this.
 
 ## spot_volume_size
 
+The Disk size for your spot nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this.
+
 ## extra_userdata
 
-Additional EC2 user data commands that will be passed to EKS nodes
+Additional EC2 user data commands that will be passed to EKS nodes, useful for installing extra apps on each node
 
 # Addons
 
 ## txt_owner_id
+
+This is used in the text record that is used to identify route53 records created by externalDns
+
 ## autoscaler-scale-down-unneeded-time
+
+How long to leave a node that isn't needed before scaling it down, if you have very transient jobs (Dask) you may want to increase this to keep the cluster warm for longer.
+
 ## alb_ingress_enabled
+
+Installs alb-ingress-controller, this will create an Application Load Balancer for your web-app when you create an ingress resource with the ingress type of `alb`
+
 ## cf_enable
+
+Creates a cloudfront distribution
+
 ## cf_dns_record
 ## cf_origin_dns_record
 ## cf_custom_aliases
