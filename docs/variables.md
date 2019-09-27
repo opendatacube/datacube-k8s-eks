@@ -3,92 +3,92 @@
 This page gives an overview of all possible variables that can be put in a `terraform.tfvars` file
 
 
-Variable                                                                                    | Deploy Stage        | Required | Default
---------------------------------------------------------------------------------------------------------------------------------------
-[region](#region)                                                                           | Infra, Nodes, Addons | No  | "ap-southeast-2"
-[owner](#owner)                                                                             | Infra, Nodes, Addons | No  | "Team name"
-[cluster_name](#cluster_name)                                                               | Infra, Nodes, Addons | No  | "datacube-eks"
-[cluster_version](#cluster_version)                                                         | Infra                | Yes | 
-[admin_access_CIDRs](#admin_access_CIDRs)                                                   | Infra                | No  | {}
-[users](#users)                                                                             | Infra                | Yes |
-[domain_name](#domain_name)                                                                 | Infra, Addons        | Yes |
-[cloudfront_log_bucket](#cloudfront_log_bucket)                                             | Infra                | No  | "dea-cloudfront-logs.s3.amazonaws.com"
-[create_certificate](#create_certificate)                                                   | Infra                | No  | false
-[db_instance_enabled](#db_instance_enabled)                                                 | Infra                | No  | true
-[db_hostname](#db_hostname)                                                                 | Infra                | No  | "database"
-[db_domain_name](#db_domain_name)                                                           | Infra                | No  | "internal"
-[db_name](#db_name)                                                                         | Infra                | No  | "datakube"
-[db_multi_az](#db_multi_az)                                                                 | Infra                | No  | false
-[store_db_credentials](#store_db_credentials)                                               | Infra                | No  | false
-[db_storage](#db_storage)                                                                   | Infra                | No  | 180
-[db_extra_sg](#db_extra_sg)                                                                 | Infra                | No  | ""
-[vpc_cidr](#vpc_cidr)                                                                       | Infra                | No  | "10.0.0.0/16"
-[public_subnet_cidrs](#public_subnet_cidrs)                                                 | Infra                | No  | ["10.0.0.0/22", "10.0.4.0/22", ["](#"10)10.0.8.0/22"]
-[private_subnet_cidrs](#private_subnet_cidrs)                                               | Infra                | No  | ["10.0.32.0/19", "10.0.64.0/19", ["](#"10)10.0.96.0/19"]
-[database_subnet_cidrs](#database_subnet_cidrs)                                             | Infra                | No  | ["10.0.20.0/22", "10.0.24.0/22", ["](#"10)10.0.28.0/22"]
-[enable_ec2_ssm](#enable_ec2_ssm)                                                           | Infra                | No  | true 
-[ami_image_id](#ami_image_id)                                                               | Nodes                | No  | ""
-[node_group_name](#node_group_name)                                                         | Nodes                | No  | "eks"
-[default_worker_instance_type](#default_worker_instance_type)                               | Nodes                | No  | ""
-[group_enabled](#group_enabled)                                                             | Nodes                | No  | false
-[spot_nodes_enabled](#spot_nodes_enabled)                                                   | Nodes                | No  | false
-[min_nodes_per_az](#min_nodes_per_az)                                                       | Nodes                | No  | 1
-[desired_nodes_per_az](#desired_nodes_per_az)                                               | Nodes                | No  | 1
-[max_nodes_per_az](#max_nodes_per_az)                                                       | Nodes                | No  | 2
-[min_spot_nodes_per_az](#min_spot_nodes_per_az)                                             | Nodes                | No  | 0
-[max_spot_nodes_per_az](#max_spot_nodes_per_az)                                             | Nodes                | No  | 2
-[max_spot_price](#max_spot_price)                                                           | Nodes                | No  | "0.40"
-[volume_size](#volume_size)                                                                 | Nodes                | No  | 20
-[spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20
-[extra_userdata](#extra_userdata)                                                           | Nodes                | No  | <<USERDATA echo "" USERDATA
-[txt_owner_id](#txt_owner_id)                                                               | Addons               | No  | "AnOwnerId"
-[autoscaler](#autoscaler)-scale-down-unneeded-time                                          | Addons               | No  | "10m"
-[alb_ingress_enabled](#alb_ingress_enabled)                                                 | Addons               | No  | false
-[cf_enable](#cf_enable)                                                                     | Addons               | No  | false
-[cf_dns_record](#cf_dns_record)                                                             | Addons               | No  | ows
-[cf_origin_dns_record](#cf_origin_dns_record)                                               | Addons               | No  | cached-alb
-[cf_custom_aliases](#cf_custom_aliases)                                                     | Addons               | No  | []
-[cf_certificate_arn](#cf_certificate_arn)                                                   | Addons               | No  | ""
-[cf_certificate_create](#cf_certificate_create)                                             | Addons               | No  | true
-[cf_log_bucket](#cf_log_bucket)                                                             | Addons               | No  | ""
-[cf_log_bucket_create](#cf_log_bucket_create)                                               | Addons               | No  | true
-[cf_origin_protocol_policy](#cf_origin_protocol_policy)                                     | Addons               | No  | http-only
-[cf_origin_timeout](#cf_origin_timeout)                                                     | Addons               | No  | 60
-[cf_default_allowed_methods](#cf_default_allowed_methods)                                   | Addons               | No  | ["GET", "HEAD", "POST", "OPTIONS", ["](#"PUT)PUT", "PATCH", "DELETE"] 
-[cf_default_cached_methods](#cf_default_cached_methods)                                     | Addons               | No  | ["GET", "HEAD"]
-[cf_min_ttl](#cf_min_ttl)                                                                   | Addons               | No  | 0
-[cf_max_ttl](#cf_max_ttl)                                                                   | Addons               | No  | 31536000
-[cf_default_ttl](#cf_default_ttl)                                                           | Addons               | No  | 86400
-[cf_price_class](#cf_price_class)                                                           | Addons               | No  | PriceClass_All
-[cloudwatch_logs_enabled](#cloudwatch_logs_enabled)                                         | Addons               | No  | false
-[cloudwatch_log_group](#cloudwatch_log_group)                                               | Addons               | No  | "datakube"
-[cloudwatch_log_retention](#cloudwatch_log_retention)                                       | Addons               | No  | 90
-[cloudwatch_image_tag](#cloudwatch_image_tag)                                               | Addons               | No  | "v1.4-debian-cloudwatch"
-[cluster_autoscaler_enabled](#cluster_autoscaler_enabled)                                   | Addons               | No  | false
-[custom_kube2iam_roles](#custom_kube2iam_roles)                                             | Addons               | No  | []
-[datacube_wms_enabled](#datacube_wms_enabled)                                               | Addons               | No  | false
-[datacube_wps_enabled](#datacube_wps_enabled)                                               | Addons               | No  | false
-[dns_proportional_autoscaler_enabled](#dns_proportional_autoscaler_enabled)                 | Addons               | No  | false
-[dns_proportional_autoscaler_coresPerReplica](#dns_proportional_autoscaler_coresPerReplica) | Addons               | No  | 256
-[dns_proportional_autoscaler_nodesPerReplica](#dns_proportional_autoscaler_nodesPerReplica) | Addons               | No  | 16
-[dns_proportional_autoscaler_minReplica](#dns_proportional_autoscaler_minReplica)           | Addons               | No  | 2
-[external_dns_enabled](#external_dns_enabled)                                               | Addons               | No  | false
-[flux_enabled](#flux_enabled)                                                               | Addons               | No  | false
-[flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/[datacube](#datacube)-k8s-eks" 
-[flux_git_branch](#flux_git_branch)                                                         | Addons               | No  | dev
-[flux_git_path](#flux_git_path)                                                             | Addons               | No  | ""
-[flux_git_label](#flux_git_label)                                                           | Addons               | No  | "flux-sync"
-[fluxcloud_enabled](#fluxcloud_enabled)                                                     | Addons               | No  | false
-[fluxcloud_slack_url](#fluxcloud_slack_url)                                                 | Addons               | No  | ""
-[fluxcloud_slack_channel](#fluxcloud_slack_channel)                                         | Addons               | No  | ""
-[fluxcloud_slack_name](#fluxcloud_slack_name)                                               | Addons               | No  | ""
-[fluxcloud_slack_emoji](#fluxcloud_slack_emoji)                                             | Addons               | No  | ""
-[fluxcloud_github_url](#fluxcloud_github_url)                                               | Addons               | No  | ""
-[fluxcloud_commit_template](#fluxcloud_commit_template)                                     | Addons               | No  | "{{ .VCSLink }}/commit/{{ .Commit }}" 
-[jhub_cognito_auth_enabled](#jhub_cognito_auth_enabled)                                     | Addons               | No  | false
-[jhub_callback_url](#jhub_callback_url)                                                     | Addons               | No  | "https:///jhub.example.com/"[oauth_callback](#oauth_callback)"                                                          | Addons               | No  | 
-[metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false
-[prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false
+| Variable                                                                                    | Deploy Stage        | Required | Default |
+| -------------------------------------------------------------------------------------------------------------------------------------- |
+| [region](#region)                                                                           | Infra, Nodes, Addons | No  | "ap-southeast-2" |
+| [owner](#owner)                                                                             | Infra, Nodes, Addons | No  | "Team name" |
+| [cluster_name](#cluster_name)                                                               | Infra, Nodes, Addons | No  | "datacube-eks" |
+| [cluster_version](#cluster_version)                                                         | Infra                | Yes |  |
+| [admin_access_CIDRs](#admin_access_CIDRs)                                                   | Infra                | No  | {} |
+| [users](#users)                                                                             | Infra                | Yes | |
+| [domain_name](#domain_name)                                                                 | Infra, Addons        | Yes | |
+| [cloudfront_log_bucket](#cloudfront_log_bucket)                                             | Infra                | No  | "dea-cloudfront-logs.s3.amazonaws.com" |
+| [create_certificate](#create_certificate)                                                   | Infra                | No  | false |
+| [db_instance_enabled](#db_instance_enabled)                                                 | Infra                | No  | true |
+| [db_hostname](#db_hostname)                                                                 | Infra                | No  | "database" |
+| [db_domain_name](#db_domain_name)                                                           | Infra                | No  | "internal" |
+| [db_name](#db_name)                                                                         | Infra                | No  | "datakube" |
+| [db_multi_az](#db_multi_az)                                                                 | Infra                | No  | false |
+| [store_db_credentials](#store_db_credentials)                                               | Infra                | No  | false |
+| [db_storage](#db_storage)                                                                   | Infra                | No  | 180 |
+| [db_extra_sg](#db_extra_sg)                                                                 | Infra                | No  | "" |
+| [vpc_cidr](#vpc_cidr)                                                                       | Infra                | No  | "10.0.0.0/16" |
+| [public_subnet_cidrs](#public_subnet_cidrs)                                                 | Infra                | No  | ["10.0.0.0/22", "10.0.4.0/22", ["](#"10)10.0.8.0/22"] |
+| [private_subnet_cidrs](#private_subnet_cidrs)                                               | Infra                | No  | ["10.0.32.0/19", "10.0.64.0/19", ["](#"10)10.0.96.0/19"] |
+| [database_subnet_cidrs](#database_subnet_cidrs)                                             | Infra                | No  | ["10.0.20.0/22", "10.0.24.0/22", ["](#"10)10.0.28.0/22"] |
+| [enable_ec2_ssm](#enable_ec2_ssm)                                                           | Infra                | No  | true  |
+| [ami_image_id](#ami_image_id)                                                               | Nodes                | No  | "" |
+| [node_group_name](#node_group_name)                                                         | Nodes                | No  | "eks" |
+| [default_worker_instance_type](#default_worker_instance_type)                               | Nodes                | No  | "" |
+| [group_enabled](#group_enabled)                                                             | Nodes                | No  | false |
+| [spot_nodes_enabled](#spot_nodes_enabled)                                                   | Nodes                | No  | false |
+| [min_nodes_per_az](#min_nodes_per_az)                                                       | Nodes                | No  | 1 |
+| [desired_nodes_per_az](#desired_nodes_per_az)                                               | Nodes                | No  | 1 |
+| [max_nodes_per_az](#max_nodes_per_az)                                                       | Nodes                | No  | 2 |
+| [min_spot_nodes_per_az](#min_spot_nodes_per_az)                                             | Nodes                | No  | 0 |
+| [max_spot_nodes_per_az](#max_spot_nodes_per_az)                                             | Nodes                | No  | 2 |
+| [max_spot_price](#max_spot_price)                                                           | Nodes                | No  | "0.40" |
+| [volume_size](#volume_size)                                                                 | Nodes                | No  | 20 |
+| [spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20 |
+| [extra_userdata](#extra_userdata)                                                           | Nodes                | No  | <<USERDATA echo "" USERDATA |
+| [txt_owner_id](#txt_owner_id)                                                               | Addons               | No  | "AnOwnerId" |
+| [autoscaler](#autoscaler)-scale-down-unneeded-time                                          | Addons               | No  | "10m" |
+| [alb_ingress_enabled](#alb_ingress_enabled)                                                 | Addons               | No  | false |
+| [cf_enable](#cf_enable)                                                                     | Addons               | No  | false |
+| [cf_dns_record](#cf_dns_record)                                                             | Addons               | No  | ows |
+| [cf_origin_dns_record](#cf_origin_dns_record)                                               | Addons               | No  | cached-alb |
+| [cf_custom_aliases](#cf_custom_aliases)                                                     | Addons               | No  | [] |
+| [cf_certificate_arn](#cf_certificate_arn)                                                   | Addons               | No  | "" |
+| [cf_certificate_create](#cf_certificate_create)                                             | Addons               | No  | true |
+| [cf_log_bucket](#cf_log_bucket)                                                             | Addons               | No  | "" |
+| [cf_log_bucket_create](#cf_log_bucket_create)                                               | Addons               | No  | true |
+| [cf_origin_protocol_policy](#cf_origin_protocol_policy)                                     | Addons               | No  | http-only |
+| [cf_origin_timeout](#cf_origin_timeout)                                                     | Addons               | No  | 60 |
+| [cf_default_allowed_methods](#cf_default_allowed_methods)                                   | Addons               | No  | ["GET", "HEAD", "POST", "OPTIONS", ["](#"PUT)PUT", "PATCH", "DELETE"]  |
+| [cf_default_cached_methods](#cf_default_cached_methods)                                     | Addons               | No  | ["GET", "HEAD"] |
+| [cf_min_ttl](#cf_min_ttl)                                                                   | Addons               | No  | 0 |
+| [cf_max_ttl](#cf_max_ttl)                                                                   | Addons               | No  | 31536000 |
+| [cf_default_ttl](#cf_default_ttl)                                                           | Addons               | No  | 86400 |
+| [cf_price_class](#cf_price_class)                                                           | Addons               | No  | PriceClass_All |
+| [cloudwatch_logs_enabled](#cloudwatch_logs_enabled)                                         | Addons               | No  | false |
+| [cloudwatch_log_group](#cloudwatch_log_group)                                               | Addons               | No  | "datakube" |
+| [cloudwatch_log_retention](#cloudwatch_log_retention)                                       | Addons               | No  | 90 |
+| [cloudwatch_image_tag](#cloudwatch_image_tag)                                               | Addons               | No  | "v1.4-debian-cloudwatch" |
+| [cluster_autoscaler_enabled](#cluster_autoscaler_enabled)                                   | Addons               | No  | false |
+| [custom_kube2iam_roles](#custom_kube2iam_roles)                                             | Addons               | No  | [] |
+| [datacube_wms_enabled](#datacube_wms_enabled)                                               | Addons               | No  | false |
+| [datacube_wps_enabled](#datacube_wps_enabled)                                               | Addons               | No  | false |
+| [dns_proportional_autoscaler_enabled](#dns_proportional_autoscaler_enabled)                 | Addons               | No  | false |
+| [dns_proportional_autoscaler_coresPerReplica](#dns_proportional_autoscaler_coresPerReplica) | Addons               | No  | 256 |
+| [dns_proportional_autoscaler_nodesPerReplica](#dns_proportional_autoscaler_nodesPerReplica) | Addons               | No  | 16 |
+| [dns_proportional_autoscaler_minReplica](#dns_proportional_autoscaler_minReplica)           | Addons               | No  | 2 |
+| [external_dns_enabled](#external_dns_enabled)                                               | Addons               | No  | false |
+| [flux_enabled](#flux_enabled)                                                               | Addons               | No  | false |
+| [flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/[datacube](#datacube)-k8s-eks"  |
+| [flux_git_branch](#flux_git_branch)                                                         | Addons               | No  | dev |
+| [flux_git_path](#flux_git_path)                                                             | Addons               | No  | "" |
+| [flux_git_label](#flux_git_label)                                                           | Addons               | No  | "flux-sync" |
+| [fluxcloud_enabled](#fluxcloud_enabled)                                                     | Addons               | No  | false |
+| [fluxcloud_slack_url](#fluxcloud_slack_url)                                                 | Addons               | No  | "" |
+| [fluxcloud_slack_channel](#fluxcloud_slack_channel)                                         | Addons               | No  | "" |
+| [fluxcloud_slack_name](#fluxcloud_slack_name)                                               | Addons               | No  | "" |
+| [fluxcloud_slack_emoji](#fluxcloud_slack_emoji)                                             | Addons               | No  | "" |
+| [fluxcloud_github_url](#fluxcloud_github_url)                                               | Addons               | No  | "" |
+| [fluxcloud_commit_template](#fluxcloud_commit_template)                                     | Addons               | No  | "{{ .VCSLink }}/commit/{{ .Commit }}"  |
+| [jhub_cognito_auth_enabled](#jhub_cognito_auth_enabled)                                     | Addons               | No  | false |
+| [jhub_callback_url](#jhub_callback_url)                                                     | Addons               | No  | "https:///jhub.example.com/"[oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
+| [metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false |
+| [prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false |
 
 # Infra
 
