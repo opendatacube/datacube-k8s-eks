@@ -3,8 +3,8 @@
 This page gives an overview of all possible variables that can be put in a `terraform.tfvars` file
 
 
-| Variable                                                                                    | Deploy Stage        | Required | Default |
-| -------------------------------------------------------------------------------------------------------------------------------------- |
+| Variable                                                                                    | Deploy Stage         | Required | Default |
+| ------------------------------------------------------------------------------------------- | -------------------- | ---------| ------- |
 | [region](#region)                                                                           | Infra, Nodes, Addons | No  | "ap-southeast-2" |
 | [owner](#owner)                                                                             | Infra, Nodes, Addons | No  | "Team name" |
 | [cluster_name](#cluster_name)                                                               | Infra, Nodes, Addons | No  | "datacube-eks" |
