@@ -42,7 +42,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20 |
 | [extra_userdata](#extra_userdata)                                                           | Nodes                | No  | <<USERDATA echo "" USERDATA |
 | [txt_owner_id](#txt_owner_id)                                                               | Addons               | No  | "AnOwnerId" |
-| [autoscaler](#autoscaler)-scale-down-unneeded-time                                          | Addons               | No  | "10m" |
+| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                | Addons               | No  | "10m" |
 | [alb_ingress_enabled](#alb_ingress_enabled)                                                 | Addons               | No  | false |
 | [cf_enable](#cf_enable)                                                                     | Addons               | No  | false |
 | [cf_dns_record](#cf_dns_record)                                                             | Addons               | No  | ows |
@@ -406,53 +406,271 @@ Installs alb-ingress-controller, this will create an Application Load Balancer f
 
 ## cf_enable
 
-Creates a cloudfront distribution
+Creates a CloudFront distribution
 
 ## cf_dns_record
+
+A DNS record that will be created and pointed to your CloudFront distribution,
+
+This value will be combined with `$var.domain_name` so
+
+Example:
+```
+domain_name = "consoto.org"
+cf_dns_record = "ows"
+```
+
+Will create a route53 record `ows.consoto.org` that points to your CloudFront Distribution
+
 ## cf_origin_dns_record
+
+The DNS entry the CloudFront Distribution will point it's requests too. This should be on the same ALB as the webservice you wish to cache. 
+
+For example: 
+```
+domain_name = "consoto.org"
+cf_dns_record = "ows"
+cf_origin_dns_record = "cached-alb"
+```
+
+Will need the following in the ows helm chart config
+```
+    ingress:
+      enabled: true
+      hosts:
+      - ows.consoto.org
+      - cached-alb.consoto.org
+```
+
+you'll need to deploy the cloudfront distribution before the ALB, or external-dns will create a record that conflicts with it.
+
+
 ## cf_custom_aliases
+
+A list of custom aliases, that you wish to add to the CloudFront Distribution, if you set this you'll need to manually provision an ACM cert in us-east-1 that includes these domains. You can pass this ACM certificate to the CloudFront Distribution by setting `cf_certificate_arn`
+
 ## cf_certificate_arn
+
+Custom certificate that includes the custom aliases
+
 ## cf_certificate_create
+
+If you aren't using a custom cert, enable this to automatically create and validate a certificate for the CloudFront Distribution,
+
+```
+domain_name = "consoto.org"
+cf_dns_record = "ows"
+cf_certificate_create = true
+```
+
+will create a certificate in us-east-1 for ows.consoto.org
+
 ## cf_log_bucket
+
+The bucket to send cloudfront logs to must be in the long form, this bucket must already exist
+
+```
+cf_log_bucket = "cloudfront-logs.s3.amazonaws.com"
+cf_log_bucket_create = false
+```
+
 ## cf_log_bucket_create
+
+Do not use (see issue #85)
+
 ## cf_origin_protocol_policy
+
+The protocol to talk to the origin (cached-alb) on, if you're using alb with https only you'll have to set this to https-only.
+
+```
+cf_origin_protocol_policy = "https-only"
+```
+
 ## cf_origin_timeout
+
+The time cloudfront will wait for a response from origin
+
 ## cf_default_allowed_methods
+
+A list of HTTP methods that cloudfront will accept
+
 ## cf_default_cached_methods
+
+A list of HTTP methods that cloudfront will cache
+
 ## cf_min_ttl
+
+Min seconds to cache requests
+
+```
+cf_min_ttl = 10
+```
+
 ## cf_max_ttl
+
+Max time to cache requests
+
 ## cf_default_ttl
+
+Default cache time
+
+```
+cf_default_ttl = 604800
+```
+
 ## cf_price_class
+
+The Price class for this distribution, can be PriceClass_100, PriceClass_200 or PriceClass_All
+
 ## cloudwatch_logs_enabled
+
+If true will configure cloudwatch to accept logs, and fluentd agents on cluster to ship them
+
 ## cloudwatch_log_group
+
+The name of your log group
+
 ## cloudwatch_log_retention
+
+Number of days to keep logs
+
 ## cloudwatch_image_tag
+
+The fluentd image to use on the cluster
+
 ## cluster_autoscaler_enabled
+
+Enables autoscaling, the autoscaler will detect when pods are stuck in `Pending` state due to lack of resources and increase the number of nodes in the cluster up to the max.
+
+Clutser-Autoscaler will also scale down if nodes are being underutilised.
+
 ## custom_kube2iam_roles
+
+A list of roles that can be used by kube2iam, roles will be prefixedd with the cluster name, and can be assigned to pods via the annotation, for example this annotation will enable the pods to run this role (deployed on a cluster called dev-eks-datacube)
+
+```
+      annotations:
+        iam.amazonaws.com/role: dev-eks-datacube-eks-wms
+````
+
+```
+custom_kube2iam_roles = [
+  {
+    name = "eks-wms"
+    policy = <<-EOF
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["S3:ListBucket"],
+            "Resource": [
+              "arn:aws:s3:::dea-public-data"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": ["S3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::dea-public-data/*"
+            ]
+          }
+        ]
+      }
+    EOF
+  }
+]
+```
+
 ## datacube_wms_enabled
+
+Creates roles and infrastructure required to deploy datacube-ows
+
 ## datacube_wps_enabled
+
+Creates roles and infrastructure required to deploy datacube-wps
+
 ## dns_proportional_autoscaler_enabled
+
+Scales core-dns depending on the number of cores / nodes useful when running large dask clusters that overload the core-dns pod
+
 ## dns_proportional_autoscaler_coresPerReplica
 ## dns_proportional_autoscaler_nodesPerReplica
 ## dns_proportional_autoscaler_minReplica
+
+
 ## external_dns_enabled
+
+Creates domain names automatically when they are specified in ingress resources and are subdomains of `$var.domain_name`
+
 ## flux_enabled
+
+Enables Weaveworks flux, a tool used to automate deployment of helm-releases and new docker images by syncing config to a git repo. 
+
+Recommended for production deployments.
+
 ## flux_git_repo_url
+
+The git repo to use as a config store
+
 ## flux_git_branch
+
+The branch to use (you can have multiple clusters managed in a single repo)
+
 ## flux_git_path
+
+The path the use (you can have multiple clusters managed in a single repo)
+
 ## flux_git_label
+
+The label to apply to the current running changes on the cluster
+
 ## fluxcloud_enabled
+
+Fluxcloud will manage alerts for the changes, when configured you can send slack notifications after each deployment (recommended for prodcution environments)
+
 ## fluxcloud_slack_url
+
+A slack webhook to send alerts to
+
 ## fluxcloud_slack_channel
+
+The name of a the slack channel you've created the webhook on
+
 ## fluxcloud_slack_name
+
+The name you wish to post as
+
 ## fluxcloud_slack_emoji
+
+An emoji to use as the profile image for the user
+
 ## fluxcloud_github_url
+
+The github url to use when building links to the commits
+
 ## fluxcloud_commit_template
+
+Template to build links to commits
+
 ## jhub_cognito_auth_enabled
+
+Creates a cognito user pool for use in a zero-to-jupyterhub deployment
+
 ## jhub_callback_url
+
+callback url for cognito, will need to match your jupytherhub config
+
 ## metrics_server_enabled
+
+Creates metrics server (not really any reason you don't want this)
+
 ## prometheus_enabled
- 
+
+Enables prometheus for monitoring services (will deploy a grafana server at mgmt.$var.domain_name)
+
+
+
  
  
  
