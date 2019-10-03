@@ -77,6 +77,11 @@ command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
 
 provisioner "local-exec" {
 when = destroy
+command = "kubectl delete crd/podmonitors.monitoring.coreos.com"
+}
+
+provisioner "local-exec" {
+when = destroy
 command = "kubectl delete crd/alertmanagers.monitoring.coreos.com"
 }
 }
