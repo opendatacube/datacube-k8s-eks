@@ -58,14 +58,3 @@ resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
   type                     = "ingress"
 }
 
-# Connects workers to load balancers
-resource "aws_security_group_rule" "eks-node-ingress-cluster" {
-  description              = "Allow worker pods to receive communication from the load balancers"
-  from_port                = 0
-  to_port                  = 65535
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.eks-node.id
-  source_security_group_id = aws_security_group.eks-lb.id
-  type                     = "ingress"
-}
-
