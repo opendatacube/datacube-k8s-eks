@@ -71,26 +71,26 @@ resource "aws_cognito_user_group" "dev_group" {
   name         = "dev-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub development users"
-  precedence   = 32
+  precedence   = 5
 }
 
 resource "aws_cognito_user_group" "internal_group" {
   name         = "internal-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub internal users"
-  precedence   = 42
+  precedence   = 6
 }
 
 resource "aws_cognito_user_group" "trusted_group" {
   name         = "trusted-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub trusted users"
-  precedence   = 32
+  precedence   = 7
 }
 
 resource "aws_cognito_user_group" "default_group" {
   name         = "default-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub default users"
-  precedence   = 42
+  precedence   = 10
 }
