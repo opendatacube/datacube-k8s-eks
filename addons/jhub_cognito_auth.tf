@@ -66,3 +66,31 @@ resource "aws_cognito_user_pool_domain" "main" {
   domain       = "${var.cluster_name}-jhub-auth"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
 }
+
+resource "aws_cognito_user_group" "dev_group" {
+  name         = "dev-group"
+  user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
+  description  = "Group defines Jupyterhub development users"
+  precedence   = 32
+}
+
+resource "aws_cognito_user_group" "internal_group" {
+  name         = "internal-group"
+  user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
+  description  = "Group defines Jupyterhub internal users"
+  precedence   = 42
+}
+
+resource "aws_cognito_user_group" "trusted_group" {
+  name         = "trusted-group"
+  user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
+  description  = "Group defines Jupyterhub trusted users"
+  precedence   = 32
+}
+
+resource "aws_cognito_user_group" "default_group" {
+  name         = "default-group"
+  user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
+  description  = "Group defines Jupyterhub default users"
+  precedence   = 42
+}
