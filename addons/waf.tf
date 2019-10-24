@@ -10,7 +10,7 @@ module "owasp_top_10_rules" {
 
   product_domain = "dea"
   service_name   = "deawaf"
-  environment    = "staging"
+  environment    = "dev"
   description    = "OWASP Top 10 rules for deawaf"
 
   target_scope      = "regional" # [IMPORTANT] this variable value should be set to regional
@@ -42,11 +42,11 @@ module "owasp_top_10_rules" {
 # https://github.com/traveloka/terraform-aws-waf-webacl-supporting-resources/blob/master/variables.tf
 module "webacl_supporting_resources" {
   source  = "traveloka/waf-webacl-supporting-resources/aws"
-  version = "0.2.0"
+  version = "v0.1.0"
 
   product_domain = "dea"
   service_name   = "deawaf"
-  environment    = "staging"
+  environment    = "dev"
   description    = "WebACL for deawaf"
 
   s3_logging_bucket = "awswaf-logs-451924316694" # TODO: create a bucket and bucket policy. Logging bucket should be in the same region as the bucket.
