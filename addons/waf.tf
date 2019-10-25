@@ -80,12 +80,6 @@ resource "aws_iam_role" "waf_firehose_role" {
   description = "Service Role for wafowasp-WebACL Firehose"
 
   assume_role_policy    = "${data.aws_iam_policy_document.firehose_assume_role_policy.json}"
-  force_detach_policies = "false"
-  max_session_duration  = "43200"
-
-  tags {
-    Name          = "ServiceRoleForFirehose_wafowasp-WebACL"
-  }
 }
 
 # Policy document that will be attached to the S3 Bucket, to make the bucket accessible by the Firehose.
@@ -93,9 +87,8 @@ data "aws_iam_policy_document" "allow_s3_actions" {
   statement {
     effect = "Allow"
 
-    principals = {
+    principals {
       type = "AWS"
-
       identifiers = [
         "${aws_iam_role.waf_firehose_role.arn}",
       ]
