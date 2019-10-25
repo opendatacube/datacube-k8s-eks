@@ -38,26 +38,112 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 }
 */
 
-/*
-# The module which is defined on repository: https://github.com/traveloka/terraform-aws-waf-webacl-supporting-resources
-# For a better understanding of what are those parameters mean,
-# please read the description of each variable in the variables.tf file:
-# https://github.com/traveloka/terraform-aws-waf-webacl-supporting-resources/blob/master/variables.tf
-module "webacl_supporting_resources" {
-  source  = "traveloka/waf-webacl-supporting-resources/aws"
-  version = "v0.2.0"
+# Create an S3 bucket to store cf logs
+resource "aws_s3_bucket" "waf_log_bucket" {
+  bucket = var.waf_log_bucket
+  region = var.region
+  acl    = "private"
 
-  product_domain = "wafowasp"
-  service_name   = "wafowasp"
-  environment    = "${var.waf_environment}"
-  description    = "WebACL for wafowasp"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 
-  s3_logging_bucket = "awswaf-logs-451924316694" # TODO: create a bucket and bucket policy. Logging bucket should be in the same region as the bucket.
-
-  firehose_buffer_size     = "128"
-  firehose_buffer_interval = "900"
+  tags = {
+    Name = "Logs for wafowasp"
+  }
 }
-*/
+
+# Policy document that will allow the Firehose to assume an IAM Role.
+data "aws_iam_policy_document" "firehose_assume_role_policy" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals = {
+      type = "Service"
+
+      identifiers = [
+        "firehose.amazonaws.com",
+      ]
+    }
+  }
+}
+
+# IAM Role for the Firehose, so it able to access those resources above.
+resource "aws_iam_role" "waf_firehose_role" {
+  name        = "ServiceRoleForFirehose_wafowasp-WebACL"
+  path        = "/service-role/firehose/"
+  description = "Service Role for wafowasp-WebACL Firehose"
+
+  assume_role_policy    = "${data.aws_iam_policy_document.firehose_assume_role_policy.json}"
+  force_detach_policies = "false"
+  max_session_duration  = "43200"
+
+  tags {
+    Name          = "ServiceRoleForFirehose_wafowasp-WebACL"
+  }
+}
+
+# Policy document that will be attached to the S3 Bucket, to make the bucket accessible by the Firehose.
+data "aws_iam_policy_document" "allow_s3_actions" {
+  statement {
+    effect = "Allow"
+
+    principals = {
+      type = "AWS"
+
+      identifiers = [
+        "${aws_iam_role.waf_firehose_role.arn}",
+      ]
+    }
+
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.waf_log_bucket.arn}",
+      "${aws_s3_bucket.waf_log_bucket.arn}/*",
+    ]
+  }
+}
+
+# Attach the policy above to the bucket.
+resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
+  bucket = "${aws_s3_bucket.waf_log_bucket.id}"
+  policy = "${data.aws_iam_policy_document.allow_s3_actions.json}"
+}
+
+# Creating the Firehose.
+resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
+  name        = "aws-waf-logs-wafowasp-WebACL-delivery_stream"
+  destination = "extended_s3"
+
+  extended_s3_configuration {
+    role_arn   = "${aws_iam_role.waf_firehose_role.arn}"
+    bucket_arn = "${aws_s3_bucket.waf_log_bucket.arn}"
+
+    buffer_size     = "${var.waf_firehose_buffer_size}"
+    buffer_interval = "${var.waf_firehose_buffer_interval}"
+
+    prefix              = "logs/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/"
+    error_output_prefix = "errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}"
+  }
+
+  tags = {
+    Name          = "aws-waf-logs-wafowasp-WebACL-delivery_stream"
+  }
+}
 
 # Read more of what are those parameters mean:
 # https://www.terraform.io/docs/providers/aws/r/wafregional_web_acl.html
