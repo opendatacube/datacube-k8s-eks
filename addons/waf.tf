@@ -10,7 +10,7 @@ module "owasp_top_10_rules" {
 
   product_domain = "wafowasp"
   service_name   = "wafowasp"
-  environment    = "dev"
+  environment    = "${var.waf_environment}"
   description    = "OWASP Top 10 rules for waf"
 
   target_scope      = "regional" # [IMPORTANT] this variable value should be set to regional
@@ -49,7 +49,7 @@ module "webacl_supporting_resources" {
 
   product_domain = "wafowasp"
   service_name   = "wafowasp"
-  environment    = "dev"
+  environment    = "${var.waf_environment}"
   description    = "WebACL for wafowasp"
 
   s3_logging_bucket = "awswaf-logs-451924316694" # TODO: create a bucket and bucket policy. Logging bucket should be in the same region as the bucket.
