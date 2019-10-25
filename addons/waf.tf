@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "firehose_assume_role_policy" {
 
 # IAM Role for the Firehose, so it able to access those resources above.
 resource "aws_iam_role" "waf_firehose_role" {
-  name        = "ServiceRoleForFirehose_wafowasp-WebACL"
+  name        = "waf_firehose_role"
   path        = "/service-role/firehose/"
   description = "Service Role for wafowasp-WebACL Firehose"
 
@@ -116,9 +116,40 @@ resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
   policy = "${data.aws_iam_policy_document.allow_s3_actions.json}"
 }
 
+# This log group for storing delivery error information.
+resource "aws_cloudwatch_log_group" "firehose_error_logs" {
+  name              = "/aws/kinesisfirehose/aws-waf-logs-wafowasp-WebACL"
+  retention_in_days = "14"
+}
+
+resource "aws_cloudwatch_log_stream" "firehose_error_log_stream" {
+  name           = "firehose-error-log-stream"
+  log_group_name = "${aws_cloudwatch_log_group.firehose_error_logs.name}"
+}
+
+data "aws_iam_policy_document" "allow_put_log_events" {
+  statement {
+    sid = "AllowWritingToLogStreams"
+    actions = [
+      "logs:PutLogEvents",
+    ]
+    effect = "Allow"
+    resources = [
+      "${aws_cloudwatch_log_stream.firehose_error_log_stream.arn}",
+    ]
+  }
+}
+
+# Attach the policy above to the IAM Role.
+resource "aws_iam_role_policy" "allow_put_log_events" {
+  name = "AllowWritingToLogStreams"
+  role = "${aws_iam_role.waf_firehose_role.name}"
+  policy = "${data.aws_iam_policy_document.allow_put_log_events.json}"
+}
+
 # Creating the Firehose.
 resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
-  name        = "aws-waf-logs-wafowasp-WebACL-delivery_stream"
+  name        = "aws-waf-logs-wafowasp-WebACL-delivery-stream"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -130,6 +161,12 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 
     prefix              = "logs/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/"
     error_output_prefix = "errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}"
+
+    cloudwatch_logging_options {
+      enabled         = "true"
+      log_group_name  = "${aws_cloudwatch_log_group.firehose_error_logs.name}"
+      log_stream_name = "${aws_cloudwatch_log_stream.firehose_error_log_stream.name}"
+    }
   }
 
   tags = {
