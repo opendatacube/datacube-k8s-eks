@@ -22,3 +22,7 @@ variable "autoscaler-scale-down-unneeded-time" {
   default = "10m"
 }
 
+variable "waf_environment" {
+  description = "The WAF environment name - used as part of resource name"
+  type        = string
+}
