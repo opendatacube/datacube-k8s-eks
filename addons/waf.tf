@@ -64,9 +64,8 @@ data "aws_iam_policy_document" "firehose_assume_role_policy" {
       "sts:AssumeRole",
     ]
 
-    principals = {
+    principals {
       type = "Service"
-
       identifiers = [
         "firehose.amazonaws.com",
       ]
