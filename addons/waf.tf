@@ -140,21 +140,15 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 # Read more of what are those parameters mean:
 # https://www.terraform.io/docs/providers/aws/r/wafregional_web_acl.html
 resource "aws_wafregional_web_acl" "waf_webacl" {
-  # The name or description of the web ACL.
   name = "waf-owasp-WebACL"
-
-  # The name or description for the Amazon CloudWatch metric of this web ACL.
   metric_name = "wafOwaspWebACL"
 
   # Configuration block to enable WAF logging.
-//  logging_configuration {
-//    # Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
-//    log_destination = "${module.webacl_supporting_resources.firehose_delivery_stream_arn}"
-//  }
+  logging_configuration {
+    # Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
+    log_destination = "${aws_kinesis_firehose_delivery_stream.waf_delivery_stream.arn}"
+  }
 
-  # Configuration block with action that you want AWS WAF to take
-  # when a request doesn't match the criteria in any of the rules
-  # that are associated with the web ACL.
   default_action {
     # Valid values are `ALLOW` and `BLOCK`.
     type = "ALLOW"
