@@ -1,5 +1,33 @@
 # AWS WAF Rules for OWASP Top 10 security risks protection.
-#
+
+# Required variables
+variable "waf_enable" {
+  default     = false
+  description = "Whether the WAF resources should be created"
+}
+
+variable "waf_environment" {
+  description = "The WAF environment name - used as part of resource name"
+  type        = string
+}
+
+variable "waf_log_bucket" {
+  default     = ""
+  description = "The name of the bucket to store waf logs in"
+}
+
+variable "waf_firehose_buffer_size" {
+  type        = "string"
+  description = "Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128"
+  default     = "128"
+}
+
+variable "waf_firehose_buffer_interval" {
+  type        = "string"
+  description = "Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900"
+  default     = "900"
+}
+
 # The module which is defined on repository: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules
 # For a better understanding of what are those parameters mean,
 # please read the description of each variable in the variables.tf file:
@@ -7,6 +35,7 @@
 module "owasp_top_10_rules" {
   source  = "traveloka/waf-owasp-top-10-rules/aws"
   version = "v0.2.0"
+  count   = (var.waf_enable) ? 1 : 0
 
   product_domain = "wafowasp"
   service_name   = "wafowasp"
@@ -40,6 +69,7 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "waf_log_bucket" {
+  count  = (var.waf_enable) ? 1 : 0
   bucket = var.waf_log_bucket
   region = var.region
   acl    = "private"
@@ -59,6 +89,7 @@ resource "aws_s3_bucket" "waf_log_bucket" {
 
 # Policy document that will allow the Firehose to assume an IAM Role.
 data "aws_iam_policy_document" "firehose_assume_role_policy" {
+  count  = (var.waf_enable) ? 1 : 0
   statement {
     actions = [
       "sts:AssumeRole",
@@ -75,6 +106,7 @@ data "aws_iam_policy_document" "firehose_assume_role_policy" {
 
 # IAM Role for the Firehose, so it able to access those resources above.
 resource "aws_iam_role" "waf_firehose_role" {
+  count       = (var.waf_enable) ? 1 : 0
   name        = "waf_firehose_role"
   path        = "/service-role/firehose/"
   description = "Service Role for wafowasp-WebACL Firehose"
@@ -84,6 +116,7 @@ resource "aws_iam_role" "waf_firehose_role" {
 
 # Policy document that will be attached to the S3 Bucket, to make the bucket accessible by the Firehose.
 data "aws_iam_policy_document" "allow_s3_actions" {
+  count  = (var.waf_enable) ? 1 : 0
   statement {
     effect = "Allow"
 
@@ -112,22 +145,26 @@ data "aws_iam_policy_document" "allow_s3_actions" {
 
 # Attach the policy above to the bucket.
 resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
+  count  = (var.waf_enable) ? 1 : 0
   bucket = "${aws_s3_bucket.waf_log_bucket.id}"
   policy = "${data.aws_iam_policy_document.allow_s3_actions.json}"
 }
 
 # This log group for storing delivery error information.
 resource "aws_cloudwatch_log_group" "firehose_error_logs" {
+  count             = (var.waf_enable) ? 1 : 0
   name              = "/aws/kinesisfirehose/aws-waf-logs-wafowasp-WebACL"
   retention_in_days = "14"
 }
 
 resource "aws_cloudwatch_log_stream" "firehose_error_log_stream" {
+  count          = (var.waf_enable) ? 1 : 0
   name           = "firehose-error-log-stream"
   log_group_name = "${aws_cloudwatch_log_group.firehose_error_logs.name}"
 }
 
 data "aws_iam_policy_document" "allow_put_log_events" {
+  count  = (var.waf_enable) ? 1 : 0
   statement {
     sid = "AllowWritingToLogStreams"
     actions = [
@@ -142,13 +179,15 @@ data "aws_iam_policy_document" "allow_put_log_events" {
 
 # Attach the policy above to the IAM Role.
 resource "aws_iam_role_policy" "allow_put_log_events" {
-  name = "AllowWritingToLogStreams"
-  role = "${aws_iam_role.waf_firehose_role.name}"
+  count  = (var.waf_enable) ? 1 : 0
+  name   = "AllowWritingToLogStreams"
+  role   = "${aws_iam_role.waf_firehose_role.name}"
   policy = "${data.aws_iam_policy_document.allow_put_log_events.json}"
 }
 
 # Creating the Firehose.
 resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
+  count       = (var.waf_enable) ? 1 : 0
   name        = "aws-waf-logs-wafowasp-WebACL-delivery-stream"
   destination = "extended_s3"
 
@@ -170,14 +209,15 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
   }
 
   tags = {
-    Name          = "aws-waf-logs-wafowasp-WebACL-delivery_stream"
+    Name = "aws-waf-logs-wafowasp-WebACL-delivery_stream"
   }
 }
 
 # Read more of what are those parameters mean:
 # https://www.terraform.io/docs/providers/aws/r/wafregional_web_acl.html
 resource "aws_wafregional_web_acl" "waf_webacl" {
-  name = "waf-owasp-WebACL"
+  count       = (var.waf_enable) ? 1 : 0
+  name        = "waf-owasp-WebACL"
   metric_name = "wafOwaspWebACL"
 
   # Configuration block to enable WAF logging.
