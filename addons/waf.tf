@@ -2,13 +2,19 @@
 
 # Required variables
 variable "waf_enable" {
-  default     = false
+  default     = true
   description = "Whether the WAF resources should be created"
+}
+
+variable "waf_target_scope" {
+  type        = "string"
+  description = "Valid values are `global` and `regional`. This variable value should be set to regional if integrate with ALBs. Also controls whether the module resources should be created if empty"
+  default     = "global"
 }
 
 variable "waf_environment" {
   description = "The WAF environment name - used as part of resource name"
-  type        = string
+  type        = "string"
 }
 
 variable "waf_log_bucket" {
@@ -35,14 +41,13 @@ variable "waf_firehose_buffer_interval" {
 module "owasp_top_10_rules" {
   source  = "traveloka/waf-owasp-top-10-rules/aws"
   version = "v0.2.0"
-  count   = (var.waf_enable) ? 1 : 0
 
   product_domain = "wafowasp"
   service_name   = "wafowasp"
   environment    = "${var.waf_environment}"
   description    = "OWASP Top 10 rules for waf"
 
-  target_scope      = "regional" # [IMPORTANT] this variable value should be set to regional
+  target_scope      = "${var.waf_target_scope}"
   create_rule_group = "true"
 
   max_expected_uri_size          = "512"
