@@ -32,6 +32,11 @@ variable "storage" {
   description = "Storage size in GB"
 }
 
+variable "db_max_storage" {
+  default = "0"
+  description = "Enables storage autoscaling up to this amount, disabled if 0"
+}
+
 variable "engine" {
   default     = "postgres"
   description = "Engine type: e.g. mysql, postgres"

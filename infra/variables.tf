@@ -75,6 +75,11 @@ variable "db_storage" {
   description = "Storage size in GB"
 }
 
+variable "db_max_storage" {
+  default = "0"
+  description = "Enables storage autoscaling up to this amount, disabled if 0"
+}
+
 variable "db_extra_sg" {
   default = ""
   description = "enables an extra security group to access the RDS"
