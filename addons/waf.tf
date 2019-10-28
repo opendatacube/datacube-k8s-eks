@@ -8,8 +8,8 @@ variable "waf_enable" {
 
 variable "waf_target_scope" {
   type        = "string"
-  description = "Valid values are `global` and `regional`. This variable value should be set to regional if integrate with ALBs. Also controls whether the module resources should be created if empty"
-  default     = ""
+  description = "Valid values are `global` and `regional`. This variable value should be set to regional if integrate with ALBs"
+  default     = "regional"
 }
 
 variable "waf_environment" {
@@ -47,7 +47,7 @@ module "owasp_top_10_rules" {
   environment    = "${var.waf_environment}"
   description    = "OWASP Top 10 rules for waf"
 
-  target_scope      = "${var.waf_target_scope}"
+  target_scope      = (var.waf_enable) ? "${var.waf_target_scope}" : ""
   create_rule_group = "true"
 
   max_expected_uri_size          = "512"
