@@ -257,7 +257,7 @@ db_storage = 500
 
 ## max_db_storage
 
-Enables storage autoscaling up to this amount, must be equal to or greater than db_storage if this value is 0, storage autoscaling is disabled.
+Enables storage autoscaling up to this amount, must be equal to or greater than db_storage, if this value is 0, storage autoscaling is disabled.
 
 When max_db_storage is any value other than 0, db_storage size is ignored by terraform to ensure it doesn't try and undto the autoscaling.
 

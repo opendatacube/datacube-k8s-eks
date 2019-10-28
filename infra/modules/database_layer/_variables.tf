@@ -33,7 +33,7 @@ variable "storage" {
 }
 
 variable "db_max_storage" {
-  default = "0"
+  default     = "0"
   description = "Enables storage autoscaling up to this amount, disabled if 0"
 }
 

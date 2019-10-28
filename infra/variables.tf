@@ -76,12 +76,12 @@ variable "db_storage" {
 }
 
 variable "db_max_storage" {
-  default = "0"
+  default     = "0"
   description = "Enables storage autoscaling up to this amount, disabled if 0"
 }
 
 variable "db_extra_sg" {
-  default = ""
+  default     = ""
   description = "enables an extra security group to access the RDS"
 }
 
