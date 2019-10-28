@@ -2,14 +2,14 @@
 
 # Required variables
 variable "waf_enable" {
-  default     = true
+  default     = false
   description = "Whether the WAF resources should be created"
 }
 
 variable "waf_target_scope" {
   type        = "string"
   description = "Valid values are `global` and `regional`. This variable value should be set to regional if integrate with ALBs. Also controls whether the module resources should be created if empty"
-  default     = "global"
+  default     = ""
 }
 
 variable "waf_environment" {
