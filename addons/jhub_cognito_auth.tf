@@ -68,6 +68,7 @@ resource "aws_cognito_user_pool_domain" "main" {
 }
 
 resource "aws_cognito_user_group" "dev_group" {
+  count        = var.jhub_cognito_auth_enabled ? 1 : 0
   name         = "dev-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub development users"
@@ -75,6 +76,7 @@ resource "aws_cognito_user_group" "dev_group" {
 }
 
 resource "aws_cognito_user_group" "internal_group" {
+  count        = var.jhub_cognito_auth_enabled ? 1 : 0
   name         = "internal-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub internal users"
@@ -82,6 +84,7 @@ resource "aws_cognito_user_group" "internal_group" {
 }
 
 resource "aws_cognito_user_group" "trusted_group" {
+  count        = var.jhub_cognito_auth_enabled ? 1 : 0
   name         = "trusted-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub trusted users"
@@ -89,6 +92,7 @@ resource "aws_cognito_user_group" "trusted_group" {
 }
 
 resource "aws_cognito_user_group" "default_group" {
+  count        = var.jhub_cognito_auth_enabled ? 1 : 0
   name         = "default-group"
   user_pool_id = "${aws_cognito_user_pool.pool[0].id}"
   description  = "Group defines Jupyterhub default users"
