@@ -21,6 +21,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [db_multi_az](#db_multi_az)                                                                 | Infra                | No  | false |
 | [store_db_credentials](#store_db_credentials)                                               | Infra                | No  | false |
 | [db_storage](#db_storage)                                                                   | Infra                | No  | 180 |
+| [max_db_storage](#max_db_storage)                                                           | Infra                | No  | 0 |
 | [db_extra_sg](#db_extra_sg)                                                                 | Infra                | No  | "" |
 | [vpc_cidr](#vpc_cidr)                                                                       | Infra                | No  | "10.0.0.0/16" |
 | [public_subnet_cidrs](#public_subnet_cidrs)                                                 | Infra                | No  | ["10.0.0.0/22", "10.0.4.0/22", ["](#"10)10.0.8.0/22"] |
@@ -251,8 +252,20 @@ RDS storage size in GB, If this is increased it cannot be decreased.
 
 Example:
 ```
-store_db_credentials = 500
+db_storage = 500
 ```
+
+## max_db_storage
+
+Enables storage autoscaling up to this amount, must be equal to or greater than db_storage, if this value is 0, storage autoscaling is disabled.
+
+When max_db_storage is any value other than 0, db_storage size is ignored by terraform to ensure it doesn't try and undto the autoscaling.
+
+Example:
+```
+max_db_storage = 500
+```
+
 
 ## db_extra_sg
 

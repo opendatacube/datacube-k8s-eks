@@ -23,6 +23,7 @@ resource "aws_db_instance" "db" {
 
   # Instance parameters
   allocated_storage      = var.storage
+  max_allocated_storage  = var.db_max_storage
   storage_type           = "gp2"
   instance_class         = var.instance_class
   vpc_security_group_ids = [aws_security_group.rds.id]

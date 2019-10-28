@@ -77,6 +77,7 @@ module "db" {
   # extra_sg could be empty, so we run compact on the list to remove it if it is
   access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
   storage                = var.db_storage
+  db_max_storage         = var.db_max_storage
 
   # Tags
   owner     = var.owner
