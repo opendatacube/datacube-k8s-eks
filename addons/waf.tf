@@ -142,8 +142,8 @@ data "aws_iam_policy_document" "allow_s3_actions" {
     ]
 
     resources = [
-      "${aws_s3_bucket.waf_log_bucket.arn}",
-      "${aws_s3_bucket.waf_log_bucket.arn}/*",
+      "${aws_s3_bucket.waf_log_bucket[0].arn}",
+      "${aws_s3_bucket.waf_log_bucket[0].arn}/*",
     ]
   }
 }
