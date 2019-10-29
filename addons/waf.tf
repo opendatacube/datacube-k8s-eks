@@ -116,7 +116,7 @@ resource "aws_iam_role" "waf_firehose_role" {
   path        = "/service-role/firehose/"
   description = "Service Role for wafowasp-WebACL Firehose"
 
-  assume_role_policy    = "${data.aws_iam_policy_document.firehose_assume_role_policy.json}"
+  assume_role_policy    = "${data.aws_iam_policy_document.firehose_assume_role_policy[0].json}"
 }
 
 # Policy document that will be attached to the S3 Bucket, to make the bucket accessible by the Firehose.
@@ -128,7 +128,7 @@ data "aws_iam_policy_document" "allow_s3_actions" {
     principals {
       type = "AWS"
       identifiers = [
-        "${aws_iam_role.waf_firehose_role.arn}",
+        "${aws_iam_role.waf_firehose_role[0].arn}",
       ]
     }
 
@@ -152,7 +152,7 @@ data "aws_iam_policy_document" "allow_s3_actions" {
 resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
   count  = (var.waf_enable) ? 1 : 0
   bucket = "${aws_s3_bucket.waf_log_bucket.id}"
-  policy = "${data.aws_iam_policy_document.allow_s3_actions.json}"
+  policy = "${data.aws_iam_policy_document.allow_s3_actions[0].json}"
 }
 
 # This log group for storing delivery error information.
@@ -165,7 +165,7 @@ resource "aws_cloudwatch_log_group" "firehose_error_logs" {
 resource "aws_cloudwatch_log_stream" "firehose_error_log_stream" {
   count          = (var.waf_enable) ? 1 : 0
   name           = "firehose-error-log-stream"
-  log_group_name = "${aws_cloudwatch_log_group.firehose_error_logs.name}"
+  log_group_name = "${aws_cloudwatch_log_group.firehose_error_logs[0].name}"
 }
 
 data "aws_iam_policy_document" "allow_put_log_events" {
@@ -177,7 +177,7 @@ data "aws_iam_policy_document" "allow_put_log_events" {
     ]
     effect = "Allow"
     resources = [
-      "${aws_cloudwatch_log_stream.firehose_error_log_stream.arn}",
+      "${aws_cloudwatch_log_stream.firehose_error_log_stream[0].arn}",
     ]
   }
 }
@@ -186,8 +186,8 @@ data "aws_iam_policy_document" "allow_put_log_events" {
 resource "aws_iam_role_policy" "allow_put_log_events" {
   count  = (var.waf_enable) ? 1 : 0
   name   = "AllowWritingToLogStreams"
-  role   = "${aws_iam_role.waf_firehose_role.name}"
-  policy = "${data.aws_iam_policy_document.allow_put_log_events.json}"
+  role   = "${aws_iam_role.waf_firehose_role[0].name}"
+  policy = "${data.aws_iam_policy_document.allow_put_log_events[0].json}"
 }
 
 # Creating the Firehose.
@@ -197,8 +197,8 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
   destination = "extended_s3"
 
   extended_s3_configuration {
-    role_arn   = "${aws_iam_role.waf_firehose_role.arn}"
-    bucket_arn = "${aws_s3_bucket.waf_log_bucket.arn}"
+    role_arn   = "${aws_iam_role.waf_firehose_role[0].arn}"
+    bucket_arn = "${aws_s3_bucket.waf_log_bucket[0].arn}"
 
     buffer_size     = "${var.waf_firehose_buffer_size}"
     buffer_interval = "${var.waf_firehose_buffer_interval}"
@@ -208,8 +208,8 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 
     cloudwatch_logging_options {
       enabled         = "true"
-      log_group_name  = "${aws_cloudwatch_log_group.firehose_error_logs.name}"
-      log_stream_name = "${aws_cloudwatch_log_stream.firehose_error_log_stream.name}"
+      log_group_name  = "${aws_cloudwatch_log_group.firehose_error_logs[0].name}"
+      log_stream_name = "${aws_cloudwatch_log_stream.firehose_error_log_stream[0].name}"
     }
   }
 
@@ -228,7 +228,7 @@ resource "aws_wafregional_web_acl" "waf_webacl" {
   # Configuration block to enable WAF logging.
   logging_configuration {
     # Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
-    log_destination = "${aws_kinesis_firehose_delivery_stream.waf_delivery_stream.arn}"
+    log_destination = "${aws_kinesis_firehose_delivery_stream.waf_delivery_stream[0].arn}"
   }
 
   default_action {
@@ -243,7 +243,7 @@ resource "aws_wafregional_web_acl" "waf_webacl" {
     priority = "0"
 
     # ID of the associated WAF rule
-    rule_id = "${module.owasp_top_10_rules.rule_group_id}"
+    rule_id = "${module.owasp_top_10_rules[0].rule_group_id}"
 
     # Valid values are `GROUP`, `RATE_BASED`, and `REGULAR`
     # The rule type, either REGULAR, as defined by Rule,
