@@ -151,7 +151,7 @@ data "aws_iam_policy_document" "allow_s3_actions" {
 # Attach the policy above to the bucket.
 resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
   count  = (var.waf_enable) ? 1 : 0
-  bucket = "${aws_s3_bucket.waf_log_bucket.id}"
+  bucket = "${aws_s3_bucket.waf_log_bucket[0].id}"
   policy = "${data.aws_iam_policy_document.allow_s3_actions[0].json}"
 }
 
