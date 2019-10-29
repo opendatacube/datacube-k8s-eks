@@ -243,7 +243,7 @@ resource "aws_wafregional_web_acl" "waf_webacl" {
     priority = "0"
 
     # ID of the associated WAF rule
-    rule_id = "${module.owasp_top_10_rules[0].rule_group_id}"
+    rule_id = "${module.owasp_top_10_rules.rule_group_id}"
 
     # Valid values are `GROUP`, `RATE_BASED`, and `REGULAR`
     # The rule type, either REGULAR, as defined by Rule,
