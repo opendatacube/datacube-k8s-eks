@@ -20,7 +20,12 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:masters
 EOF
-
+    mapUsers = <<EOF
+- userarn: ${var.user_role_arn}
+  username: dev-eks-deployer
+  groups:
+    - system:masters
+EOF
   }
 }
 
