@@ -9,6 +9,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [owner](#owner)                                                                             | Infra, Nodes, Addons | No  | "Team name" |
 | [cluster_name](#cluster_name)                                                               | Infra, Nodes, Addons | No  | "datacube-eks" |
 | [cluster_version](#cluster_version)                                                         | Infra                | Yes |  |
+| [eks_service_user](#eks_service_user)                                                       | Infra                | No  | "" |
 | [admin_access_CIDRs](#admin_access_CIDRs)                                                   | Infra                | No  | {} |
 | [users](#users)                                                                             | Infra                | Yes | |
 | [domain_name](#domain_name)                                                                 | Infra, Addons        | Yes | |
