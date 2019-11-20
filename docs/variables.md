@@ -135,6 +135,17 @@ Example:
 cluster_version = "1.13"
 ```
 
+## eks_service_user
+
+EKS service account IAM user to manage kubernetes cluster other than cluster admin user. This will grant service account user to interact with cluster by updating aws-auth ConfigMap within kubernetes.
+
+See [Manage Users for you Cluster](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html) for more details and configuration options.
+
+Example:
+```
+eks_service_user = "dev-eks-deployer"
+```
+
 ## admin_access_CIDRs
 
 Locks api access to these addresses, address must be in [CIDR Notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
