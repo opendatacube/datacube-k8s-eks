@@ -24,6 +24,11 @@ variable "admin_access_CIDRs" {
   default = {}
 }
 
+variable "eks_service_user" {
+  type        = string
+  description = "Service account username"
+}
+
 variable "users" {
   description = "A list of users that will be given access to the cluster"
   type        = list(string)

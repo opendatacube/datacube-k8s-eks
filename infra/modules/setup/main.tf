@@ -2,6 +2,7 @@ data "aws_caller_identity" "current" {
 }
 
 provider "kubernetes" {
+  load_config_file       = false
   host                   = var.cluster_endpoint
   cluster_ca_certificate = base64decode(var.cluster_ca)
   exec {
