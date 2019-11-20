@@ -48,4 +48,5 @@ variable "user_role_arn" {
 variable "eks_service_user" {
   type        = string
   description = "Service account username"
+  default     = null
 }
