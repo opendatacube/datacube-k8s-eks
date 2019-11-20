@@ -1,5 +1,5 @@
 data "aws_iam_user" "service_user" {
-  count  = (var.eks_service_user != null) ? 1 : 0
+  count  = (var.eks_service_user != "") ? 1 : 0
   user_name = var.eks_service_user
 }
 
@@ -38,7 +38,7 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:masters
 EOF
-    mapUsers = (var.eks_service_user != null) ? data.template_file.map_user_config.rendered : null
+    mapUsers = (var.eks_service_user != "") ? data.template_file.map_user_config.rendered : null
   }
 }
 

@@ -27,7 +27,7 @@ variable "admin_access_CIDRs" {
 variable "eks_service_user" {
   type        = string
   description = "Service account username"
-  default     = null
+  default     = ""
 }
 
 variable "users" {
