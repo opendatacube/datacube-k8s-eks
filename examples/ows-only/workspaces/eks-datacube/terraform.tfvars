@@ -47,11 +47,6 @@ max_nodes_per_az = 2
 # desired is only for initial deployment, it will be ignored afterwards
 desired_nodes_per_az = 1
 
-# Database config
-# ===============
-db_dns_name = "db"
-db_dns_zone = "internal"
-
 # production workloads should use multi_az
 db_multi_az = false
 

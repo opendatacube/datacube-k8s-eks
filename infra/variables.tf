@@ -55,14 +55,6 @@ variable "db_instance_enabled" {
   description = "Create an RDS postgres instance for use by the datacube"
 }
 
-variable "db_hostname" {
-  default = "database"
-}
-
-variable "db_domain_name" {
-  default = "internal"
-}
-
 variable "db_name" {
   default = "datakube"
 }

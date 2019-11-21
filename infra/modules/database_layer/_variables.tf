@@ -92,20 +92,6 @@ variable "extra_sg" {
 }
 
 #--------------------------------------------------------------
-# Route53 DNS
-#--------------------------------------------------------------
-
-variable "hostname" {
-  default     = "database"
-  description = "Database url prefix"
-}
-
-variable "domain_name" {
-  default     = "internal"
-  description = "Route53 Zone domain name suffix"
-}
-
-#--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
 variable "db_instance_enabled" {
