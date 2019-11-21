@@ -70,8 +70,6 @@ module "db" {
   vpc_id                = module.vpc.vpc_id
   database_subnet_group = module.vpc.database_subnets
 
-  hostname               = var.db_hostname
-  domain_name            = var.db_domain_name
   db_name                = var.db_name
   rds_is_multi_az        = var.db_multi_az
   # extra_sg could be empty, so we run compact on the list to remove it if it is

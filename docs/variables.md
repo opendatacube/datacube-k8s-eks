@@ -16,8 +16,6 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [cloudfront_log_bucket](#cloudfront_log_bucket)                                             | Infra                | No  | "dea-cloudfront-logs.s3.amazonaws.com" |
 | [create_certificate](#create_certificate)                                                   | Infra                | No  | false |
 | [db_instance_enabled](#db_instance_enabled)                                                 | Infra                | No  | true |
-| [db_hostname](#db_hostname)                                                                 | Infra                | No  | "database" |
-| [db_domain_name](#db_domain_name)                                                           | Infra                | No  | "internal" |
 | [db_name](#db_name)                                                                         | Infra                | No  | "datakube" |
 | [db_multi_az](#db_multi_az)                                                                 | Infra                | No  | false |
 | [store_db_credentials](#store_db_credentials)                                               | Infra                | No  | false |
@@ -222,14 +220,6 @@ Example:
 ```
 db_instance_enabled = true
 ```
-
-## db_hostname
-
-Deprecated, do not use. Instead you should edit core_dns configmap to route traffic to the RDS domain name. 
-
-## db_domain_name
-
-Deprecated, do not use. Instead you should edit core_dns configmap to route traffic to the RDS domain name. 
 
 ## db_name
 
