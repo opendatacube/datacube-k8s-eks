@@ -97,5 +97,6 @@ module "setup" {
   store_db_creds    = var.store_db_credentials
   node_role_arn     = module.eks.node_role_arn
   user_role_arn     = module.eks.user_role_arn
+  eks_service_user  = var.eks_service_user
 }
 

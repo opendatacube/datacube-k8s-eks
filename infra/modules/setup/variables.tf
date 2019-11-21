@@ -45,3 +45,8 @@ variable "user_role_arn" {
   description = "ARN of the User's IAM Role. Must be derived from the terraform resource which creates the role."
 }
 
+variable "eks_service_user" {
+  type        = string
+  description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
+  default     = ""
+}

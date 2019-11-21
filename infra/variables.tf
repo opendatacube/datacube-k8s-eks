@@ -24,6 +24,12 @@ variable "admin_access_CIDRs" {
   default = {}
 }
 
+variable "eks_service_user" {
+  type        = string
+  description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
+  default     = ""
+}
+
 variable "users" {
   description = "A list of users that will be given access to the cluster"
   type        = list(string)

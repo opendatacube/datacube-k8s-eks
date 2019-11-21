@@ -1,3 +1,22 @@
+data "aws_iam_user" "service_user" {
+  count  = (var.eks_service_user != "") ? 1 : 0
+  user_name = var.eks_service_user
+}
+
+data "template_file" "map_user_config" {
+  count  = (var.eks_service_user != "") ? 1 : 0
+  template = <<EOF
+- userarn: $${eks_service_user_arn}
+  username: $${eks_service_user}
+  groups:
+    - system:masters
+EOF
+  vars = {
+    eks_service_user     = "${var.eks_service_user}"
+    eks_service_user_arn = "${data.aws_iam_user.service_user[0].arn}"
+  }
+}
+
 resource "kubernetes_config_map" "aws_auth" {
   metadata {
     name      = "aws-auth"
@@ -20,7 +39,7 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:masters
 EOF
-
+    mapUsers = (var.eks_service_user != "") ? data.template_file.map_user_config[0].rendered : null
   }
 }
 

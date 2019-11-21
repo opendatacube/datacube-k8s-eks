@@ -9,6 +9,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [owner](#owner)                                                                             | Infra, Nodes, Addons | No  | "Team name" |
 | [cluster_name](#cluster_name)                                                               | Infra, Nodes, Addons | No  | "datacube-eks" |
 | [cluster_version](#cluster_version)                                                         | Infra                | Yes |  |
+| [eks_service_user](#eks_service_user)                                                       | Infra                | No  | "" |
 | [admin_access_CIDRs](#admin_access_CIDRs)                                                   | Infra                | No  | {} |
 | [users](#users)                                                                             | Infra                | Yes | |
 | [domain_name](#domain_name)                                                                 | Infra, Addons        | Yes | |
@@ -132,6 +133,17 @@ This can be changed on a running cluster to update the version of your kubernete
 Example:
 ```
 cluster_version = "1.13"
+```
+
+## eks_service_user
+
+EKS service account IAM user to manage kubernetes cluster other than cluster admin user. This will grant service account user to interact with cluster by updating aws-auth ConfigMap within kubernetes.
+
+See [Manage Users for you Cluster](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html) for more details and configuration options.
+
+Example:
+```
+eks_service_user = "dev-eks-deployer"
 ```
 
 ## admin_access_CIDRs
