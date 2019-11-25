@@ -22,6 +22,9 @@ resource "kubernetes_config_map" "coredns_custom" {
     prometheus :9153
     proxy . /etc/resolv.conf
     cache 30
+    loop
+    reload
+    loadbalance
 }
 EOF
   }
