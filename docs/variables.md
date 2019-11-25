@@ -32,6 +32,11 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [default_worker_instance_type](#default_worker_instance_type)                               | Nodes                | No  | "" |
 | [group_enabled](#group_enabled)                                                             | Nodes                | No  | false |
 | [spot_nodes_enabled](#spot_nodes_enabled)                                                   | Nodes                | No  | false |
+| [min_nodes](#min_nodes)                                                                     | Nodes                | No  | 0 |
+| [desired_nodes](#desired_nodes)                                                             | Nodes                | No  | 0 |
+| [max_nodes](#max_nodes)                                                                     | Nodes                | No  | 0 |
+| [min_spot_nodes](#min_spot_nodes)                                                           | Nodes                | No  | 0 |
+| [max_spot_nodes](#max_spot_nodes)                                                           | Nodes                | No  | 0 |
 | [min_nodes_per_az](#min_nodes_per_az)                                                       | Nodes                | No  | 1 |
 | [desired_nodes_per_az](#desired_nodes_per_az)                                               | Nodes                | No  | 1 |
 | [max_nodes_per_az](#max_nodes_per_az)                                                       | Nodes                | No  | 2 |
@@ -366,25 +371,57 @@ Creates a second set of Autoscaling groups (one per AZ) that are configured to r
 
 You can tell pods to run on Spot nodes by setting an affinity for nodetype = spot
 
+## min_nodes
+
+The minimum number of on-demand nodes to run
+
+## desired_nodes
+
+Desired number of nodes only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler.
+
+## max_nodes
+
+Max number of nodes you want to run, useful for controlling max cost of the cluster.
+
+## min_spot_nodes
+
+The minimum number of spot nodes to run.
+
+Good idea to keep this at 0, and allow cluster-autoscaler to create the nodes when you need them for processing jobs
+
+## max_spot_nodes
+
+Max number of spot you want to run, useful for controlling max cost of the cluster.
+
 ## min_nodes_per_az
+
+:warning: Deprecated, use [min_nodes](#min_nodes) instead :warning:
 
 The minimum number of on-demand nodes to run per Availability Zone, because of issues with how AWS handles autoscaling we currently deploy an ASG per availability zone
 
 ## desired_nodes_per_az
 
+:warning: Deprecated, use [desired_nodes](#desired_nodes) instead :warning:
+
 Desired number of nodes per AZ, only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler.
 
 ## max_nodes_per_az
 
+:warning: Deprecated, use [max_nodes](#max_nodes) instead :warning:
+
 Max number of nodes you want to run per AZ, useful for controlling max cost of the cluster.
 
 ## min_spot_nodes_per_az
+
+:warning: Deprecated, use [min_spot_nodes](#min_spot_nodes) instead :warning:
 
 The minimum number of spot nodes to run per Availability Zone, because of issues with how AWS handles autoscaling we currently deploy an ASG per availability zone
 
 Good idea to keep this at 0, and allow cluster-autoscaler to create the nodes when you need them for processing jobs
 
 ## max_spot_nodes_per_az
+
+:warning: Deprecated, use [max_spot_nodes](#max_spot_nodes) instead :warning:
 
 Max number of spot you want to run per AZ, useful for controlling max cost of the cluster.
 
