@@ -41,7 +41,7 @@ resource "aws_autoscaling_group" "nodes" {
   ]
 
   # Don't break cluster autoscaler
-  suspend_process = [AZrebalance]
+  suspended_processes = [AZrebalance]
 
   depends_on = [aws_launch_template.node]
 }
@@ -89,7 +89,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   ]
 
   # Don't break cluster autoscaler
-  suspend_process = [AZrebalance]
+  suspended_processes = [AZrebalance]
   
   depends_on = [aws_launch_template.spot]
 }
