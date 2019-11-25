@@ -32,36 +32,6 @@ EOF
   sensitive = true
 }
 
-//output "coredns_config" {
-//  value = <<EOF
-//apiVersion: v1
-//data:
-//  Corefile: |
-//    .:53 {
-//        errors
-//        health
-//        rewrite name database.local ${module.db.db_hostname}
-//        kubernetes cluster.local in-addr.arpa ip6.arpa {
-//          pods insecure
-//          upstream
-//          fallthrough in-addr.arpa ip6.arpa
-//        }
-//        prometheus :9153
-//        proxy . /etc/resolv.conf
-//        cache 30
-//    }
-//kind: ConfigMap
-//metadata:
-//  labels:
-//    eks.amazonaws.com/component: coredns
-//    k8s-app: kube-dns
-//  name: coredns
-//  namespace: kube-system
-//
-//EOF
-//
-//}
-
 data "aws_caller_identity" "current" {
 }
 
