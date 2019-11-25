@@ -20,3 +20,14 @@ We've set up automated processes to do blue / green patching of your cluster. An
 ```bash
 make patch workspace=<cluster name> path=<path> ami=<ami>
 ```
+
+## Rolling update to instances/nodes
+We've set up an automated process to deploy rolling updates to nodes/instances. The rolling patch deploy also ensures that the applications are healthy during patching.
+In order to run the rolling update, run the following command:
+```bash
+make roll-instances [wait_limit=<wait time for deployments - in seconds>] [max_nodes=<number of nodes to patch>]
+```
+
+The command optionally excepts two parameters - 
+- wait_limit: Time to wait for deployments to be healthy. Default is set to 15 mins (900 seconds).
+- max_nodes: Maximum number of nodes to patch in single go. Default is set to 50 nodes.
