@@ -90,6 +90,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
 | [metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false |
 | [prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false |
+| [kubewatch_enabled](#kubewatch_enabled)                                                   | Addons               | No  | false |
 
 # Infra
 
@@ -684,9 +685,10 @@ Creates metrics server (not really any reason you don't want this)
 
 Enables prometheus for monitoring services (will deploy a grafana server at mgmt.$var.domain_name)
 
+## kubewatch_enabled
 
+Enables kubewatch watcher that publishes k8s cluster helm event notification in a slack channel.
 
- 
  
  
  
