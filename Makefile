@@ -18,6 +18,11 @@ patch:
 	@cd infra; \
 	./patch.sh $(workspace) $(path) $(ami);
 
+roll-instances: wait_limit ?= 900
+roll-instances: max_nodes ?= 50
+roll-instances:
+    ./scripts/roll_instances.sh $(wait_limit) $(max_nodes)
+
 setup-orchestration:
 	@cd infra/orchestration; \
 	./deploy.sh $(workspace) $(path)
