@@ -38,6 +38,16 @@ resource "aws_autoscaling_group" "nodes" {
       value               = "true"
       propagate_at_launch = true
     },
+    {
+      key                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
+      value               = "owned"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "k8s.io/cluster-autoscaler/node-template/label/nodetype"
+      value               = "ondemand"
+      propagate_at_launch = true
+    },
   ]
 
   # Don't break cluster autoscaler
@@ -84,6 +94,16 @@ resource "aws_autoscaling_group" "spot_nodes" {
     {
       key                 = "k8s.io/cluster-autoscaler/enabled"
       value               = "true"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
+      value               = "owned"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "k8s.io/cluster-autoscaler/node-template/label/nodetype"
+      value               = "spot"
       propagate_at_launch = true
     },
   ]
