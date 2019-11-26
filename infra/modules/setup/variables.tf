@@ -50,3 +50,9 @@ variable "eks_service_user" {
   description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
   default     = ""
 }
+
+variable "db_hostname" {
+  type = string
+  description = "DB hostname for coredns config"
+  default = ""
+}
