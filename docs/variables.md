@@ -689,18 +689,94 @@ Enables prometheus for monitoring services (will deploy a grafana server at mgmt
 
 Enables kubewatch watcher that publishes k8s cluster helm event notification in a slack channel.
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+## kubewatch_slack_enabled
+
+Push kubewatch alert notification to Slack channel using slack token
+
+## kubewatch_slack_channel
+
+Slack channel to notify kubewatch alerts
+
+## kubewatch_slack_token
+
+Create slack bot token using: https://my.slack.com/services/new/bot and invite the bot to your channel using: /join @botname
+
+## kubewatch_hipchat_enabled
+
+Push kubewatch alert notification to hipchat room
+
+## kubewatch_hipchat_room
+
+Hipchat room name for kubewatch alert notifications
+
+## kubewatch_hipchat_token
+
+Hipchat room token to push notification to hipchat room
+
+## kubewatch_hipchat_url
+
+Hipchat URL
+
+## kubewatch_mattermost_enabled
+
+Push kubewatch alert notification to mattermost
+
+## kubewatch_mattermost_channel
+
+Mattermost Channel name
+
+## kubewatch_mattermost_url
+
+Mattermost channel URL
+
+## kubewatch_mattermost_username
+
+Mattermost username
+
+## kubewatch_flock_enabled
+
+Push kubewatch alert notification to flock
+
+## kubewatch_flock_url
+
+Flock URL
+
+## kubewatch_webhook_enabled
+
+Push kubewatch alert notification to Webhook URL
+
+## kubewatch_webhook_url
+
+Webhook URL
+
+## kubewatch_resourcesToWatch_deployment
+
+Kubewatch to monitor changes to k8s deployments
+
+## kubewatch_resourcesToWatch_replicationcontroller
+
+Kubewatch to monitor changes to k8s Replication Controller
+
+## kubewatch_resourcesToWatch_replicaset
+
+Kubewatch to monitor changes to k8s Replica Set
+
+## kubewatch_resourcesToWatch_daemonset
+
+Kubewatch to monitor changes to k8s Daemon Set
+
+## kubewatch_resourcesToWatch_services
+
+Kubewatch to monitor changes to k8s Services
+
+## kubewatch_resourcesToWatch_pod
+
+Kubewatch to monitor changes to k8s Pods
+
+## kubewatch_resourcesToWatch_job
+
+Kubewatch to monitor changes to k8s Jobs
+
+## kubewatch_resourcesToWatch_persistentvolume
+
+Kubewatch to monitor changes to k8s Persistent Volume
