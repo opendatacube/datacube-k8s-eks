@@ -58,7 +58,7 @@ resource "aws_autoscaling_group" "nodes" {
 
 resource "aws_autoscaling_group" "spot_nodes" {
   count            = var.spot_nodes_enabled ? 1 : 0
-  desired_capacity = var.desired_nodes
+  desired_capacity = var.min_spot_nodes
   max_size         = var.max_spot_nodes
   min_size         = var.min_spot_nodes
   name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot-0"
@@ -66,7 +66,8 @@ resource "aws_autoscaling_group" "spot_nodes" {
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
-    ignore_changes        = [desired_capacity]
+    # commenting for testing
+    # ignore_changes        = [desired_capacity]
     create_before_destroy = true
   }
 
