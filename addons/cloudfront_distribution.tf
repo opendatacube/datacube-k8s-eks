@@ -113,8 +113,9 @@ resource "aws_acm_certificate_validation" "cert" {
 }
 
 locals {
-  # set certificate_arn to either the existing cert of the generated cert 
-  certificate_arn = (var.cf_certificate_arn != "") ? var.cf_certificate_arn : aws_acm_certificate_validation.cert[0].certificate_arn
+  # set certificate_arn to either the existing cert or the generated cert
+  generated_cert_arn = (var.cf_certificate_create) ? aws_acm_certificate_validation.cert[0].certificate_arn : ""
+  certificate_arn = (var.cf_certificate_arn != "" ) ? var.cf_certificate_arn : local.generated_cert_arn
 
   origin_domain = "${var.cf_origin_dns_record}.${var.domain_name}"
 
