@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 # shellcheck disable=SC2178,SC2128
 
