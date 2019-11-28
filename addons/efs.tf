@@ -93,18 +93,6 @@ resource "kubernetes_persistent_volume" "example" {
   }
 }
 
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: efs-persist
-spec:
-  storageClassName: ""
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 11Gi
-
 resource "kubernetes_persistent_volume_claim" "efs" {
   metadata {
     name = "efs-persist"
