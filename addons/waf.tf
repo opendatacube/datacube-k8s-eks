@@ -15,6 +15,7 @@ variable "waf_target_scope" {
 variable "waf_environment" {
   description = "The WAF environment name - used as part of resource name"
   type        = "string"
+  default     = ""
 }
 
 variable "waf_log_bucket" {
@@ -44,7 +45,7 @@ module "owasp_top_10_rules" {
 
   product_domain = "wafowasp"
   service_name   = "wafowasp"
-  environment    = "${var.waf_environment}"
+  environment    = (var.waf_enable) ? "${var.waf_environment}" : ""
   description    = "OWASP Top 10 rules for waf"
 
   target_scope      = (var.waf_enable) ? "${var.waf_target_scope}" : ""
