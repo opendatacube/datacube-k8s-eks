@@ -159,7 +159,7 @@ resource "helm_release" "kubewatch_operator" {
 
   set {
     name  = "slack.enabled"
-    value = (var.kubewatch_slack_enabled != "") ? var.kubewatch_slack_enabled : false
+    value = var.kubewatch_slack_enabled
   }
 
   set {
@@ -174,7 +174,7 @@ resource "helm_release" "kubewatch_operator" {
 
   set {
     name  = "hipchat.enabled"
-    value = (var.kubewatch_hipchat_enabled != "") ? var.kubewatch_hipchat_enabled : ""
+    value = var.kubewatch_hipchat_enabled
   }
 
   set {
@@ -194,7 +194,7 @@ resource "helm_release" "kubewatch_operator" {
 
   set {
     name  = "mattermost.enabled"
-    value = (var.kubewatch_mattermost_enabled != "") ? var.kubewatch_mattermost_enabled : ""
+    value = var.kubewatch_mattermost_enabled
   }
 
   set {
@@ -214,7 +214,7 @@ resource "helm_release" "kubewatch_operator" {
 
   set {
     name  = "flock.enabled"
-    value = (var.kubewatch_flock_enabled != "") ? var.kubewatch_flock_enabled : ""
+    value = var.kubewatch_flock_enabled
   }
 
   set {
@@ -224,7 +224,7 @@ resource "helm_release" "kubewatch_operator" {
 
   set {
     name  = "webhook.enabled"
-    value = (var.kubewatch_webhook_enabled != "") ? var.kubewatch_webhook_enabled : ""
+    value = var.kubewatch_webhook_enabled
   }
 
   set {
@@ -234,42 +234,42 @@ resource "helm_release" "kubewatch_operator" {
 
   set {
     name  = "resourcesToWatch.deployment"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_deployment : false
+    value = var.kubewatch_resourcesToWatch_deployment
   }
 
   set {
     name  = "resourcesToWatch.replicationcontroller"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_replicationcontroller : false
+    value = var.kubewatch_resourcesToWatch_replicationcontroller
   }
 
   set {
     name  = "resourcesToWatch.replicaset"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_replicaset : false
+    value = var.kubewatch_resourcesToWatch_replicaset
   }
 
   set {
     name  = "resourcesToWatch.daemonset"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_daemonset : false
+    value = var.kubewatch_resourcesToWatch_daemonset
   }
 
   set {
     name  = "resourcesToWatch.services"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_services : false
+    value = var.kubewatch_resourcesToWatch_services
   }
 
   set {
     name  = "resourcesToWatch.pod"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_pod : false
+    value = var.kubewatch_resourcesToWatch_pod
   }
 
   set {
     name  = "resourcesToWatch.job"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_job : false
+    value = var.kubewatch_resourcesToWatch_job
   }
 
   set {
     name  = "resourcesToWatch.persistentvolume"
-    value = (var.kubewatch_enabled != "") ? var.kubewatch_resourcesToWatch_persistentvolume : false
+    value = var.kubewatch_resourcesToWatch_persistentvolume
   }
 
   depends_on = [
