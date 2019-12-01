@@ -4,7 +4,7 @@ variable "efs_enabled" {
 }
 
 # Find Worker Node SG
-data "aws_security_group" "selected" {
+data "aws_security_group" "worker" {
   count = var.efs_enabled ? 1 : 0
   name  = "${var.cluster_name}-node"
 }
@@ -47,7 +47,7 @@ resource "aws_security_group" "ingress-efs" {
 
    # NFS
    ingress {
-     security_groups = ["${data.aws_security_group.efs[0].id}"]
+     security_groups = [data.aws_security_group.worker[0].id]
      from_port       = 2049
      to_port         = 2049
      protocol        = "tcp"
@@ -55,7 +55,7 @@ resource "aws_security_group" "ingress-efs" {
 
    # Terraform removes the default rule
    egress {
-     security_groups = ["${data.aws_security_group.efs[0].id}"]
+     security_groups = [data.aws_security_group.worker[0].id]
      from_port       = 0
      to_port         = 0
      protocol        = "-1"
