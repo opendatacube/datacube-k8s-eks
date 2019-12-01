@@ -3,6 +3,12 @@ variable "efs_enabled" {
     description = "Creates an encrypted EFS and connects it to the worker nodes"
 }
 
+variable "efs_pvc_namespace" {
+    default     = "Default"
+    type        = string
+    description = "The namespace to automatically create the efs persistant volume claim"
+}
+
 # Find Worker Node SG
 data "aws_security_group" "worker" {
   count = var.efs_enabled ? 1 : 0
@@ -96,6 +102,7 @@ resource "kubernetes_persistent_volume" "example" {
 resource "kubernetes_persistent_volume_claim" "efs" {
   metadata {
     name = "efs-persist"
+    namespace = var.efs_pvc_namespace
   }
   spec {
     access_modes = ["ReadWriteMany"]
