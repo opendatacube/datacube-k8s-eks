@@ -62,11 +62,28 @@ resource "aws_iam_role_policy_attachment" "user_policy_attach" {
   policy_arn = aws_iam_policy.user_policy.arn
 }
 
+data "template_file" "policy_template" {
+  template = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "sqs:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_policy" "user_additional_policy" {
 //  count       = (var.user_additional_policy != "") ? 1 : 0
   name        = "user-additional-policy"
   description = "Enables EKS users to have additional policy"
-  policy      = var.user_additional_policy.json
+  policy      = data.template_file.policy_template.rendered
 }
 
 resource "aws_iam_role_policy_attachment" "user_additional_policy_attach" {
