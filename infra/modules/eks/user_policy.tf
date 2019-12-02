@@ -63,20 +63,7 @@ resource "aws_iam_role_policy_attachment" "user_policy_attach" {
 }
 
 data "template_file" "policy_template" {
-  template = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "sqs:*"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+  template = "${var.user_additional_policy}"
 }
 
 resource "aws_iam_policy" "user_additional_policy" {
