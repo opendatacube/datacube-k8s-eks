@@ -62,19 +62,8 @@ resource "aws_iam_role_policy_attachment" "user_policy_attach" {
   policy_arn = aws_iam_policy.user_policy.arn
 }
 
-data "template_file" "policy_template" {
-  template = "${var.user_additional_policy}"
-}
-
-resource "aws_iam_policy" "user_additional_policy" {
-//  count       = (var.user_additional_policy != "") ? 1 : 0
-  name        = "user-additional-policy"
-  description = "Enables EKS users to have additional policy"
-  policy      = jsonencode(var.user_additional_policy)
-}
-
-resource "aws_iam_role_policy_attachment" "user_additional_policy_attach" {
-//  count       = (var.user_additional_policy != "") ? 1 : 0
-  role        = aws_iam_role.eks-user.name
-  policy_arn  = aws_iam_policy.user_additional_policy.arn
+resource "aws_iam_role_policy_attachment" "role-policy-attachment" {
+  role       = aws_iam_role.eks-user.name
+  count      = "${length(var.user_additional_policy_arn)}"
+  policy_arn = "${var.user_additional_policy_arn[count.index]}"
 }
