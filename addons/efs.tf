@@ -113,6 +113,6 @@ resource "kubernetes_persistent_volume_claim" "efs" {
         storage = "10G"
       }
     }
-    volume_name = "${kubernetes_persistent_volume.example.metadata.0.name}"
+    volume_name = "${kubernetes_persistent_volume.example.metadata[0].0.name}"
   }
 }
