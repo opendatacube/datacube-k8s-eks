@@ -70,7 +70,7 @@ resource "aws_iam_policy" "user_additional_policy" {
 //  count       = (var.user_additional_policy != "") ? 1 : 0
   name        = "user-additional-policy"
   description = "Enables EKS users to have additional policy"
-  policy      = data.template_file.policy_template.rendered
+  policy      = jsonencode(var.user_additional_policy)
 }
 
 resource "aws_iam_role_policy_attachment" "user_additional_policy_attach" {
