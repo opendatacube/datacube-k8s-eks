@@ -78,6 +78,7 @@ resource "aws_efs_mount_target" "efs" {
 
 # Create a shared disk to reference the EFS
 resource "kubernetes_persistent_volume" "example" {
+  count  = var.efs_enabled ? 1 :0
   metadata {
     name = "efs-persist"
     labels = {
@@ -100,6 +101,7 @@ resource "kubernetes_persistent_volume" "example" {
 }
 
 resource "kubernetes_persistent_volume_claim" "efs" {
+  count  = var.efs_enabled ? 1 :0
   metadata {
     name = "efs-persist"
     namespace = var.efs_pvc_namespace
