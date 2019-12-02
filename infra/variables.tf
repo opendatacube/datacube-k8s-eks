@@ -35,6 +35,12 @@ variable "users" {
   type        = list(string)
 }
 
+variable "user_role_custom_policy" {
+  description = "The EKS user role custom policy to create"
+  type        = string
+  default     = ""
+}
+
 variable "user_additional_policy_arn" {
   description = "The list of IAM policy required to EKS user role"
   type        = list(string)

@@ -62,6 +62,12 @@ resource "aws_iam_role_policy_attachment" "user_policy_attach" {
   policy_arn = aws_iam_policy.user_policy.arn
 }
 
+resource "aws_iam_role_policy" "user_custom_policy" {
+  count  = (var.user_role_custom_policy != "") ? 1 : 0
+  name   = "user_custom_policy.${var.cluster_name}"
+  policy = var.user_role_custom_policy
+}
+
 resource "aws_iam_role_policy_attachment" "role-policy-attachment" {
   count      = length(var.user_additional_policy_arn)
   role       = aws_iam_role.eks-user.name
