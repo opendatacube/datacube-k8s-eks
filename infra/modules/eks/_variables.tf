@@ -32,3 +32,8 @@ variable "enable_ec2_ssm" {
   description = "Enables the IAM policy required for AWS EC2 System Manager."
 }
 
+variable "user_additional_policy" {
+  default     = ""
+  description = "The additional IAM policy required for EKS user"
+  type        = string
+}

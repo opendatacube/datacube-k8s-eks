@@ -35,6 +35,11 @@ variable "users" {
   type        = list(string)
 }
 
+variable "user_additional_policy" {
+  default     = ""
+  description = "The additional IAM policy required for EKS user"
+}
+
 variable "domain_name" {
   description = "The domain name to be used by for applications deployed to the cluster and using ingress"
   type        = string
