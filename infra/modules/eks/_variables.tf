@@ -35,5 +35,4 @@ variable "enable_ec2_ssm" {
 variable "user_additional_policy" {
   default     = ""
   description = "The additional IAM policy required for EKS user"
-  type        = string
 }
