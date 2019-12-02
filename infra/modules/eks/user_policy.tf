@@ -72,5 +72,5 @@ resource "aws_iam_policy" "user_additional_policy" {
 resource "aws_iam_role_policy_attachment" "user_additional_policy_attach" {
   count       = (var.user_additional_policy != "") ? 1 : 0
   role       = aws_iam_role.eks-user.name
-  policy_arn = aws_iam_policy.user_additional_policy.arn
+  policy_arn = aws_iam_policy.user_additional_policy[0].arn
 }
