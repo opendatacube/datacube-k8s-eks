@@ -38,6 +38,7 @@ variable "users" {
 variable "user_additional_policy_arn" {
   description = "The list of IAM policy required to EKS user role"
   type        = list(string)
+  default     = []
 }
 
 variable "domain_name" {

@@ -63,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "user_policy_attach" {
 }
 
 resource "aws_iam_role_policy_attachment" "role-policy-attachment" {
+  count      = length(var.user_additional_policy_arn)
   role       = aws_iam_role.eks-user.name
-  count      = "${length(var.user_additional_policy_arn)}"
   policy_arn = "${var.user_additional_policy_arn[count.index]}"
 }
