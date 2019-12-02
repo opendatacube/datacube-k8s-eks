@@ -34,5 +34,5 @@ variable "enable_ec2_ssm" {
 
 variable "user_additional_policy_arn" {
   description = "The list of IAM policy required to EKS user role"
-  type        = "list"
+  type        = list(string)
 }

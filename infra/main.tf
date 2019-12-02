@@ -58,6 +58,7 @@ module "eks" {
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
   users              = var.users
+  user_additional_policy_arn = var.user_additional_policy_arn
   enable_ec2_ssm     = var.enable_ec2_ssm
 }
 
