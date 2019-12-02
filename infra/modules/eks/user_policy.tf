@@ -69,7 +69,8 @@ resource "aws_iam_policy" "user_custom_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "user_custom_policy_attach" {
-  count  = (var.user_custom_policy != "") ? 1 : 0
+  depends_on = [aws_iam_policy.user_custom_policy]
+  count      = (var.user_custom_policy != "") ? 1 : 0
   role       = aws_iam_role.eks-user.name
   policy_arn = aws_iam_policy.user_custom_policy[0].arn
 }
