@@ -144,6 +144,37 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
   }
 }
 
+# create a policy document for the log bucket
+data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  statement {
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+
+    actions = [
+      "s3:GetBucketAcl",
+      "s3:PutBucketAcl"
+    ]
+
+    resources = [
+      "arn:aws:s3:::dea-cloudfront-logs-test.s3.amazonaws.com"
+    ]
+  }
+}
+
+# Attach the policy to the log bucket
+resource "aws_s3_bucket_policy" "cloudfront_log_bucket_policy" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  bucket = aws_s3_bucket.cloudfront_log_bucket[0].id
+  policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
+}
+
 # Create our cloudfront distribution
 resource "aws_cloudfront_distribution" "cloudfront" {
   count = var.cf_enable ? 1 : 0
