@@ -4,7 +4,7 @@ variable "efs_enabled" {
 }
 
 variable "efs_pvc_namespace" {
-    default     = "Default"
+    default     = "default"
     type        = string
     description = "The namespace to automatically create the efs persistant volume claim"
 }

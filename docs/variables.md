@@ -78,6 +78,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [dns_proportional_autoscaler_nodesPerReplica](#dns_proportional_autoscaler_nodesPerReplica) | Addons               | No  | 16 |
 | [dns_proportional_autoscaler_minReplica](#dns_proportional_autoscaler_minReplica)           | Addons               | No  | 2 |
 | [efs_enabled](#efs_enabled)                                                                 | Addons               | No  | false |
+| [efs_pvc_namespace](#efs_pvc_namespace)                                                     | Addons               | No  | default |
 | [external_dns_enabled](#external_dns_enabled)                                               | Addons               | No  | false |
 | [flux_enabled](#flux_enabled)                                                               | Addons               | No  | false |
 | [flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/datacube-k8s-eks |
@@ -675,6 +676,10 @@ singleuser:
   fsGid: 0
   cmd: "start-singleuser.sh"
 ```
+
+# efs_pvc_namespace
+
+Configure the Namespace you wish to create the EFS Persistant Volume Claim, this will have to match the namespace you are using to access the EFS volume, If you're using zero-to-jupyterhub you'll need to make this match the namespace you have deployed zero-to-jupyter in. 
 
 see [zero-to-jupyterhub docs](https://zero-to-jupyterhub.readthedocs.io/en/latest/amazon/efs_storage.html) for more info
 
