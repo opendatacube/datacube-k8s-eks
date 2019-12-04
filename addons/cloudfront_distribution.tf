@@ -124,26 +124,6 @@ locals {
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
 }
 
-# Create an S3 bucket to store cf logs
-resource "aws_s3_bucket" "cloudfront_log_bucket" {
-  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
-  bucket = var.cf_log_bucket
-  region = var.region
-  acl    = "private"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-
-  tags = {
-    Name = "Cloudfront Logs for ${var.cluster_name}"
-  }
-}
-
 # create a policy document for the log bucket
 data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
   count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
@@ -168,18 +148,32 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
   }
 }
 
-# Attach the policy to the log bucket
-resource "aws_s3_bucket_policy" "cloudfront_log_bucket_policy" {
-  count      = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
-  depends_on = [ aws_s3_bucket.cloudfront_log_bucket[0] ]
-  bucket     = aws_s3_bucket.cloudfront_log_bucket[0].id
-  policy     = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
+# Create an S3 bucket to store cf logs
+resource "aws_s3_bucket" "cloudfront_log_bucket" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  bucket = var.cf_log_bucket
+  region = var.region
+  acl    = "private"
+  policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
+  force_destroy = true
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  tags = {
+    Name = "Cloudfront Logs for ${var.cluster_name}"
+  }
 }
 
 # Create our cloudfront distribution
 resource "aws_cloudfront_distribution" "cloudfront" {
   count      = var.cf_enable ? 1 : 0
-  depends_on = [ aws_s3_bucket.cloudfront_log_bucket[0] ]
+  depends_on = [ aws_s3_bucket.cloudfront_log_bucket ]
 
   origin {
     domain_name = local.origin_domain
