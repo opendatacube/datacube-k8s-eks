@@ -126,7 +126,7 @@ locals {
 
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
-  count  = (var.cf_log_bucket_create) ? 1 : 0
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
   bucket = var.cf_log_bucket
   region = var.region
   acl    = "private"
@@ -146,7 +146,7 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
 
 # create a policy document for the log bucket
 data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
-  count  = (var.cf_log_bucket_create) ? 1 : 0
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
   statement {
     effect = "Allow"
 
@@ -170,14 +170,16 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
 
 # Attach the policy to the log bucket
 resource "aws_s3_bucket_policy" "cloudfront_log_bucket_policy" {
-  count  = (var.cf_log_bucket_create) ? 1 : 0
-  bucket = aws_s3_bucket.cloudfront_log_bucket[0].id
-  policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
+  count      = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  depends_on = [ aws_s3_bucket.cloudfront_log_bucket[0] ]
+  bucket     = aws_s3_bucket.cloudfront_log_bucket[0].id
+  policy     = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
 }
 
 # Create our cloudfront distribution
 resource "aws_cloudfront_distribution" "cloudfront" {
-  count = var.cf_enable ? 1 : 0
+  count      = var.cf_enable ? 1 : 0
+  depends_on = [ aws_s3_bucket.cloudfront_log_bucket[0] ]
 
   origin {
     domain_name = local.origin_domain
