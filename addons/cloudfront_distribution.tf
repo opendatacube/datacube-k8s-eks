@@ -163,7 +163,7 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
     ]
 
     resources = [
-      "arn:aws:s3:::dea-cloudfront-logs-test.s3.amazonaws.com"
+      "arn:aws:s3:::${var.cf_log_bucket}"
     ]
   }
 }
@@ -225,7 +225,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   }
 
   logging_config {
-    bucket = var.cf_log_bucket
+    bucket = "${var.cf_log_bucket}.s3.amazonaws.com"
     prefix = "${var.cluster_name}_${terraform.workspace}_cf"
   }
 
