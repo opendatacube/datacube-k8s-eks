@@ -123,7 +123,7 @@ locals {
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
 
-  is_cf_log_bucket_with_extention = length(regexall("*.s3.amazonaws.com$",var.cf_log_bucket)) > 0
+  is_cf_log_bucket_with_extention = length(regexall("*\\.s3\\.amazonaws\\.com$",var.cf_log_bucket)) > 0
 }
 
 # create a policy document for the log bucket
