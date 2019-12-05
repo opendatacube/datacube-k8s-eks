@@ -41,5 +41,9 @@ resource "kubernetes_config_map" "aws_auth" {
 EOF
     mapUsers = (var.eks_service_user != "") ? data.template_file.map_user_config[0].rendered : null
   }
+
+  depends_on = [
+    var.eks_cluster
+  ]
 }
 
