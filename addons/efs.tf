@@ -71,7 +71,7 @@ resource "aws_security_group" "ingress-efs" {
 resource "aws_efs_mount_target" "efs" {
   count = var.efs_enabled ? length(data.aws_subnet_ids.private[0].ids) : 0
   file_system_id  = aws_efs_file_system.efs[0].id
-  subnet_id       = data.aws_subnet_ids.private[0].ids[count.index]
+  subnet_id       = element(tolist(data.aws_subnet_ids.private[0].ids, count.index)
   security_groups = [aws_security_group.ingress-efs[0].id]
 
 }
