@@ -78,23 +78,23 @@ module "db" {
   workspace = terraform.workspace
 }
 
-module "setup" {
-  source = "./modules/setup"
+# module "setup" {
+#   source = "./modules/setup"
 
-  eks_cluster           = module.eks
-  cluster_name      = module.eks.cluster_name
-  cluster_endpoint  = module.eks.api_endpoint
-  cluster_ca        = module.eks.cluster_ca
-  region            = var.region
-  db_admin_username = module.db.db_admin_username
-  db_admin_password = module.db.db_admin_password
-  store_db_creds    = var.store_db_credentials
-  node_role_arn     = module.eks.node_role_arn
-  user_role_arn     = module.eks.user_role_arn
-  eks_service_user  = var.eks_service_user
-  db_hostname       = module.db.db_hostname
+#   eks_cluster           = module.eks
+#   cluster_name      = module.eks.cluster_name
+#   cluster_endpoint  = module.eks.api_endpoint
+#   cluster_ca        = module.eks.cluster_ca
+#   region            = var.region
+#   db_admin_username = module.db.db_admin_username
+#   db_admin_password = module.db.db_admin_password
+#   store_db_creds    = var.store_db_credentials
+#   node_role_arn     = module.eks.node_role_arn
+#   user_role_arn     = module.eks.user_role_arn
+#   eks_service_user  = var.eks_service_user
+#   db_hostname       = module.db.db_hostname
 
-}
+# }
 
 # module "workers" {
 #   source = "./modules/workers"
