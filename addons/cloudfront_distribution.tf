@@ -123,7 +123,9 @@ locals {
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
 
-  is_cf_log_bucket_with_extention = length(regexall("^.*s3\\.amazonaws\\.com$",var.cf_log_bucket)) > 0
+  # Get a bucket name without extention: .s3.amazonaws.com
+  log_bucket = element(split("\\.s3\\.amazonaws\\.com",var.cf_log_bucket), 0)
+  # is_cf_log_bucket_with_extention = length(regexall("^.*s3\\.amazonaws\\.com$",var.cf_log_bucket)) > 0
 }
 
 # create a policy document for the log bucket
@@ -145,7 +147,7 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.cf_log_bucket}"
+      "arn:aws:s3:::${local.log_bucket}"
     ]
   }
 }
@@ -153,7 +155,7 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
   count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
-  bucket = var.cf_log_bucket
+  bucket = local.log_bucket
   region = var.region
   acl    = "private"
   policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
@@ -223,7 +225,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   }
 
   logging_config {
-    bucket = local.is_cf_log_bucket_with_extention ? var.cf_log_bucket : "${var.cf_log_bucket}.s3.amazonaws.com"
+    bucket = "${local.log_bucket}.s3.amazonaws.com"
     prefix = "${var.cluster_name}_${terraform.workspace}_cf"
   }
 
