@@ -81,7 +81,7 @@ module "db" {
 module "setup" {
   source = "./modules/setup"
 
-  cluster           = module.eks
+  eks_cluster           = module.eks
   cluster_name      = module.eks.cluster_name
   cluster_endpoint  = module.eks.api_endpoint
   cluster_ca        = module.eks.cluster_ca
