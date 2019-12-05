@@ -42,7 +42,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20 |
 | [extra_userdata](#extra_userdata)                                                           | Nodes                | No  | <<USERDATA echo "" USERDATA |
 | [txt_owner_id](#txt_owner_id)                                                               | Addons               | No  | "AnOwnerId" |
-| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                | Addons               | No  | "10m" |
+| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                 | Addons               | No  | "10m" |
 | [alb_ingress_enabled](#alb_ingress_enabled)                                                 | Addons               | No  | false |
 | [cf_enable](#cf_enable)                                                                     | Addons               | No  | false |
 | [cf_dns_record](#cf_dns_record)                                                             | Addons               | No  | ows |
@@ -90,7 +90,30 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
 | [metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false |
 | [prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false |
-| [kubewatch_enabled](#kubewatch_enabled)                                                   | Addons               | No  | false |
+| [kubewatch_enabled](#kubewatch_enabled)                                                     | Addons               | No  | false |
+| [kubewatch_slack_enabled](#kubewatch_slack_enabled)                                         | Addons               | No  | false |
+| [kubewatch_slack_channel](#kubewatch_slack_channel)                                         | Addons               | No  | "" |
+| [kubewatch_slack_token](#kubewatch_slack_token)                                             | Addons               | No  | "" |
+| [kubewatch_hipchat_enabled](#kubewatch_hipchat_enabled)                                     | Addons               | No  | false |
+| [kubewatch_hipchat_room](#kubewatch_hipchat_room)                                           | Addons               | No  | "" |
+| [kubewatch_hipchat_token](#kubewatch_hipchat_token)                                         | Addons               | No  | "" |
+| [kubewatch_hipchat_url](#kubewatch_hipchat_url)                                             | Addons               | No  | "" |
+| [kubewatch_mattermost_enabled](#kubewatch_mattermost_enabled)                               | Addons               | No  | false |
+| [kubewatch_mattermost_channel](#kubewatch_mattermost_channel)                               | Addons               | No  | "" |
+| [kubewatch_mattermost_url](#kubewatch_mattermost_url)                                       | Addons               | No  | "" |
+| [kubewatch_mattermost_username](#kubewatch_mattermost_username)                             | Addons               | No  | "" |
+| [kubewatch_flock_enabled](#kubewatch_flock_enabled)                                         | Addons               | No  | false |
+| [kubewatch_flock_url](#kubewatch_flock_url)                                                 | Addons               | No  | "" |
+| [kubewatch_webhook_enabled](#kubewatch_webhook_enabled)                                     | Addons               | No  | false |
+| [kubewatch_webhook_url](#kubewatch_webhook_url)                                             | Addons               | No  | "" |
+| [kubewatch_resourcesToWatch_deployment](#kubewatch_resourcesToWatch_deployment)             | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_replicationcontroller](#kubewatch_resourcesToWatch_replicationcontroller)      | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_replicaset](#kubewatch_resourcesToWatch_replicaset)             | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_daemonset](#kubewatch_resourcesToWatch_daemonset)               | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_services](#kubewatch_resourcesToWatch_services)                 | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_pod](#kubewatch_resourcesToWatch_pod)                           | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_job](#kubewatch_resourcesToWatch_job)                           | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_persistentvolume](#kubewatch_resourcesToWatch_persistentvolume) | Addons               | No  | false |
 
 # Infra
 
