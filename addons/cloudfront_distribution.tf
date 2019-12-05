@@ -122,6 +122,8 @@ locals {
   # Creates a basic cloudfront disribution with a custom (i.e. not S3) origin
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
+
+  is_cf_log_bucket_with_extention = length(regexall("*.s3.amazonaws.com$",var.cf_log_bucket)) > 0
 }
 
 # create a policy document for the log bucket
@@ -221,7 +223,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   }
 
   logging_config {
-    bucket = "${var.cf_log_bucket}.s3.amazonaws.com"
+    bucket = local.is_cf_log_bucket_with_extention ? var.cf_log_bucket : "${var.cf_log_bucket}.s3.amazonaws.com"
     prefix = "${var.cluster_name}_${terraform.workspace}_cf"
   }
 
