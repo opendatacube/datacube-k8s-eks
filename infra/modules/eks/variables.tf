@@ -4,7 +4,6 @@ variable "cluster_name" {
 }
 
 variable "cluster_version" {
-  type = "string"
   description = "EKS Version to use with this cluster"
 }
 
