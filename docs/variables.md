@@ -12,6 +12,8 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [eks_service_user](#eks_service_user)                                                       | Infra                | No  | "" |
 | [admin_access_CIDRs](#admin_access_CIDRs)                                                   | Infra                | No  | {} |
 | [users](#users)                                                                             | Infra                | Yes | |
+| [user_custom_policy](#user_custom_policy)                                                   | Infra                | No  | "" |
+| [user_additional_policy_arn](#user_additional_policy_arn)                                   | Infra                | No  | [] |
 | [domain_name](#domain_name)                                                                 | Infra, Addons        | Yes | |
 | [cloudfront_log_bucket](#cloudfront_log_bucket)                                             | Infra                | No  | "dea-cloudfront-logs.s3.amazonaws.com" |
 | [create_certificate](#create_certificate)                                                   | Infra                | No  | false |
@@ -176,6 +178,37 @@ Example:
 users = [
   "user/jdoe",
   "user/usmith",
+]
+```
+
+## user_custom_policy
+
+This is an optional variable. If provided will creates a custom policy and attach it to EKS user role (`user.${var.cluster_name}`) to access other services
+
+Example:
+```
+user_custom_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["sqs:*"],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+```
+
+## user_additional_policy_arn
+
+This is an optional variable. If provided will add pre-defined policy to EKS user role (`user.${var.cluster_name}`) to access other services.
+
+Example:
+```
+user_additional_policy_arn = [
+  "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
 ]
 ```
 
