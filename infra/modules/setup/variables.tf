@@ -1,3 +1,6 @@
+variable "eks_cluster" {
+  description = "The EKS cluster in which deployment occurs for the k8s setup"
+}
 variable "cluster_name" {
   type        = string
   description = "Name of the EKS cluster. Must be derived from the terraform resource creating the EKS cluster."
