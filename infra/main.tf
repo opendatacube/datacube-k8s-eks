@@ -1,12 +1,3 @@
-terraform {
-  required_version = ">= 0.12.0"
-
-  backend "s3" {
-    # Force encryption
-    encrypt = true
-  }
-}
-
 data "aws_availability_zones" "available" {
 }
 
