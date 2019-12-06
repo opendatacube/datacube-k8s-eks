@@ -65,3 +65,9 @@ variable "store_db_creds" {
   default     = false
   description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
 }
+
+variable "eks_service_user" {
+  type        = string
+  description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
+}
+
