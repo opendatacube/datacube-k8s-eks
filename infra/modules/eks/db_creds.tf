@@ -2,7 +2,7 @@ resource "kubernetes_secret" "db_creds" {
   count = var.store_db_creds ? 1 : 0
 
   metadata {
-    name = var.eks_cluster.cluster_name
+    name = aws_eks_cluster.eks.name
   }
 
   data = {

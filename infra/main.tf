@@ -54,6 +54,16 @@ module "eks" {
   user_additional_policy_arn = var.user_additional_policy_arn
 
   enable_ec2_ssm     = var.enable_ec2_ssm
+
+  db_admin_username = module.db.db_admin_username
+  db_admin_password = module.db.db_admin_password
+  db_hostname       = module.db.db_hostname
+  store_db_creds    = var.store_db_credentials
+
+  node_role_arn     = module.eks.node_role_arn
+  user_role_arn     = module.eks.user_role_arn
+  eks_service_user  = var.eks_service_user
+
 }
 
 # Database
@@ -76,24 +86,6 @@ module "db" {
   owner     = var.owner
   cluster   = var.cluster_name
   workspace = terraform.workspace
-}
-
-module "setup" {
-  source = "./modules/setup"
-
-  eks_cluster           = module.eks
-  cluster_name      = module.eks.cluster_name
-  cluster_endpoint  = module.eks.api_endpoint
-  cluster_ca        = module.eks.cluster_ca
-  region            = var.region
-  db_admin_username = module.db.db_admin_username
-  db_admin_password = module.db.db_admin_password
-  store_db_creds    = var.store_db_credentials
-  node_role_arn     = module.eks.node_role_arn
-  user_role_arn     = module.eks.user_role_arn
-  eks_service_user  = var.eks_service_user
-  db_hostname       = module.db.db_hostname
-
 }
 
 # module "workers" {
