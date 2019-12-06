@@ -123,9 +123,8 @@ locals {
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
 
-  # Get a bucket name without extention: .s3.amazonaws.com
-  log_bucket = element(split("\\.s3\\.amazonaws\\.com",var.cf_log_bucket), 0)
-  # is_cf_log_bucket_with_extention = length(regexall("^.*s3\\.amazonaws\\.com$",var.cf_log_bucket)) > 0
+  # Get a bucket name without an extention: .s3.amazonaws.com
+  log_bucket = element(split(".s3.amazonaws.com",var.cf_log_bucket), 0)
 }
 
 # create a policy document for the log bucket
@@ -159,7 +158,9 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
   region = var.region
   acl    = "private"
   policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
-  force_destroy = true
+
+  # Needed if you want to delete the bucket
+  # force_destroy = true
 
   server_side_encryption_configuration {
     rule {

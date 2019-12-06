@@ -541,7 +541,7 @@ will create a certificate in us-east-1 for ows.consoto.org
 
 S3 Bucket to store cloudfront logs
 
-Support both the form `bucketname` or `bucketname.s3.amazonaws.com` 
+Support both the form `<bucketname>` or `<bucketname>.s3.amazonaws.com` 
 
 If `cf_log_bucket_create` is set to `false`, this bucket must already exist in your AWS account and be configured to allow cloudfront to write logs to it.
 see [Cloudfront Access Logs Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html)
