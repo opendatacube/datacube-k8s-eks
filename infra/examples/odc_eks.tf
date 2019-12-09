@@ -21,4 +21,11 @@ domain_name = "domain.name"
 # Database config
 store_db_credentials = true
 
+# System node instances
+#default_worker_instance_type = "m4.large"
+default_worker_instance_type = "t3.medium"
+spot_nodes_enabled = true
+min_nodes = 2
+max_nodes = 5
+
 }
