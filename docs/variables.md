@@ -228,19 +228,6 @@ Example:
 domain_name = "sandbox.business.com"
 ```
 
-## cloudfront_log_bucket
-
-S3 Bucket to store cloudfront logs
-
-Must currently be in the form `bucketname.s3.amazonaws.com` 
-
-This bucket must already exist in your AWS account, and be configured to allow cloudfront to write logs to it
-
-Example:
-```
-cloudfront_log_bucket = "sandbox-logs.s3.amazonaws.com"
-```
-
 ## create_certificate
 
 If this is set to `true` a wildcard certificate of `*.${var.domain_name}` will be created and validated for you.
@@ -552,18 +539,23 @@ cf_certificate_create = true
 
 will create a certificate in us-east-1 for ows.consoto.org
 
-## cf_log_bucket
+## cloudfront_log_bucket
 
-The bucket to send cloudfront logs to must be in the long form, this bucket must already exist
+S3 Bucket to store cloudfront logs
 
+Support both the form `<bucketname>` or `<bucketname>.s3.amazonaws.com` 
+
+If `cf_log_bucket_create` is set to `false`, this bucket must already exist in your AWS account and be configured to allow cloudfront to write logs to it.
+see [Cloudfront Access Logs Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html)
+
+Example:
 ```
-cf_log_bucket = "cloudfront-logs.s3.amazonaws.com"
-cf_log_bucket_create = false
+cloudfront_log_bucket = "cloudfront-logs.s3.amazonaws.com"
 ```
 
 ## cf_log_bucket_create
 
-Do not use (see issue #85)
+Creates a cloudfront distribution log bucket.
 
 ## cf_origin_protocol_policy
 
