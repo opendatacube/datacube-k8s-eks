@@ -94,11 +94,6 @@ variable "extra_sg" {
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
-variable "db_instance_enabled" {
-  default = true
-  description = "Create an RDS postgres instance for use by the datacube"
-}
-
 variable "cluster" {
 }
 

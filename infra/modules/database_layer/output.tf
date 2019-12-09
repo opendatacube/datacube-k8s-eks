@@ -8,11 +8,11 @@ output "db_admin_password" {
 
 output "db_hostname" {
   
-  value      = var.db_instance_enabled ? coalesce(join("", aws_db_instance.db.*.address), "") : ""
+  value      = aws_db_instance.db.address
   depends_on = [aws_db_instance.db]
 }
 
 output "port" {
-  value      = var.db_instance_enabled ? coalesce(join("", aws_db_instance.db.*.port), "") : ""
+  value      = aws_db_instance.db.port
   depends_on = [aws_db_instance.db]
 }

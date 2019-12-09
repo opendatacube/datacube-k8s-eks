@@ -19,7 +19,6 @@ users = [
 domain_name = "domain.name"
 
 # Database config
-db_instance_enabled = true
 store_db_credentials = true
 
 }

@@ -29,7 +29,8 @@ resource "kubernetes_config_map" "coredns_custom" {
 EOF
   }
 
-  provisioner "local-exec" {
-    command = "kubectl patch deployment coredns -n kube-system --patch '{\"spec\":{\"template\":{\"spec\":{\"volumes\":[{\"configMap\":{\"items\":[{\"key\":\"Corefile\",\"path\":\"Corefile\"}],\"name\":\"coredns-custom\"},\"name\":\"config-volume\"}]}}}}'"
-  }
+  # TODO: Refactor issue: kubectl is not available on Terraform Cloud.Is this line still necessary? It was originally requried to kick the pods to use the new config during update but this will likely be handled upstream by the k8s CD environment after refactor
+  # provisioner "local-exec" {
+  #   command = "kubectl patch deployment coredns -n kube-system --patch '{\"spec\":{\"template\":{\"spec\":{\"volumes\":[{\"configMap\":{\"items\":[{\"key\":\"Corefile\",\"path\":\"Corefile\"}],\"name\":\"coredns-custom\"},\"name\":\"config-volume\"}]}}}}'"
+  # }
 }
