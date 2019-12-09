@@ -6,8 +6,6 @@ variable "ami_image_id" {
 }
 
 variable "owner" {
-  default     = "Team name"
-  description = "Identifies who is responsible for these resources"
 }
 
 variable "default_worker_instance_type" {
@@ -37,10 +35,6 @@ variable "cluster_ca" {
 }
 
 # Node Config
-variable "nodes_enabled" {
-  default = false
-}
-
 variable "min_nodes" {
   default = 1
 }

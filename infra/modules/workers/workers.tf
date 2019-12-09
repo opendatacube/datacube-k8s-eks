@@ -1,5 +1,4 @@
 resource "aws_autoscaling_group" "nodes" {
-  count            = var.nodes_enabled ? 1 : 0
   desired_capacity = var.desired_nodes
   max_size         = var.max_nodes
   min_size         = var.min_nodes

@@ -46,7 +46,6 @@ USERDATA
 }
 
 resource "aws_launch_template" "node" {
-  count = var.nodes_enabled ? 1 : 0
   name_prefix = var.cluster_name
   image_id = local.ami_id
   user_data = base64encode(local.eks-node-userdata)
