@@ -85,29 +85,28 @@ module "db" {
   workspace = terraform.workspace
 }
 
-# module "workers" {
-#   source = "./modules/workers"
+module "workers" {
+  source = "./modules/workers"
 
-#   cluster_name                 = module.eks.cluster_name
-#   owner                        = var.owner
-#   eks_cluster_version          = module.eks.eks_cluster_version
-#   api_endpoint                 = module.eks.api_endpoint
-#   cluster_ca                   = module.eks.cluster_ca
-#   nodes_subnet_group           = module.vpc.private_subnets # data.aws_subnet_ids.nodes.ids
-#   node_security_group          = local.node_security_group
-#   node_instance_profile        = "${var.cluster_name}-node"
-#   min_nodes                    = local.min_nodes
-#   max_nodes                    = local.max_nodes
-#   desired_nodes                = local.desired_nodes
-#   min_spot_nodes               = local.min_spot_nodes
-#   max_spot_nodes               = local.max_spot_nodes
-#   node_group_name              = var.node_group_name
-#   ami_image_id                 = var.ami_image_id
-#   default_worker_instance_type = var.default_worker_instance_type
-#   spot_nodes_enabled           = var.group_enabled && var.spot_nodes_enabled
-#   max_spot_price               = var.max_spot_price
-#   nodes_enabled                = var.group_enabled
-#   extra_userdata               = var.extra_userdata
-#   volume_size                 = var.volume_size
-#   spot_volume_size            = var.spot_volume_size
-# }
+  cluster_name                 = module.eks.cluster_name
+  owner                        = var.owner
+  eks_cluster_version          = module.eks.eks_cluster_version
+  api_endpoint                 = module.eks.api_endpoint
+  cluster_ca                   = module.eks.cluster_ca
+  nodes_subnet_group           = module.vpc.private_subnets # data.aws_subnet_ids.nodes.ids
+  node_security_group          = module.eks.node_security_group
+  node_instance_profile        = module.eks.node_instance_profile
+  min_nodes                    = var.min_nodes
+  max_nodes                    = var.max_nodes
+  desired_nodes                = var.desired_nodes
+  min_spot_nodes               = var.min_spot_nodes
+  max_spot_nodes               = var.max_spot_nodes
+  node_group_name              = var.node_group_name
+  ami_image_id                 = var.ami_image_id
+  default_worker_instance_type = var.default_worker_instance_type
+  spot_nodes_enabled           = var.group_enabled && var.spot_nodes_enabled
+  max_spot_price               = var.max_spot_price
+  extra_userdata               = var.extra_userdata
+  volume_size                 = var.volume_size
+  spot_volume_size            = var.spot_volume_size
+}
