@@ -104,7 +104,7 @@ module "workers" {
   node_group_name              = var.node_group_name
   ami_image_id                 = var.ami_image_id
   default_worker_instance_type = var.default_worker_instance_type
-  spot_nodes_enabled           = var.group_enabled && var.spot_nodes_enabled
+  spot_nodes_enabled           = var.spot_nodes_enabled
   max_spot_price               = var.max_spot_price
   extra_userdata               = var.extra_userdata
   volume_size                 = var.volume_size
