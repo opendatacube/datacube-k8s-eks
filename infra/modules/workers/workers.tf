@@ -2,7 +2,7 @@ resource "aws_autoscaling_group" "nodes" {
   desired_capacity = var.desired_nodes
   max_size         = var.max_nodes
   min_size         = var.min_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.node[0].id}-nodes-0"
+  name             = "${var.node_group_name}-${aws_launch_template.node.id}-nodes-0"
   vpc_zone_identifier = var.nodes_subnet_group
 
   # Don't reset to default size every time terraform is applied
@@ -12,8 +12,8 @@ resource "aws_autoscaling_group" "nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.node[0].id
-    version = aws_launch_template.node[0].latest_version
+    id      = aws_launch_template.node.id
+    version = aws_launch_template.node.latest_version
   }
 
   tags = [
