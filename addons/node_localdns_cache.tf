@@ -2,7 +2,7 @@
 
 variable "localdns_cache_enable" {
   type = bool
-  description = "Apply Node-local DNS Cache"
+  description = "Apply Node-local DNS Cache pod on all cluster nodes"
   default = false
 }
 
@@ -32,7 +32,7 @@ variable "config_output_path" {
 }
 
 variable "write_nodelocaldns_config" {
-  description = "Whether to write a Kubectl config file containing the nodelocaldns configuration. Saved to `config_output_path`."
+  description = "Whether to write a Kubectl config file containing the nodelocaldns configuration. Saved to `var.config_output_path`."
   type        = bool
   default     = true
 }
