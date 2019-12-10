@@ -1,5 +1,5 @@
 data "aws_eks_cluster_auth" "odc" {
-  name = aws_eks_cluster.eks.name
+  name = aws_eks_cluster.eks.id
 }
 
 
