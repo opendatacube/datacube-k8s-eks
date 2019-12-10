@@ -97,7 +97,7 @@ variable "db_extra_sg" {
 
 variable "db_engine_version" {
   default = {
-    postgres = "11.5"
+    postgres = "9.6.11"
   }
   description = "PostgreSQL engine version used for initialization in specific deployments"
 }
