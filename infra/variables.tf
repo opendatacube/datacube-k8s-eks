@@ -184,3 +184,12 @@ USERDATA
 }
 
 # End Node configuration
+
+# Addons configuration
+variable "txt_owner_id" {
+}
+
+variable "autoscaler-scale-down-undeeded-time" {
+}
+
+# End Addons configuration
