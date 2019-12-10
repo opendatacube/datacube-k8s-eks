@@ -189,7 +189,7 @@ USERDATA
 variable "txt_owner_id" {
 }
 
-variable "autoscaler-scale-down-undeeded-time" {
+variable "autoscaler-scale-down-unneeded-time" {
 }
 
 # End Addons configuration
