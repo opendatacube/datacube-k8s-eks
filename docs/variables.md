@@ -24,6 +24,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [db_storage](#db_storage)                                                                   | Infra                | No  | 180 |
 | [max_db_storage](#max_db_storage)                                                           | Infra                | No  | 0 |
 | [db_extra_sg](#db_extra_sg)                                                                 | Infra                | No  | "" |
+| [db_engine_version](#db_engine_version)                                                     | Infra                | No  | "11.5" |
 | [vpc_cidr](#vpc_cidr)                                                                       | Infra                | No  | "10.0.0.0/16" |
 | [public_subnet_cidrs](#public_subnet_cidrs)                                                 | Infra                | No  | ["10.0.0.0/22", "10.0.4.0/22", ["](#"10)10.0.8.0/22"] |
 | [private_subnet_cidrs](#private_subnet_cidrs)                                               | Infra                | No  | ["10.0.32.0/19", "10.0.64.0/19", ["](#"10)10.0.96.0/19"] |
