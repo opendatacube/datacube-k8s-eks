@@ -7,7 +7,7 @@ variable "datacube_wms_enabled" {
 
 resource "aws_iam_role" "wms" {
   count = var.datacube_wms_enabled ? 1 : 0
-  name  = "${var.cluster_name}-wms"
+  name  = "${var.cluster_id}-wms"
 
   assume_role_policy = <<EOF
 {
@@ -25,7 +25,7 @@ resource "aws_iam_role" "wms" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"
         },
       "Action": "sts:AssumeRole"
     }
@@ -37,7 +37,7 @@ EOF
 
 resource "aws_iam_role_policy" "wms" {
   count = var.datacube_wms_enabled ? 1 : 0
-  name = "${var.cluster_name}-wms"
+  name = "${var.cluster_id}-wms"
   role = aws_iam_role.wms[0].id
 
   policy = <<EOF

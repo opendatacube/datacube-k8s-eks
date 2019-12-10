@@ -1,4 +1,13 @@
-variable "cluster_name" {
+variable "cluster_id" {
+}
+
+variable "cluster_api_endpoint" {
+}
+
+variable "cluster_ca" {
+}
+
+variable "cluster_arn" {
 }
 
 variable "domain_name" {
@@ -8,16 +17,10 @@ variable "domain_name" {
 
 variable "txt_owner_id" {
   description = "When using the TXT registry, a name that identifies this instance of ExternalDNS"
-  default     = "AnOwnerId"
 }
 
 variable "owner" {
 }
 
-variable "region" {
-  type = string
-}
-
 variable "autoscaler-scale-down-unneeded-time" {
-  default = "10m"
 }

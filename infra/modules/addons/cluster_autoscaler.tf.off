@@ -34,7 +34,7 @@ resource "helm_release" "cluster_autoscaler" {
   }
   set {
     name  = "podAnnotations.iam\\.amazonaws\\.com/role"
-    value = "${var.cluster_name}-autoscaler"
+    value = "${var.cluster_id}-autoscaler"
   }
 
   set {
@@ -44,7 +44,7 @@ resource "helm_release" "cluster_autoscaler" {
 
   set {
     name  = "autoDiscovery.clusterName"
-    value = var.cluster_name
+    value = var.cluster_id
   }
 
   set {
@@ -66,7 +66,7 @@ resource "helm_release" "cluster_autoscaler" {
 
 resource "aws_iam_role" "autoscaler" {
   count = var.cluster_autoscaler_enabled ? 1 : 0
-  name  = "${var.cluster_name}-autoscaler"
+  name  = "${var.cluster_id}-autoscaler"
 
   assume_role_policy = <<EOF
 {
@@ -84,7 +84,7 @@ resource "aws_iam_role" "autoscaler" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"
       },
       "Action": "sts:AssumeRole"
     }
@@ -96,7 +96,7 @@ EOF
 
 resource "aws_iam_role_policy" "autoscaler" {
   count = var.cluster_autoscaler_enabled ? 1 : 0
-  name = "${var.cluster_name}-autoscaler"
+  name = "${var.cluster_id}-autoscaler"
   role = aws_iam_role.autoscaler[0].id
 
   policy = <<EOF

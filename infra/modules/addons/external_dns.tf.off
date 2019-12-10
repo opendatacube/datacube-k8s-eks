@@ -13,7 +13,7 @@ resource "helm_release" "external-dns" {
 
   set {
     name  = "podAnnotations.iam\\.amazonaws\\.com/role"
-    value = "${var.cluster_name}-external-dns"
+    value = "${var.cluster_id}-external-dns"
   }
 
   values = [
@@ -63,7 +63,7 @@ helm_release.alb-ingress
 
 resource "aws_iam_role" "external_dns" {
 count = var.external_dns_enabled ? 1 : 0
-name = "${var.cluster_name}-external-dns"
+name = "${var.cluster_id}-external-dns"
 
 assume_role_policy = <<EOF
 {
@@ -81,7 +81,7 @@ assume_role_policy = <<EOF
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"
         },
       "Action": "sts:AssumeRole"
     }
@@ -93,7 +93,7 @@ EOF
 
   resource "aws_iam_role_policy" "external_dns" {
     count = var.external_dns_enabled ? 1 : 0
-    name  = "${var.cluster_name}-external-dns"
+    name  = "${var.cluster_id}-external-dns"
     role  = aws_iam_role.external_dns[0].id
 
     policy = <<EOF

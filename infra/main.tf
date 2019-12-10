@@ -88,7 +88,7 @@ module "db" {
 module "workers" {
   source = "./modules/workers"
 
-  cluster_name                 = module.eks.cluster_name
+  cluster_name                 = module.eks.cluster_id
   owner                        = var.owner
   eks_cluster_version          = module.eks.eks_cluster_version
   api_endpoint                 = module.eks.api_endpoint
@@ -109,4 +109,18 @@ module "workers" {
   extra_userdata               = var.extra_userdata
   volume_size                 = var.volume_size
   spot_volume_size            = var.spot_volume_size
+}
+
+module "addons" {
+  source = "./modules/addons"
+
+  cluster_id                   = module.eks.cluster_id
+  cluster_api_endpoint         = module.eks.api_endpoint
+  cluster_ca                   = module.eks.cluster_ca
+  cluster_arn                  = module.eks.cluster_arn
+
+  owner                        = var.owner
+  domain_name = var.domain_name
+  txt_owner_id = var.txt_owner_id
+  autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-undeeded-time
 }

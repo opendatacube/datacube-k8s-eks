@@ -140,7 +140,7 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
   }
 
   tags = {
-    Name = "Cloudfront Logs for ${var.cluster_name}"
+    Name = "Cloudfront Logs for ${var.cluster_id}"
   }
 }
 
@@ -150,7 +150,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
   origin {
     domain_name = local.origin_domain
-    origin_id   = "${var.cluster_name}_${terraform.workspace}_origin"
+    origin_id   = "${var.cluster_id}_${terraform.workspace}_origin"
 
     custom_origin_config {
       http_port                = 80
@@ -170,7 +170,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   default_cache_behavior {
     allowed_methods  = var.cf_default_allowed_methods
     cached_methods   = var.cf_default_cached_methods
-    target_origin_id = "${var.cluster_name}_${terraform.workspace}_origin"
+    target_origin_id = "${var.cluster_id}_${terraform.workspace}_origin"
 
     forwarded_values {
       query_string = true
@@ -195,7 +195,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
   logging_config {
     bucket = var.cf_log_bucket
-    prefix = "${var.cluster_name}_${terraform.workspace}_cf"
+    prefix = "${var.cluster_id}_${terraform.workspace}_cf"
   }
 
   viewer_certificate {

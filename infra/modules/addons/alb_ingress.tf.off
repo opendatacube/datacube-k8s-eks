@@ -29,12 +29,12 @@ resource "helm_release" "alb-ingress" {
 
   set {
     name  = "clusterName"
-    value = var.cluster_name
+    value = var.cluster_id
   }
 
   set {
     name  = "podAnnotations.iam\\.amazonaws\\.com/role"
-    value = "${var.cluster_name}-alb"
+    value = "${var.cluster_id}-alb"
   }
 
   # Uses kube2iam for credentials
@@ -51,7 +51,7 @@ resource "helm_release" "alb-ingress" {
 
 resource "aws_iam_role" "alb" {
   count = var.alb_ingress_enabled ? 1 : 0
-  name  = "${var.cluster_name}-alb"
+  name  = "${var.cluster_id}-alb"
 
   assume_role_policy = <<EOF
 {
@@ -69,7 +69,7 @@ resource "aws_iam_role" "alb" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"
         },
       "Action": "sts:AssumeRole"
     }
@@ -81,7 +81,7 @@ EOF
 
 resource "aws_iam_role_policy" "alb" {
   count = var.alb_ingress_enabled ? 1 : 0
-  name = "${var.cluster_name}-alb"
+  name = "${var.cluster_id}-alb"
   role = aws_iam_role.alb[0].id
 
   policy = <<EOF

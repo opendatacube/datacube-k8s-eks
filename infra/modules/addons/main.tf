@@ -1,35 +1,15 @@
-terraform {
-  required_version = ">= 0.12.0"
-
-  backend "s3" {
-    # Force encryption
-    encrypt = true
-  }
-}
-
-data "aws_eks_cluster" "eks" {
-  name = var.cluster_name
-}
 
 data "aws_caller_identity" "current" {
 }
 
 provider "helm" {
   kubernetes {
-    config_context = data.aws_eks_cluster.eks.arn
+    config_context = var.cluster_arn
   }
+  service_account = kubernetes_service_account.tiller.id
 
   # Tiller is installed on cluster and intialized by null_resource.helm_init_client
-  install_tiller = false
-}
-
-provider "kubernetes" {
-  version = "~> 1.7"
-  config_context_cluster = data.aws_eks_cluster.eks.arn
-}
-
-# region and kube2iam required for most add-ons
-data "aws_region" "current" {
+  #install_tiller = false
 }
 
 resource "helm_release" "kube2iam" {
@@ -50,7 +30,7 @@ resource "helm_release" "kube2iam" {
   depends_on = [
     kubernetes_service_account.tiller,
     kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-    null_resource.helm_init_client,
+    #null_resource.helm_init_client,
   ]
 }
 
