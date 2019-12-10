@@ -13,12 +13,10 @@ provider "kubernetes" {
 
 provider "helm" {
   kubernetes {
-    config_context = var.cluster_arn
+    host                   = var.cluster_api_endpoint
+    cluster_ca_certificate = base64decode(var.cluster_ca)
+    token                  = data.aws_eks_cluster_auth.odc.token
   }
-#  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-#  service_account = kubernetes_service_account.tiller.metadata.0.name
-#  namespace       = kubernetes_service_account.tiller.metadata.0.namespace
-  
   install_tiller = false
 }
 
