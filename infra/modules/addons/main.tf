@@ -6,10 +6,11 @@ provider "helm" {
   kubernetes {
     config_context = var.cluster_arn
   }
-  service_account = kubernetes_service_account.tiller.id
-
-  # Tiller is installed on cluster and intialized by null_resource.helm_init_client
-  #install_tiller = false
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
+  service_account = kubernetes_service_account.tiller.metadata.0.name
+  namespace       = kubernetes_service_account.tiller.metadata.0.namespace
+  
+  install_tiller = true
 }
 
 resource "helm_release" "kube2iam" {
