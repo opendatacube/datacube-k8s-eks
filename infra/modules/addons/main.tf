@@ -10,8 +10,15 @@ provider "helm" {
 #  service_account = kubernetes_service_account.tiller.metadata.0.name
 #  namespace       = kubernetes_service_account.tiller.metadata.0.namespace
   
-#  install_tiller = true
+  install_tiller = false
 }
+
+module "tiller" {
+  source  = "iplabs/tiller/kubernetes"
+  version = "3.2.1"
+}
+
+
 
 # resource "helm_release" "kube2iam" {
 #   name       = "kube2iam"
