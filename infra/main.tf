@@ -122,5 +122,5 @@ module "addons" {
   owner                        = var.owner
   domain_name = var.domain_name
   txt_owner_id = var.txt_owner_id
-  autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-undeeded-time
+  autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-unneeded-time
 }
