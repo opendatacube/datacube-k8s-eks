@@ -305,6 +305,17 @@ db_extra_sg = "sg-01b1c252cbf21c553"
 db_extra_sg = "sg-01b203b405b608b80"
 ```
 
+## db_engine_version
+
+Explicitly sets engine specific version for the database used. OpenDataCube / OpenWebServices typically uses PostgreSQL RDS instances and has been successfully tested with 9.6.11, 10.10 and 11.5 versions available on AWS. Terraform does not automatically allow [major version upgrades](https://www.terraform.io/docs/providers/aws/r/db_instance.html#allow_major_version_upgrade). PostGIS extensions if used have to be upgraded in tandem using [Terraform mechanisms](https://www.terraform.io/docs/providers/postgresql/r/postgresql_extension.html).
+
+Example:
+```
+{
+  postgres = "11.5"
+}
+```
+
 ## vpc_cidr
 
 The network CIDR you wish to use for this VPC, if you have organisational requirements to configure peering etc this is necessary. Otherwise the defaults are sane for most use-cases.
