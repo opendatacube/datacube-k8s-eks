@@ -46,7 +46,7 @@ EOF
 
 # Uses kube2iam for credentials
 depends_on = [
-  helm_release.kube2iam,
+  # helm_release.kube2iam,
   aws_iam_role.external_dns,
   aws_iam_role_policy.external_dns,
   kubernetes_namespace.ingress-controller,

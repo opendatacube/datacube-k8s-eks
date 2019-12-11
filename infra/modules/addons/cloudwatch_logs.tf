@@ -75,7 +75,7 @@ resource "helm_release" "fluentd-cloudwatch" {
 
   # Uses kube2iam for credentials
   depends_on = [
-    helm_release.kube2iam,
+    # helm_release.kube2iam,
     aws_iam_role.fluentd,
     aws_iam_role_policy.fluentd,
     kubernetes_namespace.fluentd,
