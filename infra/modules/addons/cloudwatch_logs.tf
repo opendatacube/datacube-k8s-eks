@@ -45,7 +45,7 @@ resource "aws_cloudwatch_log_group" "datakube" {
 resource "helm_release" "fluentd-cloudwatch" {
   count      = var.cloudwatch_logs_enabled ? 1 : 0
   name       = "fluentd-cloudwatch"
-  repository = "incubator"
+  repository = "https://kubernetes-charts-incubator.storage.googleapis.com/"
   chart      = "fluentd-cloudwatch"
   namespace  = "fluentd"
 
@@ -79,9 +79,7 @@ resource "helm_release" "fluentd-cloudwatch" {
     aws_iam_role.fluentd,
     aws_iam_role_policy.fluentd,
     kubernetes_namespace.fluentd,
-    kubernetes_service_account.tiller,
-    kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-    null_resource.repo_add_incubator,
+    module.tiller,
   ]
 }
 

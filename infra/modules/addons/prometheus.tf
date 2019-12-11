@@ -21,7 +21,7 @@ resource "kubernetes_namespace" "monitoring" {
 resource "helm_release" "prometheus_operator" {
   count      = var.prometheus_enabled ? 1 : 0
   name       = "prometheus-operator"
-  repository = "stable"
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   chart      = "prometheus-operator"
   namespace  = "monitoring"
 
@@ -50,9 +50,7 @@ EOF
 
 depends_on = [
 kubernetes_namespace.monitoring,
-kubernetes_service_account.tiller,
-kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-null_resource.helm_init_client,
+module.tiller,
 aws_acm_certificate_validation.wildcard_cert,
 helm_release.external-dns,
 helm_release.alb-ingress
@@ -60,29 +58,30 @@ helm_release.alb-ingress
 
 # Cleanup crds
 # Cleanup crds
-provisioner "local-exec" {
-when = destroy
-command = "kubectl delete crd/prometheuses.monitoring.coreos.com"
-}
+# TOOD local-exec won't work with TF Cloud. Refactor to remove this though move to Flux CD should resolve
+# provisioner "local-exec" {
+# when = destroy
+# command = "kubectl delete crd/prometheuses.monitoring.coreos.com"
+# }
 
-provisioner "local-exec" {
-when = destroy
-command = "kubectl delete crd/prometheusrules.monitoring.coreos.com"
-}
+# provisioner "local-exec" {
+# when = destroy
+# command = "kubectl delete crd/prometheusrules.monitoring.coreos.com"
+# }
 
-provisioner "local-exec" {
-when = destroy
-command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
-}
+# provisioner "local-exec" {
+# when = destroy
+# command = "kubectl delete crd/servicemonitors.monitoring.coreos.com"
+# }
 
-provisioner "local-exec" {
-when = destroy
-command = "kubectl delete crd/podmonitors.monitoring.coreos.com"
-}
+# provisioner "local-exec" {
+# when = destroy
+# command = "kubectl delete crd/podmonitors.monitoring.coreos.com"
+# }
 
-provisioner "local-exec" {
-when = destroy
-command = "kubectl delete crd/alertmanagers.monitoring.coreos.com"
-}
+# provisioner "local-exec" {
+# when = destroy
+# command = "kubectl delete crd/alertmanagers.monitoring.coreos.com"
+# }
 }
 

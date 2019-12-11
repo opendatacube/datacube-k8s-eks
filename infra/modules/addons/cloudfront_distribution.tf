@@ -128,7 +128,7 @@ locals {
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
   count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
   bucket = var.cf_log_bucket
-  region = var.region
+  region = var.aws_region
   acl    = "private"
 
   server_side_encryption_configuration {

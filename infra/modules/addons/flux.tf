@@ -44,7 +44,7 @@ resource "kubernetes_namespace" "flux" {
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
-  repository = "fluxcd"
+  repository = "https://fluxcd.github.io/flux"
   chart      = "flux"
   namespace  = "flux"
 
@@ -73,21 +73,21 @@ resource "helm_release" "flux" {
   }
 
   # Cleanup crds
-  provisioner "local-exec" {
-    when    = destroy
-    command = "kubectl delete crd/helmreleases.flux.weave.works"
-  }
+  # TODO: These won't work with Terraform Cloud - should be a way to remove the use of local-exec
+  # or better yet use the fluxcd to manage this one
+  # provisioner "local-exec" {
+    # when    = destroy
+    # command = "kubectl delete crd/helmreleases.flux.weave.works"
+  # }
 
-  provisioner "local-exec" {
-    when    = destroy
-    command = "kubectl delete crd/fluxhelmreleases.helm.integrations.flux.weave.works"
-  }
+  # provisioner "local-exec" {
+    # when    = destroy
+    # command = "kubectl delete crd/fluxhelmreleases.helm.integrations.flux.weave.works"
+  # }
 
   depends_on = [
     kubernetes_namespace.flux,
-    kubernetes_service_account.tiller,
-    kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-    null_resource.repo_add_fluxcd,
+    module.tiller,
   ]
 }
 

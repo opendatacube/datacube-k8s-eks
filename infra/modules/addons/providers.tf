@@ -2,6 +2,8 @@ data "aws_eks_cluster_auth" "odc" {
   name = var.cluster_id
 }
 
+data "aws_region" "current" {
+}
 
 provider "kubernetes" {
   version = "1.9"
