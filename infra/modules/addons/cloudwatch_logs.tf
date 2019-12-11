@@ -79,7 +79,7 @@ resource "helm_release" "fluentd-cloudwatch" {
     aws_iam_role.fluentd,
     aws_iam_role_policy.fluentd,
     kubernetes_namespace.fluentd,
-    module.tiller,
+    # module.tiller,
   ]
 }
 

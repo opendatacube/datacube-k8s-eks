@@ -50,7 +50,7 @@ depends_on = [
   aws_iam_role.external_dns,
   aws_iam_role_policy.external_dns,
   kubernetes_namespace.ingress-controller,
-  module.tiller,
+  # module.tiller,
   helm_release.alb-ingress
 ]
 }

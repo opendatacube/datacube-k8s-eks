@@ -87,7 +87,7 @@ resource "helm_release" "flux" {
 
   depends_on = [
     kubernetes_namespace.flux,
-    module.tiller,
+    # module.tiller,
   ]
 }
 

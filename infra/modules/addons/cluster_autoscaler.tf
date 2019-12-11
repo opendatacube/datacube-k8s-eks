@@ -53,7 +53,7 @@ resource "helm_release" "cluster_autoscaler" {
     aws_iam_role.autoscaler,
     aws_iam_role_policy.autoscaler,
     kubernetes_namespace.cluster-autoscaler,
-    module.tiller,
+    # module.tiller,
   ]
 }
 

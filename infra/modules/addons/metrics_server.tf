@@ -17,7 +17,7 @@ resource "helm_release" "metrics_server" {
   ]
 
   depends_on = [
-    module.tiller,
+    # module.tiller,
   ]
 }
 
