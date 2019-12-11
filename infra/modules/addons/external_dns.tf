@@ -4,7 +4,7 @@ resource "helm_release" "external-dns" {
   count      = var.external_dns_enabled ? 1 : 0
   name       = "external-dns"
   repository = "https://kubernetes-charts.storage.googleapis.com"
-  chart      = "stable/external-dns"
+  chart      = "external-dns"
   namespace  = "ingress-controller"
 
   set {
