@@ -704,9 +704,9 @@ Then configure a pod to assumes the IAM role using `sts:AssumeRoleWithWebIdentit
 
 Limitation:
 Currently it doesn't pass AWS creds to pods directly,
-- Extra role handling logic required to get a temporary assume role based session using boto3 AWS SDK
-- Needed a logic to auto refersh session for a long leaved service
-- Needed a logic to export creds to support third party tools/library
+- Extra role handling logic required to get a temporary credentials using assume role with web identity based session - ideally using boto3 AWS SDK
+- Needed a logic to auto refresh session for a long lived service
+- Needed a logic to export credentials to support third party tools/library
 
 See [IAM role for service-account](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/) for more details
 
