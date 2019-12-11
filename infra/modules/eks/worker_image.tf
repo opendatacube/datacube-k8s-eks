@@ -1,7 +1,7 @@
 data "aws_ami" "eks-worker" {
   filter {
     name   = "name"
-    values = ["amazon-eks-node-${var.eks_cluster_version}-v*"]
+    values = ["amazon-eks-node-${aws_eks_cluster.eks.version}-v*"]
   }
 
   most_recent = true
@@ -23,9 +23,9 @@ set -o xtrace
 # Get instance and ami id from the aws ec2 metadate endpoint 
 id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
 ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-/etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' \
 --kubelet-extra-args \
-  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=$id,ami-id=$ami \
+  "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=$id,ami-id=$ami \
    --cloud-provider=aws"
 ${var.extra_userdata}
 USERDATA
@@ -36,9 +36,9 @@ set -o xtrace
 # Get instance and ami id from the aws ec2 metadate endpoint 
 id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
 ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-/etc/eks/bootstrap.sh --apiserver-endpoint '${var.api_endpoint}' --b64-cluster-ca '${var.cluster_ca}' '${var.cluster_name}' \
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' \
 --kubelet-extra-args \
-  "--node-labels=cluster=${var.cluster_name},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$id,ami-id=$ami \
+  "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$id,ami-id=$ami \
    --cloud-provider=aws"
 ${var.extra_userdata}
 USERDATA
@@ -46,18 +46,18 @@ USERDATA
 }
 
 resource "aws_launch_template" "node" {
-  name_prefix = var.cluster_name
+  name_prefix = aws_eks_cluster.eks.id
   image_id = local.ami_id
   user_data = base64encode(local.eks-node-userdata)
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
-    name = var.node_instance_profile
+    name = aws_iam_instance_profile.eks-node.id
   }
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [var.node_security_group]
+    security_groups = [aws_security_group.eks-node.id]
     delete_on_termination = true
   }
 
@@ -76,13 +76,13 @@ resource "aws_launch_template" "node" {
 
 resource "aws_launch_template" "spot" {
   count = var.spot_nodes_enabled ? 1 : 0
-  name_prefix = var.cluster_name
+  name_prefix = aws_eks_cluster.eks.id
   image_id = local.ami_id
   user_data = base64encode(local.eks-spot-userdata)
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
-    name = var.node_instance_profile
+    name = aws_iam_instance_profile.eks-node.id
   }
 
   instance_market_options {
@@ -91,7 +91,7 @@ resource "aws_launch_template" "spot" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [var.node_security_group]
+    security_groups = [aws_security_group.eks-node.id]
     delete_on_termination = true
   }
 

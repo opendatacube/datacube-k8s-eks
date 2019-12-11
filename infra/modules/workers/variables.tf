@@ -1,6 +1,3 @@
-variable "cluster_name" {
-}
-
 variable "ami_image_id" {
   default = ""
 }
@@ -13,25 +10,6 @@ variable "default_worker_instance_type" {
 
 variable "node_group_name" {
   default = "eks"
-}
-
-variable "nodes_subnet_group" {
-  type = list(string)
-}
-
-variable "node_instance_profile" {
-}
-
-variable "eks_cluster_version" {
-}
-
-variable "node_security_group" {
-}
-
-variable "api_endpoint" {
-}
-
-variable "cluster_ca" {
 }
 
 # Node Config

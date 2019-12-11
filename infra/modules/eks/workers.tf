@@ -3,7 +3,7 @@ resource "aws_autoscaling_group" "nodes" {
   max_size         = var.max_nodes
   min_size         = var.min_nodes
   name             = "${var.node_group_name}-${aws_launch_template.node.id}-nodes-0"
-  vpc_zone_identifier = var.nodes_subnet_group
+  vpc_zone_identifier = var.eks_subnet_ids
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -19,7 +19,7 @@ resource "aws_autoscaling_group" "nodes" {
   tags = [
     {
       key                 = "Name"
-      value               = "${var.cluster_name}-node"
+      value               = "${aws_eks_cluster.eks.id}-node"
       propagate_at_launch = true
     },
     {
@@ -28,7 +28,7 @@ resource "aws_autoscaling_group" "nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "kubernetes.io/cluster/${var.cluster_name}"
+      key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
       value               = "owned"
       propagate_at_launch = true
     },
@@ -38,7 +38,7 @@ resource "aws_autoscaling_group" "nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
+      key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
       value               = "owned"
       propagate_at_launch = true
     },
@@ -61,7 +61,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   max_size         = var.max_spot_nodes
   min_size         = var.min_spot_nodes
   name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot-0"
-  vpc_zone_identifier = var.nodes_subnet_group
+  vpc_zone_identifier = var.eks_subnet_ids
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -77,7 +77,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   tags = [
     {
       key                 = "Name"
-      value               = "${var.cluster_name}-spot"
+      value               = "${aws_eks_cluster.eks.id}-spot"
       propagate_at_launch = true
     },
     {
@@ -86,7 +86,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "kubernetes.io/cluster/${var.cluster_name}"
+      key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
       value               = "owned"
       propagate_at_launch = true
     },
@@ -96,7 +96,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
+      key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
       value               = "owned"
       propagate_at_launch = true
     },

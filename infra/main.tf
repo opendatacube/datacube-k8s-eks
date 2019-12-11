@@ -62,6 +62,29 @@ module "eks" {
 
   eks_service_user  = var.eks_service_user
 
+  # Worker configuration
+  # cluster_name                 = module.eks.cluster_id
+  owner                        = var.owner
+  # eks_cluster_version          = module.eks.eks_cluster_version
+  # api_endpoint                 = module.eks.api_endpoint
+  # cluster_ca                   = module.eks.cluster_ca
+  # nodes_subnet_group           = module.vpc.private_subnets # data.aws_subnet_ids.nodes.ids
+  # node_security_group          = module.eks.node_security_group
+  # node_instance_profile        = module.eks.node_instance_profile
+  min_nodes                    = var.min_nodes
+  max_nodes                    = var.max_nodes
+  desired_nodes                = var.desired_nodes
+  min_spot_nodes               = var.min_spot_nodes
+  max_spot_nodes               = var.max_spot_nodes
+  node_group_name              = var.node_group_name
+  ami_image_id                 = var.ami_image_id
+  default_worker_instance_type = var.default_worker_instance_type
+  spot_nodes_enabled           = var.spot_nodes_enabled
+  max_spot_price               = var.max_spot_price
+  extra_userdata               = var.extra_userdata
+  volume_size                 = var.volume_size
+  spot_volume_size            = var.spot_volume_size
+
 }
 
 # Database
@@ -85,67 +108,47 @@ module "db" {
   workspace = terraform.workspace
 }
 
-module "workers" {
-  source = "./modules/workers"
+# module "workers" {
+  # source = "./modules/workers"
 
-  cluster_name                 = module.eks.cluster_id
-  owner                        = var.owner
-  eks_cluster_version          = module.eks.eks_cluster_version
-  api_endpoint                 = module.eks.api_endpoint
-  cluster_ca                   = module.eks.cluster_ca
-  nodes_subnet_group           = module.vpc.private_subnets # data.aws_subnet_ids.nodes.ids
-  node_security_group          = module.eks.node_security_group
-  node_instance_profile        = module.eks.node_instance_profile
-  min_nodes                    = var.min_nodes
-  max_nodes                    = var.max_nodes
-  desired_nodes                = var.desired_nodes
-  min_spot_nodes               = var.min_spot_nodes
-  max_spot_nodes               = var.max_spot_nodes
-  node_group_name              = var.node_group_name
-  ami_image_id                 = var.ami_image_id
-  default_worker_instance_type = var.default_worker_instance_type
-  spot_nodes_enabled           = var.spot_nodes_enabled
-  max_spot_price               = var.max_spot_price
-  extra_userdata               = var.extra_userdata
-  volume_size                 = var.volume_size
-  spot_volume_size            = var.spot_volume_size
-}
 
-module "addons" {
-  source = "./modules/addons"
+# }
 
-  cluster_id                   = module.eks.cluster_id
-  cluster_api_endpoint         = module.eks.api_endpoint
-  cluster_ca                   = module.eks.cluster_ca
-  cluster_arn                  = module.eks.cluster_arn
+# module "addons" {
+#   source = "./modules/addons"
 
-  owner                        = var.owner
-  domain_name = var.domain_name
+#   cluster_id                   = module.eks.cluster_id
+#   cluster_api_endpoint         = module.eks.api_endpoint
+#   cluster_ca                   = module.eks.cluster_ca
+#   cluster_arn                  = module.eks.cluster_arn
+
+#   owner                        = var.owner
+#   domain_name = var.domain_name
   
   
-  external_dns_enabled = var.external_dns_enabled
-  txt_owner_id = var.txt_owner_id
+#   external_dns_enabled = var.external_dns_enabled
+#   txt_owner_id = var.txt_owner_id
 
-  cloudwatch_logs_enabled = var.cloudwatch_logs_enabled
-  cloudwatch_log_group = var.cloudwatch_log_group
-  cloudwatch_log_retention = var.cloudwatch_log_retention
+#   cloudwatch_logs_enabled = var.cloudwatch_logs_enabled
+#   cloudwatch_log_group = var.cloudwatch_log_group
+#   cloudwatch_log_retention = var.cloudwatch_log_retention
 
-  alb_ingress_enabled = var.alb_ingress_enabled
-  prometheus_enabled = var.prometheus_enabled
+#   alb_ingress_enabled = var.alb_ingress_enabled
+#   prometheus_enabled = var.prometheus_enabled
 
-  cluster_autoscaler_enabled = var.cluster_autoscaler_enabled
-  autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-unneeded-time
-  aws_region = var.region
+#   cluster_autoscaler_enabled = var.cluster_autoscaler_enabled
+#   autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-unneeded-time
+#   aws_region = var.region
 
 
-  metrics_server_enabled = var.metrics_server_enabled
+#   metrics_server_enabled = var.metrics_server_enabled
 
-  waf_environment = var.waf_environment
+#   waf_environment = var.waf_environment
 
-  dns_proportional_autoscaler_enabled = var.dns_proportional_autoscaler_enabled
-  dns_proportional_autoscaler_coresPerReplica = var.dns_proportional_autoscaler_coresPerReplica
-  dns_proportional_autoscaler_nodesPerReplica = var.dns_proportional_autoscaler_nodesPerReplica
-  dns_proportional_autoscaler_minReplica = var.dns_proportional_autoscaler_minReplica
+#   dns_proportional_autoscaler_enabled = var.dns_proportional_autoscaler_enabled
+#   dns_proportional_autoscaler_coresPerReplica = var.dns_proportional_autoscaler_coresPerReplica
+#   dns_proportional_autoscaler_nodesPerReplica = var.dns_proportional_autoscaler_nodesPerReplica
+#   dns_proportional_autoscaler_minReplica = var.dns_proportional_autoscaler_minReplica
 
-  custom_kube2iam_roles = var.custom_kube2iam_roles
-}
+#   custom_kube2iam_roles = var.custom_kube2iam_roles
+# }

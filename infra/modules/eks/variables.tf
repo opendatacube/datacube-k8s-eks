@@ -71,3 +71,63 @@ variable "eks_service_user" {
   description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
 }
 
+# Worker variables
+variable "owner" {
+}
+
+variable "ami_image_id" {
+  default     = ""
+  description = "Overwrites the default ami (latest Amazon EKS)"
+}
+
+variable "node_group_name" {
+  default = "eks"
+}
+
+variable "default_worker_instance_type" {
+}
+
+variable "min_nodes" {
+  default = 0
+}
+
+variable "desired_nodes" {
+  default = 0
+}
+
+variable "max_nodes" {
+  default = 0
+}
+
+variable "spot_nodes_enabled" {
+  default = false
+}
+
+variable "min_spot_nodes" {
+  default = 0
+}
+
+variable "max_spot_nodes" {
+  default = 0
+}
+
+variable "max_spot_price" {
+  default = "0.40"
+}
+
+variable "volume_size" {
+  default = 20
+}
+
+variable "spot_volume_size" {
+  default = 20
+}
+
+variable "extra_userdata" {
+  type        = string
+  description = "Additional EC2 user data commands that will be passed to EKS nodes"
+  default     = <<USERDATA
+echo ""
+USERDATA
+
+}
