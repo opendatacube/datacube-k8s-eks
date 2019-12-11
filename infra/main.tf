@@ -104,7 +104,7 @@ module "db" {
 
   # Tags
   owner     = var.owner
-  cluster   = var.cluster_name
+  cluster   = module.eks.cluster_id
   workspace = terraform.workspace
 }
 
