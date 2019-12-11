@@ -121,6 +121,29 @@ module "addons" {
 
   owner                        = var.owner
   domain_name = var.domain_name
+  
+  
+  external_dns_enabled = var.external_dns_enabled
   txt_owner_id = var.txt_owner_id
+
+  cloudwatch_logs_enabled = var.cloudwatch_logs_enabled
+  cloudwatch_log_group = var.cloudwatch_log_group
+  cloudwatch_log_retention = var.cloudwatch_log_retention
+
+  alb_ingress_enabled = var.alb_ingress_enabled
+  prometheus_enabled = var.prometheus_enabled
+
+  cluster_autoscaler_enabled = var.cluster_autoscaler_enabled
   autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-unneeded-time
+
+
+  metrics_server_enabled = var.metrics_server_enabled
+
+  waf_environment = var.waf_environment
+
+  dns_proportional_autoscaler_enabled = var.dns_proportional_autoscaler_enabled
+  dns_proportional_autoscaler_coresPerReplica = var.dns_proportional_autoscaler_coresPerReplica
+  dns_proportional_autoscaler_nodesPerReplica = var.dns_proportional_autoscaler_nodesPerReplica
+  dns_proportional_autoscaler_minReplica = var.dns_proportional_autoscaler_minReplica
+
 }
