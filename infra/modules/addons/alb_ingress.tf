@@ -15,7 +15,8 @@ resource "kubernetes_namespace" "ingress-controller" {
 resource "helm_release" "alb-ingress" {
   count      = var.alb_ingress_enabled ? 1 : 0
   name       = "alb-ingress"
-  repository = "incubator"
+  repository = "https://kubernetes-charts-incubator.storage.googleapis.com/"
+#  repository = "incubator"
   chart      = "aws-alb-ingress-controller"
   namespace  = "ingress-controller"
 
