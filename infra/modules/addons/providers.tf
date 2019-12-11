@@ -25,8 +25,4 @@ provider "helm" {
 module "tiller" {
   source  = "iplabs/tiller/kubernetes"
   version = "3.2.1"
-
-  depends_on = [
-    data.aws_eks_cluster_auth.odc,
-  ]
 }
