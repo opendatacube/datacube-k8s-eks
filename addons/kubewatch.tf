@@ -137,18 +137,6 @@ variable "kubewatch_resourcesToWatch_persistentvolume" {
   default     = false
 }
 
-resource "kubernetes_namespace" "monitoring" {
-  count = var.kubewatch_enabled ? 1 : 0
-
-  metadata {
-    name = "monitoring"
-
-    labels = {
-      managed-by = "Terraform"
-    }
-  }
-}
-
 # Create the kubewatch operator
 resource "helm_release" "kubewatch_operator" {
   count      = var.kubewatch_enabled ? 1 : 0
