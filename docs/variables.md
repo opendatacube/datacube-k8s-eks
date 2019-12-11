@@ -24,6 +24,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [db_storage](#db_storage)                                                                   | Infra                | No  | 180 |
 | [max_db_storage](#max_db_storage)                                                           | Infra                | No  | 0 |
 | [db_extra_sg](#db_extra_sg)                                                                 | Infra                | No  | "" |
+| [db_engine_version](#db_engine_version)                                                     | Infra                | No  | "9.6.11" |
 | [vpc_cidr](#vpc_cidr)                                                                       | Infra                | No  | "10.0.0.0/16" |
 | [public_subnet_cidrs](#public_subnet_cidrs)                                                 | Infra                | No  | ["10.0.0.0/22", "10.0.4.0/22", ["](#"10)10.0.8.0/22"] |
 | [private_subnet_cidrs](#private_subnet_cidrs)                                               | Infra                | No  | ["10.0.32.0/19", "10.0.64.0/19", ["](#"10)10.0.96.0/19"] |
@@ -326,6 +327,17 @@ Example:
 ```
 db_extra_sg = "sg-01b1c252cbf21c553"
 db_extra_sg = "sg-01b203b405b608b80"
+```
+
+## db_engine_version
+
+Explicitly sets engine specific version for the database used. OpenDataCube / OpenWebServices typically uses PostgreSQL RDS instances and has been successfully tested with 9.6.11, 10.10 and 11.5 versions available on AWS. Terraform does not automatically allow [major version upgrades](https://www.terraform.io/docs/providers/aws/r/db_instance.html#allow_major_version_upgrade). PostGIS extensions if used have to be upgraded in tandem using [Terraform mechanisms](https://www.terraform.io/docs/providers/postgresql/r/postgresql_extension.html).
+
+Example:
+```
+{
+  postgres = "11.5"
+}
 ```
 
 ## vpc_cidr

@@ -5,6 +5,7 @@ variable "service_account_roles" {
 }
 
 resource "aws_iam_openid_connect_provider" "example" {
+  count     = (length(var.service_account_roles) > 0) ? 1 : 0
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = []
   url             = "${data.aws_eks_cluster.eks.identity.0.oidc.0.issuer}"
@@ -20,13 +21,13 @@ data "aws_iam_policy_document" "trust_policy" {
     # List of users
     principals {
       type = "Federated"
-      identifiers = ["${aws_iam_openid_connect_provider.example.arn}"]
+      identifiers = ["${aws_iam_openid_connect_provider.example[0].arn}"]
   }
 
     # Enforce MFA
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.example.url, "https://", "")}:sub"
+      variable = "${replace(aws_iam_openid_connect_provider.example[0].url, "https://", "")}:sub"
       values   = [
         "system:serviceaccount:${var.service_account_roles[count.index].service_account_namespace}:${var.service_account_roles[count.index].service_account_name}"
       ]
