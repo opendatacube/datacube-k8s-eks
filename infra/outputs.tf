@@ -29,8 +29,8 @@ output "region" {
 # EOF
 
 
-  sensitive = true
-}
+#   sensitive = true
+# }
 
 data "aws_caller_identity" "current" {
 }
