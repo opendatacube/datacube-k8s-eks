@@ -11,6 +11,7 @@ resource "kubernetes_config_map" "coredns_custom" {
   data = {
     Corefile = <<EOF
 .:53 {
+    log
     errors
     health
     rewrite name database.local ${var.db_hostname}
