@@ -1,7 +1,3 @@
-
-data "aws_caller_identity" "current" {
-}
-
 resource "helm_release" "kube2iam" {
   name       = "kube2iam"
   repository = "https://kubernetes-charts.storage.googleapis.com"
