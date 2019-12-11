@@ -15,7 +15,7 @@ variable "service_account_roles" {
   # ]
 }
 
-resource "aws_iam_openid_connect_provider" "example" {
+resource "aws_iam_openid_connect_provider" "identity_provider" {
   count     = (length(var.service_account_roles) > 0) ? 1 : 0
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = []
@@ -31,12 +31,12 @@ data "aws_iam_policy_document" "trust_policy" {
 
     principals {
       type = "Federated"
-      identifiers = ["${aws_iam_openid_connect_provider.example[0].arn}"]
+      identifiers = ["${aws_iam_openid_connect_provider.identity_provider[0].arn}"]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.example[0].url, "https://", "")}:sub"
+      variable = "${replace(aws_iam_openid_connect_provider.identity_provider[0].url, "https://", "")}:sub"
       values   = [
         "system:serviceaccount:${var.service_account_roles[count.index].service_account_namespace}:${var.service_account_roles[count.index].service_account_name}"
       ]
