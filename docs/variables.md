@@ -49,7 +49,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20 |
 | [extra_userdata](#extra_userdata)                                                           | Nodes                | No  | <<USERDATA echo "" USERDATA |
 | [txt_owner_id](#txt_owner_id)                                                               | Addons               | No  | "AnOwnerId" |
-| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                | Addons               | No  | "10m" |
+| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                 | Addons               | No  | "10m" |
 | [alb_ingress_enabled](#alb_ingress_enabled)                                                 | Addons               | No  | false |
 | [cf_enable](#cf_enable)                                                                     | Addons               | No  | false |
 | [cf_dns_record](#cf_dns_record)                                                             | Addons               | No  | ows |
@@ -97,6 +97,30 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
 | [metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false |
 | [prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false |
+| [kubewatch_enabled](#kubewatch_enabled)                                                     | Addons               | No  | false |
+| [kubewatch_slack_enabled](#kubewatch_slack_enabled)                                         | Addons               | No  | false |
+| [kubewatch_slack_channel](#kubewatch_slack_channel)                                         | Addons               | No  | "" |
+| [kubewatch_slack_token](#kubewatch_slack_token)                                             | Addons               | No  | "" |
+| [kubewatch_hipchat_enabled](#kubewatch_hipchat_enabled)                                     | Addons               | No  | false |
+| [kubewatch_hipchat_room](#kubewatch_hipchat_room)                                           | Addons               | No  | "" |
+| [kubewatch_hipchat_token](#kubewatch_hipchat_token)                                         | Addons               | No  | "" |
+| [kubewatch_hipchat_url](#kubewatch_hipchat_url)                                             | Addons               | No  | "" |
+| [kubewatch_mattermost_enabled](#kubewatch_mattermost_enabled)                               | Addons               | No  | false |
+| [kubewatch_mattermost_channel](#kubewatch_mattermost_channel)                               | Addons               | No  | "" |
+| [kubewatch_mattermost_url](#kubewatch_mattermost_url)                                       | Addons               | No  | "" |
+| [kubewatch_mattermost_username](#kubewatch_mattermost_username)                             | Addons               | No  | "" |
+| [kubewatch_flock_enabled](#kubewatch_flock_enabled)                                         | Addons               | No  | false |
+| [kubewatch_flock_url](#kubewatch_flock_url)                                                 | Addons               | No  | "" |
+| [kubewatch_webhook_enabled](#kubewatch_webhook_enabled)                                     | Addons               | No  | false |
+| [kubewatch_webhook_url](#kubewatch_webhook_url)                                             | Addons               | No  | "" |
+| [kubewatch_resourcesToWatch_deployment](#kubewatch_resourcesToWatch_deployment)             | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_replicationcontroller](#kubewatch_resourcesToWatch_replicationcontroller)      | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_replicaset](#kubewatch_resourcesToWatch_replicaset)             | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_daemonset](#kubewatch_resourcesToWatch_daemonset)               | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_services](#kubewatch_resourcesToWatch_services)                 | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_pod](#kubewatch_resourcesToWatch_pod)                           | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_job](#kubewatch_resourcesToWatch_job)                           | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_persistentvolume](#kubewatch_resourcesToWatch_persistentvolume) | Addons               | No  | false |
 
 # Infra
 
@@ -746,21 +770,98 @@ Creates metrics server (not really any reason you don't want this)
 
 Enables prometheus for monitoring services (will deploy a grafana server at mgmt.$var.domain_name)
 
+## kubewatch_enabled
 
+Enables kubewatch watcher that publishes k8s cluster helm event notification in a slack channel.
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+## kubewatch_slack_enabled
+
+Push kubewatch alert notification to Slack channel using slack token
+
+## kubewatch_slack_channel
+
+Slack channel to notify kubewatch alerts
+
+## kubewatch_slack_token
+
+Create slack bot token using: https://my.slack.com/services/new/bot and invite the bot to your channel using: /join @botname
+
+## kubewatch_hipchat_enabled
+
+Push kubewatch alert notification to hipchat room
+
+## kubewatch_hipchat_room
+
+Hipchat room name for kubewatch alert notifications
+
+## kubewatch_hipchat_token
+
+Hipchat room token to push notification to hipchat room
+
+## kubewatch_hipchat_url
+
+Hipchat URL
+
+## kubewatch_mattermost_enabled
+
+Push kubewatch alert notification to mattermost
+
+## kubewatch_mattermost_channel
+
+Mattermost Channel name
+
+## kubewatch_mattermost_url
+
+Mattermost channel URL
+
+## kubewatch_mattermost_username
+
+Mattermost username
+
+## kubewatch_flock_enabled
+
+Push kubewatch alert notification to flock
+
+## kubewatch_flock_url
+
+Flock URL
+
+## kubewatch_webhook_enabled
+
+Push kubewatch alert notification to Webhook URL
+
+## kubewatch_webhook_url
+
+Webhook URL
+
+## kubewatch_resourcesToWatch_deployment
+
+Kubewatch to monitor changes to k8s deployments
+
+## kubewatch_resourcesToWatch_replicationcontroller
+
+Kubewatch to monitor changes to k8s Replication Controller
+
+## kubewatch_resourcesToWatch_replicaset
+
+Kubewatch to monitor changes to k8s Replica Set
+
+## kubewatch_resourcesToWatch_daemonset
+
+Kubewatch to monitor changes to k8s Daemon Set
+
+## kubewatch_resourcesToWatch_services
+
+Kubewatch to monitor changes to k8s Services
+
+## kubewatch_resourcesToWatch_pod
+
+Kubewatch to monitor changes to k8s Pods
+
+## kubewatch_resourcesToWatch_job
+
+Kubewatch to monitor changes to k8s Jobs
+
+## kubewatch_resourcesToWatch_persistentvolume
+
+Kubewatch to monitor changes to k8s Persistent Volume
