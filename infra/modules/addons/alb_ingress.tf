@@ -1,9 +1,5 @@
 # ======================================
 # ALB Ingress controller
-variable "alb_ingress_enabled" {
-  default = false
-}
-
 resource "kubernetes_namespace" "ingress-controller" {
   count = var.alb_ingress_enabled ? 1 : 0
 

@@ -135,6 +135,7 @@ module "addons" {
 
   cluster_autoscaler_enabled = var.cluster_autoscaler_enabled
   autoscaler-scale-down-unneeded-time = var.autoscaler-scale-down-unneeded-time
+  aws_region = var.region
 
 
   metrics_server_enabled = var.metrics_server_enabled

@@ -1,9 +1,5 @@
 # ======================================
 # External DNS
-variable "external_dns_enabled" {
-  default = false
-}
-
 resource "helm_release" "external-dns" {
   count      = var.external_dns_enabled ? 1 : 0
   name       = "external-dns"

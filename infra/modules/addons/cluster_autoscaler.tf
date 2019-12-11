@@ -1,10 +1,5 @@
 # ======================================
 # Autoscaler
-
-variable "cluster_autoscaler_enabled" {
-  default = false
-}
-
 resource "kubernetes_namespace" "cluster-autoscaler" {
   count = var.cluster_autoscaler_enabled ? 1 : 0
 
@@ -49,7 +44,7 @@ resource "helm_release" "cluster_autoscaler" {
 
   set {
     name  = "awsRegion"
-    value = data.aws_region.current.name
+    value = var.aws_region
   }
 
   # Uses kube2iam for credentials
@@ -58,9 +53,7 @@ resource "helm_release" "cluster_autoscaler" {
     aws_iam_role.autoscaler,
     aws_iam_role_policy.autoscaler,
     kubernetes_namespace.cluster-autoscaler,
-    kubernetes_service_account.tiller,
-    kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-    null_resource.helm_init_client,
+    module.tiller,
   ]
 }
 
