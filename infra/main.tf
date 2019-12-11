@@ -63,14 +63,7 @@ module "eks" {
   eks_service_user  = var.eks_service_user
 
   # Worker configuration
-  # cluster_name                 = module.eks.cluster_id
   owner                        = var.owner
-  # eks_cluster_version          = module.eks.eks_cluster_version
-  # api_endpoint                 = module.eks.api_endpoint
-  # cluster_ca                   = module.eks.cluster_ca
-  # nodes_subnet_group           = module.vpc.private_subnets # data.aws_subnet_ids.nodes.ids
-  # node_security_group          = module.eks.node_security_group
-  # node_instance_profile        = module.eks.node_instance_profile
   min_nodes                    = var.min_nodes
   max_nodes                    = var.max_nodes
   desired_nodes                = var.desired_nodes
@@ -88,30 +81,24 @@ module "eks" {
 }
 
 # Database
-module "db" {
-  source = "./modules/database_layer"
+# module "db" {
+#   source = "./modules/database_layer"
 
-  # Networking
-  vpc_id                = module.vpc.vpc_id
-  database_subnet_group = module.vpc.database_subnets
+#   # Networking
+#   vpc_id                = module.vpc.vpc_id
+#   database_subnet_group = module.vpc.database_subnets
 
-  db_name                = var.db_name
-  rds_is_multi_az        = var.db_multi_az
-  # extra_sg could be empty, so we run compact on the list to remove it if it is
-  access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
-  storage                = var.db_storage
-  db_max_storage         = var.db_max_storage
+#   db_name                = var.db_name
+#   rds_is_multi_az        = var.db_multi_az
+#   # extra_sg could be empty, so we run compact on the list to remove it if it is
+#   access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
+#   storage                = var.db_storage
+#   db_max_storage         = var.db_max_storage
 
-  # Tags
-  owner     = var.owner
-  cluster   = module.eks.cluster_id
-  workspace = terraform.workspace
-}
-
-# module "workers" {
-  # source = "./modules/workers"
-
-
+#   # Tags
+#   owner     = var.owner
+#   cluster   = module.eks.cluster_id
+#   workspace = terraform.workspace
 # }
 
 # module "addons" {
