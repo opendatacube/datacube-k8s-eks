@@ -22,7 +22,7 @@ provider "helm" {
   install_tiller = false
 }
 
-module "tiller" {
-  source  = "iplabs/tiller/kubernetes"
-  version = "3.2.1"
-}
+# module "tiller" {
+#   source  = "iplabs/tiller/kubernetes"
+#   version = "3.2.1"
+# }
