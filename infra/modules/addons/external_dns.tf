@@ -50,14 +50,12 @@ EOF
 
 # Uses kube2iam for credentials
 depends_on = [
-helm_release.kube2iam,
-aws_iam_role.external_dns,
-aws_iam_role_policy.external_dns,
-kubernetes_namespace.ingress-controller,
-kubernetes_service_account.tiller,
-kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-null_resource.helm_init_client,
-helm_release.alb-ingress
+  helm_release.kube2iam,
+  aws_iam_role.external_dns,
+  aws_iam_role_policy.external_dns,
+  kubernetes_namespace.ingress-controller,
+  module.tiller,
+  helm_release.alb-ingress
 ]
 }
 

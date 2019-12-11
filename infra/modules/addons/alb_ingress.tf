@@ -43,9 +43,7 @@ resource "helm_release" "alb-ingress" {
     aws_iam_role.alb,
     aws_iam_role_policy.alb,
     kubernetes_namespace.ingress-controller,
-    kubernetes_service_account.tiller,
-    kubernetes_cluster_role_binding.tiller_clusterrolebinding,
-    null_resource.repo_add_incubator,
+    module.tiller,
   ]
 }
 
