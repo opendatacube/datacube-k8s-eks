@@ -50,7 +50,7 @@ EOF
 
 depends_on = [
 kubernetes_namespace.monitoring,
-module.tiller,
+# module.tiller,
 aws_acm_certificate_validation.wildcard_cert,
 helm_release.external-dns,
 helm_release.alb-ingress
