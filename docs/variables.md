@@ -122,6 +122,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [kubewatch_resourcesToWatch_pod](#kubewatch_resourcesToWatch_pod)                           | Addons               | No  | false |
 | [kubewatch_resourcesToWatch_job](#kubewatch_resourcesToWatch_job)                           | Addons               | No  | false |
 | [kubewatch_resourcesToWatch_persistentvolume](#kubewatch_resourcesToWatch_persistentvolume) | Addons               | No  | false |
+| [service_account_roles](#service_accout_roles)                                              | Addons               | No  | [] |
 
 # Infra
 
@@ -670,6 +671,61 @@ A list of roles that can be used by kube2iam, roles will be prefixedd with the c
 custom_kube2iam_roles = [
   {
     name = "eks-wms"
+    policy = <<-EOF
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["S3:ListBucket"],
+            "Resource": [
+              "arn:aws:s3:::dea-public-data"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": ["S3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::dea-public-data/*"
+            ]
+          }
+        ]
+      }
+    EOF
+  }
+]
+```
+
+## service_account_roles
+
+A list of roles that can be used by service-account, roles will be prefixed with the cluster name, and can be assigned to service-account via the annotation. 
+Once you configure service-account, you can assign a service-account to pod. This will pass `AWS_ROLE_ARN` and `AWS_WEB_IDENTITY_TOKEN_FILE` environment variables to the pod.
+Then configure a pod to assumes the IAM role using `sts:AssumeRoleWithWebIdentity`.
+
+Limitation:
+Currently it doesn't pass AWS creds to pods directly,
+- Extra role handling logic required to get a temporary assume role based session using boto3 AWS SDK
+- Needed a logic to auto refersh session for a long leaved service
+- Needed a logic to export creds to support third party tools/library
+
+See [IAM role for service-account](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/) for more details
+
+```
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: foo-sa
+      namespace: foo
+      annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<role-name>
+````
+
+```
+service_account_roles = [
+  {
+    name = "eks-wms"
+    service_account_namespace = "foo-sa"
+    service_account_name = "foo"
     policy = <<-EOF
       {
         "Version": "2012-10-17",

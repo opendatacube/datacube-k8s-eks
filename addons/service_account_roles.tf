@@ -2,6 +2,17 @@ variable "service_account_roles" {
   type        = "list"
   default     = []
   description = "Specify custom IAM roles that can be used by pods on the k8s cluster"
+  # service_account_roles = [
+  #   {
+  #       name  = "foo"
+  #       service_account_namespace = "foo-sa"
+  #       service_account_name = "foo-sa"
+  #       policy = <<-EOF
+  #       IAMPolicyDocument
+  #         WithIdents
+  #       EOF
+  #   }
+  # ]
 }
 
 resource "aws_iam_openid_connect_provider" "example" {
