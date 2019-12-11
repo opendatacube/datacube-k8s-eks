@@ -82,8 +82,8 @@ module "eks" {
   spot_nodes_enabled           = var.spot_nodes_enabled
   max_spot_price               = var.max_spot_price
   extra_userdata               = var.extra_userdata
-  volume_size                 = var.volume_size
-  spot_volume_size            = var.spot_volume_size
+  volume_size                  = var.volume_size
+  spot_volume_size             = var.spot_volume_size
 
 }
 
