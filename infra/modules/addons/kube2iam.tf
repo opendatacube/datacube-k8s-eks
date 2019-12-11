@@ -17,8 +17,8 @@ resource "helm_release" "kube2iam" {
     value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/"
   }
 
-  depends_on = [
-    module.tiller,
-  ]
+  # depends_on = [
+  #   module.tiller,
+  # ]
 }
 
