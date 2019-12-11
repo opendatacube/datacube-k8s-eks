@@ -101,7 +101,6 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [node_dns_domain](#node_dns_domain)                                                         | Addons               | No  | "cluster.local" |
 | [node_local_dns](#node_local_dns)                                                           | Addons               | No  | "169.254.20.10" |
 | [node_dns_server](#node_dns_server)                                                         | Addons               | No  | "172.20.0.10" |
-| [write_nodelocaldns_config](#write_nodelocaldns_config)                                     | Addons               | No  | true |
 
 # Infra
 
@@ -766,23 +765,3 @@ kube-dns local-link IP
 ## node_dns_server
 
 kube-dns service IP
-
-## write_nodelocaldns_config
-
-Whether to write a Kubectl config file containing the nodelocaldns configuration. Saved to `var.config_output_path`.
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
