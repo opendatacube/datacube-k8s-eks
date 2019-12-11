@@ -40,6 +40,28 @@ module "vpc" {
   }
 }
 
+# Database
+# module "db" {
+#   source = "./modules/database_layer"
+
+#   # Networking
+#   vpc_id                = module.vpc.vpc_id
+#   database_subnet_group = module.vpc.database_subnets
+
+#   db_name                = var.db_name
+#   rds_is_multi_az        = var.db_multi_az
+#   # extra_sg could be empty, so we run compact on the list to remove it if it is
+#   access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
+#   storage                = var.db_storage
+#   db_max_storage         = var.db_max_storage
+
+#   # Tags
+#   owner     = var.owner
+#   cluster   = var.cluster_name
+#   workspace = terraform.workspace
+# }
+
+
 # Creates network and Kuberenetes master nodes
 module "eks" {
   source             = "./modules/eks"
@@ -55,9 +77,9 @@ module "eks" {
 
   enable_ec2_ssm     = var.enable_ec2_ssm
 
-  db_admin_username = module.db.db_admin_username
-  db_admin_password = module.db.db_admin_password
-  db_hostname       = module.db.db_hostname
+  db_admin_username = "fred" #module.db.db_admin_username
+  db_admin_password = "fred" #module.db.db_admin_password
+  db_hostname       = "fred" #module.db.db_hostname
   store_db_creds    = var.store_db_credentials
 
   eks_service_user  = var.eks_service_user
@@ -80,26 +102,6 @@ module "eks" {
 
 }
 
-# Database
-# module "db" {
-#   source = "./modules/database_layer"
-
-#   # Networking
-#   vpc_id                = module.vpc.vpc_id
-#   database_subnet_group = module.vpc.database_subnets
-
-#   db_name                = var.db_name
-#   rds_is_multi_az        = var.db_multi_az
-#   # extra_sg could be empty, so we run compact on the list to remove it if it is
-#   access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
-#   storage                = var.db_storage
-#   db_max_storage         = var.db_max_storage
-
-#   # Tags
-#   owner     = var.owner
-#   cluster   = module.eks.cluster_id
-#   workspace = terraform.workspace
-# }
 
 # module "addons" {
 #   source = "./modules/addons"
