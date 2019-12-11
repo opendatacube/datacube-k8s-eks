@@ -29,13 +29,11 @@ data "aws_iam_policy_document" "trust_policy" {
 
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
-    # List of users
     principals {
       type = "Federated"
       identifiers = ["${aws_iam_openid_connect_provider.example[0].arn}"]
-  }
+    }
 
-    # Enforce MFA
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.example[0].url, "https://", "")}:sub"
