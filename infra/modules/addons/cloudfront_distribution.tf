@@ -26,7 +26,7 @@ variable "cf_certificate_arn" {
 }
 
 variable "cf_certificate_create" {
-  default = true
+  default = false
 }
 
 variable "cf_log_bucket" {
