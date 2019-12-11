@@ -15,18 +15,18 @@ output "region" {
   value = var.region
 }
 
-output "database_credentials" {
-  value = <<EOF
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: ${var.cluster_name}
-  namespace: default
-data:
-  postgres-username: ${base64encode(module.db.db_admin_username)} 
-  postgres-password: ${base64encode(module.db.db_admin_password)} 
-EOF
+# output "database_credentials" {
+  # value = <<EOF
+# apiVersion: v1
+# kind: Secret
+# type: Opaque
+# metadata:
+  # name: ${var.cluster_name}
+  # namespace: default
+# data:
+  # postgres-username: ${base64encode(module.db.db_admin_username)} 
+  # postgres-password: ${base64encode(module.db.db_admin_password)} 
+# EOF
 
 
   sensitive = true
