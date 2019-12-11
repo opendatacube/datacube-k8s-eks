@@ -146,4 +146,5 @@ module "addons" {
   dns_proportional_autoscaler_nodesPerReplica = var.dns_proportional_autoscaler_nodesPerReplica
   dns_proportional_autoscaler_minReplica = var.dns_proportional_autoscaler_minReplica
 
+  custom_kube2iam_roles = var.custom_kube2iam_roles
 }
