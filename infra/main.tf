@@ -106,7 +106,7 @@ module "eks" {
 
 module "addons" {
    source = "./modules/addons"
-   cluster_id                   = var.cluster_name
+   cluster_id                   = module.eks.cluster_id
 }
 
 
