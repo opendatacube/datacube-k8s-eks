@@ -69,6 +69,22 @@ variable "db_multi_az" {
   default = false
 }
 
+variable "db_storage" {
+  default     = "180"
+  description = "Storage size in GB"
+}
+
+variable "db_max_storage" {
+  default     = "0"
+  description = "Enables storage autoscaling up to this amount, disabled if 0"
+}
+
+variable "db_extra_sg" {
+  default     = ""
+  description = "enables an extra security group to access the RDS"
+}
+
+
 # VPC & subnets
 # ===========
 variable "vpc_cidr" {
