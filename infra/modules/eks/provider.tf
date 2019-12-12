@@ -10,14 +10,3 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(aws_eks_cluster.eks.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.odc.token
 }
-
-provider "helm" {
-  kubernetes {
-    load_config_file       = false
-    host                   = aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = base64decode(aws_eks_cluster.eks.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.odc.token
-  }
-  install_tiller = false
-}
-
