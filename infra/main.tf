@@ -82,7 +82,7 @@ module "eks" {
   # db_hostname       = "fred" #module.db.db_hostname
   # store_db_creds    = var.store_db_credentials
 
-  # eks_service_user  = var.eks_service_user
+  eks_service_user  = var.eks_service_user
 
   # Worker configuration
   owner                        = var.owner
