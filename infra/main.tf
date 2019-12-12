@@ -41,7 +41,7 @@ module "vpc" {
   }
 }
 
-Database
+# Database
 module "db" {
   source = "./modules/database_layer"
 
