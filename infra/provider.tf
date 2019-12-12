@@ -3,13 +3,13 @@ provider "aws" {
   max_retries = 10
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
+# data "aws_eks_cluster" "cluster" {
+#   name = module.eks.cluster_id
+# }
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
+# data "aws_eks_cluster_auth" "cluster" {
+#   name = module.eks.cluster_id
+# }
 
 # provider "kubernetes" {
 #   host                   = data.aws_eks_cluster.cluster.endpoint

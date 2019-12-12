@@ -13,9 +13,3 @@ resource "aws_eks_cluster" "eks" {
     aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy,
   ]
 }
-
-
-module "tiller" {
-  source  = "iplabs/tiller/kubernetes"
-  version = "3.2.1"
-}

@@ -77,12 +77,12 @@ module "eks" {
 
   enable_ec2_ssm     = var.enable_ec2_ssm
 
-  db_admin_username = "fred" #module.db.db_admin_username
-  db_admin_password = "fred" #module.db.db_admin_password
-  db_hostname       = "fred" #module.db.db_hostname
-  store_db_creds    = var.store_db_credentials
+  # db_admin_username = "fred" #module.db.db_admin_username
+  # db_admin_password = "fred" #module.db.db_admin_password
+  # db_hostname       = "fred" #module.db.db_hostname
+  # store_db_creds    = var.store_db_credentials
 
-  eks_service_user  = var.eks_service_user
+  # eks_service_user  = var.eks_service_user
 
   # Worker configuration
   owner                        = var.owner
