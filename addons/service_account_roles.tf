@@ -6,7 +6,7 @@ variable "service_account_roles" {
   #   {
   #       name  = "foo"
   #       service_account_namespace = "foo-sa"
-  #       service_account_name = "foo-sa"
+  #       service_account_name = "foo-sa"    # put "*" to scope a role to an entire namespace
   #       policy = <<-EOF
   #       IAMPolicyDocument
   #         WithIdents
@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "trust_policy" {
     }
 
     condition {
-      test     = "StringEquals"
+      test     = (var.service_account_roles[count.index].service_account_name != "*") ? "StringEquals": "StringLike"
       variable = "${replace(aws_iam_openid_connect_provider.identity_provider[0].url, "https://", "")}:sub"
       values   = [
         "system:serviceaccount:${var.service_account_roles[count.index].service_account_namespace}:${var.service_account_roles[count.index].service_account_name}"

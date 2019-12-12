@@ -725,7 +725,7 @@ service_account_roles = [
   {
     name = "eks-wms"
     service_account_namespace = "foo-sa"
-    service_account_name = "foo"
+    service_account_name = "foo"   # put "*" to scope a role to an entire namespace
     policy = <<-EOF
       {
         "Version": "2012-10-17",
