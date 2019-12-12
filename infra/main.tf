@@ -36,6 +36,7 @@ module "vpc" {
     workspace  = terraform.workspace
     owner      = var.owner
     cluster    = var.cluster_name
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     Created_by = "terraform"
   }
 }
