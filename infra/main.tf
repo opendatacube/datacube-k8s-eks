@@ -102,14 +102,6 @@ module "eks" {
 
 }
 
-
-
-module "addons" {
-   source = "./modules/addons"
-   cluster_id                   = module.eks.cluster_id
-}
-
-
 # module "addons" {
 #   source = "./modules/addons"
 
