@@ -26,10 +26,6 @@ variable "users" {
   type = list(string)
 }
 
-variable "eks_service_user" {
-  type        = string
-  description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
-}
 variable "enable_ec2_ssm" {
   default     = true
   description = "Enables the IAM policy required for AWS EC2 System Manager."
