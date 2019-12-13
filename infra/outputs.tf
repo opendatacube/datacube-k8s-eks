@@ -16,7 +16,7 @@ output "region" {
 }
 
 output "owner"  {
-  value = var.ownwer
+  value = var.owner
 }
 
 output "db_hostname" {
