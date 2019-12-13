@@ -15,6 +15,25 @@ output "region" {
   value = var.region
 }
 
+output "owner"  {
+  value = var.ownwer
+}
+
+output "db_hostname" {
+  value = module.db.db_hostname
+}
+
+output "db_admin_username" {
+  value = module.db.db_admin_username
+  sensitive = true
+}
+
+output "db_admin_password" {
+  value = module.db.db_admin_password
+  sensitive = true
+}
+
+
 # output "database_credentials" {
   # value = <<EOF
 # apiVersion: v1
