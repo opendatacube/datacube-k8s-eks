@@ -33,6 +33,14 @@ output "db_admin_password" {
   sensitive = true
 }
 
+output "user_role_arn" {
+  value = module.eks.user_role_arn
+}
+
+output "node_role_arn" {
+  value = module.eks.node_role_arn
+}
+
 
 # output "database_credentials" {
   # value = <<EOF
