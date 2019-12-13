@@ -10,6 +10,12 @@ variable "owner" {
 variable "cluster_name" {
   default = "datacube-eks"
 }
+variable "user_role_arn" {
+}
+
+variable "node_role_arn" {
+}
+
 
 variable "db_hostname" {
   type = string
@@ -37,4 +43,5 @@ variable "store_db_creds" {
 variable "eks_service_user" {
   type        = string
   description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
+  default = ""
 }

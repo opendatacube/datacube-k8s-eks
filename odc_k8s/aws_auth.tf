@@ -29,12 +29,12 @@ resource "kubernetes_config_map" "aws_auth" {
 
   data = {
     mapRoles = <<EOF
-- rolearn: ${aws_iam_role.eks-node.arn}
+- rolearn: ${var.node_role_arn}
   username: system:node:{{EC2PrivateDNSName}}
   groups:
     - system:bootstrappers
     - system:nodes
-- rolearn: ${aws_iam_role.eks-user.arn}
+- rolearn: ${var.user_role_arn}
   username: cluster-admin
   groups:
     - system:masters
