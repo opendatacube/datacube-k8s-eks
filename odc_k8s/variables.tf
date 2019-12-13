@@ -1,3 +1,16 @@
+variable "region" {
+  default = "ap-southeast-2"
+}
+
+variable "owner" {
+  default     = "Team name"
+  description = "Identifies who is responsible for these resources"
+}
+
+variable "cluster_name" {
+  default = "datacube-eks"
+}
+
 variable "db_hostname" {
   type = string
   description = "DB hostname for coredns config"
