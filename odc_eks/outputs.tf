@@ -3,8 +3,8 @@ output "kubeconfig" {
   sensitive = true
 }
 
-output "cluster_name" {
-  value = var.cluster_name
+output "cluster_id" {
+  value = module.eks.cluster_id
 }
 
 output "cluster_role" {
@@ -68,7 +68,7 @@ description = "You can assume this role to manage the cluster"
 value = <<EOF
 
 
-[profile ${var.cluster_name}]
+[profile ${module.eks.cluster_id}]
 source_profile = default
 role_arn = "${module.eks.user_role_arn}"
 EOF

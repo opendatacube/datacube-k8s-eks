@@ -1,12 +1,20 @@
 data "aws_availability_zones" "available" {
 }
 
+module "odc_eks_label" {
+  source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  namespace  = var.namespace
+  stage      = var.environment
+  name      = "odc-eks"
+  delimiter  = "-"
+}
+
 module "vpc" {
   # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.2.0"
 
-  name             = "${var.cluster_name}-vpc"
+  name             = "${module.odc_eks_label.id}-vpc"
   cidr             = var.vpc_cidr
   azs              = data.aws_availability_zones.available.names
   public_subnets   = var.public_subnet_cidrs
@@ -14,15 +22,15 @@ module "vpc" {
   database_subnets = var.database_subnet_cidrs
 
   private_subnet_tags = {
-    "SubnetType"                                = "Private"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"           = "1"
+    "SubnetType"                                       = "Private"
+    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
+    "kubernetes.io/role/internal-elb"                  = "1"
   }
 
   public_subnet_tags = {
-    "SubnetType"                                = "Utility"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"                    = "1"
+    "SubnetType"                                       = "Utility"
+    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
+    "kubernetes.io/role/elb"                           = "1"
   }
 
   enable_dns_hostnames = true
@@ -35,8 +43,8 @@ module "vpc" {
   tags = {
     workspace  = terraform.workspace
     owner      = var.owner
-    cluster    = var.cluster_name
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+    cluster    = module.odc_eks_label.id
+    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
     Created_by = "terraform"
   }
 }
@@ -58,7 +66,7 @@ module "db" {
 
   # Tags
   owner     = var.owner
-  cluster   = var.cluster_name
+  cluster   = module.odc_eks_label.id
   workspace = terraform.workspace
 }
 
@@ -68,7 +76,7 @@ module "eks" {
   source             = "./modules/eks"
   vpc_id             = module.vpc.vpc_id
   eks_subnet_ids     = module.vpc.private_subnets
-  cluster_name       = var.cluster_name
+  cluster_name       = module.odc_eks_label.id
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
 

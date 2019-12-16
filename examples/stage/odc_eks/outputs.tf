@@ -1,5 +1,5 @@
-output "cluster_name" {
-  value = module.odc_eks.cluster_name
+output "cluster_id" {
+  value = module.odc_eks.cluster_id
 }
 
 output "region" {

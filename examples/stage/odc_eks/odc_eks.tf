@@ -1,11 +1,12 @@
 module "odc_eks" {
-    source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=terraform-aws-odc"
-    #source = "../../../datacube-k8s-eks/odc_eks"
+    # source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=terraform-aws-odc"
+    source = "../../../odc_eks"
 # Cluster config
 region = "ap-southeast-2"
 
-owner = "AnOwner"
-cluster_name = "datacube-stage"
+owner = "odc-test"
+namespace = "odc-test"
+environment = "stage"
 cluster_version = 1.13
 
 admin_access_CIDRs = {
@@ -13,10 +14,13 @@ admin_access_CIDRs = {
 }
 
 users = [
-  "role/YouAreGonnaWantThis",
+  "user/ngandhi",
 ]
 
-domain_name = "stage.datacube.domain"
+domain_name = "test.dea.ga.gov.au"
+
+# DB config
+db_name = "odctest"
 
 # System node instances
 #default_worker_instance_type = "m4.large"
@@ -60,14 +64,14 @@ custom_kube2iam_roles = [
               "Effect": "Allow",
               "Action": ["S3:ListBucket"],
               "Resource": [
-                "arn:aws:s3:::datacube-data*"
+                "arn:aws:s3:::dea-public-data"
               ]
             },
             {
               "Effect": "Allow",
               "Action": ["S3:GetObject"],
               "Resource": [
-                "arn:aws:s3:::datacube-data*"
+                "arn:aws:s3:::dea-public-data/*"
               ]
             }
           ]

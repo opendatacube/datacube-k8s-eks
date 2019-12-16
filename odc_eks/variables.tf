@@ -1,14 +1,16 @@
 variable "region" {
-  default = "ap-southeast-2"
 }
 
 variable "owner" {
-  default     = "Team name"
   description = "Identifies who is responsible for these resources"
 }
 
-variable "cluster_name" {
-  default = "datacube-eks"
+variable "namespace" {
+  description = "Namespace for your deployment. Use as part of resource naming"
+}
+
+variable "environment" {
+  description = "Name of your environment. Use as part of resource naming. e.g. dev, stage, prod"
 }
 
 variable "cluster_version" {
@@ -52,8 +54,8 @@ variable "domain_name" {
 }
 
 variable "cloudfront_log_bucket" {
-  default     = "dea-cloudfront-logs.s3.amazonaws.com"
   description = "S3 Bucket to store cloudfront logs"
+  default = ""
 }
 
 variable "create_certificate" {
@@ -62,7 +64,6 @@ variable "create_certificate" {
 
 # Database
 variable "db_name" {
-  default = "datakube"
 }
 
 variable "db_multi_az" {
