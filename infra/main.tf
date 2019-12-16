@@ -81,6 +81,9 @@ module "db" {
   storage                = var.db_storage
   db_max_storage         = var.db_max_storage
 
+  #Engine version
+  engine_version         = var.db_engine_version
+
   # Tags
   owner     = var.owner
   cluster   = var.cluster_name

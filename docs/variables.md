@@ -24,6 +24,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [db_storage](#db_storage)                                                                   | Infra                | No  | 180 |
 | [max_db_storage](#max_db_storage)                                                           | Infra                | No  | 0 |
 | [db_extra_sg](#db_extra_sg)                                                                 | Infra                | No  | "" |
+| [db_engine_version](#db_engine_version)                                                     | Infra                | No  | "9.6.11" |
 | [vpc_cidr](#vpc_cidr)                                                                       | Infra                | No  | "10.0.0.0/16" |
 | [public_subnet_cidrs](#public_subnet_cidrs)                                                 | Infra                | No  | ["10.0.0.0/22", "10.0.4.0/22", ["](#"10)10.0.8.0/22"] |
 | [private_subnet_cidrs](#private_subnet_cidrs)                                               | Infra                | No  | ["10.0.32.0/19", "10.0.64.0/19", ["](#"10)10.0.96.0/19"] |
@@ -49,7 +50,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20 |
 | [extra_userdata](#extra_userdata)                                                           | Nodes                | No  | <<USERDATA echo "" USERDATA |
 | [txt_owner_id](#txt_owner_id)                                                               | Addons               | No  | "AnOwnerId" |
-| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                | Addons               | No  | "10m" |
+| [autoscaler-scale-down-unneeded-time](#autoscaler-scale-down-unneeded-time)                 | Addons               | No  | "10m" |
 | [alb_ingress_enabled](#alb_ingress_enabled)                                                 | Addons               | No  | false |
 | [cf_enable](#cf_enable)                                                                     | Addons               | No  | false |
 | [cf_dns_record](#cf_dns_record)                                                             | Addons               | No  | ows |
@@ -99,6 +100,31 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [oauth_callback](#oauth_callback)"                                                          | Addons               | No  |  |
 | [metrics_server_enabled](#metrics_server_enabled)                                           | Addons               | No  | false |
 | [prometheus_enabled](#prometheus_enabled)                                                   | Addons               | No  | false |
+| [kubewatch_enabled](#kubewatch_enabled)                                                     | Addons               | No  | false |
+| [kubewatch_slack_enabled](#kubewatch_slack_enabled)                                         | Addons               | No  | false |
+| [kubewatch_slack_channel](#kubewatch_slack_channel)                                         | Addons               | No  | "" |
+| [kubewatch_slack_token](#kubewatch_slack_token)                                             | Addons               | No  | "" |
+| [kubewatch_hipchat_enabled](#kubewatch_hipchat_enabled)                                     | Addons               | No  | false |
+| [kubewatch_hipchat_room](#kubewatch_hipchat_room)                                           | Addons               | No  | "" |
+| [kubewatch_hipchat_token](#kubewatch_hipchat_token)                                         | Addons               | No  | "" |
+| [kubewatch_hipchat_url](#kubewatch_hipchat_url)                                             | Addons               | No  | "" |
+| [kubewatch_mattermost_enabled](#kubewatch_mattermost_enabled)                               | Addons               | No  | false |
+| [kubewatch_mattermost_channel](#kubewatch_mattermost_channel)                               | Addons               | No  | "" |
+| [kubewatch_mattermost_url](#kubewatch_mattermost_url)                                       | Addons               | No  | "" |
+| [kubewatch_mattermost_username](#kubewatch_mattermost_username)                             | Addons               | No  | "" |
+| [kubewatch_flock_enabled](#kubewatch_flock_enabled)                                         | Addons               | No  | false |
+| [kubewatch_flock_url](#kubewatch_flock_url)                                                 | Addons               | No  | "" |
+| [kubewatch_webhook_enabled](#kubewatch_webhook_enabled)                                     | Addons               | No  | false |
+| [kubewatch_webhook_url](#kubewatch_webhook_url)                                             | Addons               | No  | "" |
+| [kubewatch_resourcesToWatch_deployment](#kubewatch_resourcesToWatch_deployment)             | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_replicationcontroller](#kubewatch_resourcesToWatch_replicationcontroller)      | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_replicaset](#kubewatch_resourcesToWatch_replicaset)             | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_daemonset](#kubewatch_resourcesToWatch_daemonset)               | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_services](#kubewatch_resourcesToWatch_services)                 | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_pod](#kubewatch_resourcesToWatch_pod)                           | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_job](#kubewatch_resourcesToWatch_job)                           | Addons               | No  | false |
+| [kubewatch_resourcesToWatch_persistentvolume](#kubewatch_resourcesToWatch_persistentvolume) | Addons               | No  | false |
+| [service_account_roles](#service_accout_roles)                                              | Addons               | No  | [] |
 
 # Infra
 
@@ -304,6 +330,17 @@ Example:
 ```
 db_extra_sg = "sg-01b1c252cbf21c553"
 db_extra_sg = "sg-01b203b405b608b80"
+```
+
+## db_engine_version
+
+Explicitly sets engine specific version for the database used. OpenDataCube / OpenWebServices typically uses PostgreSQL RDS instances and has been successfully tested with 9.6.11, 10.10 and 11.5 versions available on AWS. Terraform does not automatically allow [major version upgrades](https://www.terraform.io/docs/providers/aws/r/db_instance.html#allow_major_version_upgrade). PostGIS extensions if used have to be upgraded in tandem using [Terraform mechanisms](https://www.terraform.io/docs/providers/postgresql/r/postgresql_extension.html).
+
+Example:
+```
+{
+  postgres = "11.5"
+}
 ```
 
 ## vpc_cidr
@@ -661,6 +698,61 @@ custom_kube2iam_roles = [
 ]
 ```
 
+## service_account_roles
+
+A list of roles that can be used by service-account, roles will be prefixed with the cluster name, and can be assigned to service-account via the annotation. 
+Once you configure service-account, you can assign a service-account to pod. This will pass `AWS_ROLE_ARN` and `AWS_WEB_IDENTITY_TOKEN_FILE` environment variables to the pod.
+Then configure a pod to assumes the IAM role using `sts:AssumeRoleWithWebIdentity`.
+
+Limitation:
+Currently it doesn't pass AWS creds to pods directly,
+- Extra role handling logic required to get a temporary credentials using assume role with web identity based session - ideally using boto3 AWS SDK
+- Needed a logic to auto refresh session for a long lived service
+- Needed a logic to export credentials to support third party tools/library
+
+See [IAM role for service-account](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/) for more details
+
+```
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: foo-sa
+      namespace: foo
+      annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<role-name>
+````
+
+```
+service_account_roles = [
+  {
+    name = "eks-wms"
+    service_account_namespace = "foo-sa"
+    service_account_name = "foo"   # put "*" to scope a role to an entire namespace
+    policy = <<-EOF
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["S3:ListBucket"],
+            "Resource": [
+              "arn:aws:s3:::dea-public-data"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": ["S3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::dea-public-data/*"
+            ]
+          }
+        ]
+      }
+    EOF
+  }
+]
+```
+
 ## datacube_wms_enabled
 
 Creates roles and infrastructure required to deploy datacube-ows
@@ -779,21 +871,98 @@ Creates metrics server (not really any reason you don't want this)
 
 Enables prometheus for monitoring services (will deploy a grafana server at mgmt.$var.domain_name)
 
+## kubewatch_enabled
 
+Enables kubewatch watcher that publishes k8s cluster helm event notification in a slack channel.
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+## kubewatch_slack_enabled
+
+Push kubewatch alert notification to Slack channel using slack token
+
+## kubewatch_slack_channel
+
+Slack channel to notify kubewatch alerts
+
+## kubewatch_slack_token
+
+Create slack bot token using: https://my.slack.com/services/new/bot and invite the bot to your channel using: /join @botname
+
+## kubewatch_hipchat_enabled
+
+Push kubewatch alert notification to hipchat room
+
+## kubewatch_hipchat_room
+
+Hipchat room name for kubewatch alert notifications
+
+## kubewatch_hipchat_token
+
+Hipchat room token to push notification to hipchat room
+
+## kubewatch_hipchat_url
+
+Hipchat URL
+
+## kubewatch_mattermost_enabled
+
+Push kubewatch alert notification to mattermost
+
+## kubewatch_mattermost_channel
+
+Mattermost Channel name
+
+## kubewatch_mattermost_url
+
+Mattermost channel URL
+
+## kubewatch_mattermost_username
+
+Mattermost username
+
+## kubewatch_flock_enabled
+
+Push kubewatch alert notification to flock
+
+## kubewatch_flock_url
+
+Flock URL
+
+## kubewatch_webhook_enabled
+
+Push kubewatch alert notification to Webhook URL
+
+## kubewatch_webhook_url
+
+Webhook URL
+
+## kubewatch_resourcesToWatch_deployment
+
+Kubewatch to monitor changes to k8s deployments
+
+## kubewatch_resourcesToWatch_replicationcontroller
+
+Kubewatch to monitor changes to k8s Replication Controller
+
+## kubewatch_resourcesToWatch_replicaset
+
+Kubewatch to monitor changes to k8s Replica Set
+
+## kubewatch_resourcesToWatch_daemonset
+
+Kubewatch to monitor changes to k8s Daemon Set
+
+## kubewatch_resourcesToWatch_services
+
+Kubewatch to monitor changes to k8s Services
+
+## kubewatch_resourcesToWatch_pod
+
+Kubewatch to monitor changes to k8s Pods
+
+## kubewatch_resourcesToWatch_job
+
+Kubewatch to monitor changes to k8s Jobs
+
+## kubewatch_resourcesToWatch_persistentvolume
+
+Kubewatch to monitor changes to k8s Persistent Volume
