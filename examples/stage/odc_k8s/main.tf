@@ -1,9 +1,7 @@
 terraform {
-  backend "remote" {
-    organization = "A TF Cloud Org"
-
-    workspaces {
-      name = "odc_k8s-stage-TF_CLOUD_WORKSPACE"
-    }
+  backend "s3" {
+    bucket = "odc-test-stage-backend-tfstate"
+    key    = "odc_k8s_terraform.tfstate"
+    region = "ap-southeast-2"
   }
 }

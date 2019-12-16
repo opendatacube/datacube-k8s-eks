@@ -1,23 +1,21 @@
 data "terraform_remote_state" "odc_eks-stage" {
-  backend = "remote"
+  backend = "s3"
   config = {
-    organization = "A TF Cloud Org"
-
-    workspaces = {
-      name = "odc_eks-stage-TF_CLOUD_WORKSPACE"
-    }
+    bucket = "odc-test-stage-backend-tfstate"
+    key    = "odc_eks_terraform.tfstate"
+    region = "ap-southeast-2"
   }
 
 }
 
 module "odc_k8s" {
-    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
-    #source = "../../../datacube-k8s-eks/odc_k8s"
+//    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
+  source = "../../../odc_k8s"
   # Cluster config
   region = data.terraform_remote_state.odc_eks-stage.outputs.region
 
   owner = data.terraform_remote_state.odc_eks-stage.outputs.owner
-  cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_name
+  cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 
   user_role_arn = data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
   node_role_arn = data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
