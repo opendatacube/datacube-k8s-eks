@@ -3,37 +3,37 @@ variable "fluxcloud_enabled" {
 }
 
 variable "fluxcloud_slack_url" {
-  type        = "string"
+  type        = string
   description = "Slack webhook URL for fluxcloud to use"
   default     = ""
 }
 
 variable "fluxcloud_slack_channel" {
-  type        = "string"
+  type        = string
   description = "Slack channel for fluxcloud to use"
   default     = ""
 }
 
 variable "fluxcloud_slack_name" {
-  type        = "string"
+  type        = string
   description = "Slack name for fluxcloud to post under"
   default     = ""
 }
 
 variable "fluxcloud_slack_emoji" {
-  type        = "string"
+  type        = string
   description = "Slack emoji for fluxcloud to post under"
   default     = ""
 }
 
 variable "fluxcloud_github_url" {
-  type        = "string"
+  type        = string
   description = "VCS URL for fluxcloud links in messages, does not have to be a GitHub URL"
   default     = ""
 }
 
 variable "fluxcloud_commit_template" {
-  type        = "string"
+  type        = string
   description = "VCS template for fluxcloud links in messages, default is for GitHub"
   default     = "{{ .VCSLink }}/commit/{{ .Commit }}"
 }
