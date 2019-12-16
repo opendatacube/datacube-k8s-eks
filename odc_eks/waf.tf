@@ -2,29 +2,31 @@
 
 # Required variables
 variable "waf_enable" {
+  type        = bool
   default     = false
   description = "Whether the WAF resources should be created"
 }
 
 variable "waf_target_scope" {
-  type        = "string"
+  type        = string
   description = "Valid values are `global` and `regional`. This variable value should be set to regional if integrate with ALBs"
   default     = "regional"
 }
 
 variable "waf_log_bucket" {
+  type        = string
   default     = ""
   description = "The name of the bucket to store waf logs in"
 }
 
 variable "waf_firehose_buffer_size" {
-  type        = "string"
+  type        = string
   description = "Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128"
   default     = "128"
 }
 
 variable "waf_firehose_buffer_interval" {
-  type        = "string"
+  type        = string
   description = "Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900"
   default     = "900"
 }
