@@ -25,4 +25,16 @@ module "odc_k8s" {
   db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_admin_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
   db_admin_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
+
+  # Setup Flux/FluxCloud
+  fluxcloud_enabled = false
+//  flux_git_repo_url = ""
+//  flux_git_branch = ""
+//  flux_git_label = ""
+  fluxcloud_slack_url = "" # "https://hooks.slack.com/services/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"
+  fluxcloud_slack_channel = "" # "#ga-wms-updates"
+  fluxcloud_slack_name = "Flux Deployer"
+  fluxcloud_slack_emoji = ":zoidberg:"
+  fluxcloud_github_url = "https://github.com/opendatacube/flux-odc-sample"
+  fluxcloud_commit_template = "{{ .VCSLink }}/commits/{{ .Commit }}"
 }

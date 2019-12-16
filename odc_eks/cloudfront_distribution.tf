@@ -26,7 +26,7 @@ variable "cf_certificate_arn" {
 }
 
 variable "cf_certificate_create" {
-  default = false
+  default = true
 }
 
 variable "cf_log_bucket" {
@@ -35,7 +35,7 @@ variable "cf_log_bucket" {
 }
 
 variable "cf_log_bucket_create" {
-  default = true
+  default = false
 }
 
 # Optional tuning variables
@@ -122,14 +122,45 @@ locals {
   # Creates a basic cloudfront disribution with a custom (i.e. not S3) origin
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
+
+  # Get a bucket name without an extention: .s3.amazonaws.com
+  log_bucket = element(split(".s3.amazonaws.com",var.cf_log_bucket), 0)
+}
+
+# create a policy document for the log bucket
+data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  statement {
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+
+    actions = [
+      "s3:GetBucketAcl",
+      "s3:PutBucketAcl"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${local.log_bucket}"
+    ]
+  }
 }
 
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
   count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
-  bucket = var.cf_log_bucket
-  region = var.aws_region
+  bucket = local.log_bucket
+  region = var.region
   acl    = "private"
+  policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
+
+  # Needed if you want to delete the bucket
+  # force_destroy = true
 
   server_side_encryption_configuration {
     rule {
@@ -140,17 +171,18 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
   }
 
   tags = {
-    Name = "Cloudfront Logs for ${var.cluster_id}"
+    Name = "Cloudfront Logs for ${module.eks.cluster_id}"
   }
 }
 
 # Create our cloudfront distribution
 resource "aws_cloudfront_distribution" "cloudfront" {
-  count = var.cf_enable ? 1 : 0
+  count      = var.cf_enable ? 1 : 0
+  depends_on = [ aws_s3_bucket.cloudfront_log_bucket ]
 
   origin {
     domain_name = local.origin_domain
-    origin_id   = "${var.cluster_id}_${terraform.workspace}_origin"
+    origin_id   = "${module.eks.cluster_id}_origin"
 
     custom_origin_config {
       http_port                = 80
@@ -170,7 +202,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   default_cache_behavior {
     allowed_methods  = var.cf_default_allowed_methods
     cached_methods   = var.cf_default_cached_methods
-    target_origin_id = "${var.cluster_id}_${terraform.workspace}_origin"
+    target_origin_id = "${module.eks.cluster_id}_origin"
 
     forwarded_values {
       query_string = true
@@ -194,8 +226,8 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   }
 
   logging_config {
-    bucket = var.cf_log_bucket
-    prefix = "${var.cluster_id}_${terraform.workspace}_cf"
+    bucket = "${local.log_bucket}.s3.amazonaws.com"
+    prefix = "${module.eks.cluster_id}_cf"
   }
 
   viewer_certificate {
@@ -241,4 +273,3 @@ resource "aws_route53_record" "www" {
   ttl     = "30"
   records = aws_cloudfront_distribution.cloudfront.*.domain_name
 }
-
