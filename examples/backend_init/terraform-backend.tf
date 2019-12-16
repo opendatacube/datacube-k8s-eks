@@ -35,7 +35,6 @@ resource "aws_s3_bucket" "terraform-state-storage-s3" {
     }      
 }
 
-
 # The terraform lock database resource
 resource "aws_dynamodb_table" "terraform_state_lock" {
   name           = "${module.odc_test_stage_backend_label.id}-terraform-lock"
@@ -50,12 +49,4 @@ resource "aws_dynamodb_table" "terraform_state_lock" {
   tags = {
     Name = "DynamoDB Terraform State Lock Table for ${module.odc_test_stage_backend_label.id}"
   }
-}
-
-output "tf-state-bucket" {
-  value = "${aws_s3_bucket.terraform-state-storage-s3.*.id}"
-}
-
-output "dynamodb_table" {
-  value = "${aws_dynamodb_table.terraform_state_lock.*.name}"
 }
