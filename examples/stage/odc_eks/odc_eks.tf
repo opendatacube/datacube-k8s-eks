@@ -34,7 +34,7 @@ module "odc_eks" {
   cf_enable = false
 
   # WAF
-  waf_enable       = false
-//  waf_target_scope = "regional"
-//  waf_log_bucket   = "dea-waf-logs-dev"
+  waf_enable             = false
+  # waf_target_scope       = "regional"
+  # waf_log_bucket_prefix  = "dea-waf-logs"  # creates a bucket: <waf_log_bucket_prefix>-<environment>
 }

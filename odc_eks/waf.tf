@@ -13,10 +13,14 @@ variable "waf_target_scope" {
   default     = "regional"
 }
 
-variable "waf_log_bucket" {
+variable "waf_log_bucket_prefix" {
   type        = string
   default     = ""
-  description = "The name of the bucket to store waf logs in"
+  description = "The bucket prefix to store waf logs in. It creates a bucket with <waf_log_bucket_prefix>-<environment>"
+}
+
+variable "waf_log_bucket_create" {
+  default = false
 }
 
 variable "waf_firehose_buffer_size" {
@@ -31,6 +35,14 @@ variable "waf_firehose_buffer_interval" {
   default     = "900"
 }
 
+module "waf_label" {
+  source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  namespace  = var.namespace
+  stage      = var.environment
+  name      = "waf"
+  delimiter  = "-"
+}
+
 # The module which is defined on repository: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules
 # For a better understanding of what are those parameters mean,
 # please read the description of each variable in the variables.tf file:
@@ -39,12 +51,12 @@ module "owasp_top_10_rules" {
   source  = "traveloka/waf-owasp-top-10-rules/aws"
   version = "v0.2.0"
 
-  product_domain = "wafowasp"
+  product_domain = var.namespace
   service_name   = "wafowasp"
-  environment    = (var.waf_enable) ? "${var.environment}" : ""
+  environment    = (var.waf_enable) ? var.environment : ""
   description    = "OWASP Top 10 rules for waf"
 
-  target_scope      = (var.waf_enable) ? "${var.waf_target_scope}" : ""
+  target_scope      = (var.waf_enable) ? var.waf_target_scope : ""
   create_rule_group = "true"
 
   max_expected_uri_size          = "512"
@@ -72,7 +84,7 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "waf_log_bucket" {
   count  = (var.waf_enable) ? 1 : 0
-  bucket = var.waf_log_bucket
+  bucket = "${var.waf_log_bucket_prefix}-${var.environment}"
   region = var.region
   acl    = "private"
 
@@ -109,7 +121,7 @@ data "aws_iam_policy_document" "firehose_assume_role_policy" {
 # IAM Role for the Firehose, so it able to access those resources above.
 resource "aws_iam_role" "waf_firehose_role" {
   count       = (var.waf_enable) ? 1 : 0
-  name        = "waf_firehose_role"
+  name        = "${module.waf_label.id}-firehose-role"
   path        = "/service-role/firehose/"
   description = "Service Role for wafowasp-WebACL Firehose"
 
@@ -155,13 +167,13 @@ resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
 # This log group for storing delivery error information.
 resource "aws_cloudwatch_log_group" "firehose_error_logs" {
   count             = (var.waf_enable) ? 1 : 0
-  name              = "/aws/kinesisfirehose/aws-waf-logs-wafowasp-WebACL"
+  name              = "/aws/kinesisfirehose/${module.waf_label.id}-firehose-logs"
   retention_in_days = "14"
 }
 
 resource "aws_cloudwatch_log_stream" "firehose_error_log_stream" {
   count          = (var.waf_enable) ? 1 : 0
-  name           = "firehose-error-log-stream"
+  name           = "${module.waf_label.id}-firehose-error-log-stream"
   log_group_name = aws_cloudwatch_log_group.firehose_error_logs[0].name
 }
 
@@ -190,7 +202,8 @@ resource "aws_iam_role_policy" "allow_put_log_events" {
 # Creating the Firehose.
 resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
   count       = (var.waf_enable) ? 1 : 0
-  name        = "aws-waf-logs-wafowasp-WebACL-delivery-stream"
+  # The Kinesis Firehose Delivery Stream name must begin with aws-waf-logs-
+  name        = "aws-waf-logs-${module.waf_label.id}-delivery-stream"
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -211,7 +224,7 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
   }
 
   tags = {
-    Name = "aws-waf-logs-wafowasp-WebACL-delivery_stream"
+    Name = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
   }
 }
 
@@ -219,7 +232,7 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 # https://www.terraform.io/docs/providers/aws/r/wafregional_web_acl.html
 resource "aws_wafregional_web_acl" "waf_webacl" {
   count       = (var.waf_enable) ? 1 : 0
-  name        = "waf-owasp-WebACL"
+  name        = "${module.waf_label.id}-webacl"
   metric_name = "wafOwaspWebACL"
 
   # Configuration block to enable WAF logging.
