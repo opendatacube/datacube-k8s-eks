@@ -39,101 +39,98 @@ provider "helm" {
 #   + resources using kubectl need to include provisioner blocks for plan and destroy so they clean up after themselves and apply updates
 #
 # Reference: https://github.com/cloudposse/terraform-aws-eks-cluster/blob/master/auth.tf
-# variable "install_aws_cli" {
-#   type        = bool
-#   default     = false
-#   description = "Set to `true` to install AWS CLI if the module is provisioned on workstations where AWS CLI is not installed by default, e.g. Terraform Cloud workers"
-# }
+variable "install_aws_cli" {
+  type        = bool
+  default     = false
+  description = "Set to `true` to install AWS CLI if the module is provisioned on workstations where AWS CLI is not installed by default, e.g. Terraform Cloud workers"
+}
 
-# variable "install_kubectl" {
-#   type        = bool
-#   default     = false
-#   description = "Set to `true` to install `kubectl` if the module is provisioned on workstations where `kubectl` is not installed by default, e.g. Terraform Cloud workers"
-# }
+variable "install_kubectl" {
+  type        = bool
+  default     = false
+  description = "Set to `true` to install `kubectl` if the module is provisioned on workstations where `kubectl` is not installed by default, e.g. Terraform Cloud workers"
+}
 
-# variable "kubectl_version" {
-#   type        = string
-#   default     = ""
-#   description = "`kubectl` version to install. If not specified, the latest version will be used"
-# }
+variable "kubectl_version" {
+  type        = string
+  default     = ""
+  description = "`kubectl` version to install. If not specified, the latest version will be used"
+}
 
-# variable "external_packages_install_path" {
-#   type        = string
-#   default     = ""
-#   description = "Path to install external packages, e.g. AWS CLI and `kubectl`. Used when the module is provisioned on workstations where the external packages are not installed by default, e.g. Terraform Cloud workers"
-# }
+variable "external_packages_install_path" {
+  type        = string
+  default     = ""
+  description = "Path to install external packages, e.g. AWS CLI and `kubectl`. Used when the module is provisioned on workstations where the external packages are not installed by default, e.g. Terraform Cloud workers"
+}
 
-# variable "aws_eks_update_kubeconfig_additional_arguments" {
-#   type        = string
-#   default     = ""
-#   description = "Additional arguments for `aws eks update-kubeconfig` command, e.g. `--role-arn xxxxxxxxx`. For more info, see https://docs.aws.amazon.com/cli/latest/reference/eks/update-kubeconfig.html"
-# }
+variable "aws_eks_update_kubeconfig_additional_arguments" {
+  type        = string
+  default     = ""
+  description = "Additional arguments for `aws eks update-kubeconfig` command, e.g. `--role-arn xxxxxxxxx`. For more info, see https://docs.aws.amazon.com/cli/latest/reference/eks/update-kubeconfig.html"
+}
 
-# variable "local_exec_interpreter" {
-#   type        = string
-#   default     = "/bin/bash"
-#   description = "shell to use for local exec"
-# }
+variable "local_exec_interpreter" {
+  type        = string
+  default     = "/bin/bash"
+  description = "shell to use for local exec"
+}
 
-# variable "kubeconfig_path" {
-#   type        = string
-#   default     = "~/.kube/config"
-#   description = "The path to `kubeconfig` file"
-# }
+variable "kubeconfig_path" {
+  type        = string
+  default     = "~/.kube/config"
+  description = "The path to `kubeconfig` file"
+}
 
-# locals {
-#   external_packages_install_path = var.external_packages_install_path == "" ? join("/", [path.module, ".terraform/bin"]) : var.external_packages_install_path
-#   kubectl_version                = var.kubectl_version == "" ? "$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)" : var.kubectl_version
+locals {
+  external_packages_install_path = var.external_packages_install_path == "" ? join("/", [abspath(path.module), ".terraform/bin"]) : var.external_packages_install_path
+  kubectl_version                = var.kubectl_version == "" ? "$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)" : var.kubectl_version
 
-#   cluster_name = data.aws_eks_cluster.cluster.id
-#  }
+  cluster_name = data.aws_eks_cluster.cluster.id
+ }
 
-# resource "null_resource" "install_kubectl" {
+resource "null_resource" "install_kubectl" {
 
-#   triggers = {
-#     cluster_updated                     = data.aws_eks_cluster.cluster.id
-#     # configmap_auth_file_content_changed = join("", local_file.configmap_auth.*.content)
-#   }
+  triggers = {
+    cluster_updated                     = data.aws_eks_cluster.cluster.id
+    # configmap_auth_file_content_changed = join("", local_file.configmap_auth.*.content)
+  }
 
-#   depends_on = [data.aws_eks_cluster.cluster]
+  depends_on = [data.aws_eks_cluster.cluster]
 
-#   provisioner "local-exec" {
-#     interpreter = [var.local_exec_interpreter, "-c"]
+  provisioner "local-exec" {
+    interpreter = [var.local_exec_interpreter, "-c"]
 
-#     command = <<EOT
-#       set -e
-#       install_aws_cli=${var.install_aws_cli}
-#       if [[ "$install_aws_cli" = true ]] ; then
-#           echo 'Installing AWS CLI...'
-#           python --version
-#           echo ${local.external_packages_install_path}
-#           mkdir -p ${local.external_packages_install_path}
-#           cd ${local.external_packages_install_path}
-#           curl -LO https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
-#           unzip ./awscli-bundle.zip
-#           ./awscli-bundle/install -i ${local.external_packages_install_path}
-#           ls -l ${local.external_packages_install_path}
-#           export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
-#           echo 'Installed AWS CLI'
-#           which aws
-#           aws --version
-#       fi
-#       install_kubectl=${var.install_kubectl}
-#       if [[ "$install_kubectl" = true ]] ; then
-#           echo 'Installing kubectl...'
-#           mkdir -p ${local.external_packages_install_path}
-#           cd ${local.external_packages_install_path}
-#           curl -LO https://storage.googleapis.com/kubernetes-release/release/${local.kubectl_version}/bin/linux/amd64/kubectl
-#           chmod +x ./kubectl
-#           export PATH=$PATH:${local.external_packages_install_path}
-#           echo 'Installed kubectl'
-#           which kubectl
-#       fi
+    command = <<EOT
+      set -e
+      install_aws_cli=${var.install_aws_cli}
+      if [[ "$install_aws_cli" = true ]] ; then
+          echo 'Installing AWS CLI...'
+          mkdir -p ${local.external_packages_install_path}
+          cd ${local.external_packages_install_path}
+          curl -LO https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
+          unzip ./awscli-bundle.zip
+          ./awscli-bundle/install -i ${local.external_packages_install_path}
+          export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
+          echo 'Installed AWS CLI'
+          which aws
+          aws --version
+      fi
+      install_kubectl=${var.install_kubectl}
+      if [[ "$install_kubectl" = true ]] ; then
+          echo 'Installing kubectl...'
+          mkdir -p ${local.external_packages_install_path}
+          cd ${local.external_packages_install_path}
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/${local.kubectl_version}/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          export PATH=$PATH:${local.external_packages_install_path}
+          echo 'Installed kubectl'
+          which kubectl
+      fi
 
-#       echo 'Updating kubeconfig...'
-#       aws eks update-kubeconfig --name=${local.cluster_name} --region=${var.region} --kubeconfig=${var.kubeconfig_path} ${var.aws_eks_update_kubeconfig_additional_arguments}
-#       kubectl version --kubeconfig ${var.kubeconfig_path}
-#       echo 'kubeconfig updated'
-#     EOT
-#   }
-# }
+      echo 'Updating kubeconfig...'
+      aws eks update-kubeconfig --name=${local.cluster_name} --region=${var.region} --kubeconfig=${var.kubeconfig_path} ${var.aws_eks_update_kubeconfig_additional_arguments}
+      kubectl version --kubeconfig ${var.kubeconfig_path}
+      echo 'kubeconfig updated'
+    EOT
+  }
+}
