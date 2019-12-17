@@ -33,6 +33,7 @@ provider "helm" {
 # This will install kubectl and awscli and initialise it for use with the deployed cluster
 # kubectl can then be used via local-exec commands to update k8s configuration for those cases where the
 # official provider.kubernetes is not sufficient (e.g. CRD configuration)
+# It's the provisioner you want to have, but can't (yet)
 # 
 # Implementation Notes:
 #   + It is essential any resource that use kubectl be added to the triggers block or kubectl will not be installed on any updates

@@ -41,53 +41,63 @@ resource "kubernetes_namespace" "flux" {
   }
 }
 
-resource "helm_release" "flux" {
-  count      = var.flux_enabled ? 1 : 0
-  name       = "flux"
-  repository = "https://fluxcd.github.io/flux"
-  chart      = "flux"
-  namespace  = "flux"
+# resource "helm_release" "flux" {
+#   count      = var.flux_enabled ? 1 : 0
+#   name       = "flux"
+#   repository = "https://fluxcd.github.io/flux"
+#   chart      = "flux"
+#   namespace  = "flux"
 
-  values = [
-    file("${path.module}/config/flux.yaml"),
-  ]
+#   values = [
+#     file("${path.module}/config/flux.yaml"),
+#   ]
 
-  set {
-    name  = "git.url"
-    value = var.flux_git_repo_url
+#   set {
+#     name  = "git.url"
+#     value = var.flux_git_repo_url
+#   }
+
+#   set {
+#     name  = "git.branch"
+#     value = var.flux_git_branch
+#   }
+
+#   set {
+#     name  = "git.path"
+#     value = var.flux_git_path
+#   }
+
+#   set {
+#     name  = "git.label"
+#     value = var.flux_git_label
+#   }
+
+#   depends_on = [
+#     kubernetes_namespace.flux,
+#   ]
+# }
+
+
+resource "null_resource" "apply_flux_crd" {
+    count      = var.flux_enabled ? 1 : 0
+
+  triggers = {
+    cluster_updated                     = data.aws_eks_cluster.cluster.id
   }
-
-  set {
-    name  = "git.branch"
-    value = var.flux_git_branch
-  }
-
-  set {
-    name  = "git.path"
-    value = var.flux_git_path
-  }
-
-  set {
-    name  = "git.label"
-    value = var.flux_git_label
-  }
-
-  # Cleanup crds
-  # TODO: These won't work with Terraform Cloud - should be a way to remove the use of local-exec
-  # or better yet use the fluxcd to manage this one
-  # provisioner "local-exec" {
-    # when    = destroy
-    # command = "kubectl delete crd/helmreleases.flux.weave.works"
-  # }
-
-  # provisioner "local-exec" {
-    # when    = destroy
-    # command = "kubectl delete crd/fluxhelmreleases.helm.integrations.flux.weave.works"
-  # }
 
   depends_on = [
+    data.aws_eks_cluster.cluster,
     kubernetes_namespace.flux,
-    # module.tiller,
-  ]
-}
+    null_resource.install_kubectl,
+    ]
 
+  provisioner "local-exec" {
+    command = "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
+  }
+
+}
