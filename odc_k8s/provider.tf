@@ -93,6 +93,7 @@ resource "null_resource" "install_kubectl" {
 
   triggers = {
     cluster_updated                     = data.aws_eks_cluster.cluster.id
+    fluxcrd_updated                     = null_resource.apply_flux_crd
     # configmap_auth_file_content_changed = join("", local_file.configmap_auth.*.content)
   }
 
