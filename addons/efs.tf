@@ -13,6 +13,10 @@ variable "efs_pvc_namespace" {
 data "aws_security_group" "worker" {
   count = var.efs_enabled ? 1 : 0
   name  = "terraform-eks-eks-node"
+  tags = {
+    Name = "${var.cluster_name}-node"
+  }
+
 }
 
 # Find Network info
