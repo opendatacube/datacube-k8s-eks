@@ -105,11 +105,14 @@ resource "null_resource" "install_kubectl" {
       install_aws_cli=${var.install_aws_cli}
       if [[ "$install_aws_cli" = true ]] ; then
           echo 'Installing AWS CLI...'
+          python --version
+          echo ${local.external_packages_install_path}
           mkdir -p ${local.external_packages_install_path}
           cd ${local.external_packages_install_path}
           curl -LO https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
           unzip ./awscli-bundle.zip
           ./awscli-bundle/install -i ${local.external_packages_install_path}
+          ls -l ${local.external_packages_install_path}
           export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
           echo 'Installed AWS CLI'
           which aws
