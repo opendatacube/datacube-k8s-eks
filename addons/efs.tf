@@ -37,6 +37,7 @@ data "aws_subnet_ids" "private" {
   }
 }
 
+# Create and EFS
 resource "aws_efs_file_system" "efs" {
   count          = var.efs_enabled ? 1 : 0
   creation_token = var.cluster_name
@@ -50,6 +51,7 @@ resource "aws_efs_file_system" "efs" {
   }
 }
 
+# Create a SG so the nodes can talk to the EFS
 resource "aws_security_group" "ingress-efs" {
    count  = var.efs_enabled ? 1 : 0
    name   = "${var.cluster_name}-efs"
@@ -72,6 +74,7 @@ resource "aws_security_group" "ingress-efs" {
    }
 }
 
+# Mount targets so each AZ can access the EFS
 resource "aws_efs_mount_target" "efs" {
   count = var.efs_enabled ? length(data.aws_subnet_ids.private[0].ids) : 0
   file_system_id  = aws_efs_file_system.efs[0].id
@@ -80,44 +83,91 @@ resource "aws_efs_mount_target" "efs" {
 
 }
 
-# Create a shared disk to reference the EFS
-resource "kubernetes_persistent_volume" "efs" {
+# We template the values instead of using a yaml, this should probably be cleaned up later to be consistent
+data "template_file" "efs-provisioner_config" {
+  count          = var.efs_enabled ? 1 : 0
+  template = file("config/efs-provisioner.tpl")
+  vars = {
+    efsFileSystemId = aws_efs_file_system.efs[0].id
+    awsRegion       = var.aws_region
+    path            = "/"
+    dnsName         = aws_efs_file_system.efs[0].dns_name
+    iam_role_name   = aws_iam_role.efs-provisioner[0].name
+  }
+}
+
+# The efs-provisioner will create the k8s components we need
+resource "helm_release" "efs-provisioner" {
+  count          = var.efs_enabled ? 1 : 0
+  name      = "efs-provisioner"
+  namespace = "kube-system"
+  chart     = "stable/efs-provisioner"
+  values = [
+    data.template_file.efs-provisioner_config[0].rendered,
+  ]
+  depends_on = [aws_efs_mount_target.user-storage]
+}
+
+# EFS PVC using kubernetes provider
+resource "kubernetes_persistent_volume_claim" "efs" {
   count  = var.efs_enabled ? 1 :0
   metadata {
-    name = "efs-persist"
-    labels = {
-      source = "Terraform"
+    name      = "efs"
+    namespace = var.efs_pvc_namespace
+    annotations = {
+      "volume.beta.kubernetes.io/storage-class" = "efs" # this annotation has been deprecated but it appears to be necessary for cluster-autoscaler to function with PVC. Terraform might complain with some versions of k8s provider
     }
   }
   spec {
-    capacity = {
-      # EFS scales based on usage so we set a high number we'll never actually hit
-      storage = "1P"
-    }
-    access_modes = ["ReadWriteMany"]
-    persistent_volume_source {
-      nfs {
-          server = aws_efs_mount_target.efs[0].dns_name
-          path = "/"
+    storage_class_name = "efs"
+    access_modes       = ["ReadWriteMany"]
+    resources {
+      requests = {
+        storage = "1Mi"
       }
     }
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "efs" {
+# IAM policy 
+# At a minimum require read access to EFS  associated with user volumes
+# used by efs-provisioner helm chart
+resource "aws_iam_role" "efs-provisioner" {
   count  = var.efs_enabled ? 1 :0
-  metadata {
-    name = "efs-persist"
-    namespace = var.efs_pvc_namespace
-  }
-  spec {
-    access_modes = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "10G"
-      }
+  name = "${var.cluster_name}-efs-provisioner"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    },
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
+        },
+      "Action": "sts:AssumeRole"
     }
-    volume_name = "${kubernetes_persistent_volume.efs[0].metadata.0.name}"
-    storage_class_name = null
-  }
+  ]
+}
+EOF
+}
+
+data "aws_iam_policy" "efs-ro" {
+  count  = var.efs_enabled ? 1 :0
+  arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy" "efs-provisioner" {
+  count  = var.efs_enabled ? 1 :0
+  name = "${var.cluster_id}-efs-provisioner"
+  role = aws_iam_role.efs-provisioner[0].id
+  policy = data.aws_iam_policy.efs-ro.policy
 }
