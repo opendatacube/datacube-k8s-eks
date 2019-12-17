@@ -31,7 +31,3 @@ output "user_role_arn" {
 output "node_role_arn" {
   value = module.odc_eks.node_role_arn
 }
-
-output "users" {
-  value = module.odc_eks.users
-}

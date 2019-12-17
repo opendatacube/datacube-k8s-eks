@@ -14,10 +14,6 @@ module "odc_eks" {
     "Everywhere" = "0.0.0.0/0"
   }
 
-  users = [
-    "user/ngandhi",
-  ]
-
   domain_name = "test.dea.ga.gov.au"
 
   # DB config

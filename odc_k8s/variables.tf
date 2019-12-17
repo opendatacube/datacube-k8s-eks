@@ -11,8 +11,8 @@ variable "cluster_name" {
 }
 
 variable "users" {
-  type = list(string)
-  description = "A list of users that will be given access to the cluster"
+  type = map
+  description = "A user object that will be given access to the cluster"
 }
 
 variable "roles" {

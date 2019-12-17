@@ -22,10 +22,6 @@ variable "eks_subnet_ids" {
   description = "List of subnets to place EKS workers in"
 }
 
-variable "users" {
-  type = list(string)
-}
-
 variable "enable_ec2_ssm" {
   default     = true
   description = "Enables the IAM policy required for AWS EC2 System Manager."

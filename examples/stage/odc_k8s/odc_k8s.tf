@@ -7,6 +7,9 @@ data "terraform_remote_state" "odc_eks-stage" {
   }
 }
 
+data "aws_caller_identity" "current" {
+}
+
 module "odc_k8s" {
 //    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
   source = "../../../odc_k8s"
@@ -16,10 +19,13 @@ module "odc_k8s" {
   owner = data.terraform_remote_state.odc_eks-stage.outputs.owner
   cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 
-  users = data.terraform_remote_state.odc_eks-stage.outputs.users
+  users = {
+    "eks-deployer": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
+  }
+
   roles = {
-    node-role: data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn,
-    user-role: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+    "node-role": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn,
+    "user-role": data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
   }
 
   # Database
