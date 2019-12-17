@@ -13,10 +13,10 @@ variable "waf_target_scope" {
   default     = "regional"
 }
 
-variable "waf_log_bucket_prefix" {
+variable "waf_log_bucket" {
   type        = string
   default     = ""
-  description = "The bucket prefix to store waf logs in. It creates a bucket with <waf_log_bucket_prefix>-<environment>"
+  description = "The name of the bucket to store WAF logs in"
 }
 
 variable "waf_log_bucket_create" {
@@ -84,7 +84,7 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "waf_log_bucket" {
   count  = (var.waf_enable) ? 1 : 0
-  bucket = "${var.waf_log_bucket_prefix}-${var.environment}"
+  bucket = var.waf_log_bucket
   region = var.region
   acl    = "private"
 

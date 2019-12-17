@@ -31,10 +31,17 @@ module "odc_eks" {
   max_nodes = 5
 
   # Cloudfront CDN
-  cf_enable = false
+  cf_enable                 = false
+  cf_dns_record             = "odc"
+  cf_origin_dns_record      = "cached-alb"
+  cf_custom_aliases         = []
+  cf_certificate_create     = true
+  cf_origin_protocol_policy = "https-only"
+  cf_log_bucket_create      = true
+  cf_log_bucket             = "dea-cloudfront-logs-stage"
 
   # WAF
   waf_enable             = false
-  # waf_target_scope       = "regional"
-  # waf_log_bucket_prefix  = "dea-waf-logs"  # creates a bucket: <waf_log_bucket_prefix>-<environment>
+  waf_target_scope       = "regional"
+  waf_log_bucket         = "dea-waf-logs-stage"
 }

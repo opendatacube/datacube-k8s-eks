@@ -227,7 +227,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
   logging_config {
     bucket = "${local.log_bucket}.s3.amazonaws.com"
-    prefix = "${module.eks.cluster_id}_cf"
+    prefix = "${module.eks.cluster_id}-cf"
   }
 
   viewer_certificate {
