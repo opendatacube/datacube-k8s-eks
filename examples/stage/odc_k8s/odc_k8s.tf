@@ -5,7 +5,6 @@ data "terraform_remote_state" "odc_eks-stage" {
     key    = "odc_eks_terraform.tfstate"
     region = "ap-southeast-2"
   }
-
 }
 
 module "odc_k8s" {
@@ -17,8 +16,11 @@ module "odc_k8s" {
   owner = data.terraform_remote_state.odc_eks-stage.outputs.owner
   cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 
-  user_role_arn = data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
-  node_role_arn = data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+  users = data.terraform_remote_state.odc_eks-stage.outputs.users
+  roles = {
+    node-role: data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn,
+    user-role: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+  }
 
   # Database
   store_db_creds = true

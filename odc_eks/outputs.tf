@@ -33,6 +33,10 @@ output "db_admin_password" {
   sensitive = true
 }
 
+output "users" {
+  value = var.users
+}
+
 output "user_role_arn" {
   value = module.eks.user_role_arn
 }

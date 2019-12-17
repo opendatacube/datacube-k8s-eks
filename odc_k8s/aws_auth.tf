@@ -1,19 +1,39 @@
-data "aws_iam_user" "service_user" {
-  count  = (var.eks_service_user != "") ? 1 : 0
-  user_name = var.eks_service_user
+locals {
+  users = formatlist(
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:%s",
+    var.users
+  )
 }
 
 data "template_file" "map_user_config" {
-  count  = (var.eks_service_user != "") ? 1 : 0
+  count    = length(local.users)
   template = <<EOF
-- userarn: $${eks_service_user_arn}
-  username: $${eks_service_user}
+- userarn: $${user_arn}
+  username: $${user_name}
   groups:
     - system:masters
 EOF
   vars = {
-    eks_service_user     = "${var.eks_service_user}"
-    eks_service_user_arn = "${data.aws_iam_user.service_user[0].arn}"
+    user_name = element(split("/",local.users[count.index]), 1)
+    user_arn  = local.users[count.index]
+  }
+}
+
+data "template_file" "map_role_config" {
+  template = <<EOF
+- rolearn: $${node_role_arn}
+  username: system:node:{{EC2PrivateDNSName}}
+  groups:
+    - system:bootstrappers
+    - system:nodes
+- rolearn: $${user_role_arn}
+  username: cluster-admin
+  groups:
+    - system:masters
+EOF
+  vars = {
+    node_role_arn   = var.roles["node-role"]
+    user_role_arn   = var.roles["user-role"]
   }
 }
 
@@ -23,23 +43,9 @@ resource "kubernetes_config_map" "aws_auth" {
     namespace = "kube-system"
   }
 
-  # data {
-  #   mapRoles = "- rolearn: ${var.node_role_arn}\n  username: system:node:{{EC2PrivateDNSName}}\n  groups:\n    - system:bootstrappers\n    - system:nodes\n- rolearn: ${var.user_role_arn}\n  username: cluster-admin\n  groups:\n    - system:masters\n"
-  # }
-
   data = {
-    mapRoles = <<EOF
-- rolearn: ${var.node_role_arn}
-  username: system:node:{{EC2PrivateDNSName}}
-  groups:
-    - system:bootstrappers
-    - system:nodes
-- rolearn: ${var.user_role_arn}
-  username: cluster-admin
-  groups:
-    - system:masters
-EOF
-    mapUsers = (var.eks_service_user != "") ? data.template_file.map_user_config[0].rendered : null
+    mapRoles = data.template_file.map_role_config.rendered
+    mapUsers = (length(local.users) > 0) ? data.template_file.map_user_config[0].rendered : null
   }
 
 }
