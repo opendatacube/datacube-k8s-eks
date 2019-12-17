@@ -88,7 +88,6 @@ resource "null_resource" "apply_flux_crd" {
   depends_on = [
     data.aws_eks_cluster.cluster,
     kubernetes_namespace.flux,
-    null_resource.install_kubectl,
     ]
 
   provisioner "local-exec" {
