@@ -118,6 +118,6 @@ resource "kubernetes_persistent_volume_claim" "efs" {
       }
     }
     volume_name = "${kubernetes_persistent_volume.efs[0].metadata.0.name}"
-    storage_class_name = ""
+    storage_class_name = null
   }
 }
