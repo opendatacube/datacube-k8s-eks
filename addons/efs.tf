@@ -86,7 +86,7 @@ resource "aws_efs_mount_target" "efs" {
 # We template the values instead of using a yaml, this should probably be cleaned up later to be consistent
 data "template_file" "efs-provisioner_config" {
   count          = var.efs_enabled ? 1 : 0
-  template = file("config/efs-provisioner.tpl")
+  template = file("${path.module}/config/efs-provisioner.tpl")
   vars = {
     efsFileSystemId = aws_efs_file_system.efs[0].id
     awsRegion       = var.region
@@ -98,7 +98,7 @@ data "template_file" "efs-provisioner_config" {
 
 # The efs-provisioner will create the k8s components we need
 resource "helm_release" "efs-provisioner" {
-  count          = var.efs_enabled ? 1 : 0
+  count     = var.efs_enabled ? 1 : 0
   name      = "efs-provisioner"
   namespace = "kube-system"
   chart     = "stable/efs-provisioner"
