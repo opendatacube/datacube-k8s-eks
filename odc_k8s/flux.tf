@@ -105,8 +105,7 @@ resource "null_resource" "apply_flux_crd" {
 
   provisioner "local-exec" {
     when    = destroy
-#    interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = [self.triggers.local_exec_interpreter, "-c"]
     command = join("\n", [self.triggers.install_kubectl, "kubectl delete -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
