@@ -89,7 +89,7 @@ data "template_file" "efs-provisioner_config" {
   template = file("config/efs-provisioner.tpl")
   vars = {
     efsFileSystemId = aws_efs_file_system.efs[0].id
-    awsRegion       = var.aws_region
+    awsRegion       = var.region
     path            = "/"
     dnsName         = aws_efs_file_system.efs[0].dns_name
     iam_role_name   = aws_iam_role.efs-provisioner[0].name
