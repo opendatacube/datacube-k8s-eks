@@ -61,7 +61,6 @@ locals {
   kubectl_version                = var.kubectl_version == "" ? "$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)" : var.kubectl_version
 
   cluster_name = data.aws_eks_cluster.cluster.id
-  interpreter = [var.local_exec_interpreter, "-c"]
   install_kubectl = <<EOT
       set -e
       install_aws_cli=${var.install_aws_cli}

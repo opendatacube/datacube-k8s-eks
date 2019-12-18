@@ -88,7 +88,6 @@ resource "null_resource" "apply_flux_crd" {
     # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners
     # need to re-run (the usual purpose as above) and to retain values you can access via self during the destroy phase.
     # This avoids dependency issues during the destory phase
-    interpreter = local.interpreter
     install_kubectl = local.install_kubectl
   }
 
@@ -98,7 +97,7 @@ resource "null_resource" "apply_flux_crd" {
     ]
 
   provisioner "local-exec" {
-    interpreter = self.interpreter
+    interpreter = [var.local_exec_interpreter, "-c"]
     command = join("\n", [self.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
