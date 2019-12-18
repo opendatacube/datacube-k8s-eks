@@ -98,7 +98,7 @@ resource "null_resource" "apply_flux_crd" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
+    command = join("\n", [local.install_kubectl, "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
 }
