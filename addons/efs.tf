@@ -167,7 +167,7 @@ data "aws_iam_policy" "efs-ro" {
 
 resource "aws_iam_role_policy" "efs-provisioner" {
   count  = var.efs_enabled ? 1 :0
-  name = "${var.cluster_id}-efs-provisioner"
+  name = "${var.cluster_name}-efs-provisioner"
   role = aws_iam_role.efs-provisioner[0].id
   policy = data.aws_iam_policy.efs-ro[0].policy
 }
