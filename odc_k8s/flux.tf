@@ -95,6 +95,7 @@ resource "null_resource" "apply_flux_crd" {
   depends_on = [
     data.aws_eks_cluster.cluster,
     kubernetes_namespace.flux,
+    kubernetes_config_map.aws_auth,
     ]
 
   provisioner "local-exec" {
@@ -104,7 +105,8 @@ resource "null_resource" "apply_flux_crd" {
 
   provisioner "local-exec" {
     when    = destroy
-    interpreter = [self.triggers.local_exec_interpreter, "-c"]
+#    interpreter = [self.triggers.local_exec_interpreter, "-c"]
+    interpreter = ["/bin/bash", "-c"]
     command = join("\n", [self.triggers.install_kubectl, "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
