@@ -65,6 +65,7 @@ locals {
 set -e
 install_aws_cli=${var.install_aws_cli}
 if [[ "$install_aws_cli" = true ]] ; then
+  export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
   if [ ! -f ${local.external_packages_install_path}/aws_cli_installed ] ; then
       echo 'Installing AWS CLI...'
       mkdir -p ${local.external_packages_install_path}
@@ -72,7 +73,6 @@ if [[ "$install_aws_cli" = true ]] ; then
       curl -LO https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
       unzip ./awscli-bundle.zip
       ./awscli-bundle/install -i ${local.external_packages_install_path}
-      export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
       echo 'Installed AWS CLI'
       which aws
       aws --version
@@ -81,13 +81,13 @@ if [[ "$install_aws_cli" = true ]] ; then
 fi
 install_kubectl=${var.install_kubectl}
 if [[ "$install_kubectl" = true ]] ; then
+  export PATH=$PATH:${local.external_packages_install_path}
   if [ ! -f ${local.external_packages_install_path}/kubectl_installed ] ; then
       echo 'Installing kubectl...'
       mkdir -p ${local.external_packages_install_path}
       cd ${local.external_packages_install_path}
       curl -LO https://storage.googleapis.com/kubernetes-release/release/${local.kubectl_version}/bin/linux/amd64/kubectl
       chmod +x ./kubectl
-      export PATH=$PATH:${local.external_packages_install_path}
       echo 'Installed kubectl'
       which kubectl
       touch ${local.external_packages_install_path}/kubectl_installed
@@ -102,7 +102,7 @@ if [ ! -f ${local.external_packages_install_path}/kubeconfig_updated ] ; then
 fi
 EOT
 
- }
+}
 
 # resource "null_resource" "install_kubectl" {
 
