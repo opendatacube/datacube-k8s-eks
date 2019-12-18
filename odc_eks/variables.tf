@@ -80,6 +80,13 @@ variable "db_extra_sg" {
   description = "enables an extra security group to access the RDS"
 }
 
+variable "db_engine_version" {
+  default = {
+    postgres = "9.6.11"
+  }
+  description = "PostgreSQL engine version used for initialization in specific deployments"
+}
+
 
 # VPC & subnets
 # ===========
