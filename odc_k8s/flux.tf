@@ -83,7 +83,7 @@ resource "null_resource" "apply_flux_crd" {
 
   triggers = {
     cluster_updated                     = data.aws_eks_cluster.cluster.id
-    kubernetes_namespace_updated        = kubernetes_namespace.flux.*.id
+    kubernetes_namespace_updated        = "${join(",",kubernetes_namespace.flux.*.id}"
   }
 
   depends_on = [
