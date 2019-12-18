@@ -77,6 +77,10 @@ resource "kubernetes_namespace" "flux" {
 #   ]
 # }
 
+data "http" "flux_helm_release_crd_yaml" {
+  url = "https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
+}
+
 
 resource "null_resource" "apply_flux_crd" {
     count      = var.flux_enabled ? 1 : 0
@@ -90,6 +94,7 @@ resource "null_resource" "apply_flux_crd" {
     # This avoids dependency issues during the destory phase
     install_kubectl = local.install_kubectl
     local_exec_interpreter = var.local_exec_interpreter
+    flux_helm_release_crd_yaml = data.http.flux_helm_release_crd_yaml.body
   }
 
   depends_on = [
@@ -100,7 +105,7 @@ resource "null_resource" "apply_flux_crd" {
 
   provisioner "local-exec" {
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
+    command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f - <<< \\\"${self.triggers.flux_helm_release_crd_yaml}\\\" "])
   }
 
   provisioner "local-exec" {
