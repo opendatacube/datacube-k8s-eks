@@ -31,11 +31,6 @@ variable "eks_service_user" {
   default     = ""
 }
 
-variable "users" {
-  description = "A list of users that will be given access to the cluster"
-  type        = list(string)
-}
-
 variable "user_custom_policy" {
   description = "The IAM custom policy to create and attach to EKS user role"
   type        = string

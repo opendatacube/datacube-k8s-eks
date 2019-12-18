@@ -8,14 +8,17 @@ variable "owner" {
 }
 
 variable "cluster_name" {
-  default = "datacube-eks"
-}
-variable "user_role_arn" {
 }
 
-variable "node_role_arn" {
+variable "users" {
+  type = map
+  description = "A user object that will be given access to the cluster"
 }
 
+variable "roles" {
+  type = map
+  description = "A role object that will be assign to the cluster"
+}
 
 variable "db_hostname" {
   type = string
@@ -38,10 +41,4 @@ variable "db_admin_password" {
 variable "store_db_creds" {
   default     = false
   description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
-}
-
-variable "eks_service_user" {
-  type        = string
-  description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
-  default = ""
 }

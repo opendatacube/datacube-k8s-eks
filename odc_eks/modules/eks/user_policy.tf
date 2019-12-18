@@ -1,14 +1,6 @@
 data "aws_caller_identity" "current" {
 }
 
-# Format our list of users
-locals {
-  accounts_arn = formatlist(
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:%s",
-    var.users,
-  )
-}
-
 data "aws_iam_policy_document" "assume_role" {
   statement {
     sid = "1"
@@ -17,8 +9,8 @@ data "aws_iam_policy_document" "assume_role" {
 
     # List of users
     principals {
-      type = "AWS"
-      identifiers = local.accounts_arn
+      type = "Service"
+      identifiers = [ "ec2.amazonaws.com" ]
     }
 
     # Enforce MFA
