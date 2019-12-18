@@ -1,12 +1,11 @@
-# null_resource.install_kubectl is a workaround for limitations in the official provider.kubernetes
-# This will install kubectl and awscli and initialise it for use with the deployed cluster
-# kubectl can then be used via local-exec commands to update k8s configuration for those cases where the
-# official provider.kubernetes is not sufficient (e.g. CRD configuration)
-# It's the provisioner you want to have, but can't (yet)
+# install_extra_software is a workaround for limitations in some official providers -notably provider.kubernetes
+# The scripts below will install kubectl and awscli and initialise it for use with the deployed cluster
+# kubectl can then be used via provider blocks to install extra software update k8s configuration for those cases where the
+# official provider.kubernetes is not sufficient (e.g. CRD configuration). See flux.tf for an example of the pattern involved.
+# It's the provisioner you want to have, but can't (yet)!
 # 
 # Implementation Notes:
-#   + It is essential any resource that use kubectl be added to the triggers block or kubectl will not be installed on any updates
-#   + resources using kubectl need to include provisioner blocks for plan and destroy so they clean up after themselves and apply updates
+#   + resources using kubectl need to include provisioner blocks for plan and destroy so they clean up after themselves and apply updates (see flux.tf for example)
 #
 # Reference: https://github.com/cloudposse/terraform-aws-eks-cluster/blob/master/auth.tf
 variable "install_aws_cli" {
@@ -55,7 +54,6 @@ variable "kubeconfig_path" {
 # by prepending them to the command to be executed.
 # The appropriate way to use these is via the triggers block so they are stored as part of resource state and then
 # refer to them via self (e.g. self.interpreter). This avoids dependency issues during destroy. See flux.tf for an example
-
 locals {
   external_packages_install_path = var.external_packages_install_path == "" ? join("/", [abspath(path.module), ".terraform/bin"]) : var.external_packages_install_path
   kubectl_version                = var.kubectl_version == "" ? "$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)" : var.kubectl_version
@@ -103,19 +101,3 @@ fi
 EOT
 
 }
-
-# resource "null_resource" "install_kubectl" {
-
-#   triggers = {
-#     cluster_updated                     = data.aws_eks_cluster.cluster.id
-#     fluxcrd_updated                     = "${join(",",null_resource.apply_flux_crd.*.id)}"
-#     # configmap_auth_file_content_changed = join("", local_file.configmap_auth.*.content)
-#   }
-
-#   depends_on = [data.aws_eks_cluster.cluster]
-
-#   provisioner "local-exec" {
-#     interpreter = [var.local_exec_interpreter, "-c"]
-
-#   }
-# }
