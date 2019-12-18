@@ -105,7 +105,7 @@ resource "helm_release" "efs-provisioner" {
   values = [
     data.template_file.efs-provisioner_config[0].rendered,
   ]
-  depends_on = [aws_efs_mount_target.user-storage]
+  depends_on = [aws_efs_mount_target.efs]
 }
 
 # EFS PVC using kubernetes provider
@@ -169,5 +169,5 @@ resource "aws_iam_role_policy" "efs-provisioner" {
   count  = var.efs_enabled ? 1 :0
   name = "${var.cluster_id}-efs-provisioner"
   role = aws_iam_role.efs-provisioner[0].id
-  policy = data.aws_iam_policy.efs-ro.policy
+  policy = data.aws_iam_policy.efs-ro[0].policy
 }
