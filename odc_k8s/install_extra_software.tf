@@ -62,45 +62,45 @@ locals {
 
   cluster_name = data.aws_eks_cluster.cluster.id
   install_kubectl = <<EOT
-      set -e
-      install_aws_cli=${var.install_aws_cli}
-      if [[ "$install_aws_cli" = true ]] ; then
-        if [ ! -f ${local.external_packages_install_path}/aws_cli_installed ]
-            echo 'Installing AWS CLI...'
-            mkdir -p ${local.external_packages_install_path}
-            cd ${local.external_packages_install_path}
-            curl -LO https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
-            unzip ./awscli-bundle.zip
-            ./awscli-bundle/install -i ${local.external_packages_install_path}
-            export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
-            echo 'Installed AWS CLI'
-            which aws
-            aws --version
-            touch ${local.external_packages_install_path}/aws_cli_installed
-        fi
-      fi
-      install_kubectl=${var.install_kubectl}
-      if [[ "$install_kubectl" = true ]] ; then
-        if [ ! -f ${local.external_packages_install_path}/kubectl_installed ]
-            echo 'Installing kubectl...'
-            mkdir -p ${local.external_packages_install_path}
-            cd ${local.external_packages_install_path}
-            curl -LO https://storage.googleapis.com/kubernetes-release/release/${local.kubectl_version}/bin/linux/amd64/kubectl
-            chmod +x ./kubectl
-            export PATH=$PATH:${local.external_packages_install_path}
-            echo 'Installed kubectl'
-            which kubectl
-            touch ${local.external_packages_install_path}/kubectl_installed
-        fi
-      fi
-      if [ ! -f ${local.external_packages_install_path}/kubeconfig_updated]
-        echo 'Updating kubeconfig...'
-        aws eks update-kubeconfig --name=${local.cluster_name} --region=${var.region} --kubeconfig=${var.kubeconfig_path} ${var.aws_eks_update_kubeconfig_additional_arguments}
-        kubectl version --kubeconfig ${var.kubeconfig_path}
-        echo 'kubeconfig updated'
-        touch ${local.external_packages_install_path}/kubeconfig_updated
-      fi
-    EOT
+set -e
+install_aws_cli=${var.install_aws_cli}
+if [[ "$install_aws_cli" = true ]] ; then
+  if [ ! -f ${local.external_packages_install_path}/aws_cli_installed ] ; then
+      echo 'Installing AWS CLI...'
+      mkdir -p ${local.external_packages_install_path}
+      cd ${local.external_packages_install_path}
+      curl -LO https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
+      unzip ./awscli-bundle.zip
+      ./awscli-bundle/install -i ${local.external_packages_install_path}
+      export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
+      echo 'Installed AWS CLI'
+      which aws
+      aws --version
+      touch ${local.external_packages_install_path}/aws_cli_installed
+  fi
+fi
+install_kubectl=${var.install_kubectl}
+if [[ "$install_kubectl" = true ]] ; then
+  if [ ! -f ${local.external_packages_install_path}/kubectl_installed ] ; then
+      echo 'Installing kubectl...'
+      mkdir -p ${local.external_packages_install_path}
+      cd ${local.external_packages_install_path}
+      curl -LO https://storage.googleapis.com/kubernetes-release/release/${local.kubectl_version}/bin/linux/amd64/kubectl
+      chmod +x ./kubectl
+      export PATH=$PATH:${local.external_packages_install_path}
+      echo 'Installed kubectl'
+      which kubectl
+      touch ${local.external_packages_install_path}/kubectl_installed
+  fi
+fi
+if [ ! -f ${local.external_packages_install_path}/kubeconfig_updated ] ; then
+  echo 'Updating kubeconfig...'
+  aws eks update-kubeconfig --name=${local.cluster_name} --region=${var.region} --kubeconfig=${var.kubeconfig_path} ${var.aws_eks_update_kubeconfig_additional_arguments}
+  kubectl version --kubeconfig ${var.kubeconfig_path}
+  echo 'kubeconfig updated'
+  touch ${local.external_packages_install_path}/kubeconfig_updated
+fi
+EOT
 
  }
 
