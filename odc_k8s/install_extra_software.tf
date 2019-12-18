@@ -51,6 +51,11 @@ variable "kubeconfig_path" {
   description = "The path to `kubeconfig` file"
 }
 
+# The local variables are intended to be used in resource provider blocks (both apply and destroy) to install kubectl
+# by prepending them to the command to be executed.
+# The appropriate way to use these is via the triggers block so they are stored as part of resource state and then
+# refer to them via self (e.g. self.interpreter). This avoids dependency issues during destroy. See flux.tf for an example
+
 locals {
   external_packages_install_path = var.external_packages_install_path == "" ? join("/", [abspath(path.module), ".terraform/bin"]) : var.external_packages_install_path
   kubectl_version                = var.kubectl_version == "" ? "$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)" : var.kubectl_version

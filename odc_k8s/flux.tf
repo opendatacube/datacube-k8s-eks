@@ -84,6 +84,12 @@ resource "null_resource" "apply_flux_crd" {
   triggers = {
     cluster_updated                     = data.aws_eks_cluster.cluster.id
     kubernetes_namespace_updated        = "${join(",",kubernetes_namespace.flux.*.id)}"
+
+    # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners
+    # need to re-run (the usual purpose as above) and to retain values you can access via self during the destroy phase.
+    # This avoids dependency issues during the destory phase
+    interpreter = local.interpreter
+    install_kubectl = local.install_kubectl
   }
 
   depends_on = [
@@ -92,13 +98,13 @@ resource "null_resource" "apply_flux_crd" {
     ]
 
   provisioner "local-exec" {
-    interpreter = local.interpreter
-    command = join("\n", [local.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
+    interpreter = self.interpreter
+    command = join("\n", [self.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = join("\n", [local.install_kubectl, "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
+    command = join("\n", [self.install_kubectl, "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
 }
