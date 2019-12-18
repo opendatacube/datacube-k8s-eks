@@ -92,7 +92,9 @@ resource "null_resource" "apply_flux_crd" {
 
   provisioner "local-exec" {
     interpreter = local.interpreter
-    command = join("\n", [local.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
+    # command = join("\n", [local.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
+    command = join("\n", [local.install_kubectl, "kubectl version"])
+
   }
 
   provisioner "local-exec" {
