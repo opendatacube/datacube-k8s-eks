@@ -89,6 +89,7 @@ resource "null_resource" "apply_flux_crd" {
     # need to re-run (the usual purpose as above) and to retain values you can access via self during the destroy phase.
     # This avoids dependency issues during the destory phase
     install_kubectl = local.install_kubectl
+    local_exec_interpreter = var.local_exec_interpreter
   }
 
   depends_on = [
@@ -97,12 +98,13 @@ resource "null_resource" "apply_flux_crd" {
     ]
 
   provisioner "local-exec" {
-    interpreter = [var.local_exec_interpreter, "-c"]
+    interpreter = [self.triggers.local_exec_interpreter, "-c"]
     command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
   provisioner "local-exec" {
     when    = destroy
+    interpreter = [self.triggers.local_exec_interpreter, "-c"]
     command = join("\n", [self.triggers.install_kubectl, "kubectl destroy -f https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"])
   }
 
