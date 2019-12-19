@@ -106,7 +106,7 @@ resource "null_resource" "apply_flux_crd" {
   provisioner "local-exec" {
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
     command = <<EOF
-  crd_yaml = ${self.triggers.flux_helm_release_crd_yaml}
+  crd_yaml="${self.triggers.flux_helm_release_crd_yaml}"
   EOF
   }
     
