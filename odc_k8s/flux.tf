@@ -71,7 +71,7 @@ resource "helm_release" "flux" {
   name       = "flux"
   repository = "https://fluxcd.github.io/flux"
   chart      = "flux"
-  namespace  = "flux"
+  namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
   values = [
     file("${path.module}/config/flux.yaml"),
@@ -97,9 +97,6 @@ resource "helm_release" "flux" {
     value = var.flux_git_label
   }
 
-  depends_on = [
-    kubernetes_namespace.flux,
-  ]
 }
 
 data "http" "flux_helm_release_crd_yaml" {
@@ -112,7 +109,7 @@ resource "null_resource" "apply_flux_crd" {
 
   triggers = {
     cluster_updated                     = data.aws_eks_cluster.cluster.id
-    kubernetes_namespace_updated        = "${join(",",kubernetes_namespace.flux.*.id)}"
+    kubernetes_namespace_updated        = "${join(",",kubernetes_namespace.flux[0].metadata[0].name)}"
 
     # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners
     # need to re-run (the usual purpose as above) and to retain values you can access via self during the destroy phase.
