@@ -105,7 +105,7 @@ resource "null_resource" "apply_flux_crd" {
 
   provisioner "local-exec" {
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "crd_yaml=\"${self.triggers.flux_helm_release_crd_yaml}\" && echo <<< \"$crd_yaml\""])
+    command = join("\n", [self.triggers.install_kubectl, "crd_yaml=\"${self.triggers.flux_helm_release_crd_yaml}\" && echo \"$crd_yaml\""])
     #kubectl apply -f -"])
   }
 
