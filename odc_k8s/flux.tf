@@ -102,14 +102,14 @@ resource "helm_release" "flux" {
   #   name = "secretName"
   #   value = kubernetes_secret.flux[0].metadata[0].name
   # }
-  set {
-    name = "helmOperator.create"
-    value = "true"
-  }
-  set {
-    name = "helmOperator.createCRD"
-    value = "false"
-  }
+  # set {
+  #   name = "helmOperator.create"
+  #   value = "true"
+  # }
+  # set {
+  #   name = "helmOperator.createCRD"
+  #   value = "false"
+  # }
   depends_on = [
     null_resource.apply_flux_crd,
   ]
