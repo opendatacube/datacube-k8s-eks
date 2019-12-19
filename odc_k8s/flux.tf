@@ -53,13 +53,13 @@ resource "kubernetes_secret" "flux" {
   count = var.flux_enabled ? 1 : 0
 
   metadata {
-    name = "flux"
+    name = "flux-git-auth"
     namespace = kubernetes_namespace.flux[0].metadata[0].name
   }
 
   data = {
-    git_authuser = var.fluxcd_git_authuser
-    git_authkey = var.fluxcd_git_authkey
+    GIT_AUTHUSER = var.fluxcd_git_authuser
+    GIT_AUTHKEY = var.fluxcd_git_authkey
   }
 
   type = "Opaque"
@@ -95,6 +95,10 @@ resource "helm_release" "flux" {
   set {
     name  = "git.label"
     value = var.flux_git_label
+  }
+  set {
+    name = "secretName"
+    value = kubernetes_secret.flux[0].metadata[0].name
   }
   depends_on = [
     null_resource.apply_flux_crd,
