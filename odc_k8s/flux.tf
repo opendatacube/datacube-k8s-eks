@@ -54,7 +54,7 @@ resource "kubernetes_secret" "flux" {
 
   metadata {
     name = "flux"
-    namespace = kubernetes_namespace.flux[0].metadata.name[0]
+    namespace = kubernetes_namespace.flux[0].metadata[0].name
   }
 
   data = {
