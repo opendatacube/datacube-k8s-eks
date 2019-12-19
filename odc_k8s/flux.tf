@@ -71,7 +71,7 @@ resource "helm_release" "flux" {
   name       = "flux"
   #repository = "https://fluxcd.github.io/flux"
   repository = "https://charts.fluxcd.io"
-  chart      = "fluxcd/flux"
+  chart      = "flux"
   version    = "1.0.0"
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
