@@ -94,7 +94,7 @@ resource "null_resource" "apply_flux_crd" {
     # This avoids dependency issues during the destory phase
     install_kubectl = local.install_kubectl
     local_exec_interpreter = var.local_exec_interpreter
-    flux_helm_release_crd_yaml = data.http.flux_helm_release_crd_yaml.body
+    flux_helm_release_crd_yaml = replace(data.http.flux_helm_release_crd_yaml.body, "\"", "\\\"")
   }
 
   depends_on = [
