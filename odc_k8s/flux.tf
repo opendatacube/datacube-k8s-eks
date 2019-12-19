@@ -71,7 +71,8 @@ resource "helm_release" "flux" {
   name       = "flux"
   #repository = "https://fluxcd.github.io/flux"
   repository = "https://charts.fluxcd.io"
-  chart      = "flux"
+  chart      = "fluxcd/flux"
+  version    = "1.17.0"
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
   values = [
@@ -97,26 +98,20 @@ resource "helm_release" "flux" {
     name  = "git.label"
     value = var.flux_git_label
   }
+  # set {
+  #   name = "secretName"
+  #   value = kubernetes_secret.flux[0].metadata[0].name
+  # }
   set {
-    name = "secretName"
-    value = kubernetes_secret.flux[0].metadata[0].name
+    name = "helmOperator.create"
+    value = "true"
+  }
+  set {
+    name = "helmOperator.createCRD"
+    value = "false"
   }
   depends_on = [
     null_resource.apply_flux_crd,
-  ]
-}
-# THIS APPEARS TO BE OUT OF DATE INFORMATION - TRY USING THE INSTRUCTIONS FROM THE HELM OPERATOR LINK ON FLUXcd.io
-resource "helm_release" "flux_helm_operator" {
-  count      = var.flux_enabled ? 1 : 0
-  name       = "flux-helm-operator"
-  #repository = "https://fluxcd.github.io/flux"
-  repository = "https://charts.fluxcd.io"
-  chart      = "helm-operator"
-  namespace  = kubernetes_namespace.flux[0].metadata[0].name
-
-  depends_on = [
-    null_resource.apply_flux_crd,
-    helm_release.flux,
   ]
 }
 
