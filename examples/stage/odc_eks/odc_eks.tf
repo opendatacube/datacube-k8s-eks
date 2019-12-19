@@ -24,6 +24,7 @@ module "odc_eks" {
   default_worker_instance_type = "t3.medium"
   spot_nodes_enabled = true
   min_nodes = 1
+  desired_nodes = 1
   max_nodes = 4
 
   # Cloudfront CDN

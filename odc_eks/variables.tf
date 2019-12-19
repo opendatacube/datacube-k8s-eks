@@ -25,12 +25,6 @@ variable "admin_access_CIDRs" {
   default = {}
 }
 
-variable "eks_service_user" {
-  type        = string
-  description = "EKS Service account IAM user to manage kubernetes cluster. This will update kube-system aws-auth config mapUsers attribute if provided."
-  default     = ""
-}
-
 variable "user_custom_policy" {
   description = "The IAM custom policy to create and attach to EKS user role"
   type        = string
