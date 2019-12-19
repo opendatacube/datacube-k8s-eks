@@ -41,41 +41,41 @@ resource "kubernetes_namespace" "flux" {
   }
 }
 
-# resource "helm_release" "flux" {
-#   count      = var.flux_enabled ? 1 : 0
-#   name       = "flux"
-#   repository = "https://fluxcd.github.io/flux"
-#   chart      = "flux"
-#   namespace  = "flux"
+resource "helm_release" "flux" {
+  count      = var.flux_enabled ? 1 : 0
+  name       = "flux"
+  repository = "https://fluxcd.github.io/flux"
+  chart      = "flux"
+  namespace  = "flux"
 
-#   values = [
-#     file("${path.module}/config/flux.yaml"),
-#   ]
+  values = [
+    file("${path.module}/config/flux.yaml"),
+  ]
 
-#   set {
-#     name  = "git.url"
-#     value = var.flux_git_repo_url
-#   }
+  set {
+    name  = "git.url"
+    value = var.flux_git_repo_url
+  }
 
-#   set {
-#     name  = "git.branch"
-#     value = var.flux_git_branch
-#   }
+  set {
+    name  = "git.branch"
+    value = var.flux_git_branch
+  }
 
-#   set {
-#     name  = "git.path"
-#     value = var.flux_git_path
-#   }
+  set {
+    name  = "git.path"
+    value = var.flux_git_path
+  }
 
-#   set {
-#     name  = "git.label"
-#     value = var.flux_git_label
-#   }
+  set {
+    name  = "git.label"
+    value = var.flux_git_label
+  }
 
-#   depends_on = [
-#     kubernetes_namespace.flux,
-#   ]
-# }
+  depends_on = [
+    kubernetes_namespace.flux,
+  ]
+}
 
 data "http" "flux_helm_release_crd_yaml" {
   url = "https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
