@@ -785,7 +785,7 @@ singleuser:
   storage:
     type: "static"
     static:
-      pvcName: "efs-persist"
+      pvcName: "efs"
       subPath: 'home/{username}'
   extraEnv:
     CHOWN_HOME: 'yes'
