@@ -69,7 +69,8 @@ resource "kubernetes_secret" "flux" {
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
-  repository = "https://fluxcd.github.io/flux"
+  #repository = "https://fluxcd.github.io/flux"
+  repository = "https://charts.fluxcd.io"
   chart      = "flux"
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
@@ -104,11 +105,12 @@ resource "helm_release" "flux" {
     null_resource.apply_flux_crd,
   ]
 }
-
-resource "helm_release" "flux_operator" {
+# THIS APPEARS TO BE OUT OF DATE INFORMATION - TRY USING THE INSTRUCTIONS FROM THE HELM OPERATOR LINK ON FLUXcd.io
+resource "helm_release" "flux_helm_operator" {
   count      = var.flux_enabled ? 1 : 0
-  name       = "helm-operator"
-  repository = "https://fluxcd.github.io/flux"
+  name       = "flux-helm-operator"
+  #repository = "https://fluxcd.github.io/flux"
+  repository = "https://charts.fluxcd.io"
   chart      = "helm-operator"
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
