@@ -29,6 +29,14 @@ variable "flux_git_label" {
   default     = "flux-sync"
 }
 
+variable "fluxcd_git_authuser" {
+  type        = string
+}
+
+variable "fluxcd_git_authkey" {
+  type        = string
+}
+
 resource "kubernetes_namespace" "flux" {
   count = var.flux_enabled ? 1 : 0
 
@@ -40,6 +48,23 @@ resource "kubernetes_namespace" "flux" {
     }
   }
 }
+
+resource "kubernetes_secret" "flux" {
+  count = var.flux_enabled ? 1 : 0
+
+  metadata {
+    name = "flux"
+    namespace = kubernetes_namespace.flux[count.index].metadata.name[0]
+  }
+
+  data = {
+    git_authuser = var.fluxcd_git_authuser
+    git_authkey = var.fluxcd_git_authkey
+  }
+
+  type = "Opaque"
+}
+
 
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
