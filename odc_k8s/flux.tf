@@ -96,7 +96,9 @@ resource "helm_release" "flux" {
     name  = "git.label"
     value = var.flux_git_label
   }
-
+  depends_on = [
+    null_resource.apply_flux_crd,
+  ]
 }
 
 data "http" "flux_helm_release_crd_yaml" {
