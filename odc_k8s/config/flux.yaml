@@ -5,7 +5,7 @@ git:
   pollInterval: 1m
 registry:
   pollInterval: 1m
-additionalArgs:
-  - --connect=ws://fluxcloud
+#additionalArgs:
+#  - --connect=ws://fluxcloud
 image:
   repository: fluxcd/flux
