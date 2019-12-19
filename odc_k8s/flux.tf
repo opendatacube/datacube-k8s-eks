@@ -105,6 +105,19 @@ resource "helm_release" "flux" {
   ]
 }
 
+resource "helm_release" "flux_operator" {
+  count      = var.flux_enabled ? 1 : 0
+  name       = "helm-operator"
+  repository = "https://fluxcd.github.io/flux"
+  chart      = "helm-operator"
+  namespace  = kubernetes_namespace.flux[0].metadata[0].name
+
+  depends_on = [
+    null_resource.apply_flux_crd,
+    helm_release.flux,
+  ]
+}
+
 data "http" "flux_helm_release_crd_yaml" {
   url = "https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
 }
