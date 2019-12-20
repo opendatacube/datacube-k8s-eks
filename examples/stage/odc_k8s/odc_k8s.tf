@@ -36,7 +36,7 @@ module "odc_k8s" {
 
   # Setup Flux/FluxCloud
   flux_enabled = false
-  flux_git_repo_url = "https://github.com/opendatacube/flux-odc-sample"
+  flux_git_repo_url = "git@github.com:opendatacube/flux-odc-sample.git"
   flux_git_branch = "master"
   flux_git_path = "flux"
   #flux_git_label = "flux-sync"
