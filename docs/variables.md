@@ -783,15 +783,8 @@ singleuser:
     name: jupyter/base-notebook
     tag: latest
   storage:
-    type: "static"
-    static:
-      pvcName: "efs"
-      subPath: 'home/{username}'
-  extraEnv:
-    CHOWN_HOME: 'yes'
-  uid: 0
-  fsGid: 0
-  cmd: "start-singleuser.sh"
+    dynamic:
+      storageClass: "efs"
 ```
 
 # efs_pvc_namespace

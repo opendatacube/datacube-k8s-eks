@@ -108,27 +108,6 @@ resource "helm_release" "efs-provisioner" {
   depends_on = [aws_efs_mount_target.efs]
 }
 
-# EFS PVC using kubernetes provider
-resource "kubernetes_persistent_volume_claim" "efs" {
-  count  = var.efs_enabled ? 1 :0
-  metadata {
-    name      = "efs"
-    namespace = var.efs_pvc_namespace
-    annotations = {
-      "volume.beta.kubernetes.io/storage-class" = "efs" # this annotation has been deprecated but it appears to be necessary for cluster-autoscaler to function with PVC. Terraform might complain with some versions of k8s provider
-    }
-  }
-  spec {
-    storage_class_name = "efs"
-    access_modes       = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "1Mi"
-      }
-    }
-  }
-}
-
 # IAM policy 
 # At a minimum require read access to EFS  associated with user volumes
 # used by efs-provisioner helm chart
