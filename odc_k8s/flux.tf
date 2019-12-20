@@ -107,7 +107,7 @@ resource "helm_release" "flux-helm-operator" {
 }
 
 data "http" "flux_helm_release_crd_yaml" {
-  url = "https://raw.githubusercontent.com/fluxcd/flux/helm-0.10.1/deploy-helm/flux-helm-release-crd.yaml"
+  url = "https://raw.githubusercontent.com/fluxcd/helm-operator/chart-0.3.0/deploy/flux-helm-release-crd.yaml"
 }
 
 
