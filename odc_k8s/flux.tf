@@ -75,10 +75,6 @@ resource "helm_release" "flux" {
   version    = "1.0.0"
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
-  values = [
-    file("${path.module}/config/flux.yaml"),
-  ]
-
   set {
     name  = "git.url"
     value = var.flux_git_repo_url
@@ -98,18 +94,33 @@ resource "helm_release" "flux" {
     name  = "git.label"
     value = var.flux_git_label
   }
+
+  set {
+    name  = "helmOperator.create"
+    value = true
+  }
+  set {
+    name  = "helmOperator.createCRD"
+    value = false
+  }
+  set {
+    name  = "git.pollInterval"
+    value = "1m"
+  }
+  set {
+    name  = "registry.pollInterval"
+    value = "1m"
+  }
+  # TODO: These should be optional and the syntax for additional args is probably wrong
+  # set {
+  #   name  = "additionalArgs"
+  #   value = "- --connect=ws://fluxcloud"
+  # }
   # set {
   #   name = "secretName"
   #   value = kubernetes_secret.flux[0].metadata[0].name
   # }
-  # set {
-  #   name = "helmOperator.create"
-  #   value = "true"
-  # }
-  # set {
-  #   name = "helmOperator.createCRD"
-  #   value = "false"
-  # }
+  
   depends_on = [
     null_resource.apply_flux_crd,
   ]
