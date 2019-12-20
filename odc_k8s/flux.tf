@@ -29,14 +29,6 @@ variable "flux_git_label" {
   default     = "flux-sync"
 }
 
-variable "fluxcd_git_authuser" {
-  type        = string
-}
-
-variable "fluxcd_git_authkey" {
-  type        = string
-}
-
 resource "kubernetes_namespace" "flux" {
   count = var.flux_enabled ? 1 : 0
 
@@ -49,27 +41,9 @@ resource "kubernetes_namespace" "flux" {
   }
 }
 
-resource "kubernetes_secret" "flux" {
-  count = var.flux_enabled ? 1 : 0
-
-  metadata {
-    name = "flux-git-auth"
-    namespace = kubernetes_namespace.flux[0].metadata[0].name
-  }
-
-  data = {
-    GIT_AUTHUSER = var.fluxcd_git_authuser
-    GIT_AUTHKEY = var.fluxcd_git_authkey
-  }
-
-  type = "Opaque"
-}
-
-
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
-  #repository = "https://fluxcd.github.io/flux"
   repository = "https://charts.fluxcd.io"
   chart      = "flux"
   version    = "1.0.0"
@@ -94,15 +68,6 @@ resource "helm_release" "flux" {
     name  = "git.label"
     value = var.flux_git_label
   }
-
-  set {
-    name  = "helmOperator.create"
-    value = true
-  }
-  set {
-    name  = "helmOperator.createCRD"
-    value = false
-  }
   set {
     name  = "git.pollInterval"
     value = "1m"
@@ -116,13 +81,28 @@ resource "helm_release" "flux" {
   #   name  = "additionalArgs"
   #   value = "- --connect=ws://fluxcloud"
   # }
-  # set {
-  #   name = "secretName"
-  #   value = kubernetes_secret.flux[0].metadata[0].name
-  # }
   
   depends_on = [
     null_resource.apply_flux_crd,
+  ]
+}
+
+resource "helm_release" "flux-helm-operator" {
+  count      = var.flux_enabled ? 1 : 0
+  name       = "helm-operator"
+  repository = "https://charts.fluxcd.io"
+  chart      = "helm-operator"
+  version    = "0.3.0"
+  namespace  = kubernetes_namespace.flux[0].metadata[0].name
+
+  set {
+    name  = "git.ssh.secretName"
+    value = "flux-git-deploy"
+  }
+
+  depends_on = [
+    null_resource.apply_flux_crd,
+    helm_release.flux,
   ]
 }
 
