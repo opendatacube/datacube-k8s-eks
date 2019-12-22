@@ -80,6 +80,8 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [dns_proportional_autoscaler_coresPerReplica](#dns_proportional_autoscaler_coresPerReplica) | Addons               | No  | 256 |
 | [dns_proportional_autoscaler_nodesPerReplica](#dns_proportional_autoscaler_nodesPerReplica) | Addons               | No  | 16 |
 | [dns_proportional_autoscaler_minReplica](#dns_proportional_autoscaler_minReplica)           | Addons               | No  | 2 |
+| [efs_enabled](#efs_enabled)                                                                 | Addons               | No  | false |
+| [efs_pvc_namespace](#efs_pvc_namespace)                                                     | Addons               | No  | default |
 | [external_dns_enabled](#external_dns_enabled)                                               | Addons               | No  | false |
 | [flux_enabled](#flux_enabled)                                                               | Addons               | No  | false |
 | [flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/datacube-k8s-eks |
@@ -766,6 +768,30 @@ Scales core-dns depending on the number of cores / nodes useful when running lar
 ## dns_proportional_autoscaler_coresPerReplica
 ## dns_proportional_autoscaler_nodesPerReplica
 ## dns_proportional_autoscaler_minReplica
+
+## efs_enabled
+
+Setting this to true will create an encrypted EFS in your AWS account and configure it to be accessible from your workers as the pvc "efs-persist" 
+
+This is recommended on multi-az environments as cluster autoscaler will get confused with scaling nodes to fit users if they have EBS volumes (which are stored in a single AZ)
+
+You can configure zero to jupyterHub to use this efs like so:
+
+```
+singleuser:
+  image:
+    name: jupyter/base-notebook
+    tag: latest
+  storage:
+    dynamic:
+      storageClass: "efs"
+```
+
+# efs_pvc_namespace
+
+Configure the Namespace you wish to create the EFS Persistant Volume Claim, this will have to match the namespace you are using to access the EFS volume, If you're using zero-to-jupyterhub you'll need to make this match the namespace you have deployed zero-to-jupyter in. 
+
+see [zero-to-jupyterhub docs](https://zero-to-jupyterhub.readthedocs.io/en/latest/amazon/efs_storage.html) for more info
 
 
 ## external_dns_enabled
