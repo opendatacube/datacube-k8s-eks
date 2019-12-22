@@ -5,7 +5,7 @@
 ## Deploy environment label, e.g. dev, test, prod
 ##
 global:
-  deployEnv: dev
+  deployEnv: ${environment}
 ## Containers
 ##
 replicaCount: 1

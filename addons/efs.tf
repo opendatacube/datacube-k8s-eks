@@ -93,6 +93,7 @@ data "template_file" "efs-provisioner_config" {
     path            = "/"
     dnsName         = aws_efs_file_system.efs[0].dns_name
     iam_role_name   = aws_iam_role.efs-provisioner[0].name
+    environment     = var.cluster_name
   }
 }
 
