@@ -42,8 +42,8 @@ module "odc_k8s" {
   #flux_git_label = "flux-sync"
 
   fluxcloud_enabled = false
-  fluxcloud_slack_url = "" # "https://hooks.slack.com/services/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"
-  fluxcloud_slack_channel = "" # "#ga-wms-updates"
+  fluxcloud_slack_url = ""
+  fluxcloud_slack_channel = ""
   fluxcloud_slack_name = "Flux Example Deployer"
   fluxcloud_slack_emoji = ":zoidberg:"
   fluxcloud_github_url = "https://github.com/opendatacube/flux-odc-sample"
