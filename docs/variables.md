@@ -125,6 +125,13 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [kubewatch_resourcesToWatch_job](#kubewatch_resourcesToWatch_job)                           | Addons               | No  | false |
 | [kubewatch_resourcesToWatch_persistentvolume](#kubewatch_resourcesToWatch_persistentvolume) | Addons               | No  | false |
 | [service_account_roles](#service_accout_roles)                                              | Addons               | No  | [] |
+| [waf_enable](#waf_enable)                                                                   | Addons               | No  | false |
+| [waf_environment](#waf_environment)                                                         | Addons               | No  | "" |
+| [waf_target_scope](#waf_target_scope)                                                       | Addons               | No  | "regional" |
+| [waf_max_expected_body_size](#waf_max_expected_body_size)                                   | Addons               | No  | "536870912" |
+| [waf_log_bucket](#waf_log_bucket)                                                           | Addons               | No  | "" |
+| [waf_firehose_buffer_size](#waf_firehose_buffer_size)                                       | Addons               | No  | "128" |
+| [waf_firehose_buffer_interval](#waf_firehose_buffer_interval)                               | Addons               | No  | "900" |
 
 # Infra
 
@@ -959,3 +966,33 @@ Kubewatch to monitor changes to k8s Jobs
 ## kubewatch_resourcesToWatch_persistentvolume
 
 Kubewatch to monitor changes to k8s Persistent Volume
+
+## waf_enable
+
+Creates a AWS WAF. This will configure a WAF ACLs to mitigate OWASP Top 10 protection rules for your web application.
+
+## waf_environment
+
+The WAF environment name
+
+## waf_target_scope
+
+WAF resource target scope. Valid values are `global` and `regional`.
+If `global`, means resources created will be for global targets such as Amazon CloudFront distribution.
+For regional targets like ALBs and API Gateway stages, set to `regional`.
+
+## waf_max_expected_body_size
+
+Maximum number of bytes allowed in the body of the request. 
+
+## waf_log_bucket
+
+S3 Bucket to store WAF logs
+
+## waf_firehose_buffer_size
+
+Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128.
+
+## waf_firehose_buffer_interval
+
+Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900.
