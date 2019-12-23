@@ -96,6 +96,7 @@ if [ ! -f ${local.external_packages_install_path}/kubeconfig_updated ] ; then
   aws eks update-kubeconfig --name=${local.cluster_name} --region=${var.region} --kubeconfig=${var.kubeconfig_path} ${var.aws_eks_update_kubeconfig_additional_arguments}
   kubectl version --kubeconfig ${var.kubeconfig_path}
   echo 'kubeconfig updated'
+  mkdir -p ${local.external_packages_install_path}
   touch ${local.external_packages_install_path}/kubeconfig_updated
 fi
 EOT
