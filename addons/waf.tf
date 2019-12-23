@@ -18,6 +18,12 @@ variable "waf_environment" {
   default     = ""
 }
 
+variable "waf_max_expected_body_size" {
+  description = "Maximum number of bytes allowed in the body of the request"
+  type        = "string"
+  default     = "4096"
+}
+
 variable "waf_log_bucket" {
   default     = ""
   description = "The name of the bucket to store waf logs in"
@@ -53,7 +59,7 @@ module "owasp_top_10_rules" {
 
   max_expected_uri_size          = "512"
   max_expected_query_string_size = "1024"
-  max_expected_body_size         = "4096"
+  max_expected_body_size         = var.waf_max_expected_body_size
   max_expected_cookie_size       = "4093"
 
   csrf_expected_header = "x-csrf-token"
