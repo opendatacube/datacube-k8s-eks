@@ -21,7 +21,7 @@ variable "waf_environment" {
 variable "waf_max_expected_body_size" {
   description = "Maximum number of bytes allowed in the body of the request"
   type        = "string"
-  default     = "4096"
+  default     = "536870912"
 }
 
 variable "waf_log_bucket" {
