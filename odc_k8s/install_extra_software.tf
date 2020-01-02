@@ -63,7 +63,7 @@ locals {
 set -e
 install_aws_cli=${var.install_aws_cli}
 if [[ "$install_aws_cli" = true ]] ; then
-  export PATH=$PATH:${local.external_packages_install_path}:${local.external_packages_install_path}/bin
+  export PATH=${local.external_packages_install_path}:${local.external_packages_install_path}/bin:$PATH
   if [ ! -f ${local.external_packages_install_path}/aws_cli_installed ] ; then
       echo 'Installing AWS CLI...'
       mkdir -p ${local.external_packages_install_path}
@@ -79,7 +79,7 @@ if [[ "$install_aws_cli" = true ]] ; then
 fi
 install_kubectl=${var.install_kubectl}
 if [[ "$install_kubectl" = true ]] ; then
-  export PATH=$PATH:${local.external_packages_install_path}
+  export PATH=${local.external_packages_install_path}:$PATH
   if [ ! -f ${local.external_packages_install_path}/kubectl_installed ] ; then
       echo 'Installing kubectl...'
       mkdir -p ${local.external_packages_install_path}
