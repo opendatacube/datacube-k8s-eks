@@ -16,6 +16,9 @@ module "odc_eks" {
 
   domain_name = "test.dea.ga.gov.au"
 
+  # ACM - used by ALB
+  create_certificate  = false
+
   # DB config
   db_name = "odctest"
 
