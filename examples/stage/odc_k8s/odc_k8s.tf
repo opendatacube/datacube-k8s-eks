@@ -49,4 +49,9 @@ module "odc_k8s" {
   fluxcloud_github_url = "https://github.com/opendatacube/flux-odc-sample"
   fluxcloud_commit_template = "{{ .VCSLink }}/commits/{{ .Commit }}"
 
+
+  # Cloudwatch Log Group - for fluentd
+  cloudwatch_logs_enabled  = true
+  cloudwatch_log_group     = "datakube"
+  cloudwatch_log_retention = 90
 }
