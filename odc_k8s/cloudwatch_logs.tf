@@ -3,8 +3,8 @@ variable "cloudwatch_logs_enabled" {
 }
 
 variable "cloudwatch_log_group" {
-  default     = "datakube"
-  description = "the name of your log group, will need to match fluentd config"
+  default     = ""
+  description = "The name of cloudwatch log group"
 }
 
 variable "cloudwatch_log_retention" {
@@ -12,9 +12,9 @@ variable "cloudwatch_log_retention" {
   description = "The number of days to keep logs"
 }
 
-resource "aws_cloudwatch_log_group" "datakube" {
+resource "aws_cloudwatch_log_group" "log_group" {
   count             = var.cloudwatch_logs_enabled ? 1 : 0
-  name              = "${var.cluster_name}-${var.cloudwatch_log_group}"
+  name              = (var.cloudwatch_log_group != "") ? var.cloudwatch_log_group : "${var.cluster_name}-logs"
   retention_in_days = var.cloudwatch_log_retention
 
   tags = {
