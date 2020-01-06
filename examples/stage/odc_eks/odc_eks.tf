@@ -40,4 +40,6 @@ module "odc_eks" {
   waf_enable             = false
   waf_target_scope       = "regional"
   waf_log_bucket         = "dea-waf-logs-stage"
+
+  jhub_cognito_auth_enabled = true
 }

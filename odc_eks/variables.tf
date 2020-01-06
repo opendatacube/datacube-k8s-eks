@@ -174,3 +174,7 @@ echo ""
 USERDATA
 
 }
+
+variable "jhub_cognito_auth_enabled" {
+  default = false
+}
