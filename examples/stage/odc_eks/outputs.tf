@@ -31,3 +31,7 @@ output "user_role_arn" {
 output "node_role_arn" {
   value = module.odc_eks.node_role_arn
 }
+
+output "certificate_arn" {
+  value = (local.create_certificate)? module.odc_eks.certificate_arn : ""
+}

@@ -77,3 +77,7 @@ EOF
 sensitive = true
 }
 
+output "certificate_arn" {
+  value = (var.create_certificate)? aws_acm_certificate.wildcard_cert[0].arn : ""
+}
+

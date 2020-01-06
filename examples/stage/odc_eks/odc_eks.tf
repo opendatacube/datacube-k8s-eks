@@ -1,3 +1,7 @@
+locals {
+  create_certificate = true
+}
+
 module "odc_eks" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=terraform-aws-odc"
   source = "../../../odc_eks"
@@ -17,7 +21,7 @@ module "odc_eks" {
   domain_name = "test.dea.ga.gov.au"
 
   # ACM - used by ALB
-  create_certificate  = false
+  create_certificate  = local.create_certificate
 
   # DB config
   db_name = "odctest"
