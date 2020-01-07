@@ -19,6 +19,14 @@ output "owner"  {
   value = var.owner
 }
 
+output "namespace"  {
+  value = var.namespace
+}
+
+output "environment"  {
+  value = var.environment
+}
+
 output "db_hostname" {
   value = module.db.db_hostname
 }
