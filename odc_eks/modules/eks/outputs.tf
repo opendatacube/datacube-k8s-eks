@@ -26,10 +26,6 @@ output "cluster_ca" {
   value = aws_eks_cluster.eks.certificate_authority[0].data
 }
 
-output "user_role_arn" {
-  value = aws_iam_role.eks-user.arn
-}
-
 output "node_role_arn" {
   value = aws_iam_role.eks-node.arn
 }
