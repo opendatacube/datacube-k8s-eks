@@ -11,10 +11,6 @@ output "cluster_arn" {
   value = module.eks.cluster_arn
 }
 
-output "cluster_role" {
-  value = module.eks.user_role_arn
-}
-
 output "region" {
   value = var.region
 }
@@ -35,10 +31,6 @@ output "db_admin_username" {
 output "db_admin_password" {
   value = module.db.db_admin_password
   sensitive = true
-}
-
-output "user_role_arn" {
-  value = module.eks.user_role_arn
 }
 
 output "node_role_arn" {
@@ -65,19 +57,3 @@ output "node_role_arn" {
 
 data "aws_caller_identity" "current" {
 }
-
-output "user_profile" {
-description = "You can assume this role to manage the cluster"
-
-value = <<EOF
-
-
-[profile ${module.eks.cluster_id}]
-source_profile = default
-role_arn = "${module.eks.user_role_arn}"
-EOF
-
-
-sensitive = true
-}
-
