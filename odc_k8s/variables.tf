@@ -10,14 +10,21 @@ variable "owner" {
 variable "cluster_name" {
 }
 
-variable "users" {
-  type = map
-  description = "A user object that will be given access to the cluster"
+variable "node_role_arn" {
+  type = list(string)
+  description = "A list of node role ARNs that will be given access to the cluster"
 }
 
-variable "roles" {
+variable "user_roles" {
+  default = {}
   type = map
-  description = "A role object that will be assign to the cluster"
+  description = "A list of user roles that will be given access to the cluster"
+}
+
+variable "users" {
+  default = {}
+  type = map
+  description = "A list of users that will be given access to the cluster"
 }
 
 variable "db_hostname" {

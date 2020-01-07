@@ -19,13 +19,16 @@ module "odc_k8s" {
   owner = data.terraform_remote_state.odc_eks-stage.outputs.owner
   cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 
-  users = {
-    "eks-deployer": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
+  # Cluster Access Options
+  node_role_arn = [
+    data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+  ]
+  # Optional: user_roles and users
+  user_roles = {
+    cluster-admin: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
   }
-
-  roles = {
-    "node-role": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn,
-    "user-role": data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+  users = {
+    eks-deployer: "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
   }
 
   # Database
