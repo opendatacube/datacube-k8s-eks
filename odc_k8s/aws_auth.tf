@@ -11,20 +11,20 @@ EOF
 
 data "template_file" "map_role_config" {
   template = <<EOF
-- rolearn: $${node_role_arn}
-  username: system:node:{{EC2PrivateDNSName}}
+%{ for node_role_name, node_role_arn in var.node_roles ~}
+- rolearn: ${node_role_arn}
+  username: ${node_role_name}
   groups:
     - system:bootstrappers
     - system:nodes
-- rolearn: $${user_role_arn}
-  username: cluster-admin
+%{ endfor ~}
+%{ for user_role_name, user_role_arn in var.user_roles ~}
+- rolearn: ${user_role_arn}
+  username: ${user_role_name}
   groups:
     - system:masters
+%{ endfor ~}
 EOF
-  vars = {
-    node_role_arn   = var.roles["node-role"]
-    user_role_arn   = var.roles["user-role"]
-  }
 }
 
 resource "kubernetes_config_map" "aws_auth" {
