@@ -11,9 +11,9 @@ EOF
 
 data "template_file" "map_role_config" {
   template = <<EOF
-%{ for node_role_arn in var.node_role_arn ~}
+%{ for node_role_name, node_role_arn in var.node_roles ~}
 - rolearn: ${node_role_arn}
-  username: system:node:{{EC2PrivateDNSName}}
+  username: ${node_role_name}
   groups:
     - system:bootstrappers
     - system:nodes

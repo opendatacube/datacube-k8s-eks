@@ -10,9 +10,9 @@ variable "owner" {
 variable "cluster_name" {
 }
 
-variable "node_role_arn" {
-  type = list(string)
-  description = "A list of node role ARNs that will be given access to the cluster"
+variable "node_roles" {
+  type = map
+  description = "A list of node roles that will be given access to the cluster"
 }
 
 variable "user_roles" {

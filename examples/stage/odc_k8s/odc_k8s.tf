@@ -20,9 +20,9 @@ module "odc_k8s" {
   cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 
   # Cluster Access Options
-  node_role_arn = [
-    data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
-  ]
+  node_roles = {
+    "system:node:{{EC2PrivateDNSName}}": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+  }
   # Optional: user_roles and users
   user_roles = {
     cluster-admin: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
