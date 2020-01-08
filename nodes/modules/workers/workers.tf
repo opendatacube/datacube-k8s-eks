@@ -1,10 +1,10 @@
 resource "aws_autoscaling_group" "nodes" {
-  count            = var.nodes_enabled ? 1 : 0
+  count            = var.nodes_enabled ? length(var.nodes_subnet_group) : 0
   desired_capacity = var.desired_nodes
   max_size         = var.max_nodes
   min_size         = var.min_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.node[0].id}-nodes-0"
-  vpc_zone_identifier = var.nodes_subnet_group
+  name             = "${var.node_group_name}-${aws_launch_template.node[count.index].id}-nodes-${count.index}"
+  vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -13,14 +13,14 @@ resource "aws_autoscaling_group" "nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.node[0].id
-    version = aws_launch_template.node[0].latest_version
+    id      = element(aws_launch_template.node.*.id, count.index)
+    version = element(aws_launch_template.node.*.latest_version, count.index)
   }
 
   tags = [
     {
       key                 = "Name"
-      value               = "${var.cluster_name}-node"
+      value               = "${var.cluster_name}-node-${count.index}"
       propagate_at_launch = true
     },
     {
@@ -57,12 +57,12 @@ resource "aws_autoscaling_group" "nodes" {
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
-  count            = var.spot_nodes_enabled ? 1 : 0
+  count            = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
   desired_capacity = var.desired_nodes
   max_size         = var.max_spot_nodes
   min_size         = var.min_spot_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot-0"
-  vpc_zone_identifier = var.nodes_subnet_group
+  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
+  vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -71,14 +71,14 @@ resource "aws_autoscaling_group" "spot_nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.spot[0].id
-    version = aws_launch_template.spot[0].latest_version
+    id      = element(aws_launch_template.spot.*.id, count.index)
+    version = element(aws_launch_template.spot.*.latest_version, count.index)
   }
 
   tags = [
     {
       key                 = "Name"
-      value               = "${var.cluster_name}-spot"
+      value               = "${var.cluster_name}-spot-${count.index}"
       propagate_at_launch = true
     },
     {
