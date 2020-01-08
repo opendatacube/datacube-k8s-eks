@@ -1,8 +1,8 @@
 resource "aws_autoscaling_group" "nodes" {
-  count            = var.nodes_enabled ? length(var.nodes_subnet_group) : 0
-  desired_capacity = var.desired_nodes
-  max_size         = var.max_nodes
-  min_size         = var.min_nodes
+  count            = var.nodes_enabled ? length(var.max_nodes) : 0
+  desired_capacity = "${lookup(var.desired_nodes, concat("az", count.index))}"
+  max_size         = "${lookup(var.max_nodes, concat("az", count.index))}"
+  min_size         = "${lookup(var.min_nodes, concat("az", count.index))}"
   name             = "${var.node_group_name}-${aws_launch_template.node[count.index].id}-nodes-${count.index}"
   vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
 
@@ -58,9 +58,9 @@ resource "aws_autoscaling_group" "nodes" {
 
 resource "aws_autoscaling_group" "spot_nodes" {
   count            = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
-  desired_capacity = var.desired_nodes
-  max_size         = var.max_spot_nodes
-  min_size         = var.min_spot_nodes
+  desired_capacity = "${lookup(var.min_spot_nodes, concat("az", count.index))}"
+  max_size         = "${lookup(var.max_spot_nodes, concat("az", count.index))}"
+  min_size         = "${lookup(var.min_spot_nodes, concat("az", count.index))}"
   name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
   vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
 

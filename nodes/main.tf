@@ -54,11 +54,11 @@ locals {
   node_security_group   = element(data.aws_security_groups.nodes.ids, 0)
   # use node var or generate it from subnet count * nodes_per_az for legacy support
   # to set it to 0 both the nodes var and nodes_per_az must be 0
-  min_nodes = var.min_nodes > 0 ? var.min_nodes : var.min_nodes_per_az * length(data.aws_subnet_ids.nodes.ids)
-  max_nodes = var.max_nodes > 0 ? var.max_nodes : var.max_nodes_per_az * length(data.aws_subnet_ids.nodes.ids)
-  desired_nodes = var.desired_nodes > 0 ? var.desired_nodes : var.desired_nodes_per_az * length(data.aws_subnet_ids.nodes.ids)
-  min_spot_nodes = var.min_spot_nodes > 0 ? var.min_spot_nodes : var.min_spot_nodes_per_az * length(data.aws_subnet_ids.nodes.ids)
-  max_spot_nodes = var.max_spot_nodes > 0 ? var.max_spot_nodes : var.max_spot_nodes_per_az * length(data.aws_subnet_ids.nodes.ids)
+  min_nodes = (var.min_nodes_per_az > 0) ? { az0: var.min_nodes_per_az, az1 = var.min_nodes_per_az, az2 = var.min_nodes_per_az } : var.min_nodes
+  max_nodes = (var.max_nodes_per_az > 0) ? { az0: var.max_nodes_per_az, az1 = var.max_nodes_per_az, az2 = var.max_nodes_per_az } : var.max_nodes
+  desired_nodes = (var.desired_nodes_per_az > 0) ? { az0: var.desired_nodes_per_az, az1 = var.desired_nodes_per_az, az2 = var.desired_nodes_per_az } : var.desired_nodes
+  min_spot_nodes = (var.min_spot_nodes_per_az > 0) ? { az0: var.min_spot_nodes_per_az, az1 = var.min_spot_nodes_per_az, az2 = var.min_spot_nodes_per_az } : var.min_spot_nodes
+  max_spot_nodes = (var.max_spot_nodes_per_az > 0) ? { az0: var.max_spot_nodes_per_az, az1 = var.max_spot_nodes_per_az, az2 = var.max_spot_nodes_per_az } : var.max_spot_nodes
 }
 
 module "workers" {

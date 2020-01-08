@@ -42,23 +42,43 @@ variable "nodes_enabled" {
 }
 
 variable "min_nodes" {
-  default = 1
+  default = {
+    az1 = 0
+    az2 = 0
+    az3 = 0
+  }
 }
 
 variable "desired_nodes" {
-  default = 1
+  default = {
+    az1 = 0
+    az2 = 0
+    az3 = 0
+  }
 }
 
 variable "max_nodes" {
-  default = 2
+  default = {
+    az0 = 0
+    az1 = 0
+    az2 = 0
+  }
 }
 
 variable "min_spot_nodes" {
-  default = 0
+  default = {
+    az0 = 0
+    az1 = 0
+    az2 = 0
+  }
 }
 
 variable "max_spot_nodes" {
-  default = 2
+  default = {
+    az0 = 0
+    az1 = 0
+    az2 = 0
+  }
 }
 
 variable "volume_size" {
