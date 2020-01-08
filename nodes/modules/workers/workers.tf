@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "nodes" {
-  count            = var.nodes_enabled ? 3 : 0
+  count            = var.nodes_enabled ? length(var.nodes_subnet_group) : 0
   desired_capacity = lookup(var.desired_nodes, "az_${count.index}")
   max_size         = lookup(var.max_nodes, "az_${count.index}")
   min_size         = lookup(var.min_nodes, "az_${count.index}")
