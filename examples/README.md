@@ -1,4 +1,4 @@
-# Live Examples to excercise this suite of TerraForm Modules
+# Live Examples to exercise this suite of TerraForm Modules
 
 ## Usage
 - Change directory to *examples/stage/odc_eks/*
