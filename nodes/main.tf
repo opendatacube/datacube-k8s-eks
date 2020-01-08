@@ -53,12 +53,12 @@ locals {
   certificate_authority = element(data.aws_eks_cluster.eks.*.certificate_authority.0.data, 0)
   node_security_group   = element(data.aws_security_groups.nodes.ids, 0)
   # use node var or generate it from subnet count * nodes_per_az for legacy support
-  # to set it to 0 both the nodes var and nodes_per_az must be 0
-  # min_nodes = (var.min_nodes_per_az > 0) ? { az0: var.min_nodes_per_az, az1 = var.min_nodes_per_az, az2 = var.min_nodes_per_az } : var.min_nodes
-  # max_nodes = (var.max_nodes_per_az > 0) ? { az0: var.max_nodes_per_az, az1 = var.max_nodes_per_az, az2 = var.max_nodes_per_az } : var.max_nodes
-  # desired_nodes = (var.desired_nodes_per_az > 0) ? { az0: var.desired_nodes_per_az, az1 = var.desired_nodes_per_az, az2 = var.desired_nodes_per_az } : var.desired_nodes
-  # min_spot_nodes = (var.min_spot_nodes_per_az > 0) ? { az0: var.min_spot_nodes_per_az, az1 = var.min_spot_nodes_per_az, az2 = var.min_spot_nodes_per_az } : var.min_spot_nodes
-  # max_spot_nodes = (var.max_spot_nodes_per_az > 0) ? { az0: var.max_spot_nodes_per_az, az1 = var.max_spot_nodes_per_az, az2 = var.max_spot_nodes_per_az } : var.max_spot_nodes
+  # The default values are set to 0 for both the _nodes and _nodes_per_az
+  min_nodes = (var.min_nodes_per_az > 0) ? { az_0: var.min_nodes_per_az, az_1 = var.min_nodes_per_az, az_2 = var.min_nodes_per_az } : var.min_nodes
+  max_nodes = (var.max_nodes_per_az > 0) ? { az_0: var.max_nodes_per_az, az_1 = var.max_nodes_per_az, az_2 = var.max_nodes_per_az } : var.max_nodes
+  desired_nodes = (var.desired_nodes_per_az > 0) ? { az_0: var.desired_nodes_per_az, az_1 = var.desired_nodes_per_az, az_2 = var.desired_nodes_per_az } : var.desired_nodes
+  min_spot_nodes = (var.min_spot_nodes_per_az > 0) ? { az_0: var.min_spot_nodes_per_az, az_1 = var.min_spot_nodes_per_az, az_2 = var.min_spot_nodes_per_az } : var.min_spot_nodes
+  max_spot_nodes = (var.max_spot_nodes_per_az > 0) ? { az_0: var.max_spot_nodes_per_az, az_1 = var.max_spot_nodes_per_az, az_2 = var.max_spot_nodes_per_az } : var.max_spot_nodes
 }
 
 module "workers" {
@@ -72,11 +72,11 @@ module "workers" {
   nodes_subnet_group           = data.aws_subnet_ids.nodes.ids
   node_security_group          = local.node_security_group
   node_instance_profile        = "${var.cluster_name}-node"
-  min_nodes                    = var.min_nodes
-  max_nodes                    = var.max_nodes
-  desired_nodes                = var.desired_nodes
-  min_spot_nodes               = var.min_spot_nodes
-  max_spot_nodes               = var.max_spot_nodes
+  min_nodes                    = local.min_nodes
+  max_nodes                    = local.max_nodes
+  desired_nodes                = local.desired_nodes
+  min_spot_nodes               = local.min_spot_nodes
+  max_spot_nodes               = local.max_spot_nodes
   node_group_name              = var.node_group_name
   ami_image_id                 = var.ami_image_id
   default_worker_instance_type = var.default_worker_instance_type
