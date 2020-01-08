@@ -1,5 +1,0 @@
-rbac:
-  create: true
-args:
-  - --kubelet-preferred-address-types=InternalIP
-  - --logtostderr
