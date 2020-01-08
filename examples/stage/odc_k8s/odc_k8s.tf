@@ -37,9 +37,9 @@ module "odc_k8s" {
     "system:node:{{EC2PrivateDNSName}}": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
   }
   # Optional: user_roles and users
-  user_roles = {
-    cluster-admin: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
-  }
+  # user_roles = {
+  #   cluster-admin: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+  # }
   users = {
     eks-deployer: "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
   }
