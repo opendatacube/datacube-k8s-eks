@@ -1,10 +1,10 @@
 # Live Examples to exercise this suite of TerraForm Modules
 
 ## Usage
+- Select the correct AWS credentials to use with sufficient priviledges to spin up the infrastructure *export AWS_PROFILE=admin*
 - Change directory to *examples/stage/odc_eks/*
 - Run *terraform init* to initialize Terraform state tracking
 - Run *terraform plan* to do a dry run and validate examples and interaction of modules
-- Select the correct AWS credentials to use with sufficient priviledges to spin up the infrastructure *export AWS_PROFILE=admin*
 - Run *terraform apply* to spin up infrastructure (a new ODC EKS Cluster), can take upto 15-20minutes.
 - Validate a fresh kubernetes cluster has been created by adding a new kubernetes context and getting clusterinfo
   - aws eks update-kubeconfig --name odc-test-stage-odc-eks
