@@ -61,15 +61,15 @@ variable "max_spot_nodes" {
 
 # nodes per az variables still work but are deprecated
 variable "min_nodes_per_az" {
-  default = 1
+  default = 0
 }
 
 variable "desired_nodes_per_az" {
-  default = 1
+  default = 0
 }
 
 variable "max_nodes_per_az" {
-  default = 2
+  default = 0
 }
 
 variable "min_spot_nodes_per_az" {
@@ -77,7 +77,7 @@ variable "min_spot_nodes_per_az" {
 }
 
 variable "max_spot_nodes_per_az" {
-  default = 2
+  default = 0
 }
 
 variable "max_spot_price" {
