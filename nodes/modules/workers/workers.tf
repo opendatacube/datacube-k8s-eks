@@ -1,9 +1,9 @@
 resource "aws_autoscaling_group" "nodes" {
   count            = var.nodes_enabled ? length(var.max_nodes) : 0
-  desired_capacity = "${lookup(var.desired_nodes, concat("az", count.index))}"
-  max_size         = "${lookup(var.max_nodes, concat("az", count.index))}"
-  min_size         = "${lookup(var.min_nodes, concat("az", count.index))}"
-  name             = "${var.node_group_name}-${aws_launch_template.node[count.index].id}-nodes-${count.index}"
+  desired_capacity = lookup(var.desired_nodes, "az_${count.index}")
+  max_size         = lookup(var.max_nodes, "az_${count.index}")
+  min_size         = lookup(var.min_nodes, "az_${count.index}")
+  name             = "${var.node_group_name}-${aws_launch_template.node[0].id}-nodes-${count.index}"
   vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
 
   # Don't reset to default size every time terraform is applied
@@ -58,10 +58,10 @@ resource "aws_autoscaling_group" "nodes" {
 
 resource "aws_autoscaling_group" "spot_nodes" {
   count            = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
-  desired_capacity = "${lookup(var.min_spot_nodes, concat("az", count.index))}"
-  max_size         = "${lookup(var.max_spot_nodes, concat("az", count.index))}"
-  min_size         = "${lookup(var.min_spot_nodes, concat("az", count.index))}"
-  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
+  desired_capacity = lookup(var.min_spot_nodes, "az_${count.index}")
+  max_size         = lookup(var.max_spot_nodes, "az_${count.index}")
+  min_size         = lookup(var.min_spot_nodes, "az_${count.index}")
+  name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot-${count.index}"
   vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
 
   # Don't reset to default size every time terraform is applied

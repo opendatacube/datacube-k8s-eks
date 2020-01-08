@@ -19,43 +19,44 @@ variable "group_enabled" {
 variable "spot_nodes_enabled" {
   default = false
 }
+
 variable "min_nodes" {
   default = {
-    az1 = 0
-    az2 = 0
-    az3 = 0
+    az_0 = 0
+    az_1 = 0
+    az_2 = 0
   }
 }
 
 variable "desired_nodes" {
   default = {
-    az1 = 0
-    az2 = 0
-    az3 = 0
+    az_0 = 0
+    az_1 = 0
+    az_2 = 0
   }
 }
 
 variable "max_nodes" {
   default = {
-    az0 = 0
-    az1 = 0
-    az2 = 0
+    az_0 = 0
+    az_1 = 0
+    az_2 = 0
   }
 }
 
 variable "min_spot_nodes" {
   default = {
-    az0 = 0
-    az1 = 0
-    az2 = 0
+    az_0 = 0
+    az_1 = 0
+    az_2 = 0
   }
 }
 
 variable "max_spot_nodes" {
   default = {
-    az0 = 0
-    az1 = 0
-    az2 = 0
+    az_0 = 0
+    az_1 = 0
+    az_2 = 0
   }
 }
 
