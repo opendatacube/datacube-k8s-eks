@@ -1,3 +1,12 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+data "aws_subnet" "private" {
+  count = length(var.nodes_subnet_group)
+  id    = var.nodes_subnet_group[count.index]
+}
+
 resource "aws_autoscaling_group" "nodes" {
   count            = var.nodes_enabled ? length(var.nodes_subnet_group) : 0
   desired_capacity = lookup(var.desired_nodes, "az_${count.index}")
@@ -53,19 +62,13 @@ resource "aws_autoscaling_group" "nodes" {
   depends_on = [aws_launch_template.node]
 }
 
-# Declare the data source
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
 resource "aws_autoscaling_group" "spot_nodes" {
   count            = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
-  availability_zones = [data.aws_availability_zones.available.names[count.index]]
-  desired_capacity = lookup(var.min_spot_nodes, "${data.aws_availability_zones.available.names[count.index]}")
-  max_size         = lookup(var.max_spot_nodes, "${data.aws_availability_zones.available.names[count.index]}")
-  min_size         = lookup(var.min_spot_nodes, "${data.aws_availability_zones.available.names[count.index]}")
+  desired_capacity = lookup(var.min_spot_nodes, data.aws_subnet.private[count.index].availability_zone)
+  max_size         = lookup(var.max_spot_nodes, data.aws_subnet.private[count.index].availability_zone)
+  min_size         = lookup(var.min_spot_nodes, data.aws_subnet.private[count.index].availability_zone)
   name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
-//  vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
+  vpc_zone_identifier = [data.aws_subnet.private[count.index].id]
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
