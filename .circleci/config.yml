@@ -2,14 +2,14 @@ version: 2
 jobs:
   test:
     docker:
-      - image: geoscienceaustralia/dea-kops
+      - image: ubuntu:18-04
     steps:
       - checkout
       - run:
           name: Lint Terraform for cluster
           command: |
-            #wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh
-            #sh install_linux.sh
+            wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh
+            sh install_linux.sh
             tflint --version
             cd examples/stage/odc_eks/
             tflint --module main.tf 
