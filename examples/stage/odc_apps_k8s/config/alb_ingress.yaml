@@ -1,0 +1,3 @@
+clusterName: ${cluster_name}
+podAnnotations:
+  iam.amazonaws.com/role: ${cluster_name}-alb-ingress
