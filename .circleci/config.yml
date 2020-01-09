@@ -22,7 +22,8 @@ jobs:
             tflint --version
             cd examples/stage/odc_eks/
             terraform init
-            tflint --module main.tf 
+            tflint --module main.tf
+            cd ../../../
             cd examples/stage/odc_k8s
             terraform init
             tflint --module *.tf
