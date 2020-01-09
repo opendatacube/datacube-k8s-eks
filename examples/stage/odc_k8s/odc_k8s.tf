@@ -10,29 +10,45 @@ data "terraform_remote_state" "odc_eks-stage" {
 data "aws_caller_identity" "current" {
 }
 
+# collecting data from odc_eks module
+locals {
+  region       = data.terraform_remote_state.odc_eks-stage.outputs.region
+  owner        = data.terraform_remote_state.odc_eks-stage.outputs.owner
+  cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
+
+  db_hostname       = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
+  db_admin_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
+  db_admin_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
+
+  node_role_arn = data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+  user_role_arn = data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+}
+
 module "odc_k8s" {
 //    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
   source = "../../../odc_k8s"
   # Cluster config
-  region = data.terraform_remote_state.odc_eks-stage.outputs.region
+  region       = local.region
+  owner        = local.owner
+  cluster_name = local.cluster_name
 
-  owner = data.terraform_remote_state.odc_eks-stage.outputs.owner
-  cluster_name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
-
-  users = {
-    "eks-deployer": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
+  # Cluster Access Options
+  node_roles = {
+    "system:node:{{EC2PrivateDNSName}}": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
   }
-
-  roles = {
-    "node-role": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn,
-    "user-role": data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+  # Optional: user_roles and users
+  # user_roles = {
+  #   cluster-admin: data.terraform_remote_state.odc_eks-stage.outputs.user_role_arn
+  # }
+  users = {
+    eks-deployer: "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
   }
 
   # Database
-  store_db_creds = true
-  db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
-  db_admin_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
-  db_admin_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
+  store_db_creds    = true
+  db_hostname       = local.db_hostname
+  db_admin_username = local.db_admin_username
+  db_admin_password = local.db_admin_password
 
   # Setup Flux/FluxCloud
   flux_enabled = false
@@ -49,4 +65,9 @@ module "odc_k8s" {
   fluxcloud_github_url = "https://github.com/opendatacube/flux-odc-sample"
   fluxcloud_commit_template = "{{ .VCSLink }}/commits/{{ .Commit }}"
 
+
+  # Cloudwatch Log Group - for fluentd
+  cloudwatch_logs_enabled  = true
+  cloudwatch_log_group     = "${local.cluster_name}-logs"
+  cloudwatch_log_retention = 90
 }

@@ -42,16 +42,14 @@ variable "domain_name" {
   type        = string
 }
 
-variable "cloudfront_log_bucket" {
-  description = "S3 Bucket to store cloudfront logs"
-  default = ""
-}
-
 variable "create_certificate" {
-  default = false
+  description = "Whether to create certificate for given domain"
+  type        = string
+  default     = false
 }
 
 # Database
+# ================
 variable "db_name" {
 }
 
@@ -83,7 +81,7 @@ variable "db_engine_version" {
 
 
 # VPC & subnets
-# ===========
+# =================
 variable "vpc_cidr" {
   type    = string
   default = "10.0.0.0/16"
@@ -110,14 +108,14 @@ variable "database_subnet_cidrs" {
 }
 
 # EC2 Worker Roles
-# ================
-
+# ==================
 variable "enable_ec2_ssm" {
   default     = true
   description = "Enables the IAM policy required for AWS EC2 System Manager in the EKS node IAM role created."
 }
 
 # Node configuration
+# ===================
 variable "ami_image_id" {
   default     = ""
   description = "Overwrites the default ami (latest Amazon EKS)"
