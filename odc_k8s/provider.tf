@@ -1,5 +1,5 @@
 provider "aws" {
-  region      = var.region
+  region      = "us-west-2"
   max_retries = 10
 }
 
