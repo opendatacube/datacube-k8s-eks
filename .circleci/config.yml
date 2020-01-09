@@ -11,7 +11,7 @@ jobs:
             apt-get update
             apt-get install -y wget sudo
             wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh
-            sh install_linux.sh
+            bash install_linux.sh
             tflint --version
             cd examples/stage/odc_eks/
             tflint --module main.tf 
