@@ -22,12 +22,12 @@ jobs:
             tflint --version
             cd examples/stage/odc_eks/
             terraform init
-            cp main.tf.sample main.tf
+            cp ../../../.circleci/sample/main.tf.sample main.tf
             tflint --module main.tf
             cd ../../../
             cd examples/stage/odc_k8s
             terraform init
-            cp main.tf.sample main.tf
+            cp ../../../.circleci/sample/main.tf.sample main.tf
             tflint --module main.tf
           environment:
             WORKSPACE: datakube-dev
