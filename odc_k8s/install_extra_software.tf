@@ -58,7 +58,7 @@ locals {
   external_packages_install_path = var.external_packages_install_path == "" ? join("/", [abspath(path.module), ".terraform/bin"]) : var.external_packages_install_path
   kubectl_version                = var.kubectl_version == "" ? "$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)" : var.kubectl_version
 
-  cluster_name = local.cluster_name
+  cluster_name = var.cluster_name
   install_kubectl = <<EOT
 set -e
 install_aws_cli=${var.install_aws_cli}
