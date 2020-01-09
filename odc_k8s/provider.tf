@@ -1,7 +1,7 @@
-provider "aws" {
-  region      = "us-west-2"
-  max_retries = 10
-}
+# provider "aws" {
+#   region      = "us-west-2"
+#   max_retries = 10
+# }
 
 data "aws_caller_identity" "current" {
 }
