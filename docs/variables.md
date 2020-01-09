@@ -80,6 +80,8 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [dns_proportional_autoscaler_coresPerReplica](#dns_proportional_autoscaler_coresPerReplica) | Addons               | No  | 256 |
 | [dns_proportional_autoscaler_nodesPerReplica](#dns_proportional_autoscaler_nodesPerReplica) | Addons               | No  | 16 |
 | [dns_proportional_autoscaler_minReplica](#dns_proportional_autoscaler_minReplica)           | Addons               | No  | 2 |
+| [efs_enabled](#efs_enabled)                                                                 | Addons               | No  | false |
+| [efs_pvc_namespace](#efs_pvc_namespace)                                                     | Addons               | No  | default |
 | [external_dns_enabled](#external_dns_enabled)                                               | Addons               | No  | false |
 | [flux_enabled](#flux_enabled)                                                               | Addons               | No  | false |
 | [flux_git_repo_url](#flux_git_repo_url)                                                     | Addons               | No  | "git@github.com:opendatacube/datacube-k8s-eks |
@@ -123,6 +125,13 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [kubewatch_resourcesToWatch_job](#kubewatch_resourcesToWatch_job)                           | Addons               | No  | false |
 | [kubewatch_resourcesToWatch_persistentvolume](#kubewatch_resourcesToWatch_persistentvolume) | Addons               | No  | false |
 | [service_account_roles](#service_accout_roles)                                              | Addons               | No  | [] |
+| [waf_enable](#waf_enable)                                                                   | Addons               | No  | false |
+| [waf_environment](#waf_environment)                                                         | Addons               | No  | "" |
+| [waf_target_scope](#waf_target_scope)                                                       | Addons               | No  | "regional" |
+| [waf_max_expected_body_size](#waf_max_expected_body_size)                                   | Addons               | No  | "536870912" |
+| [waf_log_bucket](#waf_log_bucket)                                                           | Addons               | No  | "" |
+| [waf_firehose_buffer_size](#waf_firehose_buffer_size)                                       | Addons               | No  | "128" |
+| [waf_firehose_buffer_interval](#waf_firehose_buffer_interval)                               | Addons               | No  | "900" |
 
 # Infra
 
@@ -767,6 +776,30 @@ Scales core-dns depending on the number of cores / nodes useful when running lar
 ## dns_proportional_autoscaler_nodesPerReplica
 ## dns_proportional_autoscaler_minReplica
 
+## efs_enabled
+
+Setting this to true will create an encrypted EFS in your AWS account and configure it to be accessible from your workers as the pvc "efs-persist" 
+
+This is recommended on multi-az environments as cluster autoscaler will get confused with scaling nodes to fit users if they have EBS volumes (which are stored in a single AZ)
+
+You can configure zero to jupyterHub to use this efs like so:
+
+```
+singleuser:
+  image:
+    name: jupyter/base-notebook
+    tag: latest
+  storage:
+    dynamic:
+      storageClass: "efs"
+```
+
+# efs_pvc_namespace
+
+Configure the Namespace you wish to create the EFS Persistant Volume Claim, this will have to match the namespace you are using to access the EFS volume, If you're using zero-to-jupyterhub you'll need to make this match the namespace you have deployed zero-to-jupyter in. 
+
+see [zero-to-jupyterhub docs](https://zero-to-jupyterhub.readthedocs.io/en/latest/amazon/efs_storage.html) for more info
+
 
 ## external_dns_enabled
 
@@ -933,3 +966,33 @@ Kubewatch to monitor changes to k8s Jobs
 ## kubewatch_resourcesToWatch_persistentvolume
 
 Kubewatch to monitor changes to k8s Persistent Volume
+
+## waf_enable
+
+Creates a AWS WAF. This will configure a WAF ACLs to mitigate OWASP Top 10 protection rules for your web application.
+
+## waf_environment
+
+The WAF environment name
+
+## waf_target_scope
+
+WAF resource target scope. Valid values are `global` and `regional`.
+If `global`, means resources created will be for global targets such as Amazon CloudFront distribution.
+For regional targets like ALBs and API Gateway stages, set to `regional`.
+
+## waf_max_expected_body_size
+
+Maximum number of bytes allowed in the body of the request. 
+
+## waf_log_bucket
+
+S3 Bucket to store WAF logs
+
+## waf_firehose_buffer_size
+
+Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128.
+
+## waf_firehose_buffer_interval
+
+Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900.
