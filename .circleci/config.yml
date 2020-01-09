@@ -8,10 +8,21 @@ jobs:
       - run:
           name: Lint Terraform for cluster
           command: |
+            export TERRAFORM_VERSION=0.12.12
+            apk update
+            apk add curl jq python bash ca-certificates git openssl unzip wget
+            mkdir tmp
+            cd tmp
+            wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+            unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin
+            cd ..
             tflint --version
             cd examples/stage/odc_eks/
             terraform init
             tflint --module main.tf 
+            cd examples/stage/odc_k8s
+            terraform init
+            tflint --module *.tf
           environment:
             WORKSPACE: datakube-dev
 workflows:
