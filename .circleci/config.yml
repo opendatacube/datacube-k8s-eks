@@ -9,6 +9,9 @@ jobs:
           name: Lint Terraform for cluster
           command: |
             export TERRAFORM_VERSION=0.12.12
+            export AWS_ACCESS_KEY_ID="anaccesskey"
+            export AWS_SECRET_ACCESS_KEY="asecretkey"
+            export AWS_DEFAULT_REGION="us-west-2"
             apk update
             apk add curl jq python bash ca-certificates git openssl unzip wget
             mkdir tmp
