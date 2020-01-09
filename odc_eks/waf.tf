@@ -20,14 +20,9 @@ variable "waf_log_bucket" {
 }
 
 variable "waf_max_expected_body_size" {
+  type        = string
   description = "Maximum number of bytes allowed in the body of the request"
-  type        = "string"
   default     = "536870912"
-}
-
-variable "waf_log_bucket" {
-  default     = ""
-  description = "The name of the bucket to store waf logs in"
 }
 
 variable "waf_firehose_buffer_size" {
