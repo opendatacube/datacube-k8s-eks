@@ -8,7 +8,7 @@ resource "aws_autoscaling_group" "nodes" {
   desired_capacity = lookup(var.desired_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
   max_size         = lookup(var.max_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
   min_size         = lookup(var.min_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
-  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
+  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-nodes-${count.index}"
   vpc_zone_identifier = [data.aws_subnet.nodes_subnet[count.index].id]
 
   # Don't reset to default size every time terraform is applied
