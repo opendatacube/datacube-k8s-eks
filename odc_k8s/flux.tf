@@ -128,7 +128,7 @@ resource "null_resource" "apply_flux_crd" {
 
   depends_on = [
     kubernetes_namespace.flux,
-    kubernetes_config_map.aws_auth,
+#    kubernetes_config_map.aws_auth,
     ]
 
   provisioner "local-exec" {
