@@ -7,7 +7,10 @@ jobs:
       - checkout
       - run:
           name: Lint Terraform for cluster
-          command: tflint --var-file $(pwd)/examples/quickstart/workspaces/$WORKSPACE/terraform.tfvars
+          command: 
+            tflint --version
+            cd examples/stage/odc_eks/
+            tflint --module main.tf 
           environment:
             WORKSPACE: datakube-dev
 workflows:
