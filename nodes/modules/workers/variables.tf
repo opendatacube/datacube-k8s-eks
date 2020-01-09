@@ -43,25 +43,25 @@ variable "nodes_enabled" {
 
 variable "min_nodes" {
   default = {
-    az_0 = 0
-    az_1 = 0
-    az_2 = 0
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
   }
 }
 
 variable "desired_nodes" {
   default = {
-    az_0 = 0
-    az_1 = 0
-    az_2 = 0
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
   }
 }
 
 variable "max_nodes" {
   default = {
-    az_0 = 0
-    az_1 = 0
-    az_2 = 0
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
   }
 }
 
