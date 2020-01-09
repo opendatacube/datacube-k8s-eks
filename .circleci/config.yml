@@ -10,6 +10,7 @@ jobs:
           command: |
             tflint --version
             cd examples/stage/odc_eks/
+            terraform init
             tflint --module main.tf 
           environment:
             WORKSPACE: datakube-dev
