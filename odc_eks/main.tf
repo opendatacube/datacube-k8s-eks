@@ -11,8 +11,9 @@ module "odc_eks_label" {
 
 module "vpc" {
   # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.2.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.2.0"
+  #source  = "terraform-aws-modules/vpc/aws"
+  #version = "2.2.0"
 
   name             = "${module.odc_eks_label.id}-vpc"
   cidr             = var.vpc_cidr
