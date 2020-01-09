@@ -25,11 +25,6 @@ variable "waf_max_expected_body_size" {
   default     = "536870912"
 }
 
-variable "waf_log_bucket" {
-  default     = ""
-  description = "The name of the bucket to store waf logs in"
-}
-
 variable "waf_firehose_buffer_size" {
   type        = string
   description = "Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128"
