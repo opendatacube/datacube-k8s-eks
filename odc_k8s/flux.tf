@@ -84,7 +84,7 @@ resource "helm_release" "flux" {
   
   depends_on = [
     null_resource.apply_flux_crd,
-    # module.tiller,
+    module.tiller,
   ]
 }
 
@@ -104,7 +104,7 @@ resource "helm_release" "flux-helm-operator" {
   depends_on = [
     null_resource.apply_flux_crd,
     helm_release.flux,
-    # module.tiller,
+    module.tiller,
   ]
 }
 
