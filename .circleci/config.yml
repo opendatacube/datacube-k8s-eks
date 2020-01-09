@@ -8,8 +8,8 @@ jobs:
       - run:
           name: Lint Terraform for cluster
           command: |
-            wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh
-            sh install_linux.sh
+            #wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh
+            #sh install_linux.sh
             tflint --version
             cd examples/stage/odc_eks/
             tflint --module main.tf 
