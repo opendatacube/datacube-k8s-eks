@@ -8,7 +8,7 @@ jobs:
       - run:
           name: Lint Terraform for cluster
           command: |
-            sudo apt-get install wget
+            apt-get install wget sudo
             wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh
             sh install_linux.sh
             tflint --version
