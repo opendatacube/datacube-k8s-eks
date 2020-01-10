@@ -113,26 +113,5 @@ module "jhub_cognito_auth" {
   user_pool_name       = "${module.odc_eks_label.id}-jhub-userpool"
   user_pool_domain     = "${module.odc_eks_label.id}-jhub-auth"
   callback_url         = "https://app.${var.domain_name}/oauth_callback"
-  cognito_user_groups  = [
-    {
-      name        = "dev-group"
-      description = "Group defines Jupyterhub dev users"
-      precedence  = 5
-    },
-    {
-      name        = "internal-group"
-      description = "Group defines Jupyterhub internal users"
-      precedence  = 6
-    },
-    {
-      name        = "trusted-group"
-      description = "Group defines Jupyterhub trusted users"
-      precedence  = 7
-    },
-    {
-      name        = "default-group"
-      description = "Group defines Jupyterhub default users"
-      precedence  = 10
-    }
-  ]
+  user_groups          = var.jhub_cognito_user_groups
 }

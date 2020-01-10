@@ -49,4 +49,26 @@ module "odc_eks" {
   waf_log_bucket         = "dea-waf-logs-stage"
 
   jhub_cognito_auth_enabled = true
+  jhub_cognito_user_groups = [
+    {
+      name        = "dev-group"
+      description = "Group defines Jupyterhub dev users"
+      precedence  = 5
+    },
+    {
+      name        = "internal-group"
+      description = "Group defines Jupyterhub internal users"
+      precedence  = 6
+    },
+    {
+      name        = "trusted-group"
+      description = "Group defines Jupyterhub trusted users"
+      precedence  = 7
+    },
+    {
+      name        = "default-group"
+      description = "Group defines Jupyterhub default users"
+      precedence  = 10
+    }
+  ]
 }

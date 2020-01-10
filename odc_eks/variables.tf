@@ -176,3 +176,13 @@ USERDATA
 variable "jhub_cognito_auth_enabled" {
   default = false
 }
+
+variable "jhub_cognito_user_groups" {
+  default = []
+  description = "List of jhub user groups manage by cognito user pool"
+  type = list(object({
+    name = string
+    description = string
+    precedence = number
+  }))
+}
