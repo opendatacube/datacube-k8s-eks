@@ -1,5 +1,6 @@
 locals {
   create_certificate = true
+  region = "ap-southeast=2"
 }
 
 module "odc_eks" {
@@ -7,7 +8,7 @@ module "odc_eks" {
   source = "../../../odc_eks"
 
   # Cluster config
-  region = "ap-southeast-2"
+  region = local.region
 
   owner = "odc-test"
   namespace = "odc-test"
@@ -30,7 +31,7 @@ module "odc_eks" {
   #default_worker_instance_type = "m4.large"
   default_worker_instance_type = "t3.medium"
   spot_nodes_enabled = true
-  min_nodes = 1
+  min_nodes = 2
   max_nodes = 4
 
   # Cloudfront CDN
