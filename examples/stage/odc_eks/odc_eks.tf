@@ -1,6 +1,6 @@
 locals {
   create_certificate = true
-  region = "ap-southeast=2"
+  region = "ap-southeast-2"
 }
 
 module "odc_eks" {

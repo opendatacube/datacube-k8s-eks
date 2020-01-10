@@ -36,10 +36,6 @@ output "db_admin_password" {
   sensitive = true
 }
 
-output "user_role_arn" {
-  value = aws_iam_role.eks-user.arn
-}
-
 output "node_role_arn" {
   value = module.odc_eks.node_role_arn
 }

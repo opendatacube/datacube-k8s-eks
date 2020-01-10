@@ -15,6 +15,9 @@ locals {
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
   domain_name = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
+  db_hostname       = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
+  db_admin_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
+  db_admin_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
 }
 
 data "aws_caller_identity" "current" {
