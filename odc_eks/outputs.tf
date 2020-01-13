@@ -15,6 +15,10 @@ output "region" {
   value = var.region
 }
 
+output "domain_name" {
+  value = var.domain_name
+}
+
 output "owner"  {
   value = var.owner
 }
@@ -44,24 +48,6 @@ output "db_admin_password" {
 output "node_role_arn" {
   value = module.eks.node_role_arn
 }
-
-
-# output "database_credentials" {
-  # value = <<EOF
-# apiVersion: v1
-# kind: Secret
-# type: Opaque
-# metadata:
-  # name: ${var.cluster_name}
-  # namespace: default
-# data:
-  # postgres-username: ${base64encode(module.db.db_admin_username)} 
-  # postgres-password: ${base64encode(module.db.db_admin_password)} 
-# EOF
-
-
-#   sensitive = true
-# }
 
 data "aws_caller_identity" "current" {
 }

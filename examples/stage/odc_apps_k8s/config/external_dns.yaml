@@ -1,0 +1,10 @@
+podAnnotations:
+  iam.amazonaws.com/role: ${cluster_name}-external-dns
+provider: aws
+aws:
+  zoneType: public
+txtOwnerId: ${hosted_zone_id}
+domainFilters:
+  - ${domain_name}
+policy: sync
+registry: txt

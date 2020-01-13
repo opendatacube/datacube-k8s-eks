@@ -6,8 +6,20 @@ output "region" {
   value = module.odc_eks.region
 }
 
+output "domain_name" {
+  value = module.odc_eks.domain_name
+}
+
 output "owner"  {
   value = module.odc_eks.owner
+}
+
+output "namespace" {
+  value = module.odc_eks.namespace
+}
+
+output "environment" {
+  value = module.odc_eks.environment
 }
 
 output "db_hostname" {

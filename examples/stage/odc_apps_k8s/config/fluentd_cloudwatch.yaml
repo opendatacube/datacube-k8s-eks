@@ -1,0 +1,3 @@
+awsRole: ${cluster_name}-fluentd
+logGroupName: ${cluster_name}-logs
+awsRegion: ${region}
