@@ -1,17 +1,9 @@
-module "odc_eks_cluster_label" {
-  source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
-  namespace  = var.namespace
-  stage      = var.environment
-  name       = "odc-eks"
-  delimiter  = "-"
-}
-
 data "aws_caller_identity" "current" {
 }
 
 resource "aws_iam_role" "role" {
   count = length(var.roles)
-  name  = "${module.odc_eks_cluster_label.id}-${var.roles[count.index].name}"
+  name  = "${var.cluster_name}-${var.roles[count.index].name}"
 
   assume_role_policy = <<EOF
 {
@@ -29,7 +21,7 @@ resource "aws_iam_role" "role" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${module.odc_eks_cluster_label.id}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
       },
       "Action": "sts:AssumeRole"
     }
@@ -41,7 +33,7 @@ EOF
 
 resource "aws_iam_role_policy" "role_policy" {
   count = length(var.roles)
-  name  = "${module.odc_eks_cluster_label.id}-${var.roles[count.index].name}"
+  name  = "${var.cluster_name}-${var.roles[count.index].name}"
   role  = aws_iam_role.role[count.index].id
   policy = var.roles[count.index].policy
 }
