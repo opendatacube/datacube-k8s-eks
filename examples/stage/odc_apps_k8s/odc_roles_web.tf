@@ -14,7 +14,7 @@ module "odc_web_roles" {
 
   roles = [
     {
-      name = "wms"
+      name = "${local.cluster_name}-${local.environment}-wms"
       policy = <<-EOF
       {
         "Version": "2012-10-17",
@@ -45,7 +45,7 @@ module "odc_web_roles" {
       EOF
     },
     {
-      name  = "wps"
+      name  = "${local.cluster_name}-${local.environment}-wps"
       policy = <<-EOF
       {
         "Version": "2012-10-17",

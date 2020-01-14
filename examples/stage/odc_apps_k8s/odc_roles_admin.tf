@@ -14,7 +14,7 @@ module "odc_admin_roles" {
 
   roles = [
     {
-      name   = "autoscaler"
+      name   = "${local.cluster_name}-${local.environment}-autoscaler"
       policy = <<-EOF
         {
           "Version": "2012-10-17",
@@ -37,7 +37,7 @@ module "odc_admin_roles" {
         EOF
     },
     {
-      name   = "alb-ingress"
+      name   = "${local.cluster_name}-${local.environment}-alb-ingress"
       policy = <<-EOF
       {
         "Version": "2012-10-17",
@@ -169,7 +169,7 @@ module "odc_admin_roles" {
       EOF
     },
     {
-      name   = "external-dns"
+      name   = "${local.cluster_name}-${local.environment}-external-dns"
       policy = <<-EOF
       {
         "Version": "2012-10-17",
@@ -198,7 +198,7 @@ module "odc_admin_roles" {
       EOF
     },
     {
-      name   = "fluentd"
+      name   = "${local.cluster_name}-${local.environment}-fluentd"
       policy = <<-EOF
       {
         "Version": "2012-10-17",

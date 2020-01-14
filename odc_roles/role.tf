@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {
 
 resource "aws_iam_role" "role" {
   count = length(var.roles)
-  name  = "${var.cluster_name}-${var.roles[count.index].name}"
+  name  = var.roles[count.index].name
 
   assume_role_policy = <<EOF
 {
@@ -29,11 +29,19 @@ resource "aws_iam_role" "role" {
 }
 EOF
 
+  tags = {
+    Name       = var.roles[count.index].name
+    Cluster    = var.cluster_name
+    Environment= var.environment
+    Owner      = var.owner
+    Workspace  = terraform.workspace
+    Created_by = "terraform"
+  }
 }
 
 resource "aws_iam_role_policy" "role_policy" {
   count = length(var.roles)
-  name  = "${var.cluster_name}-${var.roles[count.index].name}"
+  name  = var.roles[count.index].name
   role  = aws_iam_role.role[count.index].id
   policy = var.roles[count.index].policy
 }
