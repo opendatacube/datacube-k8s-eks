@@ -1,5 +1,5 @@
 podAnnotations:
-  iam.amazonaws.com/role: ${cluster_name}-external-dns
+  iam.amazonaws.com/role: ${role_name}
 provider: aws
 aws:
   zoneType: public

@@ -1,8 +1,9 @@
 data "template_file" "cluster_autoscaler" {
-  template = "${file("${path.module}/config/cluster_autoscaler.yaml")}"
+  template = file("${path.module}/config/cluster_autoscaler.yaml")
   vars = {
-    cluster_name = "${local.cluster_name}"
-    region = "${local.region}"
+    cluster_name = local.cluster_name
+    region = local.region
+    role_name = "${local.cluster_name}-${local.environment}-autoscaler"
   }
 }
 
@@ -17,7 +18,7 @@ resource "kubernetes_secret" "cluster_autoscaler" {
   }
 
   data = {
-    "values.yaml" = "${data.template_file.cluster_autoscaler.rendered}"
+    "values.yaml" = data.template_file.cluster_autoscaler.rendered
   }
 
   type = "Opaque"
