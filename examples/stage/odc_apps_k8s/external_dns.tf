@@ -8,7 +8,7 @@ data "template_file" "external_dns" {
     cluster_name = local.cluster_name
     hosted_zone_id = data.aws_route53_zone.domain.zone_id
     domain_name = local.domain_name
-    role_name = "${local.cluster_name}-${local.environment}-external-dns"
+    role_name = "${local.cluster_name}-external-dns"
   }
 }
 

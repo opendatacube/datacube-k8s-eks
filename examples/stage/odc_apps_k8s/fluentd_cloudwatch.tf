@@ -3,7 +3,7 @@ data "template_file" "fluentd_cloudwatch" {
   vars = {
     cluster_name = local.cluster_name
     region = local.region
-    role_name = "${local.cluster_name}-${local.environment}-fluentd"
+    role_name = "${local.cluster_name}-fluentd"
   }
 }
 
