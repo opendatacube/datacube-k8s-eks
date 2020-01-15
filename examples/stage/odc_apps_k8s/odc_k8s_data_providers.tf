@@ -7,6 +7,14 @@ data "terraform_remote_state" "odc_eks-stage" {
   }
 }
 
+data "aws_eks_cluster" "cluster" {
+  name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
+}
+
 locals {
   region = data.terraform_remote_state.odc_eks-stage.outputs.region
   owner        = data.terraform_remote_state.odc_eks-stage.outputs.owner
