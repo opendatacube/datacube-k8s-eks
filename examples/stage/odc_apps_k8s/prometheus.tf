@@ -1,8 +1,8 @@
 data "template_file" "prometheus" {
-  template = "${file("${path.module}/config/prometheus.yaml")}"
+  template = file("${path.module}/config/prometheus.yaml")
   vars = {
-    certificate_arn = "${local.certificate_arn}"
-    domain_name = "${local.domain_name}"
+    certificate_arn = local.certificate_arn
+    domain_name = local.domain_name
   }
 }
 
@@ -17,7 +17,7 @@ resource "kubernetes_secret" "prometheus-operator" {
   }
 
   data = {
-    "values.yaml" = "${data.template_file.prometheus.rendered}"
+    "values.yaml" = data.template_file.prometheus.rendered
   }
 
   type = "Opaque"

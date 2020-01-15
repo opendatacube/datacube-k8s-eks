@@ -11,8 +11,12 @@ variable "environment" {
   description = "Name of your environment e.g. dev, stage, prod"
 }
 
-variable "roles" {
-  type        = list
-  description = "list of roles that can be used by pods/applications on the k8s cluster"
-  default     = []
+variable "cluster_name" {
+  type        = string
+  description = "Name of your cluster"
+}
+
+variable "role" {
+  type        = map
+  description = "Provision a role that can be used by pods/applications on the k8s cluster"
 }
