@@ -1,0 +1,111 @@
+resource "kubernetes_secret" "efs-provisioner" {
+  metadata {
+    name = "efs-provisioner"
+    namespace = "kube-system"
+  }
+
+  data = {
+    "values.yaml" = "${data.template_file.efs-provisioner.rendered}"
+  }
+
+  type = "Opaque"
+}
+
+data "template_file" "efs-provisioner" {
+  template = file("${path.module}/config/efs-provisioner.yaml")
+  vars = {
+    role_name = module.odc_role_efs-provisioner.role_name
+    efsFileSystemId = aws_efs_file_system.user-storage.id
+    awsRegion       = local.region
+    environment     = local.environment
+    path            = "/"
+    dnsName         = aws_efs_file_system.user-storage.dns_name
+    cluster_name = local.cluster_name
+  }
+}
+
+resource "aws_efs_file_system" "user-storage" {
+  tags = {
+    Name = "${local.cluster_name}-efs-storage"
+  }
+  lifecycle_policy {
+    transition_to_ia = "AFTER_30_DAYS"
+  }
+}
+
+resource "aws_efs_mount_target" "user-storage" {
+  count = length(
+    data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids,
+  )
+  file_system_id = aws_efs_file_system.user-storage.id
+  subnet_id = element(
+    tolist(data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids),
+    count.index,
+  )
+  security_groups = [aws_security_group.efs.id]
+}
+
+resource "aws_security_group" "efs" {
+  name        = "${data.aws_eks_cluster.cluster.id}_efs_sg"
+  description = "allow NFS traffic from the EKS node and master sg"
+  vpc_id      = data.aws_eks_cluster.cluster.vpc_config[0].vpc_id
+
+  ingress {
+    from_port = "2049"
+    to_port   = "2049"
+    protocol  = "tcp"
+    security_groups = concat(
+      tolist(data.aws_eks_cluster.cluster.vpc_config[0].security_group_ids),
+      [local.node_security_group]
+    )
+  }
+
+  tags = {
+    Created_by = "terraform"
+  }
+}
+
+output "efs_provisoner_fsid" {
+  value = aws_efs_file_system.user-storage.id
+}
+
+# EFS PVC using kubernetes provider
+# https://www.terraform.io/docs/providers/kubernetes/r/persistent_volume_claim.html
+resource "kubernetes_persistent_volume_claim" "efs" {
+  metadata {
+    name      = "efs-odc"
+    namespace = kubernetes_namespace.admin
+    annotations = {
+      "volume.beta.kubernetes.io/storage-class" = "efs" # this annotation has been deprecated but it appears to be necessary for cluster-autoscaler to function with PVC. Terraform might complain with some versions of k8s provider
+    }
+  }
+  spec {
+    storage_class_name = "efs"
+    access_modes       = ["ReadWriteMany"]
+    resources {
+      requests = {
+        storage = "1Mi"
+      }
+    }
+  }
+}
+
+# Get IAM policy for EFS
+data "aws_iam_policy" "efs-ro" {
+  arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemReadOnlyAccess"
+}
+
+module "odc_role_efs-provisioner" {
+  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  # source = "../../../odc_role"
+
+  owner = local.owner
+  namespace = local.namespace
+  environment = local.environment
+  cluster_name = local.cluster_name
+
+  role = {
+    name = "${local.cluster_name}-efs-provisioner"
+    policy = data.aws_iam_policy.efs-ro.policy
+  }
+}
