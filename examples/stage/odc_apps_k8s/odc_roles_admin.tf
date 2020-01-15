@@ -2,43 +2,52 @@
 # Separate TF files can be used per application but in some cases it
 # is more manageable to simply group them up (e.g. Use the odc_roles and a list of roles)
 
-module "odc_admin_roles" {
-//  source = "github.com/opendatacube/datacube-k8s-eks//odc_roles?ref=terraform-aws-odc"
-  source = "../../../odc_roles"
+module "odc_role_autoscaler" {
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  source = "../../../odc_role"
 
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-
   cluster_name = local.cluster_name
 
-  roles = [
+  role = {
+    name = "${local.cluster_name}-autoscaler"
+    policy = <<-EOF
     {
-      name   = "${local.cluster_name}-autoscaler"
-      policy = <<-EOF
+      "Version": "2012-10-17",
+      "Statement": [
         {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                  "autoscaling:DescribeAutoScalingGroups",
-                  "autoscaling:DescribeAutoScalingInstances",
-                  "autoscaling:DescribeLaunchConfigurations",
-                  "autoscaling:DescribeTags",
-                  "autoscaling:SetDesiredCapacity",
-                  "autoscaling:TerminateInstanceInAutoScalingGroup",
-                  "ec2:DescribeLaunchTemplateVersions"
-              ],
-              "Resource": "*"
-            }
-          ]
+          "Effect": "Allow",
+          "Action": [
+              "autoscaling:DescribeAutoScalingGroups",
+              "autoscaling:DescribeAutoScalingInstances",
+              "autoscaling:DescribeLaunchConfigurations",
+              "autoscaling:DescribeTags",
+              "autoscaling:SetDesiredCapacity",
+              "autoscaling:TerminateInstanceInAutoScalingGroup",
+              "ec2:DescribeLaunchTemplateVersions"
+          ],
+          "Resource": "*"
         }
-        EOF
-    },
-    {
-      name   = "${local.cluster_name}-alb-ingress"
-      policy = <<-EOF
+      ]
+    }
+    EOF
+  }
+}
+
+module "odc_role_alb_ingress" {
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  source = "../../../odc_role"
+
+  owner = local.owner
+  namespace = local.namespace
+  environment = local.environment
+  cluster_name = local.cluster_name
+
+  role = {
+    name = "${local.cluster_name}-alb-ingress"
+    policy = <<-EOF
       {
         "Version": "2012-10-17",
         "Statement": [
@@ -167,58 +176,79 @@ module "odc_admin_roles" {
         ]
       }
       EOF
-    },
+  }
+}
+
+module "odc_role_external_dns" {
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  source = "../../../odc_role"
+
+  owner = local.owner
+  namespace = local.namespace
+  environment = local.environment
+  cluster_name = local.cluster_name
+
+  role = {
+    name = "${local.cluster_name}-external-dns"
+    policy = <<-EOF
     {
-      name   = "${local.cluster_name}-external-dns"
-      policy = <<-EOF
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Effect": "Allow",
-            "Action": [
-              "route53:ChangeResourceRecordSets"
-            ],
-            "Resource": [
-              "arn:aws:route53:::hostedzone/*"
-            ]
-          },
-          {
-            "Effect": "Allow",
-            "Action": [
-              "route53:ListHostedZones",
-              "route53:ListResourceRecordSets"
-            ],
-            "Resource": [
-              "*"
-            ]
-          }
-        ]
-      }
-      EOF
-    },
-    {
-      name   = "${local.cluster_name}-fluentd"
-      policy = <<-EOF
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Effect": "Allow",
-            "Action": [
-              "logs:CreateLogStream",
-              "logs:PutLogEvents",
-              "logs:DescribeLogGroups",
-              "logs:DescribeLogStreams",
-              "logs:CreateLogGroup"
-            ],
-            "Resource": [
-              "*"
-            ]
-          }
-        ]
-      }
-      EOF
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "route53:ChangeResourceRecordSets"
+          ],
+          "Resource": [
+            "arn:aws:route53:::hostedzone/*"
+          ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "route53:ListHostedZones",
+            "route53:ListResourceRecordSets"
+          ],
+          "Resource": [
+            "*"
+          ]
+        }
+      ]
     }
-  ]
+    EOF
+  }
+}
+
+module "odc_role_fluentd" {
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  source = "../../../odc_role"
+
+  owner = local.owner
+  namespace = local.namespace
+  environment = local.environment
+  cluster_name = local.cluster_name
+
+  role = {
+    name   = "${local.cluster_name}-fluentd"
+    policy = <<-EOF
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "logs:DescribeLogGroups",
+            "logs:DescribeLogStreams",
+            "logs:CreateLogGroup"
+          ],
+          "Resource": [
+            "*"
+          ]
+        }
+      ]
+    }
+    EOF
+  }
 }
