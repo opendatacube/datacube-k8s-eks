@@ -1,20 +1,20 @@
-resource "kubernetes_secret" "efs-provisioner" {
+resource "kubernetes_secret" "efs_provisioner" {
   metadata {
     name = "efs-provisioner"
     namespace = "kube-system"
   }
 
   data = {
-    "values.yaml" = "${data.template_file.efs-provisioner.rendered}"
+    "values.yaml" = "${data.template_file.efs_provisioner.rendered}"
   }
 
   type = "Opaque"
 }
 
-data "template_file" "efs-provisioner" {
+data "template_file" "efs_provisioner" {
   template = file("${path.module}/config/efs-provisioner.yaml")
   vars = {
-    role_name = module.odc_role_efs-provisioner.role_name
+    role_name = module.odc_role_efs_provisioner.role_name
     efsFileSystemId = aws_efs_file_system.user-storage.id
     awsRegion       = local.region
     environment     = local.environment
@@ -95,7 +95,7 @@ data "aws_iam_policy" "efs-ro" {
   arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemReadOnlyAccess"
 }
 
-module "odc_role_efs-provisioner" {
+module "odc_role_efs_provisioner" {
   source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   # source = "../../../odc_role"
 
