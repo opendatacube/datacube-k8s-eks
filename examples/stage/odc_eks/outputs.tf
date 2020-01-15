@@ -36,6 +36,10 @@ output "db_admin_password" {
   sensitive = true
 }
 
+output "db_name" {
+  value = module.odc_eks.db_name
+}
+
 output "node_role_arn" {
   value = module.odc_eks.node_role_arn
 }
@@ -49,11 +53,20 @@ output "ami_image_id" {
 }
 
 output "certificate_arn" {
-  value = (local.create_certificate)? module.odc_eks.certificate_arn : ""
+  value = module.odc_eks.certificate_arn
 }
 
 output "jhub_userpool" {
   value = module.odc_eks.jhub_userpool
+}
+
+output "jhub_userpool_id" {
+  value = module.odc_eks.jhub_userpool_id
+  sensitive = true
+}
+
+output "jhub_userpool_domain" {
+  value = module.odc_eks.jhub_userpool_domain
 }
 
 output "jhub_auth_client_id" {

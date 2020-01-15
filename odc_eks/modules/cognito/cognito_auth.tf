@@ -55,13 +55,13 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_flows = ["code"]
 }
 
-resource "aws_cognito_user_pool_domain" "main" {
+resource "aws_cognito_user_pool_domain" "domain" {
   count        = var.cognito_auth_enabled ? 1 : 0
   domain       = var.user_pool_domain
   user_pool_id = aws_cognito_user_pool.pool[0].id
 }
 
-resource "aws_cognito_user_group" "internal_group" {
+resource "aws_cognito_user_group" "group" {
   count        = var.cognito_auth_enabled ? length(var.user_groups) : 0
   user_pool_id = aws_cognito_user_pool.pool[0].id
   name         = var.user_groups[count.index].name

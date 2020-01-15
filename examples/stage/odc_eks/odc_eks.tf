@@ -3,8 +3,6 @@ locals {
   owner       = "odc-test"
   namespace   = "odc-test"
   environment = "stage"
-
-  create_certificate = true
 }
 
 module "odc_eks" {
@@ -25,7 +23,7 @@ module "odc_eks" {
   domain_name = "test.dea.ga.gov.au"
 
   # ACM - used by ALB
-  create_certificate  = local.create_certificate
+  create_certificate  = true
 
   # DB config
   db_name = "odctest"

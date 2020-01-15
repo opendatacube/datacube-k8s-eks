@@ -45,6 +45,10 @@ output "db_admin_password" {
   sensitive = true
 }
 
+output "db_name" {
+  value = var.db_name
+}
+
 output "node_role_arn" {
   value = module.eks.node_role_arn
 }
@@ -66,6 +70,15 @@ output "certificate_arn" {
 
 output "jhub_userpool" {
   value = module.jhub_cognito_auth.userpool
+}
+
+output "jhub_userpool_id" {
+  value = module.jhub_cognito_auth.userpool_id
+  sensitive = true
+}
+
+output "jhub_userpool_domain" {
+  value = module.jhub_cognito_auth.userpool_domain
 }
 
 output "jhub_auth_client_id" {
