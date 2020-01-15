@@ -40,6 +40,28 @@ output "node_role_arn" {
   value = module.odc_eks.node_role_arn
 }
 
+output "node_security_group" {
+  value = module.odc_eks.node_security_group
+}
+
+output "ami_image_id" {
+  value = module.odc_eks.ami_image_id
+}
+
 output "certificate_arn" {
   value = (local.create_certificate)? module.odc_eks.certificate_arn : ""
+}
+
+output "jhub_userpool" {
+  value = module.odc_eks.jhub_userpool
+}
+
+output "jhub_auth_client_id" {
+  value = module.odc_eks.jhub_auth_client_id
+  sensitive = true
+}
+
+output "jhub_auth_client_secret" {
+  value = module.odc_eks.jhub_auth_client_secret
+  sensitive = true
 }

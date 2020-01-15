@@ -49,10 +49,31 @@ output "node_role_arn" {
   value = module.eks.node_role_arn
 }
 
+output "node_security_group" {
+  value = module.eks.node_security_group
+}
+
+output "ami_image_id" {
+  value = module.eks.ami_image_id
+}
+
 data "aws_caller_identity" "current" {
 }
 
 output "certificate_arn" {
-  value = (var.create_certificate)? aws_acm_certificate.wildcard_cert[0].arn : ""
+  value = (var.create_certificate)? aws_acm_certificate.wildcard_cert[0].arn : null
 }
 
+output "jhub_userpool" {
+  value = module.jhub_cognito_auth.userpool
+}
+
+output "jhub_auth_client_id" {
+  value = module.jhub_cognito_auth.client_id
+  sensitive = true
+}
+
+output "jhub_auth_client_secret" {
+  value = module.jhub_cognito_auth.client_secret
+  sensitive = true
+}

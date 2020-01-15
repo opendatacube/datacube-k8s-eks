@@ -37,9 +37,10 @@ resource "aws_cognito_user_pool" "pool" {
     require_symbols   = false
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # Enable this if you want to prevent destroy
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 resource "aws_cognito_user_pool_client" "client" {
