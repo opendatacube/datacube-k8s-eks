@@ -50,7 +50,7 @@ module "odc_eks" {
   waf_target_scope       = "regional"
   waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
 
-  jhub_cognito_auth_enabled = true
+  jhub_cognito_auth_enabled = false
   jhub_cognito_user_groups = [
     {
       name        = "dev-group"
