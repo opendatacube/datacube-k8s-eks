@@ -1,10 +1,12 @@
 module "odc_k8s" {
 //    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
   source = "../../../odc_k8s"
-  # Cluster config
+
   region       = local.region
   owner        = local.owner
-  cluster_name = local.cluster_name
+  namespace    = local.namespace
+  environment  = local.environment
+  cluster_id   = local.cluster_id
 
   # Cluster Access Options
   node_roles = {
@@ -42,6 +44,6 @@ module "odc_k8s" {
 
   # Cloudwatch Log Group - for fluentd
   cloudwatch_logs_enabled  = true
-  cloudwatch_log_group     = "${local.cluster_name}-logs"
+  cloudwatch_log_group     = "${local.cluster_id}-logs"
   cloudwatch_log_retention = 90
 }
