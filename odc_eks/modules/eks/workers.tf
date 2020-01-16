@@ -2,7 +2,7 @@ resource "aws_autoscaling_group" "nodes" {
   desired_capacity = var.desired_nodes
   max_size         = var.max_nodes
   min_size         = var.min_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.node.id}-nodes-0"
+  name             = "${var.node_group_name}-${aws_launch_template.node.id}-nodes"
   vpc_zone_identifier = var.eks_subnet_ids
 
   # Don't reset to default size every time terraform is applied
@@ -19,12 +19,22 @@ resource "aws_autoscaling_group" "nodes" {
   tags = [
     {
       key                 = "Name"
-      value               = "${aws_eks_cluster.eks.id}-node"
+      value               = "${var.node_group_name}-${aws_launch_template.node.id}-nodes"
       propagate_at_launch = true
     },
     {
-      key                 = "owner"
+      key                 = "Owner"
       value               = var.owner
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Namespace"
+      value               = var.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = var.environment
       propagate_at_launch = true
     },
     {
@@ -60,7 +70,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   desired_capacity = var.desired_nodes
   max_size         = var.max_spot_nodes
   min_size         = var.min_spot_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot-0"
+  name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
   vpc_zone_identifier = var.eks_subnet_ids
 
   # Don't reset to default size every time terraform is applied
@@ -77,12 +87,22 @@ resource "aws_autoscaling_group" "spot_nodes" {
   tags = [
     {
       key                 = "Name"
-      value               = "${aws_eks_cluster.eks.id}-spot"
+      value               = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
       propagate_at_launch = true
     },
     {
-      key                 = "owner"
+      key                 = "Owner"
       value               = var.owner
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Namespace"
+      value               = var.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = var.environment
       propagate_at_launch = true
     },
     {

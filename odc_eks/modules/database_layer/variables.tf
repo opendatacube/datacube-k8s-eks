@@ -2,6 +2,11 @@
 # Database / variables.tf
 #==============================================================
 
+variable "db_label" {
+  description = "Label prefix use by resources"
+  type        = string
+}
+
 #--------------------------------------------------------------
 # Network
 #--------------------------------------------------------------
@@ -94,10 +99,13 @@ variable "extra_sg" {
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
-variable "cluster" {
+variable "cluster_id" {
 }
 
-variable "workspace" {
+variable "environment" {
+}
+
+variable "namespace" {
 }
 
 variable "owner" {

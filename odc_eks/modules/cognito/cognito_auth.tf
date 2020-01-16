@@ -41,6 +41,14 @@ resource "aws_cognito_user_pool" "pool" {
   # lifecycle {
   #   prevent_destroy = true
   # }
+
+  tags = {
+    Name        = var.user_pool_name
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
+  }
 }
 
 resource "aws_cognito_user_pool_client" "client" {

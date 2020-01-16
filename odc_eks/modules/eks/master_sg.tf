@@ -1,5 +1,5 @@
-resource "aws_security_group" "eks-cluster" {
-  name        = "terraform-eks-eks-cluster"
+resource "aws_security_group" "eks_cluster" {
+  name        = "${var.cluster_name}-cluster-sg"
   description = "Cluster communication with worker nodes"
   vpc_id      = var.vpc_id
 
@@ -11,7 +11,11 @@ resource "aws_security_group" "eks-cluster" {
   }
 
   tags = {
-    Name = "terraform-eks-eks"
+    Name        = "${var.cluster_name}-cluster-sg"
+    Cluster     = var.cluster_name
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 
@@ -22,7 +26,7 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
   description       = element(keys(var.admin_access_CIDRs), count.index)
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.eks-cluster.id
+  security_group_id = aws_security_group.eks_cluster.id
   to_port           = 443
   type              = "ingress"
 }

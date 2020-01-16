@@ -27,3 +27,18 @@ variable "user_groups" {
     precedence = number
   }))
 }
+
+#--------------------------------------------------------------
+# Tags
+#--------------------------------------------------------------
+variable "cluster_id" {
+}
+
+variable "environment" {
+}
+
+variable "namespace" {
+}
+
+variable "owner" {
+}
