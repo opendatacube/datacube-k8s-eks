@@ -1,5 +1,5 @@
 variable "region" {
-    description = "The AWS region to provision resources too"
+    description = "The AWS region to provision resources"
     default = "ap-southeast-2"
 }
 
@@ -14,6 +14,6 @@ variable "owner" {
 }
 
 variable "environment" {
-    description = "The name of the environment e.g. dev, stage, prod"
+    description = "The name of the environment - e.g. dev, stage, prod"
     default = "stage"
 }

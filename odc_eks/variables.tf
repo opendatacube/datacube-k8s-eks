@@ -1,16 +1,21 @@
 variable "region" {
-}
-
-variable "owner" {
-  description = "Identifies who is responsible for these resources"
+  description = "The AWS region to provision resources"
+  default = "ap-southeast-2"
 }
 
 variable "namespace" {
-  description = "Namespace for your deployment. Use as part of resource naming"
+  description = "The name used for creation of backend resources like the terraform state bucket"
+  default = "odc-test"
+}
+
+variable "owner" {
+  description = "The owner of the environment"
+  default = "odc-test"
 }
 
 variable "environment" {
-  description = "Name of your environment. Use as part of resource naming. e.g. dev, stage, prod"
+  description = "The name of the environment - e.g. dev, stage, prod"
+  default = "stage"
 }
 
 variable "cluster_version" {
