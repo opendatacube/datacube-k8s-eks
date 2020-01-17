@@ -65,9 +65,9 @@ locals {
   certificate_authority = data.aws_eks_cluster.cluster.certificate_authority[0].data
 
   ami_image_id          = data.terraform_remote_state.odc_eks-stage.outputs.ami_image_id
-  default_worker_instance_type = "r5.4xlarge"
-  node_type          = "ondemand"
-  spot_node_type     = "spot"
+  default_worker_instance_type = "m4.large"
+  node_type          = "${local.node_group_name}-ondemand"
+  spot_node_type     = "${local.node_group_name}-spot"
   volume_size = 100
   spot_volume_size = 100
   extra_userdata        = <<-USERDATA

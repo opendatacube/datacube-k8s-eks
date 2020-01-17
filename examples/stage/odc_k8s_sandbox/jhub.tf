@@ -5,7 +5,6 @@ data "template_file" "jhub" {
     cluster_name = local.cluster_id
     role_name    = "${local.cluster_id}-wms"
     certificate_arn = local.certificate_arn
-    node_group_name = local.node_group_name  # use for node affinity
     node_type   = local.node_type  # use for node affinity
     domain_name = local.domain_name
     db_hostname = local.db_hostname
