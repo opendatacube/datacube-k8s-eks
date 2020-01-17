@@ -2,8 +2,8 @@ data "template_file" "jhub" {
   template = file("${path.module}/config/jhub.yaml")
   vars = {
     region       = local.region
-    cluster_name = local.cluster_name
-    role_name    = "${local.cluster_name}-wms"
+    cluster_name = local.cluster_id
+    role_name    = "${local.cluster_id}-wms"
     certificate_arn = local.certificate_arn
     node_group_name = local.node_group_name  # use for node affinity
     node_type   = local.node_type  # use for node affinity

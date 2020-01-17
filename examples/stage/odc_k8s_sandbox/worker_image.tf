@@ -23,9 +23,9 @@ locals {
     # Get instance and ami id from the aws ec2 metadate endpoint
     id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
     ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-    /etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_name}' \
+    /etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_id}' \
     --kubelet-extra-args \
-      "--node-labels=cluster=${local.cluster_name},nodegroup=${local.node_group_name},nodetype=${local.node_type},instance-id=$id,ami-id=$ami \
+      "--node-labels=cluster=${local.cluster_id},nodegroup=${local.node_group_name},nodetype=${local.node_type},instance-id=$id,ami-id=$ami \
        --cloud-provider=aws"
     ${local.extra_userdata}
   USERDATA
@@ -36,9 +36,9 @@ locals {
     # Get instance and ami id from the aws ec2 metadate endpoint
     id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
     ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-    /etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_name}' \
+    /etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_id}' \
     --kubelet-extra-args \
-      "--node-labels=cluster=${local.cluster_name},nodegroup=${local.node_group_name},nodetype=${local.spot_node_type},instance-id=$id,ami-id=$ami \
+      "--node-labels=cluster=${local.cluster_id},nodegroup=${local.node_group_name},nodetype=${local.spot_node_type},instance-id=$id,ami-id=$ami \
        --cloud-provider=aws"
     ${local.extra_userdata}
   USERDATA
@@ -53,7 +53,7 @@ resource "aws_launch_template" "node" {
   instance_type = local.default_worker_instance_type
 
   iam_instance_profile {
-    name = "${local.cluster_name}-node"
+    name = "${local.cluster_id}-node"
   }
 
   network_interfaces {
@@ -82,7 +82,7 @@ resource "aws_launch_template" "spot" {
   instance_type = local.default_worker_instance_type
 
   iam_instance_profile {
-    name = "${local.cluster_name}-node"
+    name = "${local.cluster_id}-node"
   }
 
   instance_market_options {

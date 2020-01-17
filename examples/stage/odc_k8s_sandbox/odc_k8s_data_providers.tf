@@ -52,14 +52,14 @@ locals {
   db_password     = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
   db_name         = data.terraform_remote_state.odc_eks-stage.outputs.db_name
 
-  node_group_name     = "${local.cluster_name}-jhub"
+  node_group_name     = "sandbox"
   nodes_subnet_group  = data.aws_subnet_ids.nodes.ids
   node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
 
   nodes_enabled       = true
   spot_nodes_enabled  = true
 
-  cluster_name          = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
+  cluster_id            = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   eks_cluster_version   = data.aws_eks_cluster.cluster.version
   endpoint              = data.aws_eks_cluster.cluster.endpoint
   certificate_authority = data.aws_eks_cluster.cluster.certificate_authority[0].data
