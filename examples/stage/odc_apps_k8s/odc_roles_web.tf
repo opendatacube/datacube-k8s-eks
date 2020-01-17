@@ -9,10 +9,10 @@ module "odc_role_wms" {
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-  cluster_name = local.cluster_name
+  cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_name}-wms"
+    name = "${local.cluster_id}-wms"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -51,10 +51,10 @@ module "odc_role_wps" {
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-  cluster_name = local.cluster_name
+  cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_name}-wps"
+    name = "${local.cluster_id}-wps"
     policy = <<-EOF
     {
       "Version": "2012-10-17",

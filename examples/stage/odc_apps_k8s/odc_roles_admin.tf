@@ -9,10 +9,10 @@ module "odc_role_autoscaler" {
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-  cluster_name = local.cluster_name
+  cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_name}-autoscaler"
+    name = "${local.cluster_id}-autoscaler"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -43,10 +43,10 @@ module "odc_role_alb_ingress" {
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-  cluster_name = local.cluster_name
+  cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_name}-alb-ingress"
+    name = "${local.cluster_id}-alb-ingress"
     policy = <<-EOF
       {
         "Version": "2012-10-17",
@@ -186,10 +186,10 @@ module "odc_role_external_dns" {
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-  cluster_name = local.cluster_name
+  cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_name}-external-dns"
+    name = "${local.cluster_id}-external-dns"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -226,10 +226,10 @@ module "odc_role_fluentd" {
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
-  cluster_name = local.cluster_name
+  cluster_id = local.cluster_id
 
   role = {
-    name   = "${local.cluster_name}-fluentd"
+    name   = "${local.cluster_id}-fluentd"
     policy = <<-EOF
     {
       "Version": "2012-10-17",

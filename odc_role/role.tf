@@ -20,7 +20,7 @@ resource "aws_iam_role" "role" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"
       },
       "Action": "sts:AssumeRole"
     }
@@ -29,12 +29,11 @@ resource "aws_iam_role" "role" {
 EOF
 
   tags = {
-    Name       = var.role.name
-    Cluster    = var.cluster_name
-    Environment= var.environment
-    Owner      = var.owner
-    Workspace  = terraform.workspace
-    Created_by = "terraform"
+    Name        = var.role.name
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 

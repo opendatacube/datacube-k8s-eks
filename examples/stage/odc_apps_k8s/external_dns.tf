@@ -5,7 +5,7 @@ data "aws_route53_zone" "domain" {
 data "template_file" "external_dns" {
   template = file("${path.module}/config/external_dns.yaml")
   vars = {
-    cluster_name = local.cluster_name
+    cluster_name = local.cluster_id
     hosted_zone_id = data.aws_route53_zone.domain.zone_id
     domain_name = local.domain_name
     role_name = module.odc_role_external_dns.role_name

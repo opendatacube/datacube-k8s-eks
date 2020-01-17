@@ -1,7 +1,7 @@
 data "template_file" "fluentd_cloudwatch" {
   template = file("${path.module}/config/fluentd_cloudwatch.yaml")
   vars = {
-    cluster_name = local.cluster_name
+    cluster_name = local.cluster_id
     region = local.region
     role_name = module.odc_role_fluentd.role_name
   }
