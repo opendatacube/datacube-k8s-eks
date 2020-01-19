@@ -1,6 +1,8 @@
 locals {
-  create_certificate = true
-  region = "ap-southeast-2"
+  region      = "ap-southeast-2"
+  owner       = "odc-test"
+  namespace   = "odc-test"
+  environment = "stage"
 }
 
 module "odc_eks" {
@@ -8,11 +10,10 @@ module "odc_eks" {
   source = "../../../odc_eks"
 
   # Cluster config
-  region = local.region
-
-  owner = "odc-test"
-  namespace = "odc-test"
-  environment = "stage"
+  region          = local.region
+  owner           = local.owner
+  namespace       = local.namespace
+  environment     = local.environment
   cluster_version = 1.13
 
   admin_access_CIDRs = {
@@ -22,7 +23,7 @@ module "odc_eks" {
   domain_name = "test.dea.ga.gov.au"
 
   # ACM - used by ALB
-  create_certificate  = local.create_certificate
+  create_certificate  = false
 
   # DB config
   db_name = "odctest"
@@ -42,12 +43,12 @@ module "odc_eks" {
   cf_certificate_create     = true
   cf_origin_protocol_policy = "https-only"
   cf_log_bucket_create      = true
-  cf_log_bucket             = "dea-cloudfront-logs-stage"
+  cf_log_bucket             = "${local.namespace}-${local.environment}-cloudfront-logs"
 
   # WAF
   waf_enable             = false
   waf_target_scope       = "regional"
-  waf_log_bucket         = "dea-waf-logs-stage"
+  waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
 
   jhub_cognito_auth_enabled = false
   jhub_cognito_user_groups = [
