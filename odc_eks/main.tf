@@ -84,7 +84,7 @@ module "eks" {
   source             = "./modules/eks"
   vpc_id             = module.vpc.vpc_id
   eks_subnet_ids     = module.vpc.private_subnets
-  cluster_name       = module.odc_eks_label.id
+  cluster_id         = module.odc_eks_label.id
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
 

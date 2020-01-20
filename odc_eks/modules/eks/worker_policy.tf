@@ -1,5 +1,5 @@
 resource "aws_iam_role" "eks_node" {
-  name = "nodes.${var.cluster_name}"
+  name = "nodes.${var.cluster_id}"
 
   assume_role_policy = <<-POLICY
     {
@@ -19,7 +19,7 @@ resource "aws_iam_role" "eks_node" {
 }
 
 resource "aws_iam_policy" "eks_kube2iam" {
-  name = "${var.cluster_name}-kube2iam"
+  name = "${var.cluster_id}-kube2iam"
   path = "/"
   description = "Enables Kube2iam to assume roles"
 
@@ -67,7 +67,7 @@ resource "aws_iam_role_policy_attachment" "eks_node_AmazonEC2RoleforSSM" {
 }
 
 resource "aws_iam_instance_profile" "eks_node" {
-  name = "${var.cluster_name}-node"
+  name = "${var.cluster_id}-node"
   role = aws_iam_role.eks_node.name
 }
 

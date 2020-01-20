@@ -1,5 +1,5 @@
 resource "aws_security_group" "eks_node" {
-  name        = "${var.cluster_name}-node-sg"
+  name        = "${var.cluster_id}-node-sg"
   description = "Security group for all nodes in the cluster"
   vpc_id      = var.vpc_id
 
@@ -11,8 +11,8 @@ resource "aws_security_group" "eks_node" {
   }
 
   tags = {
-    Name        = "${var.cluster_name}-node-sg"
-    Cluster     = var.cluster_name
+    Name        = "${var.cluster_id}-node-sg"
+    Cluster     = var.cluster_id
     Owner       = var.owner
     Namespace   = var.namespace
     Environment = var.environment
