@@ -42,6 +42,12 @@ variable "domain_name" {
   type        = string
 }
 
+variable "app_name" {
+  description = "The app name to be used by for applications deployed to the cluster and using ingress"
+  type        = string
+}
+
+
 variable "create_certificate" {
   description = "Whether to create certificate for given domain"
   type        = string
