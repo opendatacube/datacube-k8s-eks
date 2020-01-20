@@ -53,6 +53,8 @@ module "odc_eks" {
   waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
 
   jhub_cognito_auth_enabled = false
+  app_name = "app"
+  cognito_auto_verify       = true
   jhub_cognito_user_groups = [
     {
       name        = "dev-group"

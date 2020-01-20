@@ -28,6 +28,11 @@ variable "user_groups" {
   }))
 }
 
+variable "auto_verify" {
+  description = "Set to true to allow the users account to be auto verified. False - admin will need to verify"
+  type = bool
+}
+
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------

@@ -5,7 +5,7 @@ resource "aws_cognito_user_pool" "pool" {
   count = var.cognito_auth_enabled ? 1 : 0
   name = var.user_pool_name
   alias_attributes           = ["email"]
-  auto_verified_attributes   = ["email"]
+  auto_verified_attributes   = var.auto_verify ? ["email"] : null
 
   schema {
     name                = "email"
@@ -21,7 +21,7 @@ resource "aws_cognito_user_pool" "pool" {
   schema {
     name                = "name"
     attribute_data_type = "String"
-    mutable             = false
+    mutable             = true
     required            = true
     string_attribute_constraints {
       min_length = 1
