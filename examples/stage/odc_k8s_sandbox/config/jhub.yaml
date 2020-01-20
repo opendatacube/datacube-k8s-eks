@@ -1,0 +1,58 @@
+singleuser:
+  extraAnnotations:
+    iam.amazonaws.com/role: ${role_name}
+  extraEnv:
+    DB_HOSTNAME: ${db_hostname}
+    DB_USERNAME: ${db_username}
+    DB_PASSWORD: ${db_password}
+    DB_DATABASE: ${db_name}
+hub:
+  pdb:
+    extraAnnotations:
+      iam.amazonaws.com/role: ${role_name}
+  extraEnv:
+    JUPYTERHUB_USERPOOL_ID: ${jhub_userpool_id}
+    AWS_DEFAULT_REGION: ${region}
+    OAUTH_CALLBACK_URL: https://app.${domain_name}/oauth_callback
+    OAUTH2_AUTHORIZE_URL: https://${jhub_userpool_doamin}.auth.${region}.amazoncognito.com/oauth2/authorize
+    OAUTH2_TOKEN_URL: https://${jhub_userpool_doamin}.auth.${region}.amazoncognito.com/oauth2/token
+    OAUTH2_USERDATA_URL: https://${jhub_userpool_doamin}.auth.${region}.amazoncognito.com/oauth2/userInfo
+  cookieSecret: 65732236ed9aca1180053b99f1d43382eba09bd7bc5c401804959127a80f774c # Replace
+scheduling:
+  userPods:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: nodetype
+              operator: In
+              values:
+                - ${node_type}
+            - key: nodegroup
+              operator: In
+              values:
+                - ${node_group_name}
+proxy:
+  secretToken: 1ad45878c40c6f4921fff6d234acaac806f3370c61eb7dcda1dded36c4560f4f # Replace
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/healthcheck-path: /hub/login
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}
+  hosts:
+    - app.${domain_name}
+  pathSuffix: "*"
+auth:
+  state:
+    enabled: True
+    cryptoKey: 356e9462b05e983c6ffcced3702b9b78c5859a22fd6c9380513701ed8e075184 # Replace
+  custom:
+    config:
+      client_id: ${jhub_auth_client_id}
+      client_secret: ${jhub_auth_client_secret}
