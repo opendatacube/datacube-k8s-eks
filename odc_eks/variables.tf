@@ -183,6 +183,11 @@ variable "jhub_cognito_auth_enabled" {
   default = false
 }
 
+variable "cognito_auto_verify" {
+  description = "Set to true to allow the users account to be auto verified. False - admin will need to verify"
+  type = bool
+}
+
 variable "jhub_cognito_user_groups" {
   default = []
   description = "List of jhub user groups manage by cognito user pool"
