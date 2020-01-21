@@ -1,33 +1,14 @@
-resource "kubernetes_secret" "efs_provisioner" {
-  metadata {
-    name = "efs-provisioner"
-    namespace = "sandbox"
-  }
-
-  data = {
-    "values.yaml" = data.template_file.efs_provisioner.rendered
-  }
-
-  type = "Opaque"
-}
-
-data "template_file" "efs_provisioner" {
-  template = file("${path.module}/config/efs-provisioner.yaml")
-  vars = {
-    role_name = module.odc_role_efs_provisioner.role_name
-    efsFileSystemId = aws_efs_file_system.user_storage.id
-    awsRegion       = local.region
-    environment     = local.environment
-    path            = "/"
-    dnsName         = aws_efs_file_system.user_storage.dns_name
-    cluster_name    = local.cluster_id
-  }
-}
-
 resource "aws_efs_file_system" "user_storage" {
+  # Creation token is optional and needs to be unique. terraform will create a value for us.
+
   tags = {
-    Name = "${local.cluster_id}-efs-storage"
+    Name        = "${local.cluster_id}-efs-storage"
+    Cluster     = local.cluster_id
+    Owner       = local.owner
+    Namespace   = local.namespace
+    Environment = local.environment
   }
+
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"
   }
@@ -73,26 +54,30 @@ output "efs_provisoner_fsid" {
   value = aws_efs_file_system.user_storage.id
 }
 
-# EFS PVC using kubernetes provider
-# https://www.terraform.io/docs/providers/kubernetes/r/persistent_volume_claim.html
-resource "kubernetes_persistent_volume_claim" "efs" {
+data "template_file" "efs_provisioner" {
+  template = file("${path.module}/config/efs-provisioner.yaml")
+  vars = {
+    role_name = module.odc_role_efs-provisioner.role_name
+    efsFileSystemId = aws_efs_file_system.user_storage.id
+    awsRegion       = local.region
+    environment     = local.environment
+    path            = "/"
+    dnsName         = aws_efs_file_system.user_storage.dns_name
+    cluster_name = local.cluster_id
+  }
+}
+
+resource "kubernetes_secret" "efs_provisioner" {
   metadata {
-    name      = "efs-odc"
-    namespace = kubernetes_namespace.sandbox
-    annotations = {
-      "volume.beta.kubernetes.io/storage-class" = "efs" # this annotation has been deprecated but it appears to be necessary for cluster-autoscaler to function with PVC. Terraform might complain with some versions of k8s provider
-    }
+    name = "efs-provisioner"
+    namespace = kubernetes_namespace.admin.metadata[0].name
   }
 
-  spec {
-    storage_class_name = "efs"
-    access_modes       = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "1Mi"
-      }
-    }
+  data = {
+    "values.yaml" = data.template_file.efs_provisioner.rendered
   }
+
+  type = "Opaque"
 }
 
 # Get IAM policy for EFS
@@ -100,7 +85,7 @@ data "aws_iam_policy" "efs_ro" {
   arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemReadOnlyAccess"
 }
 
-module "odc_role_efs_provisioner" {
+module "odc_role_efs-provisioner" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   source = "../../../odc_role"
 
