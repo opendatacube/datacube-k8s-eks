@@ -41,11 +41,11 @@ locals {
   domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
 
-  jhub_userpool           = data.terraform_remote_state.odc_eks-stage.outputs.jhub_userpool
-  jhub_userpool_id        = data.terraform_remote_state.odc_eks-stage.outputs.jhub_userpool_id
-  jhub_userpool_doamin    = data.terraform_remote_state.odc_eks-stage.outputs.jhub_userpool_domain
-  jhub_auth_client_id     = data.terraform_remote_state.odc_eks-stage.outputs.jhub_auth_client_id
-  jhub_auth_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.jhub_auth_client_secret
+  jhub_userpool           = module.jhub_cognito_auth.userpool
+  jhub_userpool_id        = module.jhub_cognito_auth.userpool_id
+  jhub_userpool_doamin    = module.jhub_cognito_auth.userpool_domain
+  jhub_auth_client_id     = module.jhub_cognito_auth.client_id
+  jhub_auth_client_secret = module.jhub_cognito_auth.client_secret
 
   db_hostname     = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_username     = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
@@ -87,10 +87,10 @@ locals {
   min_nodes = {
     ap-southeast-2a = 0
     ap-southeast-2b = 0
-    ap-southeast-2c = 1
+    ap-southeast-2c = 0
   }
   desired_nodes = {
-    ap-southeast-2a = 0
+    ap-southeast-2a = 1
     ap-southeast-2b = 0
     ap-southeast-2c = 1
   }
