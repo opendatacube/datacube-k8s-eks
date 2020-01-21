@@ -20,8 +20,8 @@ variable "waf_log_bucket" {
 }
 
 variable "waf_max_expected_body_size" {
+  type        = string
   description = "Maximum number of bytes allowed in the body of the request"
-  type        = "string"
   default     = "536870912"
 }
 
@@ -50,8 +50,10 @@ module "waf_label" {
 # please read the description of each variable in the variables.tf file:
 # https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/blob/master/variables.tf
 module "owasp_top_10_rules" {
-  source  = "traveloka/waf-owasp-top-10-rules/aws"
-  version = "v0.2.0"
+  source = "git::https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules.git?ref=v0.2.0"
+  # The TF registry syntax is proving unreliable for downloads. Using direct github link to get module
+  # source  = "traveloka/waf-owasp-top-10-rules/aws"
+  # version = "v0.2.0"
 
   product_domain = var.namespace
   service_name   = "wafowasp"

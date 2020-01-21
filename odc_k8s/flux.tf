@@ -84,6 +84,7 @@ resource "helm_release" "flux" {
   
   depends_on = [
     null_resource.apply_flux_crd,
+    module.tiller,
   ]
 }
 
@@ -103,6 +104,7 @@ resource "helm_release" "flux-helm-operator" {
   depends_on = [
     null_resource.apply_flux_crd,
     helm_release.flux,
+    module.tiller,
   ]
 }
 
@@ -115,7 +117,7 @@ resource "null_resource" "apply_flux_crd" {
     count      = var.flux_enabled ? 1 : 0
 
   triggers = {
-    cluster_updated                     = data.aws_eks_cluster.cluster.id
+    cluster_updated                     = var.cluster_name
     kubernetes_namespace_updated        = kubernetes_namespace.flux[0].metadata[0].name
 
     # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners
@@ -127,9 +129,8 @@ resource "null_resource" "apply_flux_crd" {
   }
 
   depends_on = [
-    data.aws_eks_cluster.cluster,
     kubernetes_namespace.flux,
-    kubernetes_config_map.aws_auth,
+#    kubernetes_config_map.aws_auth,
     ]
 
   provisioner "local-exec" {

@@ -11,8 +11,9 @@ module "odc_eks_label" {
 
 module "vpc" {
   # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.2.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.2.0"
+  #source  = "terraform-aws-modules/vpc/aws"
+  #version = "2.2.0"
 
   name             = "${module.odc_eks_label.id}-vpc"
   cidr             = var.vpc_cidr
@@ -104,4 +105,15 @@ module "eks" {
   volume_size                  = var.volume_size
   spot_volume_size             = var.spot_volume_size
 
+}
+
+module "jhub_cognito_auth" {
+  source               = "./modules/cognito"
+
+  cognito_auth_enabled = var.jhub_cognito_auth_enabled
+  auto_verify          = var.cognito_auto_verify
+  user_pool_name       = "${module.odc_eks_label.id}-jhub-userpool"
+  user_pool_domain     = "${module.odc_eks_label.id}-jhub-auth"
+  callback_url         = "https://${var.app_name}.${var.domain_name}/oauth_callback"
+  user_groups          = var.jhub_cognito_user_groups
 }

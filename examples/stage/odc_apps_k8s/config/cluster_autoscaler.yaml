@@ -1,0 +1,6 @@
+podAnnotations:
+  iam.amazonaws.com/role: ${role_name}
+autoDiscovery:
+  clusterName: ${cluster_name}
+cloudProvider: aws
+awsRegion: ${region}

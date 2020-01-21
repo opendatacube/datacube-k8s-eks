@@ -1,5 +1,8 @@
 locals {
-  create_certificate = true
+  region      = "ap-southeast-2"
+  owner       = "odc-test"
+  namespace   = "odc-test"
+  environment = "stage"
 }
 
 module "odc_eks" {
@@ -7,11 +10,10 @@ module "odc_eks" {
   source = "../../../odc_eks"
 
   # Cluster config
-  region = "ap-southeast-2"
-
-  owner = "odc-test"
-  namespace = "odc-test"
-  environment = "stage"
+  region          = local.region
+  owner           = local.owner
+  namespace       = local.namespace
+  environment     = local.environment
   cluster_version = 1.13
 
   admin_access_CIDRs = {
@@ -21,7 +23,7 @@ module "odc_eks" {
   domain_name = "test.dea.ga.gov.au"
 
   # ACM - used by ALB
-  create_certificate  = local.create_certificate
+  create_certificate  = false
 
   # DB config
   db_name = "odctest"
@@ -30,7 +32,7 @@ module "odc_eks" {
   #default_worker_instance_type = "m4.large"
   default_worker_instance_type = "t3.medium"
   spot_nodes_enabled = true
-  min_nodes = 1
+  min_nodes = 2
   max_nodes = 4
 
   # Cloudfront CDN
@@ -41,10 +43,36 @@ module "odc_eks" {
   cf_certificate_create     = true
   cf_origin_protocol_policy = "https-only"
   cf_log_bucket_create      = true
-  cf_log_bucket             = "dea-cloudfront-logs-stage"
+  cf_log_bucket             = "${local.namespace}-${local.environment}-cloudfront-logs"
 
   # WAF
   waf_enable             = false
   waf_target_scope       = "regional"
-  waf_log_bucket         = "dea-waf-logs-stage"
+  waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
+
+  jhub_cognito_auth_enabled = false
+  app_name = "app"
+  cognito_auto_verify       = true
+  jhub_cognito_user_groups = [
+    {
+      name        = "dev-group"
+      description = "Group defines Jupyterhub dev users"
+      precedence  = 5
+    },
+    {
+      name        = "internal-group"
+      description = "Group defines Jupyterhub internal users"
+      precedence  = 6
+    },
+    {
+      name        = "trusted-group"
+      description = "Group defines Jupyterhub trusted users"
+      precedence  = 7
+    },
+    {
+      name        = "default-group"
+      description = "Group defines Jupyterhub default users"
+      precedence  = 10
+    }
+  ]
 }
