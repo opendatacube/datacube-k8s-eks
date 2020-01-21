@@ -171,7 +171,10 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
   }
 
   tags = {
-    Name = "Cloudfront Logs for ${module.eks.cluster_id}"
+    Name        = local.log_bucket
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 
