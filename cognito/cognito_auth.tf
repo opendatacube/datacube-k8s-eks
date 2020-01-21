@@ -52,7 +52,7 @@ resource "aws_cognito_user_pool" "pool" {
 
 resource "aws_cognito_user_pool_client" "client" {
   name = "client"
-  user_pool_id = aws_cognito_user_pool.pool[0].id
+  user_pool_id = aws_cognito_user_pool.pool.id
   generate_secret     = true
   supported_identity_providers = ["COGNITO"]
   callback_urls =[var.callback_url]
@@ -63,12 +63,12 @@ resource "aws_cognito_user_pool_client" "client" {
 
 resource "aws_cognito_user_pool_domain" "domain" {
   domain       = var.user_pool_domain
-  user_pool_id = aws_cognito_user_pool.pool[0].id
+  user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 resource "aws_cognito_user_group" "group" {
   count        = length(var.user_groups)
-  user_pool_id = aws_cognito_user_pool.pool[0].id
+  user_pool_id = aws_cognito_user_pool.pool.id
   name         = var.user_groups[count.index].name
   description  = var.user_groups[count.index].description
   precedence   = var.user_groups[count.index].precedence
