@@ -113,20 +113,3 @@ module "eks" {
   namespace   = var.namespace
   environment = var.environment
 }
-
-module "jhub_cognito_auth" {
-  source               = "./modules/cognito"
-
-  cognito_auth_enabled = var.jhub_cognito_auth_enabled
-  auto_verify          = var.cognito_auto_verify
-  user_pool_name       = "${module.odc_eks_label.id}-jhub-userpool"
-  user_pool_domain     = "${module.odc_eks_label.id}-jhub-auth"
-  callback_url         = "https://${var.app_name}.${var.domain_name}/oauth_callback"
-  user_groups          = var.jhub_cognito_user_groups
-
-  # Tags
-  owner       = var.owner
-  cluster_id  = module.eks.cluster_id
-  namespace   = var.namespace
-  environment = var.environment
-}

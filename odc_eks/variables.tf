@@ -47,12 +47,6 @@ variable "domain_name" {
   type        = string
 }
 
-variable "app_name" {
-  description = "The app name to be used by for applications deployed to the cluster and using ingress"
-  type        = string
-}
-
-
 variable "create_certificate" {
   description = "Whether to create certificate for given domain"
   type        = string
@@ -182,23 +176,4 @@ variable "extra_userdata" {
 echo ""
 USERDATA
 
-}
-
-variable "jhub_cognito_auth_enabled" {
-  default = false
-}
-
-variable "cognito_auto_verify" {
-  description = "Set to true to allow the users account to be auto verified. False - admin will need to verify"
-  type = bool
-}
-
-variable "jhub_cognito_user_groups" {
-  default = []
-  description = "List of jhub user groups manage by cognito user pool"
-  type = list(object({
-    name = string
-    description = string
-    precedence = number
-  }))
 }

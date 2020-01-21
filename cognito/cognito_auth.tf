@@ -2,7 +2,6 @@
 # COGNITO
 
 resource "aws_cognito_user_pool" "pool" {
-  count = var.cognito_auth_enabled ? 1 : 0
   name = var.user_pool_name
   alias_attributes           = ["email"]
   auto_verified_attributes   = var.auto_verify ? ["email"] : null
@@ -52,7 +51,6 @@ resource "aws_cognito_user_pool" "pool" {
 }
 
 resource "aws_cognito_user_pool_client" "client" {
-  count = var.cognito_auth_enabled ? 1 : 0
   name = "client"
   user_pool_id = aws_cognito_user_pool.pool[0].id
   generate_secret     = true
@@ -64,13 +62,12 @@ resource "aws_cognito_user_pool_client" "client" {
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
-  count        = var.cognito_auth_enabled ? 1 : 0
   domain       = var.user_pool_domain
   user_pool_id = aws_cognito_user_pool.pool[0].id
 }
 
 resource "aws_cognito_user_group" "group" {
-  count        = var.cognito_auth_enabled ? length(var.user_groups) : 0
+  count        = length(var.user_groups)
   user_pool_id = aws_cognito_user_pool.pool[0].id
   name         = var.user_groups[count.index].name
   description  = var.user_groups[count.index].description

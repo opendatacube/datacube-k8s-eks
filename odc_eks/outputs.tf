@@ -67,26 +67,3 @@ data "aws_caller_identity" "current" {
 output "certificate_arn" {
   value = (var.create_certificate)? aws_acm_certificate.wildcard_cert[0].arn : null
 }
-
-output "jhub_userpool" {
-  value = module.jhub_cognito_auth.userpool
-}
-
-output "jhub_userpool_id" {
-  value = module.jhub_cognito_auth.userpool_id
-  sensitive = true
-}
-
-output "jhub_userpool_domain" {
-  value = module.jhub_cognito_auth.userpool_domain
-}
-
-output "jhub_auth_client_id" {
-  value = module.jhub_cognito_auth.client_id
-  sensitive = true
-}
-
-output "jhub_auth_client_secret" {
-  value = module.jhub_cognito_auth.client_secret
-  sensitive = true
-}
