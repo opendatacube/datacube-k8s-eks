@@ -8,7 +8,7 @@ jobs:
       - run:
           name: Lint Terraform for cluster
           command: |
-            /bin/bash ./.circleci/run_tflint.sh
+            /bin/sh ./.circleci/run_tflint.sh
           environment:
             WORKSPACE: datakube-dev
 workflows:
