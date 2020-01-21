@@ -49,7 +49,7 @@ locals {
 
   db_hostname     = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_username     = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
-  db_password     = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
+  db_password     = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_password
   db_name         = data.terraform_remote_state.odc_eks-stage.outputs.db_name
 
   node_group_name     = "sandbox"
