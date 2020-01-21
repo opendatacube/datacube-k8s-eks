@@ -5,7 +5,7 @@ module "odc_eks_label" {
   source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
   namespace  = var.namespace
   stage      = var.environment
-  name      = "odc-eks"
+  name      = "eks"
   delimiter  = "-"
 }
 
@@ -54,6 +54,9 @@ module "vpc" {
 module "db" {
   source = "./modules/database_layer"
 
+  # Label prefix for db resources
+  db_label = module.odc_eks_label.id
+
   # Networking
   vpc_id                = module.vpc.vpc_id
   database_subnet_group = module.vpc.database_subnets
@@ -69,9 +72,10 @@ module "db" {
   engine_version         = var.db_engine_version
 
   # Tags
-  owner     = var.owner
-  cluster   = module.odc_eks_label.id
-  workspace = terraform.workspace
+  owner       = var.owner
+  cluster_id  = module.eks.cluster_id
+  namespace   = var.namespace
+  environment = var.environment
 }
 
 
@@ -80,7 +84,7 @@ module "eks" {
   source             = "./modules/eks"
   vpc_id             = module.vpc.vpc_id
   eks_subnet_ids     = module.vpc.private_subnets
-  cluster_name       = module.odc_eks_label.id
+  cluster_id         = module.odc_eks_label.id
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
 
@@ -90,7 +94,6 @@ module "eks" {
   enable_ec2_ssm     = var.enable_ec2_ssm
 
   # Worker configuration
-  owner                        = var.owner
   min_nodes                    = var.min_nodes
   max_nodes                    = var.max_nodes
   desired_nodes                = var.desired_nodes
@@ -105,15 +108,8 @@ module "eks" {
   volume_size                  = var.volume_size
   spot_volume_size             = var.spot_volume_size
 
-}
-
-module "jhub_cognito_auth" {
-  source               = "./modules/cognito"
-
-  cognito_auth_enabled = var.jhub_cognito_auth_enabled
-  auto_verify          = var.cognito_auto_verify
-  user_pool_name       = "${module.odc_eks_label.id}-jhub-userpool"
-  user_pool_domain     = "${module.odc_eks_label.id}-jhub-auth"
-  callback_url         = "https://${var.app_name}.${var.domain_name}/oauth_callback"
-  user_groups          = var.jhub_cognito_user_groups
+  # Tags
+  owner       = var.owner
+  namespace   = var.namespace
+  environment = var.environment
 }

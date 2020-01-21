@@ -117,7 +117,7 @@ resource "null_resource" "apply_flux_crd" {
     count      = var.flux_enabled ? 1 : 0
 
   triggers = {
-    cluster_updated                     = var.cluster_name
+    cluster_updated                     = var.cluster_id
     kubernetes_namespace_updated        = kubernetes_namespace.flux[0].metadata[0].name
 
     # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners

@@ -28,10 +28,6 @@ scheduling:
               operator: In
               values:
                 - ${node_type}
-            - key: nodegroup
-              operator: In
-              values:
-                - ${node_group_name}
 proxy:
   secretToken: 1ad45878c40c6f4921fff6d234acaac806f3370c61eb7dcda1dded36c4560f4f # Replace
 ingress:

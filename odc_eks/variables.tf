@@ -1,16 +1,21 @@
 variable "region" {
-}
-
-variable "owner" {
-  description = "Identifies who is responsible for these resources"
+  description = "The AWS region to provision resources"
+  default = "ap-southeast-2"
 }
 
 variable "namespace" {
-  description = "Namespace for your deployment. Use as part of resource naming"
+  description = "The name used for creation of backend resources like the terraform state bucket"
+  default = "odc-test"
+}
+
+variable "owner" {
+  description = "The owner of the environment"
+  default = "odc-test"
 }
 
 variable "environment" {
-  description = "Name of your environment. Use as part of resource naming. e.g. dev, stage, prod"
+  description = "The name of the environment - e.g. dev, stage, prod"
+  default = "stage"
 }
 
 variable "cluster_version" {
@@ -41,12 +46,6 @@ variable "domain_name" {
   description = "The domain name to be used by for applications deployed to the cluster and using ingress"
   type        = string
 }
-
-variable "app_name" {
-  description = "The app name to be used by for applications deployed to the cluster and using ingress"
-  type        = string
-}
-
 
 variable "create_certificate" {
   description = "Whether to create certificate for given domain"
@@ -177,23 +176,4 @@ variable "extra_userdata" {
 echo ""
 USERDATA
 
-}
-
-variable "jhub_cognito_auth_enabled" {
-  default = false
-}
-
-variable "cognito_auto_verify" {
-  description = "Set to true to allow the users account to be auto verified. False - admin will need to verify"
-  type = bool
-}
-
-variable "jhub_cognito_user_groups" {
-  default = []
-  description = "List of jhub user groups manage by cognito user pool"
-  type = list(object({
-    name = string
-    description = string
-    precedence = number
-  }))
 }

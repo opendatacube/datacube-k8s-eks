@@ -23,9 +23,9 @@ users:
       args:
         - "token"
         - "-i"
-        - "${var.cluster_name}"
+        - "${var.cluster_id}"
         - "-r"
-        - "${aws_iam_role.eks-node.arn}"
+        - "${aws_iam_role.eks_node.arn}"
 KUBECONFIG
 
 }

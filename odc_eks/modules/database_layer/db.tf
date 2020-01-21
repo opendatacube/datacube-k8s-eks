@@ -4,21 +4,21 @@
 
 # Create a subnet group and rds
 
-resource "aws_db_subnet_group" "default" {
-  name       = "${var.cluster}-db"
+resource "aws_db_subnet_group" "db_sg" {
+  name       = "${var.db_label}-db-sg"
   subnet_ids = var.database_subnet_group
 
   tags = {
-    Name       = "${var.cluster}-${var.workspace}"
-    Cluster    = var.cluster
-    Workspace  = var.workspace
-    Owner      = var.owner
-    Created_by = "terraform"
+    Name        = "${var.db_label}-db"
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 
 resource "aws_db_instance" "db" {
-  identifier = "db-${var.cluster}-${var.workspace}"
+  identifier = "db-${var.db_label}"
 
   # Instance parameters
   allocated_storage      = var.storage
@@ -26,7 +26,7 @@ resource "aws_db_instance" "db" {
   storage_type           = "gp2"
   instance_class         = var.instance_class
   vpc_security_group_ids = [aws_security_group.rds.id]
-  db_subnet_group_name   = aws_db_subnet_group.default.id
+  db_subnet_group_name   = aws_db_subnet_group.db_sg.id
   multi_az               = var.rds_is_multi_az
 
   # DB parameters
@@ -45,11 +45,11 @@ resource "aws_db_instance" "db" {
   storage_encrypted       = var.storage_encrypted
 
   tags = {
-    Name       = "db-${var.cluster}-${var.workspace}"
-    Cluster    = var.cluster
-    Workspace  = var.workspace
-    Owner      = var.owner
-    Created_by = "terraform"
+    Name        = "db-${var.db_label}"
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 

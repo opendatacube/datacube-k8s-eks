@@ -25,16 +25,26 @@ resource "aws_autoscaling_group" "nodes" {
   tags = [
     {
       key                 = "Name"
-      value               = "${local.cluster_name}-node-${count.index}"
+      value               = "${local.node_group_name}-${aws_launch_template.node[0].id}-nodes-${count.index}"
       propagate_at_launch = true
     },
     {
-      key                 = "owner"
+      key                 = "Owner"
       value               = local.owner
       propagate_at_launch = true
     },
     {
-      key                 = "kubernetes.io/cluster/${local.cluster_name}"
+      key                 = "Namespace"
+      value               = local.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = local.environment
+      propagate_at_launch = true
+    },
+    {
+      key                 = "kubernetes.io/cluster/${local.cluster_id}"
       value               = "owned"
       propagate_at_launch = true
     },
@@ -44,7 +54,7 @@ resource "aws_autoscaling_group" "nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+      key                 = "k8s.io/cluster-autoscaler/${local.cluster_id}"
       value               = "owned"
       propagate_at_launch = true
     },
@@ -80,16 +90,26 @@ resource "aws_autoscaling_group" "spot_nodes" {
   tags = [
     {
       key                 = "Name"
-      value               = "${local.cluster_name}-spot-${count.index}"
+      value               = "${local.node_group_name}-${aws_launch_template.node[0].id}-spot-${count.index}"
       propagate_at_launch = true
     },
     {
-      key                 = "owner"
+      key                 = "Owner"
       value               = local.owner
       propagate_at_launch = true
     },
     {
-      key                 = "kubernetes.io/cluster/${local.cluster_name}"
+      key                 = "Namespace"
+      value               = local.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = local.environment
+      propagate_at_launch = true
+    },
+    {
+      key                 = "kubernetes.io/cluster/${local.cluster_id}"
       value               = "owned"
       propagate_at_launch = true
     },
@@ -99,7 +119,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+      key                 = "k8s.io/cluster-autoscaler/${local.cluster_id}"
       value               = "owned"
       propagate_at_launch = true
     },

@@ -12,14 +12,21 @@ variable "cloudwatch_log_retention" {
   description = "The number of days to keep logs"
 }
 
+locals {
+  cloudwatch_log_group = (var.cloudwatch_log_group != "") ? var.cloudwatch_log_group : "${var.cluster_id}-logs"
+}
+
 resource "aws_cloudwatch_log_group" "log_group" {
   count             = var.cloudwatch_logs_enabled ? 1 : 0
-  name              = (var.cloudwatch_log_group != "") ? var.cloudwatch_log_group : "${var.cluster_name}-logs"
+  name              = local.cloudwatch_log_group
   retention_in_days = var.cloudwatch_log_retention
 
   tags = {
-    cluster = var.cluster_name
-    Owner   = var.owner
+    Name        = local.cloudwatch_log_group
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 

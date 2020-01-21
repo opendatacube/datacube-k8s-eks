@@ -27,6 +27,8 @@ module "odc_eks" {
 
   # DB config
   db_name = "odctest"
+  db_engine_version = { postgres = "11.5" }
+  db_multi_az = false
 
   # System node instances
   #default_worker_instance_type = "m4.large"

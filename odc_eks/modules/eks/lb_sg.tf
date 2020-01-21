@@ -1,5 +1,5 @@
-resource "aws_security_group" "eks-lb" {
-  name        = "terraform-eks-lb"
+resource "aws_security_group" "eks_lb" {
+  name        = "${var.cluster_id}-lb-sg"
   description = "Security group for eks load balancers"
   vpc_id      = var.vpc_id
 
@@ -25,7 +25,10 @@ resource "aws_security_group" "eks-lb" {
   }
 
   tags = {
-    "Name"                                      = "${var.cluster_name}-lb"
-    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+    Name        = "${var.cluster_id}-lb-sg"
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }

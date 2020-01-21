@@ -1,9 +1,9 @@
 output "node_instance_profile" {
-  value = aws_iam_instance_profile.eks-node.id
+  value = aws_iam_instance_profile.eks_node.id
 }
 
 output "node_security_group" {
-  value = aws_security_group.eks-node.id
+  value = aws_security_group.eks_node.id
 }
 
 output "kubeconfig" {
@@ -27,7 +27,7 @@ output "cluster_ca" {
 }
 
 output "node_role_arn" {
-  value = aws_iam_role.eks-node.arn
+  value = aws_iam_role.eks_node.arn
 }
 
 output "cluster_id" {

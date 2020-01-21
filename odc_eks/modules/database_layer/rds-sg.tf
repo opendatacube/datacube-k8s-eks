@@ -5,7 +5,7 @@
 # Security groups for the RDS.
 
 resource "aws_security_group" "rds" {
-  name        = "${var.cluster}_${var.workspace}_ecs_rds_sg"
+  name        = "${var.db_label}-rds-sg"
   description = "allow traffic from the instance sg"
   vpc_id      = var.vpc_id
 
@@ -17,11 +17,11 @@ resource "aws_security_group" "rds" {
   }
 
   tags = {
-    Name       = "ecs-rds-sg"
-    Cluster    = var.cluster
-    Workspace  = var.workspace
-    Owner      = var.owner
-    Created_by = "terraform"
+    Name        = "${var.db_label}-rds-sg"
+    Cluster     = var.cluster_id
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
   }
 }
 

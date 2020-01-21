@@ -1,19 +1,21 @@
-variable "owner" {
+variable "namespace" {
+  description = "The name used for creation of backend resources like the terraform state bucket"
+  default = "odc-test"
 }
 
-variable "namespace" {
-  type        = string
-  description = "Namespace for your deployment"
+variable "owner" {
+  description = "The owner of the environment"
+  default = "odc-test"
 }
 
 variable "environment" {
-  type        = string
-  description = "Name of your environment e.g. dev, stage, prod"
+  description = "The name of the environment - e.g. dev, stage, prod"
+  default = "stage"
 }
 
-variable "cluster_name" {
-  type        = string
-  description = "Name of your cluster"
+variable "cluster_id" {
+  type = string
+  description = "The name of your cluster"
 }
 
 variable "role" {

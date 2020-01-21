@@ -1,4 +1,4 @@
-data "aws_ami" "eks-worker" {
+data "aws_ami" "eks_worker" {
   filter {
     name   = "name"
     values = ["amazon-eks-node-${aws_eks_cluster.eks.version}-v*"]
@@ -15,7 +15,7 @@ data "aws_ami" "eks-worker" {
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
   # return first non-empty value
-  ami_id = coalesce(var.ami_image_id, data.aws_ami.eks-worker.id)
+  ami_id = coalesce(var.ami_image_id, data.aws_ami.eks_worker.id)
 
   eks-node-userdata = <<USERDATA
 #!/bin/bash
@@ -52,12 +52,12 @@ resource "aws_launch_template" "node" {
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.eks-node.id
+    name = aws_iam_instance_profile.eks_node.id
   }
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [aws_security_group.eks-node.id]
+    security_groups = [aws_security_group.eks_node.id]
     delete_on_termination = true
   }
 
@@ -82,7 +82,7 @@ resource "aws_launch_template" "spot" {
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.eks-node.id
+    name = aws_iam_instance_profile.eks_node.id
   }
 
   instance_market_options {
@@ -91,7 +91,7 @@ resource "aws_launch_template" "spot" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [aws_security_group.eks-node.id]
+    security_groups = [aws_security_group.eks_node.id]
     delete_on_termination = true
   }
 

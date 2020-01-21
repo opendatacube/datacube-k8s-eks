@@ -1,7 +1,7 @@
 data "template_file" "cluster_autoscaler" {
   template = file("${path.module}/config/cluster_autoscaler.yaml")
   vars = {
-    cluster_name = local.cluster_name
+    cluster_name = local.cluster_id
     region = local.region
     role_name = module.odc_role_autoscaler.role_name
   }

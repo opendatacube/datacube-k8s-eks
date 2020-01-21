@@ -1,4 +1,4 @@
-variable "cluster_name" {
+variable "cluster_id" {
   default = "terraform-eks"
   type    = string
 }
@@ -40,9 +40,6 @@ variable "user_additional_policy_arn" {
 }
 
 # Worker variables
-variable "owner" {
-}
-
 variable "ami_image_id" {
   default     = ""
   description = "Overwrites the default ami (latest Amazon EKS)"
@@ -98,4 +95,16 @@ variable "extra_userdata" {
 echo ""
 USERDATA
 
+}
+
+#--------------------------------------------------------------
+# Tags
+#--------------------------------------------------------------
+variable "environment" {
+}
+
+variable "namespace" {
+}
+
+variable "owner" {
 }
