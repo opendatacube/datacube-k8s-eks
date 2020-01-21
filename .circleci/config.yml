@@ -8,27 +8,7 @@ jobs:
       - run:
           name: Lint Terraform for cluster
           command: |
-            export TERRAFORM_VERSION=0.12.12
-            export AWS_ACCESS_KEY_ID="anaccesskey"
-            export AWS_SECRET_ACCESS_KEY="asecretkey"
-            export AWS_DEFAULT_REGION="us-west-2"
-            apk update
-            apk add curl jq python bash ca-certificates git openssl unzip wget
-            mkdir tmp
-            cd tmp
-            wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-            unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/bin
-            cd ..
-            tflint --version
-            cd examples/stage/odc_eks/
-            terraform init
-            cp ../../../.circleci/sample/main.tf.sample main.tf
-            tflint --module main.tf
-            cd ../../../
-            cd examples/stage/odc_k8s
-            terraform init
-            cp ../../../.circleci/sample/main.tf.sample main.tf
-            tflint --module main.tf
+            ./.circleci/run_tflint.sh
           environment:
             WORKSPACE: datakube-dev
 workflows:
