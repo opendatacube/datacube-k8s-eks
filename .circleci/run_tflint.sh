@@ -1,5 +1,5 @@
 #!/bin/bash
-export TERRAFORM_VERSION=0.12.12
+export TERRAFORM_VERSION=0.12.18
 export AWS_ACCESS_KEY_ID="anaccesskey"
 export AWS_SECRET_ACCESS_KEY="asecretkey"
 export AWS_DEFAULT_REGION="us-west-2"
