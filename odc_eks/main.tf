@@ -24,10 +24,14 @@ module "vpc" {
 
   private_subnet_tags = {
     "SubnetType"  = "Private"
+    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
+    "kubernetes.io/role/internal-elb"                  = "1"
   }
 
   public_subnet_tags = {
     "SubnetType"  = "Utility"
+    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
+    "kubernetes.io/role/elb"                           = "1"
   }
 
   database_subnet_tags = {
@@ -46,7 +50,6 @@ module "vpc" {
     Namespace   = var.namespace
     Environment = var.environment
     cluster    = module.odc_eks_label.id
-    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
   }
 }
 
