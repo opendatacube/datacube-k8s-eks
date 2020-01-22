@@ -46,7 +46,7 @@ USERDATA
 }
 
 resource "aws_launch_template" "node" {
-  count = var.nodes_enabled ? 1 : 0
+  count = var.nodes_enabled ? length(var.nodes_subnet_group) : 0
   name_prefix = var.cluster_name
   image_id = local.ami_id
   user_data = base64encode(local.eks-node-userdata)
@@ -57,6 +57,7 @@ resource "aws_launch_template" "node" {
   }
 
   network_interfaces {
+    subnet_id = var.nodes_subnet_group[count.index]
     associate_public_ip_address = false
     security_groups = [var.node_security_group]
     delete_on_termination = true
@@ -76,7 +77,7 @@ resource "aws_launch_template" "node" {
 }
 
 resource "aws_launch_template" "spot" {
-  count = var.spot_nodes_enabled ? 1 : 0
+  count = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
   name_prefix = var.cluster_name
   image_id = local.ami_id
   user_data = base64encode(local.eks-spot-userdata)
@@ -91,6 +92,7 @@ resource "aws_launch_template" "spot" {
   }
 
   network_interfaces {
+    subnet_id = var.nodes_subnet_group[count.index]
     associate_public_ip_address = false
     security_groups = [var.node_security_group]
     delete_on_termination = true

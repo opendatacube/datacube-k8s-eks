@@ -42,23 +42,43 @@ variable "nodes_enabled" {
 }
 
 variable "min_nodes" {
-  default = 1
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "desired_nodes" {
-  default = 1
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "max_nodes" {
-  default = 2
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "min_spot_nodes" {
-  default = 0
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "max_spot_nodes" {
-  default = 2
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "volume_size" {

@@ -35,16 +35,16 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [default_worker_instance_type](#default_worker_instance_type)                               | Nodes                | No  | "" |
 | [group_enabled](#group_enabled)                                                             | Nodes                | No  | false |
 | [spot_nodes_enabled](#spot_nodes_enabled)                                                   | Nodes                | No  | false |
-| [min_nodes](#min_nodes)                                                                     | Nodes                | No  | 0 |
-| [desired_nodes](#desired_nodes)                                                             | Nodes                | No  | 0 |
-| [max_nodes](#max_nodes)                                                                     | Nodes                | No  | 0 |
-| [min_spot_nodes](#min_spot_nodes)                                                           | Nodes                | No  | 0 |
-| [max_spot_nodes](#max_spot_nodes)                                                           | Nodes                | No  | 0 |
-| [min_nodes_per_az](#min_nodes_per_az)                                                       | Nodes                | No  | 1 |
-| [desired_nodes_per_az](#desired_nodes_per_az)                                               | Nodes                | No  | 1 |
-| [max_nodes_per_az](#max_nodes_per_az)                                                       | Nodes                | No  | 2 |
+| [min_nodes](#min_nodes)                                                                     | Nodes                | No  | { ap-southeast-2a: 0, ap-southeast-2b: 0, ap-southeast-2c: 0 } |
+| [desired_nodes](#desired_nodes)                                                             | Nodes                | No  | { ap-southeast-2a: 0, ap-southeast-2b: 0, ap-southeast-2c: 0 } |
+| [max_nodes](#max_nodes)                                                                     | Nodes                | No  | { ap-southeast-2a: 0, ap-southeast-2b: 0, ap-southeast-2c: 0 } |
+| [min_spot_nodes](#min_spot_nodes)                                                           | Nodes                | No  | { ap-southeast-2a: 0, ap-southeast-2b: 0, ap-southeast-2c: 0 } |
+| [max_spot_nodes](#max_spot_nodes)                                                           | Nodes                | No  | { ap-southeast-2a: 0, ap-southeast-2b: 0, ap-southeast-2c: 0 } |
+| [min_nodes_per_az](#min_nodes_per_az)                                                       | Nodes                | No  | 0 |
+| [desired_nodes_per_az](#desired_nodes_per_az)                                               | Nodes                | No  | 0 |
+| [max_nodes_per_az](#max_nodes_per_az)                                                       | Nodes                | No  | 0 |
 | [min_spot_nodes_per_az](#min_spot_nodes_per_az)                                             | Nodes                | No  | 0 |
-| [max_spot_nodes_per_az](#max_spot_nodes_per_az)                                             | Nodes                | No  | 2 |
+| [max_spot_nodes_per_az](#max_spot_nodes_per_az)                                             | Nodes                | No  | 0 |
 | [max_spot_price](#max_spot_price)                                                           | Nodes                | No  | "0.40" |
 | [volume_size](#volume_size)                                                                 | Nodes                | No  | 20 |
 | [spot_volume_size](#spot_volume_size)                                                       | Nodes                | No  | 20 |

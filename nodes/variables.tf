@@ -19,37 +19,58 @@ variable "group_enabled" {
 variable "spot_nodes_enabled" {
   default = false
 }
+
 variable "min_nodes" {
-  default = 0
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "desired_nodes" {
-  default = 0
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "max_nodes" {
-  default = 0
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "min_spot_nodes" {
-  default = 0
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 variable "max_spot_nodes" {
-  default = 0
+  default = {
+    ap-southeast-2a = 0
+    ap-southeast-2b = 0
+    ap-southeast-2c = 0
+  }
 }
 
 # nodes per az variables still work but are deprecated
 variable "min_nodes_per_az" {
-  default = 1
+  default = 0
 }
 
 variable "desired_nodes_per_az" {
-  default = 1
+  default = 0
 }
 
 variable "max_nodes_per_az" {
-  default = 2
+  default = 0
 }
 
 variable "min_spot_nodes_per_az" {
@@ -57,7 +78,7 @@ variable "min_spot_nodes_per_az" {
 }
 
 variable "max_spot_nodes_per_az" {
-  default = 2
+  default = 0
 }
 
 variable "max_spot_price" {

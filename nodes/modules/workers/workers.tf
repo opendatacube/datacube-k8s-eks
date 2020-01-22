@@ -1,10 +1,15 @@
+data "aws_subnet" "nodes_subnet" {
+  count = length(var.nodes_subnet_group)
+  id    = var.nodes_subnet_group[count.index]
+}
+
 resource "aws_autoscaling_group" "nodes" {
-  count            = var.nodes_enabled ? 1 : 0
-  desired_capacity = var.desired_nodes
-  max_size         = var.max_nodes
-  min_size         = var.min_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.node[0].id}-nodes-0"
-  vpc_zone_identifier = var.nodes_subnet_group
+  count            = var.nodes_enabled ? length(var.nodes_subnet_group) : 0
+  desired_capacity = lookup(var.desired_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
+  max_size         = lookup(var.max_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
+  min_size         = lookup(var.min_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
+  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-nodes-${count.index}"
+  vpc_zone_identifier = [data.aws_subnet.nodes_subnet[count.index].id]
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -13,14 +18,14 @@ resource "aws_autoscaling_group" "nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.node[0].id
-    version = aws_launch_template.node[0].latest_version
+    id      = element(aws_launch_template.node.*.id, count.index)
+    version = element(aws_launch_template.node.*.latest_version, count.index)
   }
 
   tags = [
     {
       key                 = "Name"
-      value               = "${var.cluster_name}-node"
+      value               = "${var.cluster_name}-node-${count.index}"
       propagate_at_launch = true
     },
     {
@@ -50,19 +55,16 @@ resource "aws_autoscaling_group" "nodes" {
     },
   ]
 
-  # Don't break cluster autoscaler
-  suspended_processes = ["AZRebalance"]
-
   depends_on = [aws_launch_template.node]
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
-  count            = var.spot_nodes_enabled ? 1 : 0
-  desired_capacity = var.desired_nodes
-  max_size         = var.max_spot_nodes
-  min_size         = var.min_spot_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot-0"
-  vpc_zone_identifier = var.nodes_subnet_group
+  count            = var.spot_nodes_enabled ? length(var.nodes_subnet_group) : 0
+  desired_capacity = lookup(var.min_spot_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
+  max_size         = lookup(var.max_spot_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
+  min_size         = lookup(var.min_spot_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
+  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
+  vpc_zone_identifier = [data.aws_subnet.nodes_subnet[count.index].id]
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -71,14 +73,14 @@ resource "aws_autoscaling_group" "spot_nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.spot[0].id
-    version = aws_launch_template.spot[0].latest_version
+    id      = element(aws_launch_template.spot.*.id, count.index)
+    version = element(aws_launch_template.spot.*.latest_version, count.index)
   }
 
   tags = [
     {
       key                 = "Name"
-      value               = "${var.cluster_name}-spot"
+      value               = "${var.cluster_name}-spot-${count.index}"
       propagate_at_launch = true
     },
     {
@@ -107,9 +109,6 @@ resource "aws_autoscaling_group" "spot_nodes" {
       propagate_at_launch = true
     },
   ]
-
-  # Don't break cluster autoscaler
-  suspended_processes = ["AZRebalance"]
   
   depends_on = [aws_launch_template.spot]
 }
