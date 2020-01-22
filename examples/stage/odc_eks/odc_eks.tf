@@ -14,7 +14,7 @@ module "odc_eks" {
   owner           = local.owner
   namespace       = local.namespace
   environment     = local.environment
-  cluster_version = 1.13
+  cluster_version = 1.14
 
   admin_access_CIDRs = {
     "Everywhere" = "0.0.0.0/0"
