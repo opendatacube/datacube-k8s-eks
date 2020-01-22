@@ -2,12 +2,13 @@ version: 2
 jobs:
   test:
     docker:
-      - image: geoscienceaustralia/dea-kops
+      - image: wata727/tflint
     steps:
       - checkout
       - run:
           name: Lint Terraform for cluster
-          command: tflint --var-file $(pwd)/examples/quickstart/workspaces/$WORKSPACE/terraform.tfvars
+          command: |
+            /bin/sh ./.circleci/run_tflint.sh
           environment:
             WORKSPACE: datakube-dev
 workflows:
