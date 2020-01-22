@@ -10,12 +10,6 @@ data "helm_repository" "incubator" {
   depends_on = [null_resource.repo_add_incubator]
 }
 
-data "helm_repository" "coreos" {
-  name       = "coreos"
-  url        = "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
-  depends_on = [null_resource.repo_add_coreos]
-}
-
 data "helm_repository" "fluxcd" {
   name       = "fluxcd"
   url        = "https://fluxcd.github.io/flux"
@@ -38,15 +32,6 @@ resource "null_resource" "helm_init_client" {
 resource "null_resource" "repo_add_incubator" {
   provisioner "local-exec" {
     command = "helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/"
-  }
-  triggers = {
-    id = null_resource.helm_init_client.id
-  }
-}
-
-resource "null_resource" "repo_add_coreos" {
-  provisioner "local-exec" {
-    command = "helm repo add coreos https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"
   }
   triggers = {
     id = null_resource.helm_init_client.id
