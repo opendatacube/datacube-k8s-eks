@@ -3,7 +3,7 @@ data "template_file" "jhub" {
   vars = {
     region       = local.region
     cluster_name = local.cluster_id
-    role_name    = "${local.cluster_id}-wms"
+    role_name    = module.odc_role_jhub.role_name
     certificate_arn = local.certificate_arn
     node_type   = local.node_type  # use for node affinity
     domain_name = local.domain_name

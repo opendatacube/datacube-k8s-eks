@@ -8,7 +8,7 @@ resource "aws_autoscaling_group" "nodes" {
   desired_capacity = lookup(local.desired_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
   max_size         = lookup(local.max_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
   min_size         = lookup(local.min_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
-  name             = "${local.node_group_name}-${aws_launch_template.node[0].id}-nodes-${count.index}"
+  name             = "${local.node_group_name}-${aws_launch_template.user_node[0].id}-nodes-${count.index}"
   vpc_zone_identifier = [data.aws_subnet.nodes_subnet[count.index].id]
 
   # Don't reset to default size every time terraform is applied
@@ -18,14 +18,14 @@ resource "aws_autoscaling_group" "nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.node[0].id
-    version = aws_launch_template.node[0].latest_version
+    id      = aws_launch_template.user_node[0].id
+    version = aws_launch_template.user_node[0].latest_version
   }
 
   tags = [
     {
       key                 = "Name"
-      value               = "${local.node_group_name}-${aws_launch_template.node[0].id}-nodes-${count.index}"
+      value               = "${local.node_group_name}-${aws_launch_template.user_node[0].id}-nodes-${count.index}"
       propagate_at_launch = true
     },
     {
@@ -65,7 +65,7 @@ resource "aws_autoscaling_group" "nodes" {
     },
   ]
 
-  depends_on = [aws_launch_template.node]
+  depends_on = [aws_launch_template.user_node]
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
@@ -73,7 +73,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   desired_capacity = lookup(local.min_spot_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
   max_size         = lookup(local.max_spot_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
   min_size         = lookup(local.min_spot_nodes, data.aws_subnet.nodes_subnet[count.index].availability_zone)
-  name             = "${local.node_group_name}-${aws_launch_template.spot[0].id}-spot-${count.index}"
+  name             = "${local.node_group_name}-${aws_launch_template.user_spot_node[0].id}-spot-${count.index}"
   vpc_zone_identifier = [data.aws_subnet.nodes_subnet[count.index].id]
 
   # Don't reset to default size every time terraform is applied
@@ -83,14 +83,14 @@ resource "aws_autoscaling_group" "spot_nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.spot[0].id
-    version = aws_launch_template.spot[0].latest_version
+    id      = aws_launch_template.user_spot_node[0].id
+    version = aws_launch_template.user_spot_node[0].latest_version
   }
 
   tags = [
     {
       key                 = "Name"
-      value               = "${local.node_group_name}-${aws_launch_template.node[0].id}-spot-${count.index}"
+      value               = "${local.node_group_name}-${aws_launch_template.user_spot_node[0].id}-spot-${count.index}"
       propagate_at_launch = true
     },
     {
@@ -130,5 +130,5 @@ resource "aws_autoscaling_group" "spot_nodes" {
     },
   ]
 
-  depends_on = [aws_launch_template.spot]
+  depends_on = [aws_launch_template.user_spot_node]
 }

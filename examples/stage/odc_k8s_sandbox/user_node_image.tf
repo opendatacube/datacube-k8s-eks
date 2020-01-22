@@ -1,4 +1,4 @@
-data "aws_ami" "eks-worker" {
+data "aws_ami" "user_node" {
   filter {
     name   = "name"
     values = ["amazon-eks-node-${local.eks_cluster_version}-v*"]
@@ -15,7 +15,7 @@ data "aws_ami" "eks-worker" {
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
   # return first non-empty value
-  ami_id = coalesce(local.ami_image_id, data.aws_ami.eks-worker.id)
+  ami_id = coalesce(local.ami_image_id, data.aws_ami.user_node.id)
 
   eks-node-userdata = <<-USERDATA
     #!/bin/bash
@@ -45,7 +45,7 @@ locals {
 
 }
 
-resource "aws_launch_template" "node" {
+resource "aws_launch_template" "user_node" {
   count = local.nodes_enabled ? 1 : 0
   name_prefix = local.node_group_name
   image_id = local.ami_id
@@ -74,7 +74,7 @@ resource "aws_launch_template" "node" {
   }
 }
 
-resource "aws_launch_template" "spot" {
+resource "aws_launch_template" "user_spot_node" {
   count = local.spot_nodes_enabled ? 1 : 0
   name_prefix = local.node_group_name
   image_id = local.ami_id
