@@ -23,15 +23,15 @@ module "vpc" {
   database_subnets = var.database_subnet_cidrs
 
   private_subnet_tags = {
-    "SubnetType"                                       = "Private"
-    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
-    "kubernetes.io/role/internal-elb"                  = "1"
+    "SubnetType"  = "Private"
   }
 
   public_subnet_tags = {
-    "SubnetType"                                       = "Utility"
-    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
-    "kubernetes.io/role/elb"                           = "1"
+    "SubnetType"  = "Utility"
+  }
+
+  database_subnet_tags = {
+    "SubnetType"  = "Database"
   }
 
   enable_dns_hostnames = true
@@ -42,11 +42,11 @@ module "vpc" {
   enable_s3_endpoint           = true
 
   tags = {
-    workspace  = terraform.workspace
-    owner      = var.owner
+    Owner       = var.owner
+    Namespace   = var.namespace
+    Environment = var.environment
     cluster    = module.odc_eks_label.id
     "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
-    Created_by = "terraform"
   }
 }
 
