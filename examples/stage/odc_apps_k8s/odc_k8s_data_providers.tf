@@ -22,7 +22,7 @@ locals {
   namespace = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
   domain_name = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
-  certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
+  certificate_arn = tolist(data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn)[0]
   node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
 }
 
