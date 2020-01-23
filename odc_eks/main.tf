@@ -50,6 +50,7 @@ module "vpc" {
     Namespace   = var.namespace
     Environment = var.environment
     cluster    = module.odc_eks_label.id
+    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
   }
 }
 
