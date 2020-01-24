@@ -41,9 +41,8 @@ locals {
   domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   certificate_arn = tolist(data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn)[0]
 
-  jhub_userpool           = module.jhub_cognito_auth.userpool
   jhub_userpool_id        = module.jhub_cognito_auth.userpool_id
-  jhub_userpool_doamin    = module.jhub_cognito_auth.userpool_domain
+  jhub_userpool_domain    = module.jhub_cognito_auth.userpool_domain
   jhub_auth_client_id     = module.jhub_cognito_auth.client_id
   jhub_auth_client_secret = module.jhub_cognito_auth.client_secret
 

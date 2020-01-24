@@ -12,7 +12,7 @@ data "template_file" "jhub" {
     db_password = local.db_password
     db_name     = local.db_name
     jhub_userpool_id        = local.jhub_userpool_id
-    jhub_userpool_doamin    = local.jhub_userpool_doamin
+    jhub_userpool_domain    = local.jhub_userpool_domain
     jhub_auth_client_id     = local.jhub_auth_client_id
     jhub_auth_client_secret = local.jhub_auth_client_secret
   }
