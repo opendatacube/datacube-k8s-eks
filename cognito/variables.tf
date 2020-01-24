@@ -80,3 +80,16 @@ variable "admin_create_user_config_sms_message" {
   type        = string
   default     = "Your username is {username} and temporary password is `{####}`"
 }
+
+variable "email_verification_message" {
+  description = "A string representing the email verification message"
+  type        = string
+  default     = null
+}
+
+variable "email_verification_subject" {
+  description = "A string representing the email verification subject"
+  type        = string
+  default     = null
+}
+
