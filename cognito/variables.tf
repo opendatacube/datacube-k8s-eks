@@ -59,7 +59,7 @@ variable "admin_create_user_config_allow_admin_create_user_only" {
 variable "admin_create_user_config_unused_account_validity_days" {
   description = "The user account expiration limit, in days, after which the account is no longer usable"
   type        = number
-  default     = 7
+  default     = 0
 }
 
 variable "admin_create_user_config_email_message" {
