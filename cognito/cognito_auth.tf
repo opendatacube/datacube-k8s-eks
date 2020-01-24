@@ -54,15 +54,15 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
-  lifecycle {
-    # Hack to workaround issue with AWS changing approach and TF AWS Provider not having been updated yet.
-    # https://github.com/terraform-providers/terraform-provider-aws/issues/8827#issuecomment-567041332
-    ignore_changes = [
-      "admin_create_user_config[0].unused_account_validity_days"
-    ]
-    # Enable this if you want to prevent destroy
-    #   prevent_destroy = true
-  }
+  # lifecycle {
+  #   # Hack to workaround issue with AWS changing approach and TF AWS Provider not having been updated yet.
+  #   # https://github.com/terraform-providers/terraform-provider-aws/issues/8827#issuecomment-567041332
+  #   ignore_changes = [
+  #     "admin_create_user_config[0].unused_account_validity_days"
+  #   ]
+  #   # Enable this if you want to prevent destroy
+  #   #   prevent_destroy = true
+  # }
 
   tags = {
     Name        = var.user_pool_name
