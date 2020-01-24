@@ -65,5 +65,5 @@ data "aws_caller_identity" "current" {
 }
 
 output "certificate_arn" {
-  value = (var.create_certificate)? aws_acm_certificate.wildcard_cert[0].arn : null
+  value = (var.create_certificate)? aws_acm_certificate.wildcard_cert.*.arn : null
 }
