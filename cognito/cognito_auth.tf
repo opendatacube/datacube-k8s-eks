@@ -36,10 +36,33 @@ resource "aws_cognito_user_pool" "pool" {
     require_symbols   = false
   }
 
-  # Enable this if you want to prevent destroy
-  # lifecycle {
-  #   prevent_destroy = true
-  # }
+    # admin_create_user_config
+  dynamic "admin_create_user_config" {
+    for_each = local.admin_create_user_config
+    content {
+      allow_admin_create_user_only = lookup(admin_create_user_config.value, "allow_admin_create_user_only")
+      unused_account_validity_days = lookup(admin_create_user_config.value, "unused_account_validity_days")
+
+      dynamic "invite_message_template" {
+        for_each = lookup(admin_create_user_config.value, "email_message", null) == null && lookup(admin_create_user_config.value, "email_subject", null) == null && lookup(admin_create_user_config.value, "sms_message", null) == null ? [] : [1]
+        content {
+          email_message = lookup(admin_create_user_config.value, "email_message")
+          email_subject = lookup(admin_create_user_config.value, "email_subject")
+          sms_message   = lookup(admin_create_user_config.value, "sms_message")
+        }
+      }
+    }
+  }
+
+  lifecycle {
+    # Hack to workaround issue with AWS changing approach and TF AWS Provider not having been updated yet.
+    # https://github.com/terraform-providers/terraform-provider-aws/issues/8827#issuecomment-567041332
+    ignore_changes = [
+      "admin_create_user_config[0].unused_account_validity_days"
+    ]
+    # Enable this if you want to prevent destroy
+    #   prevent_destroy = true
+  }
 
   tags = {
     Name        = var.user_pool_name
@@ -48,6 +71,22 @@ resource "aws_cognito_user_pool" "pool" {
     Namespace   = var.namespace
     Environment = var.environment
   }
+}
+
+locals {
+
+  # admin_create_user_config
+  # If no admin_create_user_config list is provided, build a admin_create_user_config using the default values
+  admin_create_user_config_default = {
+    allow_admin_create_user_only = lookup(var.admin_create_user_config, "allow_admin_create_user_only", null) == null ? var.admin_create_user_config_allow_admin_create_user_only : lookup(var.admin_create_user_config, "allow_admin_create_user_only")
+    unused_account_validity_days = lookup(var.admin_create_user_config, "unused_account_validity_days", null) == null ? var.admin_create_user_config_unused_account_validity_days : lookup(var.admin_create_user_config, "unused_account_validity_days")
+    email_message                = lookup(var.admin_create_user_config, "email_message", null) == null ? (var.email_verification_message == "" || var.email_verification_message == null ? var.admin_create_user_config_email_message : var.email_verification_message) : lookup(var.admin_create_user_config, "email_message")
+    email_subject                = lookup(var.admin_create_user_config, "email_subject", null) == null ? (var.email_verification_subject == "" || var.email_verification_subject == null ? var.admin_create_user_config_email_subject : var.email_verification_subject) : lookup(var.admin_create_user_config, "email_subject")
+    sms_message                  = lookup(var.admin_create_user_config, "sms_message", null) == null ? var.admin_create_user_config_sms_message : lookup(var.admin_create_user_config, "sms_message")
+
+  }
+
+  admin_create_user_config = [local.admin_create_user_config_default]
 }
 
 resource "aws_cognito_user_pool_client" "client" {
