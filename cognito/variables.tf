@@ -65,20 +65,20 @@ variable "admin_create_user_config_unused_account_validity_days" {
 variable "admin_create_user_config_email_message" {
   description = "The message template for email messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively"
   type        = string
-  default     = "{username}, your verification code is `{####}`"
+  default     = null
 }
 
 
 variable "admin_create_user_config_email_subject" {
   description = "The subject line for email messages"
   type        = string
-  default     = "Your verification code"
+  default     = null
 }
 
 variable "admin_create_user_config_sms_message" {
   description = "- The message template for SMS messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively"
   type        = string
-  default     = "Your username is {username} and temporary password is `{####}`"
+  default     = null
 }
 
 variable "email_verification_message" {
