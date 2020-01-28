@@ -14,9 +14,9 @@ hub:
     JUPYTERHUB_USERPOOL_ID: ${jhub_userpool_id}
     AWS_DEFAULT_REGION: ${region}
     OAUTH_CALLBACK_URL: https://app.${domain_name}/oauth_callback
-    OAUTH2_AUTHORIZE_URL: https://${jhub_userpool_doamin}.auth.${region}.amazoncognito.com/oauth2/authorize
-    OAUTH2_TOKEN_URL: https://${jhub_userpool_doamin}.auth.${region}.amazoncognito.com/oauth2/token
-    OAUTH2_USERDATA_URL: https://${jhub_userpool_doamin}.auth.${region}.amazoncognito.com/oauth2/userInfo
+    OAUTH2_AUTHORIZE_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/authorize
+    OAUTH2_TOKEN_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
+    OAUTH2_USERDATA_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/userInfo
   cookieSecret: 65732236ed9aca1180053b99f1d43382eba09bd7bc5c401804959127a80f774c # Replace
 scheduling:
   userPods:
