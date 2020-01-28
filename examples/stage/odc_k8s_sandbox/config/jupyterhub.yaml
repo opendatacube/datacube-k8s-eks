@@ -18,16 +18,6 @@ hub:
     OAUTH2_TOKEN_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
     OAUTH2_USERDATA_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/userInfo
   cookieSecret: 65732236ed9aca1180053b99f1d43382eba09bd7bc5c401804959127a80f774c # Replace
-scheduling:
-  userPods:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-            - key: nodetype
-              operator: In
-              values:
-                - ${node_type}
 proxy:
   secretToken: 1ad45878c40c6f4921fff6d234acaac806f3370c61eb7dcda1dded36c4560f4f # Replace
 ingress:

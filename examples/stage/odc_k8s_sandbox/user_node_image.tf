@@ -17,49 +17,31 @@ locals {
   # return first non-empty value
   ami_id = coalesce(local.ami_image_id, data.aws_ami.user_node.id)
 
-  eks-node-userdata = <<-USERDATA
-    #!/bin/bash
-    set -o xtrace
-    # Get instance and ami id from the aws ec2 metadate endpoint
-    id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
-    ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-    /etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_id}' \
-    --kubelet-extra-args \
-      "--node-labels=cluster=${local.cluster_id},nodegroup=${local.node_group_name},nodetype=${local.node_type},instance-id=$id,ami-id=$ami \
-       --cloud-provider=aws"
-    ${local.extra_userdata}
-  USERDATA
-
-  eks-spot-userdata = <<-USERDATA
-    #!/bin/bash
-    set -o xtrace
-    # Get instance and ami id from the aws ec2 metadate endpoint
-    id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
-    ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-    /etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_id}' \
-    --kubelet-extra-args \
-      "--node-labels=cluster=${local.cluster_id},nodegroup=${local.node_group_name},nodetype=${local.spot_node_type},instance-id=$id,ami-id=$ami \
-       --cloud-provider=aws"
-    ${local.extra_userdata}
-  USERDATA
+  eks-node-userdata = <<USERDATA
+#!/bin/bash
+set -o xtrace
+# Get instance and ami id from the aws ec2 metadate endpoint
+id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
+ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
+/etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_id}' \
+--kubelet-extra-args \
+  "--node-labels=cluster=${local.cluster_id},nodegroup="users",nodetype="ondemand",instance-id=$id,ami-id=$ami,"hub.jupyter.org/node-purpose=user" \
+   --register-with-taints="hub.jupyter.org/dedicated=user:NoSchedule" \
+   --cloud-provider=aws"
+USERDATA
 
 }
 
 resource "aws_launch_template" "user_node" {
-  count = local.nodes_enabled ? 1 : 0
-  name_prefix = local.node_group_name
-  image_id = local.ami_id
-  user_data = base64encode(local.eks-node-userdata)
-  instance_type = local.default_worker_instance_type
+  name_prefix            = "user-nodes-${local.cluster_id}"
+  image_id               = local.ami_id
+  user_data              = base64encode(local.eks-node-userdata)
+  instance_type          = local.user_node_instance_type
+  vpc_security_group_ids = [local.node_security_group]
 
   iam_instance_profile {
+    # TODO this is the naming convention for this IAM profile for datacube-k8s-eks but it shoudl probably be looked up
     name = "${local.cluster_id}-node"
-  }
-
-  network_interfaces {
-    associate_public_ip_address = false
-    security_groups = [local.node_security_group]
-    delete_on_termination = true
   }
 
   lifecycle {
@@ -69,41 +51,8 @@ resource "aws_launch_template" "user_node" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
-      volume_size = local.volume_size
+      volume_size = local.user_node_volume_size
     }
   }
 }
 
-resource "aws_launch_template" "user_spot_node" {
-  count = local.spot_nodes_enabled ? 1 : 0
-  name_prefix = local.node_group_name
-  image_id = local.ami_id
-  user_data = base64encode(local.eks-spot-userdata)
-  instance_type = local.default_worker_instance_type
-
-  iam_instance_profile {
-    name = "${local.cluster_id}-node"
-  }
-
-  instance_market_options {
-    market_type = "spot"
-  }
-
-  network_interfaces {
-    associate_public_ip_address = false
-    security_groups = [local.node_security_group]
-    delete_on_termination = true
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  block_device_mappings {
-    device_name = "/dev/xvda"
-    ebs {
-      volume_size = local.spot_volume_size
-    }
-  }
-
-}

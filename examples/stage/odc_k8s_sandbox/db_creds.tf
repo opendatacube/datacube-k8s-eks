@@ -4,8 +4,8 @@ resource "kubernetes_secret" "db" {
   ]
 
   metadata {
-    name = "db"
-    namespace = "sandbox"
+    name      = "db"
+    namespace = kubernetes_namespace.sandbox.metadata[0].name
   }
 
   data = {
@@ -15,4 +15,3 @@ resource "kubernetes_secret" "db" {
 
   type = "Opaque"
 }
-
