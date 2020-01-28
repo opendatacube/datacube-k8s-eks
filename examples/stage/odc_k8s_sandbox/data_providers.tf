@@ -51,7 +51,7 @@ locals {
   node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
 
   ami_image_id            = data.terraform_remote_state.odc_eks-stage.outputs.ami_image_id
-  user_node_instance_type = "r5.4xlarge"
+  user_node_instance_type = "m4.large"
   user_node_volume_size   = 100
 
   cluster_id            = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
