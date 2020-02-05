@@ -5,16 +5,26 @@ locals {
   environment = "stage"
 }
 
+module "odc_cluster_label" {
+  source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  namespace  = local.namespace
+  stage      = local.environment
+  name      = "eks"
+  delimiter  = "-"
+}
+
 module "odc_eks" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=terraform-aws-odc"
   source = "../../../odc_eks"
 
   # Cluster config
   region          = local.region
+  cluster_id      = module.odc_cluster_label.id   # optional - if not provided it uses odc_eks_label defined in the module.
+  cluster_version = 1.14
+
   owner           = local.owner
   namespace       = local.namespace
   environment     = local.environment
-  cluster_version = 1.14
 
   admin_access_CIDRs = {
     "Everywhere" = "0.0.0.0/0"
@@ -51,30 +61,4 @@ module "odc_eks" {
   waf_enable             = false
   waf_target_scope       = "regional"
   waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
-
-  jhub_cognito_auth_enabled = false
-  app_name = "app"
-  cognito_auto_verify       = true
-  jhub_cognito_user_groups = [
-    {
-      name        = "dev-group"
-      description = "Group defines Jupyterhub dev users"
-      precedence  = 5
-    },
-    {
-      name        = "internal-group"
-      description = "Group defines Jupyterhub internal users"
-      precedence  = 6
-    },
-    {
-      name        = "trusted-group"
-      description = "Group defines Jupyterhub trusted users"
-      precedence  = 7
-    },
-    {
-      name        = "default-group"
-      description = "Group defines Jupyterhub default users"
-      precedence  = 10
-    }
-  ]
 }

@@ -18,22 +18,22 @@ resource "aws_autoscaling_group" "nodes" {
 
   tags = [
     {
-      key                 = "Name"
+      key                 = "name"
       value               = "${var.node_group_name}-${aws_launch_template.node.id}-nodes"
       propagate_at_launch = true
     },
     {
-      key                 = "Owner"
+      key                 = "owner"
       value               = var.owner
       propagate_at_launch = true
     },
     {
-      key                 = "Namespace"
+      key                 = "namespace"
       value               = var.namespace
       propagate_at_launch = true
     },
     {
-      key                 = "Environment"
+      key                 = "environment"
       value               = var.environment
       propagate_at_launch = true
     },
@@ -86,22 +86,22 @@ resource "aws_autoscaling_group" "spot_nodes" {
 
   tags = [
     {
-      key                 = "Name"
+      key                 = "name"
       value               = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
       propagate_at_launch = true
     },
     {
-      key                 = "Owner"
+      key                 = "owner"
       value               = var.owner
       propagate_at_launch = true
     },
     {
-      key                 = "Namespace"
+      key                 = "namespace"
       value               = var.namespace
       propagate_at_launch = true
     },
     {
-      key                 = "Environment"
+      key                 = "environment"
       value               = var.environment
       propagate_at_launch = true
     },

@@ -15,7 +15,7 @@ module "vpc" {
   #source  = "terraform-aws-modules/vpc/aws"
   #version = "2.2.0"
 
-  name             = "${module.odc_eks_label.id}-vpc"
+  name             = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
   cidr             = var.vpc_cidr
   azs              = data.aws_availability_zones.available.names
   public_subnets   = var.public_subnet_cidrs
@@ -45,13 +45,15 @@ module "vpc" {
   create_database_subnet_group = true
   enable_s3_endpoint           = true
 
-  tags = {
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-    cluster    = module.odc_eks_label.id
-    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
-  }
+  tags = merge(
+    {
+      name = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 # Database
@@ -59,7 +61,7 @@ module "db" {
   source = "./modules/database_layer"
 
   # Label prefix for db resources
-  db_label = module.odc_eks_label.id
+  name = (var.cluster_id != "") ? var.cluster_id : module.odc_eks_label.id
 
   # Networking
   vpc_id                = module.vpc.vpc_id
@@ -75,11 +77,12 @@ module "db" {
   #Engine version
   engine_version         = var.db_engine_version
 
-  # Tags
+  # Deafult Tags
   owner       = var.owner
-  cluster_id  = module.eks.cluster_id
   namespace   = var.namespace
   environment = var.environment
+
+  tags = var.tags
 }
 
 
@@ -88,7 +91,7 @@ module "eks" {
   source             = "./modules/eks"
   vpc_id             = module.vpc.vpc_id
   eks_subnet_ids     = module.vpc.private_subnets
-  cluster_id         = module.odc_eks_label.id
+  cluster_id         = (var.cluster_id != "") ? var.cluster_id : module.odc_eks_label.id
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
 
@@ -112,8 +115,10 @@ module "eks" {
   volume_size                  = var.volume_size
   spot_volume_size             = var.spot_volume_size
 
-  # Tags
+  # Default Tags
   owner       = var.owner
   namespace   = var.namespace
   environment = var.environment
+
+  tags = var.tags
 }

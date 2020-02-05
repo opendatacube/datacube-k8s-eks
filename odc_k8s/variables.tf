@@ -20,7 +20,7 @@ variable "environment" {
 
 variable "cluster_id" {
   type = string
-  description = "The name of your cluster"
+  description = "The name of your cluster. Also used on all the resources as identifier"
 }
 
 variable "node_roles" {

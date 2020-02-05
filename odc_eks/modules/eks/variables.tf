@@ -108,3 +108,9 @@ variable "namespace" {
 
 variable "owner" {
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  default     = {}
+}

@@ -170,12 +170,15 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
     }
   }
 
-  tags = {
-    Name        = local.log_bucket
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = local.log_bucket
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 # Create our cloudfront distribution
