@@ -62,3 +62,9 @@ variable "store_db_creds" {
   default     = false
   description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  default     = {}
+}
