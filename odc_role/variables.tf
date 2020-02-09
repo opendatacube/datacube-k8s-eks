@@ -15,10 +15,16 @@ variable "environment" {
 
 variable "cluster_id" {
   type = string
-  description = "The name of your cluster"
+  description = "The name of your cluster for role based cluster access - attach to assume role policy"
 }
 
 variable "role" {
   type        = map
   description = "Provision a role that can be used by pods/applications on the k8s cluster"
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  default     = {}
 }

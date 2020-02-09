@@ -21,12 +21,14 @@ resource "aws_cloudwatch_log_group" "log_group" {
   name              = local.cloudwatch_log_group
   retention_in_days = var.cloudwatch_log_retention
 
-  tags = {
-    Name        = local.cloudwatch_log_group
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = local.cloudwatch_log_group
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 

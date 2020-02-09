@@ -6,9 +6,11 @@ module "odc_role_autoscaler" {
   //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   source = "../../../odc_role"
 
+  # Default Tags
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
+
   cluster_id = local.cluster_id
 
   role = {
@@ -40,9 +42,11 @@ module "odc_role_alb_ingress" {
   //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   source = "../../../odc_role"
 
+  # Default Tags
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
+
   cluster_id = local.cluster_id
 
   role = {
@@ -183,9 +187,11 @@ module "odc_role_external_dns" {
   //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   source = "../../../odc_role"
 
+  # Default Tags
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
+
   cluster_id = local.cluster_id
 
   role = {
@@ -223,9 +229,11 @@ module "odc_role_fluentd" {
   //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   source = "../../../odc_role"
 
+  # Default Tags
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
+
   cluster_id = local.cluster_id
 
   role = {

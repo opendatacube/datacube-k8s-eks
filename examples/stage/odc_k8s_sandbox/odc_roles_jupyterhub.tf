@@ -3,9 +3,11 @@ module "odc_role_jupyterhub" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
   source = "../../../odc_role"
 
+  # Default Tags
   owner = local.owner
   namespace = local.namespace
   environment = local.environment
+
   cluster_id = local.cluster_id
 
   role = {

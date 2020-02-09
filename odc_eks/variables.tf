@@ -18,6 +18,12 @@ variable "environment" {
   default = "stage"
 }
 
+variable "cluster_id" {
+  type = string
+  description = "The name of your cluster. Also used on all the resources as identifier"
+  default = ""
+}
+
 variable "cluster_version" {
   description = "EKS Cluster version to use"
 }
@@ -176,4 +182,10 @@ variable "extra_userdata" {
 echo ""
 USERDATA
 
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  default     = {}
 }

@@ -100,12 +100,15 @@ resource "aws_s3_bucket" "waf_log_bucket" {
     }
   }
 
-  tags = {
-    Name        = var.waf_log_bucket
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = var.waf_log_bucket
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 # Policy document that will allow the Firehose to assume an IAM Role.
@@ -230,12 +233,15 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
     }
   }
 
-  tags = {
-    Name        = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 # Read more of what are those parameters mean:
