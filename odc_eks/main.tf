@@ -77,7 +77,11 @@ module "db" {
   #Engine version
   engine_version         = var.db_engine_version
 
-  # Deafult Tags
+  # Optional snapshot ID injection for migrations, only set if not null
+  # Refer to - https://www.terraform.io/docs/providers/aws/r/db_instance.html#snapshot_identifier
+  snapshot_identifier    =  var.db_migrate_snapshot
+  
+  # Default Tags
   owner       = var.owner
   namespace   = var.namespace
   environment = var.environment
