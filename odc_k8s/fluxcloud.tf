@@ -42,7 +42,7 @@ resource "kubernetes_service" "fluxcloud" {
   count = var.fluxcloud_enabled ? 1 : 0
   metadata {
     name = "fluxcloud"
-    namespace = "flux"
+    namespace = kubernetes_namespace.flux[0].metadata[0].name
   }
 
   spec {
