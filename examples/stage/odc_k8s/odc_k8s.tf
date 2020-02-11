@@ -2,10 +2,12 @@ module "odc_k8s" {
 //    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
   source = "../../../odc_k8s"
 
-  region       = local.region
+  # Default Tags
   owner        = local.owner
   namespace    = local.namespace
   environment  = local.environment
+
+  region       = local.region
   cluster_id   = local.cluster_id
 
   # Cluster Access Options

@@ -5,7 +5,7 @@
 # Security groups for the RDS.
 
 resource "aws_security_group" "rds" {
-  name        = "${var.db_label}-rds-sg"
+  name        = "${var.name}-rds-sg"
   description = "allow traffic from the instance sg"
   vpc_id      = var.vpc_id
 
@@ -16,12 +16,14 @@ resource "aws_security_group" "rds" {
     security_groups = var.access_security_groups
   }
 
-  tags = {
-    Name        = "${var.db_label}-rds-sg"
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = "${var.name}-rds-sg"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 

@@ -16,6 +16,15 @@ resource "aws_iam_role" "eks_node" {
     }
   POLICY
 
+  tags = merge(
+    {
+      name = "nodes.${var.cluster_id}"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 resource "aws_iam_policy" "eks_kube2iam" {

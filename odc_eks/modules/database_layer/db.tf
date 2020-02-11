@@ -5,20 +5,22 @@
 # Create a subnet group and rds
 
 resource "aws_db_subnet_group" "db_sg" {
-  name       = "${var.db_label}-db-sg"
+  name       = "${var.name}-db-sg"
   subnet_ids = var.database_subnet_group
 
-  tags = {
-    Name        = "${var.db_label}-db"
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = "${var.name}-db"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 resource "aws_db_instance" "db" {
-  identifier = "db-${var.db_label}"
+  identifier = "db-${var.name}"
 
   # Instance parameters
   allocated_storage      = var.storage
@@ -45,13 +47,15 @@ resource "aws_db_instance" "db" {
   storage_encrypted       = var.storage_encrypted
   snapshot_identifier     = (var.snapshot_identifier != "")? var.snapshot_identifier : null
 
-  tags = {
-    Name        = "db-${var.db_label}"
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = "db-${var.name}"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 resource "random_string" "password" {

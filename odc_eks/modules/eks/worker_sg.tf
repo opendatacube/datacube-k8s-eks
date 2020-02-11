@@ -10,13 +10,15 @@ resource "aws_security_group" "eks_node" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name        = "${var.cluster_id}-node-sg"
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      name = "${var.cluster_id}-node-sg"
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 resource "aws_security_group_rule" "eks_node_ingress_self" {

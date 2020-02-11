@@ -2,8 +2,8 @@
 # Database / variables.tf
 #==============================================================
 
-variable "db_label" {
-  description = "Label prefix use by resources"
+variable "name" {
+  description = "Name to be used on all the db resources as identifier"
   type        = string
 }
 
@@ -107,9 +107,6 @@ variable "snapshot_identifier" {
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
-variable "cluster_id" {
-}
-
 variable "environment" {
 }
 
@@ -117,5 +114,11 @@ variable "namespace" {
 }
 
 variable "owner" {
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  default     = {}
 }
 

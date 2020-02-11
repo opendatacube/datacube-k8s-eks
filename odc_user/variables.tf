@@ -18,7 +18,7 @@ variable "environment" {
 
 variable "tags" {
   type        = map(string)
-  description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`"
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
 

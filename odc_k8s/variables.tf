@@ -20,7 +20,7 @@ variable "environment" {
 
 variable "cluster_id" {
   type = string
-  description = "The name of your cluster"
+  description = "The name of your cluster. Also used on all the resources as identifier"
 }
 
 variable "node_roles" {
@@ -61,4 +61,10 @@ variable "db_admin_password" {
 variable "store_db_creds" {
   default     = false
   description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  default     = {}
 }
