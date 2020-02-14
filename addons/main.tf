@@ -15,6 +15,8 @@ data "aws_caller_identity" "current" {
 }
 
 provider "helm" {
+  # The latest helm release 1.0.0 has a breaking change that removes support for Helm 2 and tiller.
+  version = "0.10.4"
   kubernetes {
     config_context = data.aws_eks_cluster.eks.arn
   }
