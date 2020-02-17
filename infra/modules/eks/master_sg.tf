@@ -8,6 +8,16 @@ resource "aws_security_group" "eks-cluster" {
   }
 }
 
+resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
+  description              = "Allow worker nodes to communicate with control pane"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks-cluster.id
+  source_security_group_id = aws_security_group.eks-node.id
+}
+
 # Converts admin_access_CIDRs to descriptions / IP CIDRs
 resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
   count = length(var.admin_access_CIDRs)
