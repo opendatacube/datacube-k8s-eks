@@ -3,13 +3,6 @@ resource "aws_security_group" "eks-node" {
   description = "Security group for all nodes in the cluster"
   vpc_id      = var.vpc_id
 
-//  egress {
-//    from_port   = 0
-//    to_port     = 0
-//    protocol    = "-1"
-//    cidr_blocks = ["0.0.0.0/0"]
-//  }
-
   tags = {
     "Name"                                      = "${var.cluster_name}-node"
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
@@ -59,10 +52,20 @@ resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
 }
 
 # Connects workers to load balancers
-resource "aws_security_group_rule" "eks-node-ingress-lb" {
-  description              = "Allow worker pods to receive communication from the load balancers"
-  from_port                = 0
-  to_port                  = 65535
+resource "aws_security_group_rule" "eks-node-ingress-lb-http" {
+  description              = "Allow worker pods to receive communication from the load balancers over http"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks-node.id
+  source_security_group_id = aws_security_group.eks-lb.id
+  type                     = "ingress"
+}
+
+resource "aws_security_group_rule" "eks-node-ingress-lb-https" {
+  description              = "Allow worker pods to receive communication from the load balancers over https"
+  from_port                = 443
+  to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = aws_security_group.eks-node.id
   source_security_group_id = aws_security_group.eks-lb.id
