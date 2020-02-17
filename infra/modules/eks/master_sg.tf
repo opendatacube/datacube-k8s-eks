@@ -22,7 +22,7 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
 
 # Security group - outbound
 resource "aws_security_group_rule" "eks-cluster-egress-node" {
-  description              = "Allow cluster control pane to communication with worker nodes"
+  description              = "Allow cluster control pane to communicate with worker nodes"
   type                     = "egress"
   from_port                = 1025
   to_port                  = 65535
