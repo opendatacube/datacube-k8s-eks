@@ -77,6 +77,7 @@ resource "aws_security_group_rule" "eks-node-egress-lb-http" {
   to_port           = 80
   protocol          = "tcp"
   security_group_id = aws_security_group.eks-node.id
+  source_security_group_id = aws_security_group.eks-lb.id
 }
 
 # security group - hardening egress
@@ -87,6 +88,7 @@ resource "aws_security_group_rule" "eks-node-egress-lb-https" {
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.eks-node.id
+  source_security_group_id = aws_security_group.eks-lb.id
 }
 
 resource "aws_security_group_rule" "eks-node-egress-cluster" {
