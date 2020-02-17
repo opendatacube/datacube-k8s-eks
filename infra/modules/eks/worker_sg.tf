@@ -91,8 +91,8 @@ resource "aws_security_group_rule" "eks-node-egress-lb-https" {
   source_security_group_id = aws_security_group.eks-lb.id
 }
 
-resource "aws_security_group_rule" "eks-node-egress-cluster" {
-  description              = "Allow worker Kubelets and pods create communication to the cluster control plane over https"
+resource "aws_security_group_rule" "eks-node-egress-cluster-https" {
+  description              = "Allow worker Kubelets and pods to create communication to the cluster control plane over https"
   type                     = "egress"
   from_port                = 443
   to_port                  = 443
