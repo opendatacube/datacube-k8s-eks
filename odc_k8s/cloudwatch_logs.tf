@@ -23,7 +23,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 
   tags = merge(
     {
-      name = local.cloudwatch_log_group
+      Name = local.cloudwatch_log_group
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

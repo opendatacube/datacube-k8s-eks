@@ -26,7 +26,7 @@ resource "aws_security_group" "eks_lb" {
 
   tags = merge(
     {
-      name = "${var.cluster_id}-lb-sg"
+      Name = "${var.cluster_id}-lb-sg"
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

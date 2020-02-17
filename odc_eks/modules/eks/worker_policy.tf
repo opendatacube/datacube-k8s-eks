@@ -18,7 +18,7 @@ resource "aws_iam_role" "eks_node" {
 
   tags = merge(
     {
-      name = "nodes.${var.cluster_id}"
+      Name = "nodes.${var.cluster_id}"
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

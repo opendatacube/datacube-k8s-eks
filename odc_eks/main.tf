@@ -47,7 +47,7 @@ module "vpc" {
 
   tags = merge(
     {
-      name = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
+      Name = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

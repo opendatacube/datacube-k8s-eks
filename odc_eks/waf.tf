@@ -102,7 +102,7 @@ resource "aws_s3_bucket" "waf_log_bucket" {
 
   tags = merge(
     {
-      name = var.waf_log_bucket
+      Name = var.waf_log_bucket
       owner = var.owner
       namespace = var.namespace
       environment = var.environment
@@ -235,7 +235,7 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 
   tags = merge(
     {
-      name = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
+      Name = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

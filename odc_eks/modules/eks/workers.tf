@@ -18,7 +18,7 @@ resource "aws_autoscaling_group" "nodes" {
 
   tags = [
     {
-      key                 = "name"
+      key                 = "Name"
       value               = "${var.node_group_name}-${aws_launch_template.node.id}-nodes"
       propagate_at_launch = true
     },
@@ -86,7 +86,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
 
   tags = [
     {
-      key                 = "name"
+      key                 = "Name"
       value               = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
       propagate_at_launch = true
     },
