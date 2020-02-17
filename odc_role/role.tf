@@ -30,7 +30,7 @@ resource "aws_iam_role" "role" {
 
   tags = merge(
     {
-      name = var.role.name
+      Name = var.role.name
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

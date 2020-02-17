@@ -172,7 +172,7 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
 
   tags = merge(
     {
-      name = local.log_bucket
+      Name = local.log_bucket
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

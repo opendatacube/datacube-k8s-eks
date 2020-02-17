@@ -4,7 +4,7 @@ resource "aws_iam_user" "user" {
 
   tags = merge(
     {
-      name = var.user.name
+      Name = var.user.name
       owner = var.owner
       namespace = var.namespace
       environment = var.environment

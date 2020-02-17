@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "db_sg" {
 
   tags = merge(
     {
-      name = "${var.name}-db"
+      Name = "${var.name}-db"
       owner = var.owner
       namespace = var.namespace
       environment = var.environment
@@ -49,7 +49,7 @@ resource "aws_db_instance" "db" {
 
   tags = merge(
     {
-      name = "db-${var.name}"
+      Name = "db-${var.name}"
       owner = var.owner
       namespace = var.namespace
       environment = var.environment
