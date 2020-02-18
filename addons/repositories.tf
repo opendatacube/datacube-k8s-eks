@@ -46,3 +46,12 @@ resource "null_resource" "repo_add_fluxcd" {
     id = null_resource.helm_init_client.id
   }
 }
+
+resource "null_resource" "repo_add_aws_eks" {
+  provisioner "local-exec" {
+    command = "helm repo add eks https://aws.github.io/eks-charts"
+  }
+  triggers = {
+    id = null_resource.helm_init_client.id
+  }
+}
