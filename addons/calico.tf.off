@@ -1,6 +1,6 @@
 # Install calico using helm release: https://github.com/aws/eks-charts/tree/master/stable/aws-vpc-cni
-resource "helm_release" "aws_vpc_cni" {
-  name       = "aws-vpc-cni"
+resource "helm_release" "" {
+  name       = "calico-node"
   repository = "eks"
   chart      = "aws-vpc-cni"
   namespace  = "kube-system"
