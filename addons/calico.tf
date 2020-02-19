@@ -20,7 +20,7 @@ variable "calico_enabled" {
 //}
 
 resource "null_resource" "install_calico" {
-//  count      = var.calico_enabled ? 1 : 0
+  count      = var.calico_enabled ? 1 : 0
   provisioner "local-exec" {
     command = "kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.6/calico.yaml"
   }
