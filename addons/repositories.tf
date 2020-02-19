@@ -16,6 +16,12 @@ data "helm_repository" "fluxcd" {
   depends_on = [null_resource.repo_add_fluxcd]
 }
 
+data "helm_repository" "eks" {
+  name       = "eks"
+  url        = "https://aws.github.io/eks-charts"
+  depends_on = [null_resource.repo_add_eks]
+}
+
 # Initialize and destroy helm / tiller
 resource "null_resource" "helm_init_client" {
   provisioner "local-exec" {
@@ -41,6 +47,15 @@ resource "null_resource" "repo_add_incubator" {
 resource "null_resource" "repo_add_fluxcd" {
   provisioner "local-exec" {
     command = "helm repo add fluxcd https://fluxcd.github.io/flux"
+  }
+  triggers = {
+    id = null_resource.helm_init_client.id
+  }
+}
+
+resource "null_resource" "repo_add_eks" {
+  provisioner "local-exec" {
+    command = "helm repo add eks https://aws.github.io/eks-charts"
   }
   triggers = {
     id = null_resource.helm_init_client.id

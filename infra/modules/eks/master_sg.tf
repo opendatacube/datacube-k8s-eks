@@ -3,16 +3,19 @@ resource "aws_security_group" "eks-cluster" {
   description = "Cluster communication with worker nodes"
   vpc_id      = var.vpc_id
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags = {
     Name = "terraform-eks-eks"
   }
+}
+
+resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
+  description              = "Allow worker nodes to communicate with control pane"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks-cluster.id
+  source_security_group_id = aws_security_group.eks-node.id
 }
 
 # Converts admin_access_CIDRs to descriptions / IP CIDRs
@@ -27,3 +30,13 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
   type              = "ingress"
 }
 
+# Security group - outbound
+resource "aws_security_group_rule" "eks-cluster-egress-node" {
+  description              = "Allow cluster control pane to communicate with worker nodes"
+  type                     = "egress"
+  from_port                = 1025
+  to_port                  = 65535
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks-cluster.id
+  source_security_group_id = aws_security_group.eks-node.id
+}

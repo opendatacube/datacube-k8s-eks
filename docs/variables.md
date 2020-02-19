@@ -132,6 +132,7 @@ This page gives an overview of all possible variables that can be put in a `terr
 | [waf_log_bucket](#waf_log_bucket)                                                           | Addons               | No  | "" |
 | [waf_firehose_buffer_size](#waf_firehose_buffer_size)                                       | Addons               | No  | "128" |
 | [waf_firehose_buffer_interval](#waf_firehose_buffer_interval)                               | Addons               | No  | "900" |
+| [calico_enabled](#calico_enabled)                                                           | Addons               | No  | false |
 
 # Infra
 
@@ -996,3 +997,13 @@ Buffer incoming data to the specified size, in MBs, before delivering it to the 
 ## waf_firehose_buffer_interval
 
 Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900.
+
+## calico_enabled
+
+Install calico to support pod networking. 
+
+This is require to setup network policies for the application pods running in your EKS cluster. Network policies are similar to AWS security groups in that you can create network ingress and egress rules.
+
+Can be used for jupyterhub network security enforcement defined here: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/doc/source/administrator/security.md
+
+Refer this doc for Kubernetes network policy examples: https://kubernetes.io/docs/concepts/services-networking/network-policies/
