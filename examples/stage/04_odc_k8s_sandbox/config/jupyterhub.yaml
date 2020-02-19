@@ -13,7 +13,7 @@ hub:
   extraEnv:
     JUPYTERHUB_USERPOOL_ID: ${jhub_userpool_id}
     AWS_DEFAULT_REGION: ${region}
-    OAUTH_CALLBACK_URL: https://app.${domain_name}/oauth_callback
+    OAUTH_CALLBACK_URL: https://${sandbox_host_name}/oauth_callback
     OAUTH2_AUTHORIZE_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/authorize
     OAUTH2_TOKEN_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
     OAUTH2_USERDATA_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/userInfo
@@ -32,7 +32,7 @@ ingress:
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}
   hosts:
-    - app.${domain_name}
+    - ${sandbox_host_name}
   pathSuffix: "*"
 auth:
   state:
