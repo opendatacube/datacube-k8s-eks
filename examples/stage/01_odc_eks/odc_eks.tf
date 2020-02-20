@@ -3,6 +3,10 @@ locals {
   owner       = "odc-test"
   namespace   = "odc-test"
   environment = "stage"
+
+  domain_name = "dev.dea.ga.gov.au"
+  # ACM - used by ALB
+  create_certificate  = false
 }
 
 module "odc_cluster_label" {
@@ -61,4 +65,10 @@ module "odc_eks" {
   waf_enable             = false
   waf_target_scope       = "regional"
   waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
+}
+
+data "aws_acm_certificate" "domain_cert" {
+  count = local.create_certificate ? 0 : 1
+  domain = "*.${local.domain_name}"
+  most_recent = true
 }

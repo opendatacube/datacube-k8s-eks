@@ -12,20 +12,18 @@ data "aws_eks_cluster" "cluster" {
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id #data.aws_eks_cluster.cluster.id
+  name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 }
 
 locals {
   region = data.terraform_remote_state.odc_eks-stage.outputs.region
-  owner        = data.terraform_remote_state.odc_eks-stage.outputs.owner
+  owner  = data.terraform_remote_state.odc_eks-stage.outputs.owner
   cluster_id = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   namespace = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
   domain_name = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
-  certificate_arn = tolist(data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn)[0]
-  db_hostname       = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
-  db_admin_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username
-  db_admin_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_password
+  certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
+  node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
 }
 
 data "aws_caller_identity" "current" {

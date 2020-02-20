@@ -29,8 +29,18 @@ resource "aws_autoscaling_group" "nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "Owner"
+      key                 = "owner"
       value               = local.owner
+      propagate_at_launch = true
+    },
+    {
+      key                 = "namespace"
+      value               = local.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "environment"
+      value               = local.environment
       propagate_at_launch = true
     },
     {

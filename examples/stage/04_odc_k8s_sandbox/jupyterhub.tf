@@ -5,7 +5,7 @@ data "template_file" "jupyterhub" {
     cluster_name    = local.cluster_id
     role_name       = module.odc_role_jupyterhub.role_name
     certificate_arn = local.certificate_arn
-    domain_name     = local.domain_name
+    sandbox_host_name = local.sandbox_host_name
     db_hostname     = local.db_hostname
     db_username     = local.db_username
     db_password     = local.db_password

@@ -53,5 +53,5 @@ output "ami_image_id" {
 }
 
 output "certificate_arn" {
-  value = module.odc_eks.certificate_arn
+  value = (local.create_certificate) ? module.odc_eks.certificate_arn[0] : data.aws_acm_certificate.domain_cert[0].arn
 }

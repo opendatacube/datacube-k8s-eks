@@ -5,7 +5,7 @@ module "jhub_cognito_auth" {
   auto_verify = true
   user_pool_name       = "${local.cluster_id}-jhub-userpool"
   user_pool_domain     = "${local.cluster_id}-jhub-auth"
-  callback_url         = "https://app.${local.domain_name}/oauth_callback"
+  callback_url         = "https://${local.sandbox_host_name}/oauth_callback"
   user_groups = [
     {
       name        = "dev-group"
