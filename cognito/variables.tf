@@ -76,7 +76,7 @@ variable "admin_create_user_config_email_subject" {
 }
 
 variable "admin_create_user_config_sms_message" {
-  description = "- The message template for SMS messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively"
+  description = "The message template for SMS messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively"
   type        = string
   default     = null
 }
@@ -91,5 +91,11 @@ variable "email_verification_subject" {
   description = "A string representing the email verification subject"
   type        = string
   default     = null
+}
+
+variable "prevent_destroy" {
+  type = bool
+  description = "Whether to prevent destroy cognito. Default is set to false and delete cognito on terraform destroy."
+  default = false
 }
 
