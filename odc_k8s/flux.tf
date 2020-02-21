@@ -29,6 +29,12 @@ variable "flux_git_label" {
   default     = "flux-sync"
 }
 
+variable "flux_additional_args" {
+  type        = string
+  description = "Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud"
+  default     = ""
+}
+
 resource "kubernetes_namespace" "flux" {
   count = var.flux_enabled ? 1 : 0
 
@@ -41,6 +47,17 @@ resource "kubernetes_namespace" "flux" {
   }
 }
 
+data "template_file" "flux_config" {
+  template = file("${path.module}/config/flux.yaml")
+  vars = {
+    git_repo_url = var.flux_git_repo_url
+    git_branch = var.flux_git_branch
+    git_path = var.flux_git_path
+    git_label = var.cluster_id
+    additional_args = var.flux_additional_args
+  }
+}
+
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
@@ -49,39 +66,10 @@ resource "helm_release" "flux" {
   version    = "1.0.0"
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
-  set {
-    name  = "git.url"
-    value = var.flux_git_repo_url
-  }
+  values = [
+    data.template_file.flux_config.rendered
+  ]
 
-  set {
-    name  = "git.branch"
-    value = var.flux_git_branch
-  }
-
-  set {
-    name  = "git.path"
-    value = var.flux_git_path
-  }
-
-  set {
-    name  = "git.label"
-    value = var.flux_git_label
-  }
-  set {
-    name  = "git.pollInterval"
-    value = "1m"
-  }
-  set {
-    name  = "registry.pollInterval"
-    value = "1m"
-  }
-  # TODO: These should be optional and the syntax for additional args is probably wrong
-  # set {
-  #   name  = "additionalArgs"
-  #   value = "- --connect=ws://fluxcloud"
-  # }
-  
   depends_on = [
     null_resource.apply_flux_crd,
     module.tiller,
