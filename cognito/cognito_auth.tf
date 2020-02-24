@@ -61,7 +61,7 @@ resource "aws_cognito_user_pool" "pool" {
       "admin_create_user_config[0].unused_account_validity_days"
     ]
     # Enable prevent destroy
-    prevent_destroy = var.prevent_destroy
+    # prevent_destroy = true
   }
 
   tags = {

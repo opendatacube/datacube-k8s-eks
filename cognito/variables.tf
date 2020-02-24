@@ -93,9 +93,3 @@ variable "email_verification_subject" {
   default     = null
 }
 
-variable "prevent_destroy" {
-  type = bool
-  description = "Whether to prevent destroy cognito. Default is set to false and delete cognito on terraform destroy."
-  default = false
-}
-
