@@ -1,5 +1,5 @@
 variable "namespace" {
-  description = "The name used for creation of backend resources like the terraform state bucket"
+  description = "The unique namespace for the environment, which could be your organization name or abbreviation"
   default = "odc-test"
 }
 
@@ -25,6 +25,6 @@ variable "role" {
 
 variable "tags" {
   type        = map(string)
-  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  description = "Additional tags (e.g. `map('StackName','XYZ')`)"
   default     = {}
 }

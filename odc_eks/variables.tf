@@ -1,21 +1,22 @@
 variable "region" {
   description = "The AWS region to provision resources"
+  type = string
   default = "ap-southeast-2"
 }
 
 variable "namespace" {
   description = "The name used for creation of backend resources like the terraform state bucket"
-  default = "odc-test"
+  type = string
 }
 
 variable "owner" {
   description = "The owner of the environment"
-  default = "odc-test"
+  type = string
 }
 
 variable "environment" {
-  description = "The name of the environment - e.g. dev, stage, prod"
-  default = "stage"
+  description = "The unique namespace for the environment, which could be your organization name or abbreviation"
+  type = string
 }
 
 variable "cluster_id" {
@@ -26,6 +27,7 @@ variable "cluster_id" {
 
 variable "cluster_version" {
   description = "EKS Cluster version to use"
+  type = string
 }
 
 variable "admin_access_CIDRs" {
@@ -55,31 +57,36 @@ variable "domain_name" {
 
 variable "create_certificate" {
   description = "Whether to create certificate for given domain"
-  type        = string
+  type        = bool
   default     = false
 }
 
 # Database
 # ================
 variable "db_name" {
+  type = string
 }
 
 variable "db_multi_az" {
+  type = bool
   default = false
 }
 
 variable "db_storage" {
   default     = "180"
   description = "Storage size in GB"
+  type = string
 }
 
 variable "db_max_storage" {
   default     = "0"
+  type = string
   description = "Enables storage autoscaling up to this amount, disabled if 0"
 }
 
 variable "db_extra_sg" {
   default     = ""
+  type = string
   description = "enables an extra security group to access the RDS"
 }
 
@@ -172,14 +179,17 @@ variable "max_spot_nodes" {
 
 variable "max_spot_price" {
   default = "0.40"
+  type = string
 }
 
 variable "volume_size" {
   default = 20
+  type = number
 }
 
 variable "spot_volume_size" {
   default = 20
+  type = number
 }
 
 variable "extra_userdata" {

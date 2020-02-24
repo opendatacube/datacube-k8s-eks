@@ -61,16 +61,18 @@ resource "aws_cognito_user_pool" "pool" {
       "admin_create_user_config[0].unused_account_validity_days"
     ]
     # Enable prevent destroy
-    prevent_destroy = var.prevent_destroy
+    # prevent_destroy = true
   }
 
-  tags = {
-    Name        = var.user_pool_name
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      Name = var.user_pool_name
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 locals {

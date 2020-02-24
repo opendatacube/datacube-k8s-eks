@@ -31,16 +31,19 @@ variable "auto_verify" {
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
-variable "cluster_id" {
-}
-
-variable "environment" {
-}
-
 variable "namespace" {
+  type = string
+  description = "The unique namespace for the environment, which could be your organization name or abbreviation"
 }
 
 variable "owner" {
+  type = string
+  description = "The owner of the environment"
+}
+
+variable "environment" {
+  type = string
+  description = "The name of the environment - e.g. dev, stage, prod"
 }
 
 # admin_create_user_config
@@ -93,9 +96,9 @@ variable "email_verification_subject" {
   default     = null
 }
 
-variable "prevent_destroy" {
-  type = bool
-  description = "Whether to prevent destroy cognito. Default is set to false and delete cognito on terraform destroy."
-  default = false
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags (e.g. `map('StackName','XYZ')`)"
+  default     = {}
 }
 
