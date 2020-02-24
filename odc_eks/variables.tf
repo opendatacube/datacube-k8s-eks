@@ -5,7 +5,7 @@ variable "region" {
 }
 
 variable "namespace" {
-  description = "The name used for creation of backend resources like the terraform state bucket"
+  description = "The unique namespace for the environment, which could be your organization name or abbreviation"
   type = string
 }
 
@@ -15,7 +15,7 @@ variable "owner" {
 }
 
 variable "environment" {
-  description = "The unique namespace for the environment, which could be your organization name or abbreviation"
+  description = "The name of the environment - e.g. dev, stage, prod"
   type = string
 }
 
