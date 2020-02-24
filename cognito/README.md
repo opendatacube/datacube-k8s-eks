@@ -5,6 +5,7 @@ Terraform ODC supporting module that creates AWS Cognito user pool for sandbox u
 #### Warning
 
 * Create a ODC cluster environment using [odc_eks](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_eks) and [odc_k8s](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_k8s) first.
+
 ---
 
 ## Requirements
@@ -64,9 +65,9 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 ### Inputs
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| owner | The owner of the environment | string | `` | yes |
-| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string | `` | yes |
-| environment | The name of the environment - e.g. dev, stage | string | `` | yes |
+| owner | The owner of the environment | string |  | yes |
+| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
+| environment | The name of the environment - e.g. dev, stage | string |  | yes |
 | auto_verify | Set to true to allow the user account to be auto verified. False - admin will need to verify | bool | | yes |
 | callback_url | The callback url for your application | string | | yes |
 | user_pool_name | The cognito user pool name | string | | yes |

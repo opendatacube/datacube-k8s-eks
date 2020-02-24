@@ -5,6 +5,7 @@ Terraform ODC supporting module that creates IAM user for cluster pods with prov
 #### Warning
 
 * Create a ODC cluster environment using [odc_eks](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_eks) and [odc_k8s](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_k8s) first.
+
 ---
 
 ## Requirements
@@ -78,9 +79,9 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 ### Inputs
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| owner | The owner of the environment | string | `` | yes |
-| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string | `` | yes |
-| environment | The name of the environment - e.g. dev, stage | string | `` | yes |
+| owner | The owner of the environment | string |  | yes |
+| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
+| environment | The name of the environment - e.g. dev, stage | string |  | yes |
 | user | Provision a role that can be used by cluster pods | map | {} | yes |
 | tags | Additional tags - e.g. `map('StackName','XYZ')` | map(string) | {} | no |
 

@@ -1,6 +1,7 @@
 # Terraform Open Data Cube EKS Module: odc_eks
 
 Terraform module designed to provision an Open Data Cube EKS cluster on AWS.
+
 ---
 
 ## Requirements
@@ -92,18 +93,18 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 ### Inputs
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| owner | The owner of the environment | string | `` | yes |
-| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string | `` | yes |
-| environment | The name of the environment - e.g. dev, stage | string | `` | yes |
+| owner | The owner of the environment | string |  | yes |
+| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
+| environment | The name of the environment - e.g. dev, stage | string |  | yes |
 | region | The AWS region to provision resources | string | "ap-southeast-2" | No |
-| cluster_id | The name of your cluster. Used for the resource naming as identifier | string | `` | yes |
-| cluster_version | EKS Cluster version to use | string | `` | Yes |
+| cluster_id | The name of your cluster. Used for the resource naming as identifier | string |  | yes |
+| cluster_version | EKS Cluster version to use | string |  | Yes |
 | admin_access_CIDRs | Locks ssh and api access to these IPs | map(string) | {} | No |
-| user_custom_policy | The IAM custom policy to create and attach to EKS user role | string | `` | No |
+| user_custom_policy | The IAM custom policy to create and attach to EKS user role | string | "" | No |
 | user_additional_policy_arn | The list of pre-defined IAM policy required to EKS user role | list(string) | [] | No |
-| domain_name | The domain name to be used by applications deployed to the cluster and using ingress | string | `` | Yes |
+| domain_name | The domain name to be used by applications deployed to the cluster and using ingress | string |  | Yes |
 | create_certificate | Whether to create certificate for given domain | bool | false | Yes |
-| db_name | The name of your RDS database | string | `` | Yes |
+| db_name | The name of your RDS database | string |  | Yes |
 | db_multi_az | If set to true your RDS will have read replicas in other Availability Zones, recommended for production environments to ensure the system will tolerate failure of an Availability Zone | bool | false | No |
 | db_storage | RDS storage size in GB. If this is increased it cannot be decreased | string | "180" | No |
 | db_max_storage | Enables storage autoscaling up to this amount, must be equal to or greater than db_storage, if this value is 0, storage autoscaling is disabled | string | "0" | No
@@ -117,7 +118,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | enable_ec2_ssm | Enables the IAM policy required for AWS EC2 System Manager in the EKS Node IAM role created | bool | true | No |
 | ami_image_id | This variable can be used to deploy a patched / customised version of the Amazon EKS image | string | "" | No |
 | node_group_name | Autoscaling node group name. This name is used to tag instances and ASGs | string | "eks" | No |
-| default_worker_instance_type | The Worker instance type that the cluster nodes will run, for production we recommend something with a good network, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge | string | `` | Yes |
+| default_worker_instance_type | The Worker instance type that the cluster nodes will run, for production we recommend something with a good network, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge | string |  | Yes |
 | min_nodes | The minimum number of on-demand nodes to run | number | 0 | No |
 | desired_nodes | Desired number of nodes only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler | number | 0 | No |
 | max_nodes | Max number of nodes you want to run, useful for controlling max cost of the cluster | number | 0 | No |

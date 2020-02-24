@@ -95,15 +95,15 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 ### Inputs
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| owner | The owner of the environment | string | `` | yes |
-| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string | `` | yes |
-| environment | The name of the environment - e.g. dev, stage | string | `` | yes |
-| cluster_id | The name of your cluster. Used for the resource naming as identifier | string | `` | yes |
+| owner | The owner of the environment | string |  | yes |
+| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
+| environment | The name of the environment - e.g. dev, stage | string |  | yes |
+| cluster_id | The name of your cluster. Used for the resource naming as identifier | string |  | yes |
 | node_roles | A list of node roles that will be given access to the cluster | map | | Yes |
 | user_roles | A list of user roles that will be given access to the cluster | map | {} | No |
 | users | A list of users that will be given access to the cluster | map | {} | No |
-| db_hostname | DB hostname for coredns config | string | `` | No |
-| db_admin_username | Username for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | `` | No |
-| db_admin_password | Password for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | `` | No |
+| db_hostname | DB hostname for coredns config | string | "" | No |
+| db_admin_username | Username for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | "" | No |
+| db_admin_password | Password for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | "" | No |
 | store_db_creds | If true, store the db_admin_username and db_admin_password variables in a kubernetes secret | bool | false | No |
 | tags | Additional tags - e.g. `map('StackName','XYZ')` | map(string) | {} | no | 
