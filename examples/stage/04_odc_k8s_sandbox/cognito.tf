@@ -31,7 +31,6 @@ module "jhub_cognito_auth" {
 
   # Tags
   owner       = local.owner
-  cluster_id  = local.cluster_id
   namespace   = local.namespace
   environment = local.environment
 }
