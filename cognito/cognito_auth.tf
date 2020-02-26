@@ -64,13 +64,15 @@ resource "aws_cognito_user_pool" "pool" {
     # prevent_destroy = true
   }
 
-  tags = {
-    Name        = var.user_pool_name
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      Name = var.user_pool_name
+      owner = var.owner
+      namespace = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 locals {

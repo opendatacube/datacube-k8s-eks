@@ -4,18 +4,18 @@ variable "region" {
 }
 
 variable "namespace" {
-  description = "The name used for creation of backend resources like the terraform state bucket"
-  default = "odc-test"
+  description = "The unique namespace for the environment, which could be your organization name or abbreviation"
+  type = string
 }
 
 variable "owner" {
   description = "The owner of the environment"
-  default = "odc-test"
+  type = string
 }
 
 variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
-  default = "stage"
+  type = string
 }
 
 variable "cluster_id" {
@@ -61,10 +61,11 @@ variable "db_admin_password" {
 variable "store_db_creds" {
   default     = false
   description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
+  type = bool
 }
 
 variable "tags" {
   type        = map(string)
-  description = "Additional tags (e.g. `map('StackName','XYZ')`"
+  description = "Additional tags (e.g. `map('StackName','XYZ')`)"
   default     = {}
 }
