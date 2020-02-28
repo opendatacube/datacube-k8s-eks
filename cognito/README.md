@@ -69,7 +69,10 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
 | environment | The name of the environment - e.g. dev, stage | string |  | yes |
 | auto_verify | Set to true to allow the user account to be auto verified. False - admin will need to verify | bool | | yes |
-| callback_url | The callback url for your application | string | | yes |
+| callback_url | **Deprecated Var** - The callback url for your application | list(string) | | no |
+| callback_urls | List of allowed callback URLs for the identity providers | list(string) | | yes |
+| default_redirect_uri | The default redirect URI. Must be in the list of callback URLs | string | | no |
+| logout_urls | List of allowed logout URLs for the identity providers | list(string) | | no |
 | user_pool_name | The cognito user pool name | string | | yes |
 | user_pool_domain | The cognito user pool domain | string | | yes |
 | user_groups | List of user groups manage by cognito user pool | List | [] | no |
