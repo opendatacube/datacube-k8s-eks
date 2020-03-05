@@ -22,7 +22,7 @@ resource "aws_security_group" "eks_node" {
 }
 
 resource "aws_security_group_rule" "eks_node_ingress_self" {
-  description              = "Allow node to communicate with each other"
+  description              = "Allow worker nodes to communicate with each other"
   from_port                = 0
   to_port                  = 65535
   protocol                 = "-1"

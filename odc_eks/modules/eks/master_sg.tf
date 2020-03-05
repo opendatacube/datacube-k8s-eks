@@ -15,7 +15,7 @@ resource "aws_security_group" "eks_cluster" {
 }
 
 resource "aws_security_group_rule" "eks_cluster_ingress_node_https" {
-  description              = "Allow worker nodes to communicate with control pane"
+  description              = "Allow worker nodes to communicate with control pane over https"
   type                     = "ingress"
   from_port                = 443
   to_port                  = 443
@@ -37,6 +37,7 @@ resource "aws_security_group_rule" "eks_cluster_ingress_workstation_https" {
 }
 
 # Security group - outbound
+# Refernce: https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html
 resource "aws_security_group_rule" "eks_cluster_egress_node" {
   description              = "Allow cluster control pane to communicate with worker nodes"
   type                     = "egress"
