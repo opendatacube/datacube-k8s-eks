@@ -1,6 +1,25 @@
 variable "callback_url" {
   type = string
-  description = "The callback url for your application"
+  description = "**Deprecated Var** - The callback url for your application"
+  default = ""
+}
+
+variable "callback_urls" {
+  type = list(string)
+  description = "List of allowed callback URLs for the identity providers"
+  default = []
+}
+
+variable "default_redirect_uri" {
+  type = string
+  description = "The default redirect URI. Must be in the list of callback URLs"
+  default = ""
+}
+
+variable "logout_urls" {
+  type = list(string)
+  description = "List of allowed logout URLs for the identity providers"
+  default = []
 }
 
 variable "user_pool_name" {

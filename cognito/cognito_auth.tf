@@ -96,7 +96,9 @@ resource "aws_cognito_user_pool_client" "client" {
   user_pool_id = aws_cognito_user_pool.pool.id
   generate_secret     = true
   supported_identity_providers = ["COGNITO"]
-  callback_urls =[var.callback_url]
+  callback_urls = (var.callback_url != "") ? [var.callback_url] : var.callback_urls
+  default_redirect_uri = var.default_redirect_uri
+  logout_urls = var.logout_urls
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes = ["email", "aws.cognito.signin.user.admin", "openid"]
   allowed_oauth_flows = ["code"]
