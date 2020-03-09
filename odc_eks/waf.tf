@@ -116,7 +116,7 @@ resource "aws_s3_bucket" "waf_log_bucket" {
 }
 
 data "aws_s3_bucket" "waf_log_bucket" {
-  bucket = (var.waf_log_bucket_create) ? aws_s3_bucket.waf_log_bucket.id : var.waf_log_bucket
+  bucket = (var.waf_log_bucket_create) ? aws_s3_bucket.waf_log_bucket[0].id : var.waf_log_bucket
 }
 
 # Policy document that will allow the Firehose to assume an IAM Role.
