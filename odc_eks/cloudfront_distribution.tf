@@ -6,23 +6,24 @@ variable "cf_enable" {
 }
 
 variable "cf_dns_record" {
-  default     = "ows"
+  default     = ""
   description = "The domain we will point to cloudfront"
 }
 
 variable "cf_origin_dns_record" {
-  default     = "cached-alb"
+  default     = ""
   description = "The domain of our load balancer that will be created by kubernetes"
 }
 
 variable "cf_custom_aliases" {
   type    = list(string)
+  description = "Extra CNAMEs (alternate domain names), if any, for this distribution"
   default = []
 }
 
 variable "cf_certificate_arn" {
   default     = ""
-  description = "When setting additional aliases you will need to provide your own us-east-1 certificate"
+  description = "Provide your own us-east-1 certificate ARN when setting additional aliases"
 }
 
 variable "cf_certificate_create" {

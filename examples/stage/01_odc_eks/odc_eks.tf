@@ -64,6 +64,7 @@ module "odc_eks" {
   # WAF
   waf_enable             = false
   waf_target_scope       = "regional"
+  waf_log_bucket_create  = true
   waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
 }
 

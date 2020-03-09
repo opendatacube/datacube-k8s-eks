@@ -19,6 +19,10 @@ variable "waf_log_bucket" {
   description = "The name of the bucket to store WAF logs in"
 }
 
+variable "waf_log_bucket_create" {
+  default = false
+}
+
 variable "waf_max_expected_body_size" {
   type        = string
   description = "Maximum number of bytes allowed in the body of the request"
@@ -87,7 +91,7 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 
 # Create an S3 bucket to store cf logs
 resource "aws_s3_bucket" "waf_log_bucket" {
-  count  = (var.waf_enable) ? 1 : 0
+  count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
   bucket = var.waf_log_bucket
   region = var.region
   acl    = "private"
@@ -109,6 +113,10 @@ resource "aws_s3_bucket" "waf_log_bucket" {
     },
     var.tags
   )
+}
+
+data "aws_s3_bucket" "waf_log_bucket" {
+  bucket = (var.waf_log_bucket_create) ? aws_s3_bucket.waf_log_bucket[0].id : var.waf_log_bucket
 }
 
 # Policy document that will allow the Firehose to assume an IAM Role.
@@ -161,8 +169,8 @@ data "aws_iam_policy_document" "allow_s3_actions" {
     ]
 
     resources = [
-      "${aws_s3_bucket.waf_log_bucket[0].arn}",
-      "${aws_s3_bucket.waf_log_bucket[0].arn}/*",
+      data.aws_s3_bucket.waf_log_bucket.arn,
+      "${data.aws_s3_bucket.waf_log_bucket.arn}/*",
     ]
   }
 }
@@ -170,7 +178,7 @@ data "aws_iam_policy_document" "allow_s3_actions" {
 # Attach the policy above to the bucket.
 resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
   count  = (var.waf_enable) ? 1 : 0
-  bucket = aws_s3_bucket.waf_log_bucket[0].id
+  bucket = data.aws_s3_bucket.waf_log_bucket.id
   policy = data.aws_iam_policy_document.allow_s3_actions[0].json
 }
 
@@ -218,7 +226,7 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 
   extended_s3_configuration {
     role_arn   = aws_iam_role.waf_firehose_role[0].arn
-    bucket_arn = aws_s3_bucket.waf_log_bucket[0].arn
+    bucket_arn = data.aws_s3_bucket.waf_log_bucket.arn
 
     buffer_size     = var.waf_firehose_buffer_size
     buffer_interval = var.waf_firehose_buffer_interval

@@ -24,7 +24,7 @@ The module provisions the following resources:
 - Setup a new RDS instance with PostgreSQL database. Provide a snapshot ID to create the new RDS instance from existing RDS instance.\n
 This is useful if migration is being performed to deploy a new infrastructure with pre-existing data indexed.
 
-### Optional Components
+### Module Extensions(Optional Components)
 - Setup a AWS CloudFront Distribution to support Open Data Cube web services
 - Setup AWS WAF for web application security for web application.
 - Issue a domain certificate using AWS Certificate Manager. It uses Route53 to validate certificate. 
@@ -103,7 +103,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | user_custom_policy | The IAM custom policy to create and attach to EKS user role | string | "" | No |
 | user_additional_policy_arn | The list of pre-defined IAM policy required to EKS user role | list(string) | [] | No |
 | domain_name | The domain name to be used by applications deployed to the cluster and using ingress | string |  | Yes |
-| create_certificate | Whether to create certificate for given domain | bool | false | Yes |
 | db_name | The name of your RDS database | string |  | Yes |
 | db_multi_az | If set to true your RDS will have read replicas in other Availability Zones, recommended for production environments to ensure the system will tolerate failure of an Availability Zone | bool | false | No |
 | db_storage | RDS storage size in GB. If this is increased it cannot be decreased | string | "180" | No |
@@ -150,3 +149,41 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | node_security_group | security group for EKS work node group | false |
 | ami_image_id | AMI ID used for worker EC2 instances | false |
 | certificate_arn | Certificate ARN | false |
+
+### Input - Extensions
+
+#### CloudFront Distribution
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| cf_enable | Whether the cloudfront distribution should be created | bool | false | No |
+| cf_dns_record | The domain used by point to cloudfront | string | "" | No |
+| cf_origin_dns_record | The domain of load balancer that will be created by kubernetes | string | "" | No |
+| cf_custom_aliases | Extra CNAMEs (alternate domain names), if any, for this distribution | list(string) | [] | No |
+| cf_certificate_create | Whether to create a certificate for cloudfront distribution | bool | true | No | 
+| cf_certificate_arn | Provide your own us-east-1 certificate ARN when setting additional aliases. Needed when `cf_certificate_create` set to false | string | "" | No |
+| cf_log_bucket_create | Whether to create cloudfront log bucket | bool | false | No |
+| cf_log_bucket | Name of your cloudfront log bucket | string | "" | No |
+| cf_origin_protocol_policy | Which protocol is used to connect to origin, http-only, https-only, match-viewer | string | "http-only" | No |
+| cf_origin_timeout | The time cloudfront will wait for a response | number | 60 | No |
+| cf_default_allowed_methods | Controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin | list(string) | ["GET", "HEAD", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"] | No |
+| cf_default_cached_methods | Controls whether CloudFront caches the response to requests using the specified HTTP methods | list(string) | ["GET", "HEAD"] |
+| cf_min_ttl | The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront queries your origin to see whether the object has been updated | bool | 0 | No |
+| cf_max_ttl | The maximum amount of time (in seconds) that an object is in a CloudFront cache before CloudFront forwards another request to your origin to determine whether the object has been updated | number | 31536000 | No |
+| cf_default_ttl | The default amount of time (in seconds) that an object is in a CloudFront cache before CloudFront forwards another request in the absence of an Cache-Control max-age or Expires header | number | 86400 | No |
+| cf_price_class | The Price class for this distribution, can be PriceClass_100, PriceClass_200 or PriceClass_All | string | "PriceClass_All" | No |
+
+#### WAF
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| waf_enable | Whether the WAF resources should be created | bool | false | No |
+| waf_target_scope | Valid values are `global` and `regional`. This variable value should be set to regional if integrate with ALBs | string | "regional" | No |
+| waf_log_bucket_create | Whether to create WAF log bucket | bool | false | No |
+| waf_log_bucket | The name of the bucket to store WAF logs in | string | "" | No |
+| waf_max_expected_body_size | Maximum number of bytes allowed in the body of the request | string | "536870912" | No |
+| waf_firehose_buffer_size | Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128 | string | "128" | No |
+| waf_firehose_buffer_interval | Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900 | string | "900" | No |
+
+#### ACM
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| create_certificate | Whether to create certificate for given domain | bool | false | No |
