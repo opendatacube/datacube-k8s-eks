@@ -116,6 +116,7 @@ resource "aws_s3_bucket" "waf_log_bucket" {
 }
 
 data "aws_s3_bucket" "waf_log_bucket" {
+  count = (var.waf_enable) ? 1 : 0
   bucket = (var.waf_log_bucket_create) ? aws_s3_bucket.waf_log_bucket[0].id : var.waf_log_bucket
 }
 
@@ -169,8 +170,8 @@ data "aws_iam_policy_document" "allow_s3_actions" {
     ]
 
     resources = [
-      data.aws_s3_bucket.waf_log_bucket.arn,
-      "${data.aws_s3_bucket.waf_log_bucket.arn}/*",
+      data.aws_s3_bucket.waf_log_bucket[0].arn,
+      "${data.aws_s3_bucket.waf_log_bucket[0].arn}/*",
     ]
   }
 }
@@ -178,7 +179,7 @@ data "aws_iam_policy_document" "allow_s3_actions" {
 # Attach the policy above to the bucket.
 resource "aws_s3_bucket_policy" "webacl_log_bucket_policy" {
   count  = (var.waf_enable) ? 1 : 0
-  bucket = data.aws_s3_bucket.waf_log_bucket.id
+  bucket = data.aws_s3_bucket.waf_log_bucket[0].id
   policy = data.aws_iam_policy_document.allow_s3_actions[0].json
 }
 
@@ -226,7 +227,7 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 
   extended_s3_configuration {
     role_arn   = aws_iam_role.waf_firehose_role[0].arn
-    bucket_arn = data.aws_s3_bucket.waf_log_bucket.arn
+    bucket_arn = data.aws_s3_bucket.waf_log_bucket[0].arn
 
     buffer_size     = var.waf_firehose_buffer_size
     buffer_interval = var.waf_firehose_buffer_interval
