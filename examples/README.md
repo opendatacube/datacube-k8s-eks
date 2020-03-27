@@ -38,14 +38,7 @@ Once you have create a terraform backend and updated a configuration parameters,
   kubectl get secret prometheus-operator-grafana -n monitoring -o yaml | grep "admin-password:" | sed 's/admin-password: //' | base64 -d -i`
 ```
 
-## How to Destroy a New Environment
-- 
-- Run `terraform destroy` to pull down the example EKS cluster pods/CD services
-- Get pods from kubernetes admin namespace to verify admin pods have been squashed.
-- Change directory back to `examples/stage/odc_eks/`
-- Run `terraform destroy` to pull down the example EKS, RDS and everything else can take upto 15minutes.
-
-#### Destroy a newly created infrastructure
+## Destroy a newly created infrastructure
 
 1. Remove `flux` deploy ssh key. This will stop flux to read/write from your live repo.
 2. Delete helm releases (HRs) in the following order. Assuming that you have similar setup as defined in example -
