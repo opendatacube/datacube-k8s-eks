@@ -24,7 +24,7 @@ In order to create the infrastructure you'll need to configure your aws cli to h
 
 You'll also need a public Route53 zone so your applications can be accessed externally. This can be configured using the following guide [A Public Route53 Hosted Zone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingHostedZone.html)
 
-## Create your a live repo
+## Create your live repo
 
 This repo provides odc terraform modules require to setup an Open Data Cube EKS cluster on AWS platform. 
 
