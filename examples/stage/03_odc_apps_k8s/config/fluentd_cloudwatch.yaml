@@ -1,0 +1,3 @@
+awsRole: ${role_name}
+logGroupName: ${cluster_name}-logs
+awsRegion: ${region}

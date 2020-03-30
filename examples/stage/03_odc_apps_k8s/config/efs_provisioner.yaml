@@ -1,0 +1,13 @@
+## Deploy environment label, e.g. dev, test, prod
+##
+global:
+  deployEnv: ${environment}
+efsProvisioner:
+  # If specified, use this DNS or IP to connect the EFS
+  dnsName: ${dnsName}
+  efsFileSystemId: ${efsFileSystemId}
+  awsRegion: ${awsRegion}
+  path: ${path}
+podAnnotations: {
+  iam.amazonaws.com/role: ${iam_role_name}
+}

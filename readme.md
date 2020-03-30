@@ -26,7 +26,7 @@ for running Open Data Cube applications.
 
 Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first cluster and learn how to customise your build.
 
-# Documenation
+# Documentation
 
 * [Additional Users](docs/additional_users.md) - How to add users and configure access
 * [Patching](docs/patching_upgrading.md) - How to keep the Kubernetes nodes up to date
@@ -34,3 +34,15 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 * [Troubleshooting](docs/troubleshooting.md) - Workarounds to fix common issues
 * [Service Account](docs/service_account.md) - Creating a service account to build the infrastructure
 * [Variables](docs/variables.md) - A list of the configurable variables and what they do
+
+# Repository Layout
+
+* docs - Out of code documentation as above
+* examples - Sample Terraform deployments that can be spun-up and destroyed to test the various modules
+* odc_eks - Core components required to run an EKS cluster for ODC
+* ods_k8s - Kubernetes service pods required to perform Continuous deployment of applications.
+  * [Flux](https://www.weave.works/oss/flux/)
+  * [Tiller/Helm](https://helm.sh/)
+:warning: Soon to be deprecated :warning:
+* addons - Kubernetes hosted applications pending refactor to deployment via Flux.
+* .circleci - TFLint CI automation

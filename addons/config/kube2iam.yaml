@@ -1,8 +1,0 @@
-host:
-  iptables: true
-  interface: eni+
-rbac:
-  create: true
-tolerations:
-  - effect: NoSchedule
-    operator: Exists

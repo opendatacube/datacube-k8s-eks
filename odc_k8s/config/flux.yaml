@@ -1,0 +1,17 @@
+helmOperator:
+  create: true
+  createCRD: false
+git:
+  url: ${git_repo_url}
+  branch: ${git_branch}
+  path: ${git_path}
+  label: ${git_label}
+  pollInterval: 1m
+registry:
+  pollInterval: 1m
+%{ if additional_args != "" }
+additionalArgs:
+  - ${additional_args}
+%{ endif }
+image:
+  repository: fluxcd/flux
