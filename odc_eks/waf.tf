@@ -147,13 +147,14 @@ module "waf_label" {
   delimiter  = "-"
 }
 
-# Module: https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules
-# The module is a fork from repository: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules
-# PR raised to support below features: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/pull/17
+# Module: https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules
+# The module is a fork from repository: https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules
+# This is an extention of the main repo: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/pull/17
+# This module extends the main repo to solve -
 # - Updates to address all Terraform 0.12 warnings
 # - Updates to allow disable specific XSS and  rules
 module "owasp_top_10_rules" {
-  source = "git::https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
+  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
   # The TF registry syntax is proving unreliable for downloads. Using direct github link to get module
   # source  = "traveloka/waf-owasp-top-10-rules/aws"
   # version = "v0.2.0"
