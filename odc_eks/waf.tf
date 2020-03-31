@@ -41,6 +41,104 @@ variable "waf_firehose_buffer_interval" {
   default     = "900"
 }
 
+# NOTE: variables to manage cross-site scripting filters
+variable "waf_disable_03_uri_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "waf_disable_03_uri_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+variable "waf_disable_03_query_string_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "waf_disable_03_query_string_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+variable "waf_disable_03_body_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "waf_disable_03_body_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+variable "waf_disable_03_cookie_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "waf_disable_03_cookie_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+# NOTE: variables to manage dangerous HTTP request patterns filters, e.g. path traversal attempts
+variable "waf_disable_04_uri_contains_previous_dir_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '../' after decoding as URL.' filter"
+}
+
+variable "waf_disable_04_uri_contains_previous_dir_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '../' after decoding as HTML tags.' filter"
+}
+
+variable "waf_disable_04_query_string_contains_previous_dir_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '../' after decoding as URL.' filter"
+}
+
+variable "waf_disable_04_query_string_contains_previous_dir_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '../' after decoding as HTML tags.' filter"
+}
+
+variable "waf_disable_04_uri_contains_url_path_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '://' after decoding as URL.' filter"
+}
+
+variable "waf_disable_04_uri_contains_url_path_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '://' after decoding as HTML tags.' filter"
+}
+
+variable "waf_disable_04_query_string_contains_url_path_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '://' after decoding as URL.' filter"
+}
+
+variable "waf_disable_04_query_string_contains_url_path_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '://' after decoding as HTML tags.' filter"
+}
+
 module "waf_label" {
   source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
   namespace  = var.namespace
@@ -49,12 +147,13 @@ module "waf_label" {
   delimiter  = "-"
 }
 
-# The module which is defined on repository: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules
-# For a better understanding of what are those parameters mean,
-# please read the description of each variable in the variables.tf file:
-# https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/blob/master/variables.tf
+# Module: https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules
+# The module is a fork from repository: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules
+# PR raised to support below features: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/pull/17
+# - Updates to address all Terraform 0.12 warnings
+# - Updates to allow disable specific XSS and  rules
 module "owasp_top_10_rules" {
-  source = "git::https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules.git?ref=v0.2.0"
+  source = "git::https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
   # The TF registry syntax is proving unreliable for downloads. Using direct github link to get module
   # source  = "traveloka/waf-owasp-top-10-rules/aws"
   # version = "v0.2.0"
@@ -74,6 +173,26 @@ module "owasp_top_10_rules" {
 
   csrf_expected_header = "x-csrf-token"
   csrf_expected_size   = "36"
+
+  # NOTE: variables to manage cross-site scripting filters
+  disable_03_uri_url_decode           = var.waf_disable_03_uri_url_decode
+  disable_03_uri_html_decode          = var.waf_disable_03_uri_html_decode
+  disable_03_query_string_url_decode  = var.waf_disable_03_query_string_url_decode
+  disable_03_query_string_html_decode = var.waf_disable_03_query_string_html_decode
+  disable_03_body_url_decode          = var.waf_disable_03_body_url_decode
+  disable_03_body_html_decode         = var.waf_disable_03_body_html_decode
+  disable_03_cookie_url_decode        = var.waf_disable_03_cookie_url_decode
+  disable_03_cookie_html_decode       = var.waf_disable_03_cookie_html_decode
+
+  # NOTE: variables to manage dangerous HTTP request patterns filters, e.g. path traversal attempts
+  disable_04_uri_contains_previous_dir_after_url_decode           = var.waf_disable_04_uri_contains_previous_dir_after_url_decode
+  disable_04_uri_contains_previous_dir_after_html_decode          = var.waf_disable_04_uri_contains_previous_dir_after_html_decode
+  disable_04_query_string_contains_previous_dir_after_url_decode  = var.waf_disable_04_query_string_contains_previous_dir_after_url_decode
+  disable_04_query_string_contains_previous_dir_after_html_decode = var.waf_disable_04_query_string_contains_previous_dir_after_html_decode
+  disable_04_uri_contains_url_path_after_url_decode               = var.waf_disable_04_uri_contains_url_path_after_url_decode
+  disable_04_uri_contains_url_path_after_html_decode              = var.waf_disable_04_uri_contains_url_path_after_html_decode
+  disable_04_query_string_contains_url_path_after_url_decode      = var.waf_disable_04_query_string_contains_url_path_after_url_decode
+  disable_04_query_string_contains_url_path_after_html_decode     = var.waf_disable_04_query_string_contains_url_path_after_html_decode
 }
 
 /*
