@@ -45,49 +45,49 @@ variable "waf_firehose_buffer_interval" {
 variable "waf_disable_03_uri_url_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter."
+  description = "Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter"
 }
 
 variable "waf_disable_03_uri_html_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter."
+  description = "Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter"
 }
 
 variable "waf_disable_03_query_string_url_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter."
+  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter"
 }
 
 variable "waf_disable_03_query_string_html_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter."
+  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter"
 }
 
 variable "waf_disable_03_body_url_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter."
+  description = "Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter"
 }
 
 variable "waf_disable_03_body_html_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter."
+  description = "Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter"
 }
 
 variable "waf_disable_03_cookie_url_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter."
+  description = "Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter"
 }
 
 variable "waf_disable_03_cookie_html_decode" {
   default     = false
   type        = bool
-  description = "Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter."
+  description = "Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter"
 }
 
 # NOTE: variables to manage dangerous HTTP request patterns filters, e.g. path traversal attempts
@@ -155,9 +155,6 @@ module "waf_label" {
 # - Updates to allow disable specific XSS and  rules
 module "owasp_top_10_rules" {
   source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
-  # The TF registry syntax is proving unreliable for downloads. Using direct github link to get module
-  # source  = "traveloka/waf-owasp-top-10-rules/aws"
-  # version = "v0.2.0"
 
   product_domain = var.namespace
   service_name   = "wafowasp"
