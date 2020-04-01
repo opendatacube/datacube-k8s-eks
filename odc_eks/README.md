@@ -29,6 +29,10 @@ This is useful if migration is being performed to deploy a new infrastructure wi
 - Setup AWS WAF for web application security for web application.
 - Issue a domain certificate using AWS Certificate Manager. It uses Route53 to validate certificate. 
 
+### WAF Important Consideration
+- If you are using WAF for `jupyterhub` setup, make sure to disable `waf_disable_03_body_url_decode` and `waf_disable_03_body_html_decode` 
+filter to allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
+
 ## Usage
 
 The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/examples/stage).
