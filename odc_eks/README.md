@@ -29,6 +29,10 @@ This is useful if migration is being performed to deploy a new infrastructure wi
 - Setup AWS WAF for web application security for web application.
 - Issue a domain certificate using AWS Certificate Manager. It uses Route53 to validate certificate. 
 
+### WAF Important Consideration
+- If you are using WAF for `jupyterhub` setup, make sure to disable `waf_disable_03_body_url_decode` and `waf_disable_03_body_html_decode` 
+filter to allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
+
 ## Usage
 
 The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/examples/stage).
@@ -182,6 +186,22 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | waf_max_expected_body_size | Maximum number of bytes allowed in the body of the request | string | "536870912" | No |
 | waf_firehose_buffer_size | Buffer incoming data to the specified size, in MBs, before delivering it to the destination. Valid value is between 64-128 | string | "128" | No |
 | waf_firehose_buffer_interval | Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. Valid value is between 60-900 | string | "900" | No |
+| waf_disable_03_uri_url_decode | Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter | bool | false | No |
+| waf_disable_03_uri_html_decode | Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_03_query_string_url_decode | Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter | bool | false | No |
+| waf_disable_03_query_string_html_decode | Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_03_body_url_decode | Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter | bool | false | No |
+| waf_disable_03_body_html_decode | Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_03_cookie_url_decode | Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter | bool | false | No |
+| waf_disable_03_cookie_html_decode | Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_04_uri_contains_previous_dir_after_url_decode | Disable the 'URI contains: '../' after decoding as URL.' filter | bool | false | No |
+| waf_disable_04_uri_contains_previous_dir_after_html_decode | Disable the 'URI contains: '../' after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_04_query_string_contains_previous_dir_after_url_decode | Disable the 'Query string contains: '../' after decoding as URL.' filter | bool | false | No |
+| waf_disable_04_query_string_contains_previous_dir_after_html_decode | Disable the 'Query string contains: '../' after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_04_uri_contains_url_path_after_url_decode | Disable the 'URI contains: '://' after decoding as URL.' filter | bool | false | No |
+| waf_disable_04_uri_contains_url_path_after_html_decode | Disable the 'URI contains: '://' after decoding as HTML tags.' filter | bool | false | No |
+| waf_disable_04_query_string_contains_url_path_after_url_decode | Disable the 'Query string contains: '://' after decoding as URL.' filter | bool | false | No |
+| waf_disable_04_query_string_contains_url_path_after_html_decode | Disable the 'Query string contains: '://' after decoding as HTML tags.' filter | bool | false | No |
 
 #### ACM
 | Name | Description | Type | Default | Required |
