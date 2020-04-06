@@ -23,6 +23,46 @@ variable "waf_log_bucket_create" {
   default = false
 }
 
+variable "waf_rule_01_sql_injection_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_02_auth_tokens_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_03_xss_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_04_lfi_rfi_paths_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_06_php_insecure_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_07_size_restriction_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_08_csrf_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_09_ssi_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
 variable "waf_max_expected_body_size" {
   type        = string
   description = "Maximum number of bytes allowed in the body of the request"
@@ -154,12 +194,12 @@ module "waf_label" {
 # - Updates to address all Terraform 0.12 warnings
 # - Updates to allow disable specific XSS and  rules
 module "owasp_top_10_rules" {
-  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
+  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=waf-module-enhancement"
 
-  product_domain = var.namespace
-  service_name   = "wafowasp"
+  owner          = var.owner
+  namespace      = var.namespace
   environment    = (var.waf_enable) ? var.environment : ""
-  description    = "OWASP Top 10 rules for waf"
+  waf_prefix     = "wafowasp"
 
   target_scope      = (var.waf_enable) ? var.waf_target_scope : ""
   create_rule_group = "true"
@@ -171,6 +211,17 @@ module "owasp_top_10_rules" {
 
   csrf_expected_header = "x-csrf-token"
   csrf_expected_size   = "36"
+
+  # NOTE: variables to set rules allow type. Deafult is set to "BLOCK" for all the rules.
+  #   Allow values are - BLOCK, ALLOW and COUNT.
+  rule_01_sql_injection_action_type    = var.waf_rule_01_sql_injection_action_type
+  rule_02_auth_tokens_action_type      = var.waf_rule_02_auth_tokens_action_type
+  rule_03_xss_action_type              = var.waf_rule_03_xss_action_type
+  rule_04_lfi_rfi_paths_action_type    = var.waf_rule_04_lfi_rfi_paths_action_type
+  rule_06_php_insecure_action_type     = var.waf_rule_06_php_insecure_action_type
+  rule_07_size_restriction_action_type = var.waf_rule_07_size_restriction_action_type
+  rule_08_csrf_action_type             = var.waf_rule_08_csrf_action_type
+  rule_09_ssi_action_type              = var.waf_rule_09_ssi_action_type
 
   # NOTE: variables to manage cross-site scripting filters
   disable_03_uri_url_decode           = var.waf_disable_03_uri_url_decode
