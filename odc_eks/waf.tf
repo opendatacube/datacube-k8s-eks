@@ -179,6 +179,24 @@ variable "waf_disable_04_query_string_contains_url_path_after_html_decode" {
   description = "Disable the 'Query string contains: '://' after decoding as HTML tags.' filter"
 }
 
+variable "waf_enable_url_whitelist_string_match_set" {
+  default     = false
+  type        = bool
+  description = "Enable the 'URL whitelisting' filter. If enabled, provide values for `url_whitelist_uri_prefix` and `url_whitelist_url_host`"
+}
+
+variable "waf_url_whitelist_uri_prefix" {
+  default     = ""
+  type        = string
+  description = "URI prefix for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true`"
+}
+
+variable "waf_url_whitelist_url_host" {
+  default     = ""
+  type        = string
+  description = "Host for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true`"
+}
+
 module "waf_label" {
   source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
   namespace  = var.namespace
@@ -192,9 +210,11 @@ module "waf_label" {
 # This is an extention of the main repo: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/pull/17
 # This module extends the main repo to solve -
 # - Updates to address all Terraform 0.12 warnings
+# - Updates to split owasp-top-10-rules into each tf files
 # - Updates to allow disable specific XSS and  rules
+# - Updates to address URL whitelisting
 module "owasp_top_10_rules" {
-  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=waf-module-enhancement"
+  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=uri-whitelist"
 
   owner          = var.owner
   namespace      = var.namespace
@@ -222,6 +242,10 @@ module "owasp_top_10_rules" {
   rule_07_size_restriction_action_type = var.waf_rule_07_size_restriction_action_type
   rule_08_csrf_action_type             = var.waf_rule_08_csrf_action_type
   rule_09_ssi_action_type              = var.waf_rule_09_ssi_action_type
+
+  enable_url_whitelist_string_match_set = var.waf_enable_url_whitelist_string_match_set
+  url_whitelist_uri_prefix              = var.waf_url_whitelist_uri_prefix
+  url_whitelist_url_host                = var.waf_url_whitelist_url_host
 
   # NOTE: variables to manage cross-site scripting filters
   disable_03_uri_url_decode           = var.waf_disable_03_uri_url_decode
