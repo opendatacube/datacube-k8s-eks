@@ -104,6 +104,23 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_flows = ["code"]
 }
 
+resource "aws_cognito_user_pool_client" "additional_clients" {
+  count           = length(var.additional_clients)
+  name            = var.additional_clients[count.index].name
+  user_pool_id    = aws_cognito_user_pool.pool.id
+  generate_secret = true
+  supported_identity_providers = ["COGNITO"]
+
+  callback_urls        = var.additional_clients[count.index].callback_urls
+  default_redirect_uri = var.additional_clients[count.index].default_redirect_uri
+  logout_urls          = var.additional_clients[count.index].logout_urls
+  explicit_auth_flows  = var.additional_clients[count.index].explicit_auth_flows
+
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_scopes = ["email", "aws.cognito.signin.user.admin", "openid"]
+  allowed_oauth_flows = ["code"]
+}
+
 resource "aws_cognito_user_pool_domain" "domain" {
   domain       = var.user_pool_domain
   user_pool_id = aws_cognito_user_pool.pool.id

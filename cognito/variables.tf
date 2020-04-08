@@ -42,6 +42,18 @@ variable "user_groups" {
   }))
 }
 
+variable "additional_clients" {
+  default = []
+  description = "List of additional user pool client to support multiple applications"
+  type = list(object({
+    name = string
+    callback_urls = list(string)
+    logout_urls = list(string)
+    default_redirect_uri = string
+    explicit_auth_flows = list(string)
+  }))
+}
+
 variable "auto_verify" {
   description = "Set to true to allow the users account to be auto verified. False - admin will need to verify"
   type = bool
