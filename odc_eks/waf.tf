@@ -23,6 +23,46 @@ variable "waf_log_bucket_create" {
   default = false
 }
 
+variable "waf_rule_01_sql_injection_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_02_auth_tokens_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_03_xss_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_04_lfi_rfi_paths_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_06_php_insecure_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_07_size_restriction_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_08_csrf_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
+variable "waf_rule_09_ssi_action_type" {
+  default     = "BLOCK"
+  description = "Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing)"
+}
+
 variable "waf_max_expected_body_size" {
   type        = string
   description = "Maximum number of bytes allowed in the body of the request"
@@ -139,6 +179,24 @@ variable "waf_disable_04_query_string_contains_url_path_after_html_decode" {
   description = "Disable the 'Query string contains: '://' after decoding as HTML tags.' filter"
 }
 
+variable "waf_enable_url_whitelist_string_match_set" {
+  default     = false
+  type        = bool
+  description = "Enable the 'URL whitelisting' filter. If enabled, provide values for `url_whitelist_uri_prefix` and `url_whitelist_url_host`"
+}
+
+variable "waf_url_whitelist_uri_prefix" {
+  default     = ""
+  type        = string
+  description = "URI prefix for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true`"
+}
+
+variable "waf_url_whitelist_url_host" {
+  default     = ""
+  type        = string
+  description = "Host for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true`"
+}
+
 module "waf_label" {
   source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
   namespace  = var.namespace
@@ -149,17 +207,19 @@ module "waf_label" {
 
 # Module: https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules
 # The module is a fork from repository: https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules
-# This is an extention of the main repo: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/pull/17
-# This module extends the main repo to solve -
+# This parent repo is: https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules
+# This module supports additional features -
 # - Updates to address all Terraform 0.12 warnings
-# - Updates to allow disable specific XSS and  rules
+# - Updates to split owasp-top-10-rules into each tf files
+# - Updates to allow disable specific XSS and PATH based rules filters
+# - Updates to address URL whitelisting
 module "owasp_top_10_rules" {
   source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
 
-  product_domain = var.namespace
-  service_name   = "wafowasp"
+  owner          = var.owner
+  namespace      = var.namespace
   environment    = (var.waf_enable) ? var.environment : ""
-  description    = "OWASP Top 10 rules for waf"
+  waf_prefix     = "wafowasp"
 
   target_scope      = (var.waf_enable) ? var.waf_target_scope : ""
   create_rule_group = "true"
@@ -171,6 +231,22 @@ module "owasp_top_10_rules" {
 
   csrf_expected_header = "x-csrf-token"
   csrf_expected_size   = "36"
+
+  # NOTE: variables to set rules allow type. Deafult is set to "BLOCK" for all the rules.
+  #   Allow values are - BLOCK, ALLOW and COUNT.
+  rule_01_sql_injection_action_type    = var.waf_rule_01_sql_injection_action_type
+  rule_02_auth_tokens_action_type      = var.waf_rule_02_auth_tokens_action_type
+  rule_03_xss_action_type              = var.waf_rule_03_xss_action_type
+  rule_04_lfi_rfi_paths_action_type    = var.waf_rule_04_lfi_rfi_paths_action_type
+  rule_06_php_insecure_action_type     = var.waf_rule_06_php_insecure_action_type
+  rule_07_size_restriction_action_type = var.waf_rule_07_size_restriction_action_type
+  rule_08_csrf_action_type             = var.waf_rule_08_csrf_action_type
+  rule_09_ssi_action_type              = var.waf_rule_09_ssi_action_type
+
+  # NOTE: variables to setup URL whitelisting string match filter
+  enable_url_whitelist_string_match_set = var.waf_enable_url_whitelist_string_match_set
+  url_whitelist_uri_prefix              = var.waf_url_whitelist_uri_prefix
+  url_whitelist_url_host                = var.waf_url_whitelist_url_host
 
   # NOTE: variables to manage cross-site scripting filters
   disable_03_uri_url_decode           = var.waf_disable_03_uri_url_decode

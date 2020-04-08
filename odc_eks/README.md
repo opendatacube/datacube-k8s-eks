@@ -30,8 +30,8 @@ This is useful if migration is being performed to deploy a new infrastructure wi
 - Issue a domain certificate using AWS Certificate Manager. It uses Route53 to validate certificate. 
 
 ### WAF Important Consideration
-- If you are using WAF for `jupyterhub` setup, make sure to disable `waf_disable_03_body_url_decode` and `waf_disable_03_body_html_decode` 
-filter to allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
+- If you are using WAF for `jupyterhub` setup, make sure to enable `waf_enable_url_whitelist_string_match_set` - 
+string match filter for allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
 
 ## Usage
 
@@ -202,6 +202,9 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | waf_disable_04_uri_contains_url_path_after_html_decode | Disable the 'URI contains: '://' after decoding as HTML tags.' filter | bool | false | No |
 | waf_disable_04_query_string_contains_url_path_after_url_decode | Disable the 'Query string contains: '://' after decoding as URL.' filter | bool | false | No |
 | waf_disable_04_query_string_contains_url_path_after_html_decode | Disable the 'Query string contains: '://' after decoding as HTML tags.' filter | bool | false | No |
+| waf_enable_url_whitelist_string_match_set | Enable the 'URL whitelisting' filter. If enabled, provide values for `url_whitelist_uri_prefix` and `url_whitelist_url_host` | bool | `false` | No |
+| waf_url_whitelist_uri_prefix | URI prefix for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true` | string | `""` | Yes |
+| waf_url_whitelist_url_host | Host for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true` | string | `""` | Yes |
 
 #### ACM
 | Name | Description | Type | Default | Required |

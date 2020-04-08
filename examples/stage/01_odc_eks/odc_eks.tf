@@ -66,6 +66,11 @@ module "odc_eks" {
   waf_target_scope       = "regional"
   waf_log_bucket_create  = true
   waf_log_bucket         = "${local.namespace}-${local.environment}-waf-logs"
+  # Additional setting required to setup URL whitelist string match filter
+  # Recommanded if WAF is enabled for `jupyterhub` setup
+  waf_enable_url_whitelist_string_match_set = true
+  waf_url_whitelist_uri_prefix              = "/user"
+  waf_url_whitelist_url_host                = "${sandbox_domain_name}"
 }
 
 data "aws_acm_certificate" "domain_cert" {
