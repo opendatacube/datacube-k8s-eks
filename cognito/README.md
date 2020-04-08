@@ -35,16 +35,30 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     callback_url         = "https://app.example.domain.com/oauth_callback"
     user_groups = [
       {
-          name        = "dev-group"
-          description = "Group defines Jupyterhub dev users"
-          precedence  = 5
+        name        = "dev-group"
+        description = "Group defines Jupyterhub dev users"
+        precedence  = 5
       },
       {
-          name        = "default-group"
-          description = "Group defines Jupyterhub default users"
-          precedence  = 10
+        name        = "default-group"
+        description = "Group defines Jupyterhub default users"
+        precedence  = 10
       }
     ]
+    additional_clients = [
+      {
+        name          = "app1-client"
+        callback_urls = [
+          "https://app1.example.domain.com/oauth_callback",
+          "https://app1.example.domain.com"
+        ]
+        logout_urls   = [
+          "https://app1.example.domain.com"
+        ]
+        default_redirect_uri = "https://app1.example.domain.com"
+        explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH"]
+    }
+  ]
     
     # Default tags + resource labels
     owner           = "odc-owner"
@@ -75,7 +89,8 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | logout_urls | List of allowed logout URLs for the identity providers | list(string) | | no |
 | user_pool_name | The cognito user pool name | string | | yes |
 | user_pool_domain | The cognito user pool domain | string | | yes |
-| user_groups | List of user groups manage by cognito user pool | List | [] | no |
+| user_groups | List of user groups manage by cognito user pool | list(object({name = string,description = string,precedence = number})) | [] | no |
+| additional_clients | List of additional user pool client to support multiple applications | List(object({name = string,callback_urls = list(string),logout_urls = list(string),default_redirect_uri = string,explicit_auth_flows = list(string)})) | [] | no |
 | admin_create_user_config | The configuration for AdminCreateUser requests | map | {} | no |
 | admin_create_user_config_allow_admin_create_user_only | Set to True if only the administrator is allowed to create user profiles. Set to False if users can sign themselves up via an app | bool | false | No | 
 | admin_create_user_config_unused_account_validity_days | The user account expiration limit, in days, after which the account is no longer usable | number | 0 | No |
