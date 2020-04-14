@@ -4,22 +4,37 @@ variable "callback_url" {
   default = ""
 }
 
+# TODO: remove me! - This is deprecated. Use `app_clients` var instead.
 variable "callback_urls" {
   type = list(string)
   description = "List of allowed callback URLs for the identity providers"
   default = []
 }
 
+# TODO: remove me! - This is deprecated. Use `app_clients` var instead.
 variable "default_redirect_uri" {
   type = string
   description = "The default redirect URI. Must be in the list of callback URLs"
   default = ""
 }
 
+# TODO: remove me! - This is deprecated. Use `app_clients` var instead.
 variable "logout_urls" {
   type = list(string)
   description = "List of allowed logout URLs for the identity providers"
   default = []
+}
+
+variable "app_clients" {
+  default = []
+  description = "List of user pool app clients to support multiple applications"
+  type = list(object({
+    name = string
+    callback_urls = list(string)
+    logout_urls = list(string)
+    default_redirect_uri = string
+    explicit_auth_flows = list(string)
+  }))
 }
 
 variable "user_pool_name" {
@@ -39,18 +54,6 @@ variable "user_groups" {
     name = string
     description = string
     precedence = number
-  }))
-}
-
-variable "app_clients" {
-  default = []
-  description = "List of user pool app clients to support multiple applications"
-  type = list(object({
-    name = string
-    callback_urls = list(string)
-    logout_urls = list(string)
-    default_redirect_uri = string
-    explicit_auth_flows = list(string)
   }))
 }
 

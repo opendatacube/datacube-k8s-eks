@@ -26,7 +26,6 @@ output "client_ids" {
 }
 
 output "client_secrets" {
-  //  value = (length(var.app_clients) == 0)? aws_cognito_user_pool_client.client[0].client_secret : null
   value = (length(var.app_clients) > 0) ? aws_cognito_user_pool_client.clients.*.client_secret : null
   sensitive = true
 }

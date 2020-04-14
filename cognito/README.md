@@ -32,7 +32,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     auto_verify = true
     user_pool_name       = "odc-stage-cluster-jhub-userpool"
     user_pool_domain     = "odc-stage-cluster-jhub-auth"
-    callback_url         = "https://app.example.domain.com/oauth_callback"
     user_groups = [
       {
         name        = "dev-group"
@@ -45,20 +44,20 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
         precedence  = 10
       }
     ]
-    additional_clients = [
+    app_clients = [
       {
-        name          = "app1-client"
+        name          = "sandbox-client"
         callback_urls = [
-          "https://app1.example.domain.com/oauth_callback",
-          "https://app1.example.domain.com"
+          "https://app.sandbox.example.com/oauth_callback",
+          "https://app.sandbox.example.com"
         ]
         logout_urls   = [
-          "https://app1.example.domain.com"
+          "https://app.sandbox.example.com"
         ]
-        default_redirect_uri = "https://app1.example.domain.com"
-        explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH"]
-    }
-  ]
+        default_redirect_uri = "app.sandbox.example.com"
+        explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_CUSTOM_AUTH"]
+      }
+    ]
     
     # Default tags + resource labels
     owner           = "odc-owner"
@@ -84,13 +83,13 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | environment | The name of the environment - e.g. dev, stage | string |  | yes |
 | auto_verify | Set to true to allow the user account to be auto verified. False - admin will need to verify | bool | | yes |
 | callback_url | **Deprecated Var** - The callback url for your application | list(string) | | no |
-| callback_urls | List of allowed callback URLs for the identity providers | list(string) | | yes |
-| default_redirect_uri | The default redirect URI. Must be in the list of callback URLs | string | | no |
-| logout_urls | List of allowed logout URLs for the identity providers | list(string) | | no |
+| callback_urls | **Deprecated Var** - List of allowed callback URLs for the identity providers | list(string) | | yes |
+| default_redirect_uri | **Deprecated Var** - The default redirect URI. Must be in the list of callback URLs | string | | no |
+| logout_urls | **Deprecated Var** - List of allowed logout URLs for the identity providers | list(string) | | no |
+| app_clients | List of user pool app clients to support multiple applications | List(object({name = string,callback_urls = list(string),logout_urls = list(string),default_redirect_uri = string,explicit_auth_flows = list(string)})) | [] | no |
 | user_pool_name | The cognito user pool name | string | | yes |
 | user_pool_domain | The cognito user pool domain | string | | yes |
 | user_groups | List of user groups manage by cognito user pool | list(object({name = string,description = string,precedence = number})) | [] | no |
-| additional_clients | List of additional user pool client to support multiple applications | List(object({name = string,callback_urls = list(string),logout_urls = list(string),default_redirect_uri = string,explicit_auth_flows = list(string)})) | [] | no |
 | admin_create_user_config | The configuration for AdminCreateUser requests | map | {} | no |
 | admin_create_user_config_allow_admin_create_user_only | Set to True if only the administrator is allowed to create user profiles. Set to False if users can sign themselves up via an app | bool | false | No | 
 | admin_create_user_config_unused_account_validity_days | The user account expiration limit, in days, after which the account is no longer usable | number | 0 | No |
