@@ -42,9 +42,9 @@ variable "user_groups" {
   }))
 }
 
-variable "additional_clients" {
+variable "app_clients" {
   default = []
-  description = "List of additional user pool client to support multiple applications"
+  description = "List of user pool app clients to support multiple applications"
   type = list(object({
     name = string
     callback_urls = list(string)
