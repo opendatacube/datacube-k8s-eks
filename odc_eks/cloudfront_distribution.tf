@@ -85,7 +85,8 @@ provider "aws" {
 resource "aws_acm_certificate" "cert" {
   provider          = aws.us
   count             = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
-  domain_name       = "${var.cf_dns_record}.${var.domain_name}"
+  domain_name       = "${var.cf_dns_record}.${local.cf_acm_domains[0]}"
+  subject_alternative_names = slice(local.cf_acm_domains, 1, length(local.cf_acm_domains))
   validation_method = "DNS"
 }
 
@@ -97,20 +98,19 @@ data "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_record" "cert_validation" {
-  count   = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
-  name    = aws_acm_certificate.cert[0].domain_validation_options[0].resource_record_name
-  type    = aws_acm_certificate.cert[0].domain_validation_options[0].resource_record_type
+  count   = (var.cf_certificate_create && var.cf_enable) ? length(local.cf_acm_domains) : 0
+  name    = aws_acm_certificate.cert[0].domain_validation_options[count.index].resource_record_name
+  type    = aws_acm_certificate.cert[0].domain_validation_options[count.index].resource_record_type
   zone_id = data.aws_route53_zone.zone[0].id
-  records = [aws_acm_certificate.cert[0].domain_validation_options[0].resource_record_value]
+  records = [aws_acm_certificate.cert[0].domain_validation_options[count.index].resource_record_value]
   ttl     = 60
 }
 
 resource "aws_acm_certificate_validation" "cert" {
-  provider = aws.us
-
+  provider                = aws.us
   count                   = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
   certificate_arn         = aws_acm_certificate.cert[0].arn
-  validation_record_fqdns = [aws_route53_record.cert_validation[0].fqdn]
+  validation_record_fqdns = aws_route53_record.cert_validation.*.fqdn
 }
 
 locals {
@@ -119,6 +119,9 @@ locals {
   certificate_arn = (var.cf_certificate_arn != "" ) ? var.cf_certificate_arn : local.generated_cert_arn
 
   origin_domain = "${var.cf_origin_dns_record}.${var.domain_name}"
+
+  # List of domains for cf certificate
+  cf_acm_domains = (length(var.cf_custom_aliases) == 0) ? [var.domain_name] : concat([var.domain_name], var.cf_custom_aliases)
 
   # Creates a basic cloudfront disribution with a custom (i.e. not S3) origin
   default_alias = ["${var.cf_dns_record}.${var.domain_name}"]
