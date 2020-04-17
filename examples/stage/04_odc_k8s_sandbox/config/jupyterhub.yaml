@@ -13,10 +13,9 @@ hub:
   extraEnv:
     JUPYTERHUB_USERPOOL_ID: ${jhub_userpool_id}
     AWS_DEFAULT_REGION: ${region}
-    OAUTH_CALLBACK_URL: https://${sandbox_host_name}/oauth_callback
+    AWSCOGNITO_DOMAIN: ${jhub_userpool_domain}.auth.${region}.amazoncognito.com
     OAUTH2_AUTHORIZE_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/authorize
     OAUTH2_TOKEN_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
-    OAUTH2_USERDATA_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/userInfo
   cookieSecret: 65732236ed9aca1180053b99f1d43382eba09bd7bc5c401804959127a80f774c # Replace
 proxy:
   secretToken: 1ad45878c40c6f4921fff6d234acaac806f3370c61eb7dcda1dded36c4560f4f # Replace
@@ -40,6 +39,11 @@ auth:
     enabled: True
     cryptoKey: 356e9462b05e983c6ffcced3702b9b78c5859a22fd6c9380513701ed8e075184 # Replace
   custom:
+    className: oauthenticator.awscognito.AWSCognitoAuthenticator
     config:
       client_id: ${jhub_auth_client_id}
       client_secret: ${jhub_auth_client_secret}
+      token_url: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
+      userdata_url: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/userInfo
+      oauth_callback_url: https://${sandbox_host_name}/oauth_callback
+      oauth_logout_redirect_url: https://${sandbox_host_name}

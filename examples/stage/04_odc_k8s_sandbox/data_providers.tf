@@ -60,6 +60,9 @@ locals {
   ami_image_id            = data.terraform_remote_state.odc_eks-stage.outputs.ami_image_id
   user_node_instance_type = "m4.large"
   user_node_volume_size   = 100
+  spot_node_instance_type = "m4.large"
+  spot_node_volume_size   = 100
+  spot_max_price          = "0.40"
 
   cluster_id            = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   eks_cluster_version   = data.aws_eks_cluster.cluster.version
@@ -80,5 +83,21 @@ locals {
     ap-southeast-2a = 2
     ap-southeast-2b = 2
     ap-southeast-2c = 2
+  }
+
+  spot_min_nodes = {
+    us-west-2a = 0
+    us-west-2b = 0
+    us-west-2c = 0
+  }
+  spot_desired_nodes = {
+    us-west-2a = 0
+    us-west-2b = 0
+    us-west-2c = 0
+  }
+  spot_max_nodes = {
+    us-west-2a = 2
+    us-west-2b = 2
+    us-west-2c = 2
   }
 }

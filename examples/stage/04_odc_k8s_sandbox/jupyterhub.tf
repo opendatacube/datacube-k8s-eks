@@ -22,7 +22,7 @@ data "template_file" "jupyterhub" {
 
 resource "kubernetes_secret" "jupyterhub" {
   metadata {
-    name = "jhub"
+    name = "jupyterhub"
     namespace = kubernetes_namespace.sandbox.metadata[0].name
   }
 

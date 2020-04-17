@@ -30,6 +30,18 @@ ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
    --cloud-provider=aws"
 USERDATA
 
+  worker_node_userdata = <<USERDATA
+#!/bin/bash
+set -o xtrace
+# Get instance and ami id from the aws ec2 metadate endpoint
+id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
+ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
+/etc/eks/bootstrap.sh --apiserver-endpoint '${local.endpoint}' --b64-cluster-ca '${local.certificate_authority}' '${local.cluster_id}' \
+--kubelet-extra-args \
+  "--node-labels=cluster=${local.cluster_id},nodegroup=${local.node_group_name},nodetype=spot,instance-id=$id,ami-id=$ami,"hub.jupyter.org/node-purpose=worker" \
+   --register-with-taints="hub.jupyter.org/dedicated=worker:NoSchedule" \
+   --cloud-provider=aws"
+USERDATA
 }
 
 resource "aws_launch_template" "user_node" {
@@ -56,3 +68,26 @@ resource "aws_launch_template" "user_node" {
   }
 }
 
+resource "aws_launch_template" "worker_node" {
+  name_prefix            = "${local.cluster_id}-${local.node_group_name}-worker-nodes"
+  image_id               = local.ami_id
+  user_data              = base64encode(local.worker_node_userdata)
+  instance_type          = local.spot_node_instance_type
+  vpc_security_group_ids = [local.node_security_group]
+
+  iam_instance_profile {
+    # TODO this is the naming convention for this IAM profile for datacube-k8s-eks but it should probably be looked up
+    name = "${local.cluster_id}-node"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      volume_size = local.spot_node_volume_size
+    }
+  }
+}
