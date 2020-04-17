@@ -4,7 +4,7 @@ Terraform ODC supporting module that provision a kubernetes core components on t
 
 #### Warning
 
-* This is an extension module that is build upon [odc_eks](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_eks) cluster.
+* This is an extension module that is build upon [odc_eks](https://github.com/opendatacube/datacube-k8s-eks/tree/master/odc_eks) cluster.
 
 ---
 
@@ -29,13 +29,13 @@ The module provisions the following resources:
 
 ## Usage
 
-The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/examples/stage).
+The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
 Copy the example to create your own live repo to setup ODC infrastructure to run [jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) notebook and ODC web services to your own AWS account.
 
 ```hcl-terraform
   # Collect Data from odc_eks parent module
   module "odc_k8s" {
-    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
+    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=master"
     
     # Default tags + resource labels
     owner           = "odc-owner"
