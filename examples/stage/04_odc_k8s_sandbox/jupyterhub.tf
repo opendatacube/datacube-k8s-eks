@@ -5,16 +5,18 @@ data "template_file" "jupyterhub" {
     cluster_name    = local.cluster_id
     role_name       = module.odc_role_jupyterhub.role_name
     certificate_arn = local.certificate_arn
+    waf_acl_id      = local.waf_acl_id
     sandbox_host_name = local.sandbox_host_name
+
     db_hostname     = local.db_hostname
     db_username     = local.db_username
     db_password     = local.db_password
     db_name         = local.db_name
 
-    jhub_userpool_id        = module.jhub_cognito_auth.userpool_id
-    jhub_userpool_domain    = module.jhub_cognito_auth.userpool_domain
-    jhub_auth_client_id     = module.jhub_cognito_auth.client_id
-    jhub_auth_client_secret = module.jhub_cognito_auth.client_secret
+    jhub_userpool_id        = local.cognito_auth_userpool_id
+    jhub_userpool_domain    = local.cognito_auth_userpool_domain
+    jhub_auth_client_id     = local.cognito_auth_userpool_jhub_client_id
+    jhub_auth_client_secret = local.cognito_auth_userpool_jhub_client_secret
   }
 }
 

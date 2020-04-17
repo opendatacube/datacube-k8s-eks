@@ -1,5 +1,5 @@
 module "odc_k8s" {
-//    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=terraform-aws-odc"
+//    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=master"
   source = "../../../odc_k8s"
 
   # Default Tags

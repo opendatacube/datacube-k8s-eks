@@ -55,3 +55,35 @@ output "ami_image_id" {
 output "certificate_arn" {
   value = (local.create_certificate) ? module.odc_eks.certificate_arn[0] : data.aws_acm_certificate.domain_cert[0].arn
 }
+
+output "waf_acl_id" {
+  value = module.odc_eks.waf_acl_id
+}
+
+output "cognito_auth_userpool_id" {
+  value = module.cognito_auth.userpool_id
+}
+
+output "cognito_auth_userpool_domain" {
+  value = module.cognito_auth.userpool_domain
+}
+
+output "cognito_auth_userpool_jhub_client_id" {
+  value = module.cognito_auth.client_ids[0]
+  sensitive = true
+}
+
+output "cognito_auth_userpool_jhub_client_secret" {
+  value = module.cognito_auth.client_secrets[0]
+  sensitive = true
+}
+
+output "cognito_auth_userpool_airflow_client_id" {
+  value = module.cognito_auth.client_ids[1]
+  sensitive = true
+}
+
+output "cognito_auth_userpool_airflow_client_secret" {
+  value = module.cognito_auth.client_secrets[1]
+  sensitive = true
+}

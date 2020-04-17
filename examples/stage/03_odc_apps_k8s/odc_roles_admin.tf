@@ -3,7 +3,7 @@
 # is more manageable to simply group them up (e.g. Use the odc_roles and a list of roles)
 
 module "odc_role_autoscaler" {
-  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
   # Default Tags
@@ -39,7 +39,7 @@ module "odc_role_autoscaler" {
 }
 
 module "odc_role_alb_ingress" {
-  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
   # Default Tags
@@ -184,7 +184,7 @@ module "odc_role_alb_ingress" {
 }
 
 module "odc_role_external_dns" {
-  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
   # Default Tags
@@ -226,7 +226,7 @@ module "odc_role_external_dns" {
 }
 
 module "odc_role_fluentd" {
-  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  //  source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
   # Default Tags
