@@ -9,6 +9,3 @@ awsCredentialsSecret: ${aws_creds_secret}
 ingress:
   hosts:
     - ows.${domain_name}
-    - ows.services.${domain_name}
-    - nc-ows.${domain_name}
-    - cached-alb.${domain_name}
