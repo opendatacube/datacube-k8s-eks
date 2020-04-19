@@ -1,4 +1,6 @@
-# NOTE: This patch is required to solve pending issue: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1413
+# NOTE: This template only needed if you are using ebs volumes for jupyterhub user storage class.
+#
+# This patch is required to solve pending issue: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1413
 # Below null_resource patch the default StorageClass - gp2 (default) - set not to default
 # Makesure you create a new StorageClass using k8s template as per zero-to-jupyterhub docs: https://zero-to-jupyterhub.readthedocs.io/_/downloads/en/latest/pdf/
 #

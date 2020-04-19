@@ -7,3 +7,13 @@ resource "kubernetes_namespace" "admin" {
     }
   }
 }
+
+resource "kubernetes_namespace" "web" {
+  metadata {
+    name = "web"
+
+    labels = {
+      managed-by = "Terraform"
+    }
+  }
+}
