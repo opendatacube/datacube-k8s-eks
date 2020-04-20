@@ -23,8 +23,11 @@ Once you have create a terraform backend and updated a configuration parameters,
 ```shell script
   kubectl get pods —all-namespaces
 ```
-- Optionally, you can execute `examples/stage/03_odc_apps_k8s` and `examples/stage/04_odc_k8s_sandbox`. This will setup a full sandbox/jupyterhub environment as well installs necessary components, roles and kubernetes secrets, etc to manage your cluster.
-- Deploy apps using Flux and Helm Release. As part of this example, FluxCD is configured (in `o2_odc_k8s` module) to monitor [flux-odc-sample](https://github.com/opendatacube/flux-odc-sample) repo that defines Helm Releases for ODC cluster. Create your own live repo and update flux configuration.
+
+## Deploy apps using Flux and Helm Release
+- FluxCD is configured (in `02_odc_k8s` module) to monitor [flux-odc-sample](https://github.com/opendatacube/flux-odc-sample) repo that defines Helm Releases for ODC cluster. Create your own live repo and update flux configuration.
+- Execute example modules `examples/stage/03_odc_apps_k8s` and `examples/stage/04_odc_k8s_sandbox`. 
+This will setup a full sandbox/jupyterhub environment, ows web service and also installs necessary admin & monitoring components, roles and kubernetes secrets, etc to manage your cluster.
 - Fetch a flux deployment key and copy it to repo ssh public key or deploy keys section:
 ```bash
     kubectl -n flux logs deployment/flux | grep identity.pub |cut -d '"' -f2
