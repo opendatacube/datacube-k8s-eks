@@ -4,8 +4,11 @@ locals {
   namespace   = "odc-test"
   environment = "stage"
 
-  domain_name = "dev.dea.ga.gov.au"
-  # ACM - used by ALB
+  domain_name = "test.dea.ga.gov.au"
+  sandbox_host_name = "app.${local.domain_name}"
+
+  # ACM - used by ALB.
+  # To create a new cert, set this flag to true
   create_certificate  = false
 }
 
@@ -18,7 +21,7 @@ module "odc_cluster_label" {
 }
 
 module "odc_eks" {
-  # source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=terraform-aws-odc"
+  # source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=master"
   source = "../../../odc_eks"
 
   # Cluster config
@@ -34,10 +37,10 @@ module "odc_eks" {
     "Everywhere" = "0.0.0.0/0"
   }
 
-  domain_name = "test.dea.ga.gov.au"
+  domain_name = local.domain_name
 
   # ACM - used by ALB
-  create_certificate  = false
+  create_certificate  = local.create_certificate
 
   # DB config
   db_name = "odctest"
@@ -50,6 +53,8 @@ module "odc_eks" {
   spot_nodes_enabled = true
   min_nodes = 2
   max_nodes = 4
+  min_spot_nodes = 0
+  max_spot_nodes = 4
 
   # Cloudfront CDN
   cf_enable                 = false
@@ -70,7 +75,7 @@ module "odc_eks" {
   # Recommanded if WAF is enabled for `jupyterhub` setup
   waf_enable_url_whitelist_string_match_set = true
   waf_url_whitelist_uri_prefix              = "/user"
-  waf_url_whitelist_url_host                = "${sandbox_domain_name}"
+  waf_url_whitelist_url_host                = local.sandbox_host_name
 }
 
 data "aws_acm_certificate" "domain_cert" {

@@ -41,6 +41,12 @@ locals {
   domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   sandbox_host_name = "app.${local.domain_name}"
   certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
+  waf_acl_id      = tolist(data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id)[0]
+
+  cognito_auth_userpool_id                 = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_id
+  cognito_auth_userpool_domain             = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_domain
+  cognito_auth_userpool_jhub_client_id     = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_id
+  cognito_auth_userpool_jhub_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_secret
 
   db_hostname       = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username # This could be operational DB username/password
@@ -54,6 +60,9 @@ locals {
   ami_image_id            = data.terraform_remote_state.odc_eks-stage.outputs.ami_image_id
   user_node_instance_type = "m4.large"
   user_node_volume_size   = 100
+  spot_node_instance_type = "m4.large"
+  spot_node_volume_size   = 100
+  spot_max_price          = "0.40"
 
   cluster_id            = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   eks_cluster_version   = data.aws_eks_cluster.cluster.version
@@ -74,5 +83,21 @@ locals {
     ap-southeast-2a = 2
     ap-southeast-2b = 2
     ap-southeast-2c = 2
+  }
+
+  spot_min_nodes = {
+    us-west-2a = 0
+    us-west-2b = 0
+    us-west-2c = 0
+  }
+  spot_desired_nodes = {
+    us-west-2a = 0
+    us-west-2b = 0
+    us-west-2c = 0
+  }
+  spot_max_nodes = {
+    us-west-2a = 2
+    us-west-2b = 2
+    us-west-2c = 2
   }
 }

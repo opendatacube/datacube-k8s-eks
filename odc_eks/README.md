@@ -32,15 +32,21 @@ This is useful if migration is being performed to deploy a new infrastructure wi
 ### WAF Important Consideration
 - If you are using WAF for `jupyterhub` setup, make sure to enable `waf_enable_url_whitelist_string_match_set` - 
 string match filter for allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
+- Pass additional settings to support WAF for jupyterhub - 
+```hcl-terraform
+  waf_enable_url_whitelist_string_match_set = true
+  waf_url_whitelist_uri_prefix              = "/user"
+  waf_url_whitelist_url_host                = "app.example.domain.com"
+```
 
 ## Usage
 
-The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/examples/stage).
+The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
 Copy the example to create your own live repo to setup ODC infrastructure to run [jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) notebook and ODC web services to your own AWS account.
 
 ```hcl-terraform
   module "odc_eks" {
-    source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=terraform-aws-odc"
+    source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=master"
     
     # Cluster config
     region          = "ap-southeast-2"
@@ -74,6 +80,8 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     spot_nodes_enabled = true
     min_nodes = 2
     max_nodes = 4
+    min_spot_nodes = 0
+    max_spot_nodes = 4
     
     # Cloudfront CDN
     cf_enable                 = true
@@ -89,6 +97,11 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     waf_enable             = true
     waf_target_scope       = "regional"
     waf_log_bucket         = "odc-stage-waf-logs"
+    # Additional setting required to setup URL whitelist string match filter
+    # Recommanded if WAF is enabled for `jupyterhub` setup
+    waf_enable_url_whitelist_string_match_set = true
+    waf_url_whitelist_uri_prefix              = "/user"
+    waf_url_whitelist_url_host                = app.example.domain.com
   }
 ```
 
@@ -209,4 +222,4 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 #### ACM
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| create_certificate | Whether to create certificate for given domain | bool | false | No |
+| create_certificate | Whether to create wildcard certificate for given domain | bool | false | No |

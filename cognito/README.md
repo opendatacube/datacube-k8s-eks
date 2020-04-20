@@ -1,10 +1,10 @@
 # Terraform Open Data Cube EKS Supporting Module: cognito
 
-Terraform ODC supporting module that creates AWS Cognito user pool for sandbox user authentication.
+Terraform ODC supporting module that creates AWS Cognito user pool for user authentication.
 
 #### Warning
 
-* Create a ODC cluster environment using [odc_eks](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_eks) and [odc_k8s](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/odc_k8s) first.
+* Create a ODC cluster environment using [odc_eks](https://github.com/opendatacube/datacube-k8s-eks/tree/master/odc_eks) and [odc_k8s](https://github.com/opendatacube/datacube-k8s-eks/tree/master/odc_k8s) first.
 
 ---
 
@@ -22,16 +22,16 @@ Terraform ODC supporting module that creates AWS Cognito user pool for sandbox u
 
 ## Usage
 
-The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/terraform-aws-odc/examples/stage).
+The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
 Copy the example to create your own live repo to setup ODC infrastructure to run [jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) notebook and ODC web services to your own AWS account.
 
 ```hcl-terraform
-  module "cognito_auth_jhub" {
-    source = "github.com/opendatacube/datacube-k8s-eks//cognito?ref=terraform-aws-odc"
+  module "cognito_auth" {
+    source = "github.com/opendatacube/datacube-k8s-eks//cognito?ref=master"
     
     auto_verify = true
-    user_pool_name       = "odc-stage-cluster-jhub-userpool"
-    user_pool_domain     = "odc-stage-cluster-jhub-auth"
+    user_pool_name       = "odc-stage-cluster-userpool"
+    user_pool_domain     = "odc-stage-cluster-auth"
     user_groups = [
       {
         name        = "dev-group"
@@ -46,15 +46,15 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     ]
     app_clients = [
       {
-        name          = "sandbox-client"
+        name          = "jupyterhub-client"
         callback_urls = [
-          "https://app.sandbox.example.com/oauth_callback",
-          "https://app.sandbox.example.com"
+          "https://app.jupyterhub.example.com/oauth_callback",
+          "https://app.jupyterhub.example.com"
         ]
         logout_urls   = [
-          "https://app.sandbox.example.com"
+          "https://app.jupyterhub.example.com"
         ]
-        default_redirect_uri = "app.sandbox.example.com"
+        default_redirect_uri = "app.jupyterhub.example.com"
         explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_CUSTOM_AUTH"]
       }
     ]
@@ -105,5 +105,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 |------|-------------|------|
 | userpool_id | Cognito user pool ID | true |
 | userpool_domain | Cognito user pood domain | false |
-| client_id | Cognito user pool client ID | true |
-| client_secret | Cognito user pool client secret | true |
+| client_id | **Deprecated** Cognito user pool client ID | true |
+| client_secret | **Deprecated** Cognito user pool client secret | true |
+| client_ids | Cognito user pool client IDs | true |
+| client_secrets | Cognito user pool client secrets | true |

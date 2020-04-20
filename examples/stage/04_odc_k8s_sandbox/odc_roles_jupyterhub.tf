@@ -1,6 +1,6 @@
 # Roles for Jupyterhub web applications
 module "odc_role_jupyterhub" {
-  # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=terraform-aws-odc"
+  # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
   # Default Tags
