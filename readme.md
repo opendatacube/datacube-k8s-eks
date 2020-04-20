@@ -1,7 +1,5 @@
 # Datacube Kubernetes EKS
 
-:warning: This is still a work in progress and doesn't have an official release :warning:
-
 This repository will build and manage a production scale kubernetes cluster using the AWS EKS engine
 for running Open Data Cube applications. 
 
