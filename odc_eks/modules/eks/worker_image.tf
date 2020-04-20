@@ -87,6 +87,9 @@ resource "aws_launch_template" "spot" {
 
   instance_market_options {
     market_type = "spot"
+    spot_options {
+      max_price = var.max_spot_price
+    }
   }
 
   network_interfaces {
