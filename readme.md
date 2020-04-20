@@ -14,11 +14,14 @@ for running Open Data Cube applications.
 * Scale applications based on usage
 * Scale cluster to fit application requirements
 * Spot instance support
-* Send logs to cloudfront
-* Application load balancers with automatically generated certificates
-* Optional Cloudfront distribution with automatically generated certificates
+* Send logs to CloudWatch
+* Automatically generated domain wildcard certificate for application load balancer
+* Optional CloudFront distribution with automatically generated certificates
+* Optional WAF application firewall rules for jupyterhub - OWASP Top 10 security risks protection
 * Automatically register route53 DNS records
 * Inspect cluster metrics using Prometheus and Grafana
+* Modules to create IAM roles and users, used by cluster pods
+* Module to create cognito auth user pool for application authentication
 
 # Getting started
 
@@ -26,15 +29,12 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 
 # Documentation
 
-* [Additional Users](docs/additional_users.md) - How to add users and configure access
-* [Patching](docs/patching_upgrading.md) - How to keep the Kubernetes nodes up to date
-* [Addons](docs/addons.md) - Notes on how to install and configure various addons
-* [Troubleshooting](docs/troubleshooting.md) - Workarounds to fix common issues
+* [Cluster Access](docs/cluster_access.md) - How to add users and configure access
 * [Service Account](docs/service_account.md) - Creating a service account to build the infrastructure
-* [Variables](docs/variables.md) - A list of the configurable variables and what they do
 
 # Repository Layout
 
+* cognito - ODC supporting module that creates AWS Cognito user pool for user authentication
 * docs - Out of code documentation as above
 * examples - Sample Terraform deployments that can be spun-up and destroyed to test the various modules
 * odc_eks - Core components required to run an EKS cluster for ODC
@@ -42,5 +42,6 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
   * [Flux](https://www.weave.works/oss/flux/)
   * [Tiller/Helm](https://helm.sh/)
 :warning: Soon to be deprecated :warning:
-* addons - Kubernetes hosted applications pending refactor to deployment via Flux.
+* odc_role - ODC supporting module that creates IAM role for cluster pods
+* odc_user - ODC supporting module that creates IAM user for cluster pods
 * .circleci - TFLint CI automation
