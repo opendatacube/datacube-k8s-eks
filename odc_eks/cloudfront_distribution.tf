@@ -88,6 +88,10 @@ resource "aws_acm_certificate" "cert" {
   domain_name       = "${var.cf_dns_record}.${local.cf_acm_domains[0]}"
   subject_alternative_names = slice(local.cf_acm_domains, 1, length(local.cf_acm_domains))
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Automatically validate the cert using DNS validation
