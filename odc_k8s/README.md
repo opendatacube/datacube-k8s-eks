@@ -26,6 +26,46 @@ The module provisions the following resources:
 
 - Install kubernetes core components - tiller, helm, flux, fluxcloud.
 - Optionally creates a AWS CloudWatch log group to collect logs for your cluster.
+- Setup `aws-auth` ConfigMap settings for user/role based cluster access.
+
+## Manage Cluster Access 
+
+When you create an Amazon EKS cluster, the IAM entity user or role, such as a federated user that creates the cluster, 
+is automatically granted `system:masters` permissions in the cluster's RBAC configuration. To grant additional AWS users 
+or roles the ability to interact with your cluster, you must edit the `aws-auth` ConfigMap within Kubernetes.
+
+### MapRoles config
+
+**Option 1: Must provide `node_roles` (for worker node group access) and optional `user_roles` (role based user access) params**
+```hcl-terraform
+node_roles = {
+  "system:node:{{EC2PrivateDNSName}}": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+}
+# NOTE: roles are assigns to `system:masters` group
+user_roles = {
+  cluster-admin: "<IAM-role-arn>"
+}
+```
+
+**Option 2: provide a `role_config_template` param**
+```hcl-terraform
+role_config_template = "<renderd aws-auth MapRoles config template>"
+```
+
+### MapUsers config
+
+**Option 1: provide `users` param**
+```hcl-terraform
+# NOTE: users are assigns to `system:masters` group
+users = {
+  eks-deployer: "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/eks-deployer"
+}
+```
+
+**Option 2: provide a `user_config_template` param**
+```hcl-terraform
+user_config_template = "<renderd aws-auth MaapUsers config template>"
+```
 
 ## Usage
 
@@ -99,9 +139,11 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
 | environment | The name of the environment - e.g. dev, stage | string |  | yes |
 | cluster_id | The name of your cluster. Used for the resource naming as identifier | string |  | yes |
-| node_roles | A list of node roles that will be given access to the cluster | map | | Yes |
+| node_roles | A list of node roles that will be given access to the cluster | map | {} | No |
 | user_roles | A list of user roles that will be given access to the cluster | map | {} | No |
 | users | A list of users that will be given access to the cluster | map | {} | No |
+| role_config_template | aws-auth MapRoles config template | string | "" | No |
+| user_config_template | aws-auth MapRoles config template | string | "" | No |
 | db_hostname | DB hostname for coredns config | string | "" | No |
 | db_admin_username | Username for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | "" | No |
 | db_admin_password | Password for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | "" | No |

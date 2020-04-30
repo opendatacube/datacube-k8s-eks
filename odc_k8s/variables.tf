@@ -44,13 +44,13 @@ variable "users" {
 variable "role_config_template" {
   default = ""
   type = string
-  description = "aws-auth role config template"
+  description = "aws-auth MapRoles config template"
 }
 
 variable "user_config_template" {
   default = ""
   type = string
-  description = "aws-auth user config template"
+  description = "aws-auth MapUsers config template"
 }
 
 variable "db_hostname" {
