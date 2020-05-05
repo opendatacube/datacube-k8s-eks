@@ -5,6 +5,14 @@ variable "flux_enabled" {
   default = false
 }
 
+variable "fluxcd_flux_chart_version" {
+  default = "1.0.0"
+}
+
+variable "fluxcd_helm_operator_chart_version" {
+  default = "0.3.0"
+}
+
 variable "flux_git_repo_url" {
   type        = string
   description = "URL pointing to the git repository that flux will monitor and commit to"
@@ -63,7 +71,7 @@ resource "helm_release" "flux" {
   name       = "flux"
   repository = "https://charts.fluxcd.io"
   chart      = "flux"
-  version    = "1.0.0"
+  version    = var.fluxcd_flux_chart_version
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
   values = [
@@ -81,7 +89,7 @@ resource "helm_release" "flux-helm-operator" {
   name       = "helm-operator"
   repository = "https://charts.fluxcd.io"
   chart      = "helm-operator"
-  version    = "0.3.0"
+  version    = var.fluxcd_helm_operator_chart_version
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
   set {
