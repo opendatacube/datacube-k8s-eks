@@ -12,13 +12,13 @@ variable "flux_version" {
 variable "flux_git_repo_url" {
   type        = string
   description = "URL pointing to the git repository that flux will monitor and commit to"
-  default     = "git@github.com:opendatacube/datacube-k8s-eks"
+  default     = ""
 }
 
 variable "flux_git_branch" {
   type        = string
   description = "Branch of the specified git repository to monitor and commit to"
-  default     = "dev"
+  default     = ""
 }
 
 variable "flux_git_path" {

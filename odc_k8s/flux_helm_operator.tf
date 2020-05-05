@@ -3,7 +3,9 @@ variable "flux_helm_operator_version" {
 }
 
 variable "enabled_helm_versions" {
-  default = "v2\\,v3"
+  type        = string
+  description = "Helm options to support release versions"
+  default     = "v2\\,v3"
 }
 
 resource "helm_release" "flux_helm_operator" {

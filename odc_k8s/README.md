@@ -148,4 +148,26 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | db_admin_username | Username for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | "" | No |
 | db_admin_password | Password for the database to store in a default kubernetes secret. Inject through odc_eks terraform output state file | string | "" | No |
 | store_db_creds | If true, store the db_admin_username and db_admin_password variables in a kubernetes secret | bool | false | No |
-| tags | Additional tags - e.g. `map('StackName','XYZ')` | map(string) | {} | no | 
+| tags | Additional tags - e.g. `map('StackName','XYZ')` | map(string) | {} | no |
+
+### Inputs - FluxCD
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| flux_enabled | Flag to enable flux helm release | bool | false | No | 
+| flux_version | Flux helm release version | string | "1.3.0" | No | 
+| flux_git_repo_url | URL pointing to the git repository that flux will monitor and commit to | string | "" | No | 
+| flux_git_branch | Branch of the specified git repository to monitor and commit to | string | "" | No | 
+| flux_git_path | Relative path inside specified git repository to search for manifest files | string | "" | No | 
+| flux_git_label | Label prefix that is used to track flux syncing inside the git repository | string | "flux-sync" | No | 
+| flux_additional_args | Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud | string | "" | No | 
+| flux_helm_operator_version | Flux helm-operator release version | string | "1.0.1" | No | 
+| enabled_helm_versions | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"` | string | "v2\\,v3" | No | 
+
+### Inputs - FluxCloud
+| fluxcloud_enabled | Flag to deploy fluxcloud - used to notify flux deployment to slack | bool | false | No | 
+| fluxcloud_slack_url | Slack webhook URL for fluxcloud to use | string | "" | No | 
+| fluxcloud_slack_channel | Slack channel for fluxcloud to use | string | "" | No | 
+| fluxcloud_slack_name | Slack name for fluxcloud to post under | string | "" | No | 
+| fluxcloud_slack_emoji | Slack emoji for fluxcloud to post under | string | "" | No | 
+| fluxcloud_github_url | VCS URL for fluxcloud links in messages, does not have to be a GitHub URL | string | "" | No | 
+| fluxcloud_commit_template | VCS template for fluxcloud links in messages, default is for GitHub | string | "{{ .VCSLink }}/commit/{{ .Commit }}" | No | 
