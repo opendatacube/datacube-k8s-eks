@@ -38,10 +38,6 @@ resource "helm_release" "flux_helm_operator" {
 //}
 
 # installing extra softwares + helm-operator CRD
-data "http" "flux_helm_operator_crd_yaml" {
-  url = "https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"
-}
-
 resource "null_resource" "apply_flux_helm_operator_crd" {
   count      = var.flux_enabled ? 1 : 0
 
@@ -54,7 +50,6 @@ resource "null_resource" "apply_flux_helm_operator_crd" {
     # This avoids dependency issues during the destory phase
     install_kubectl = local.install_kubectl
     local_exec_interpreter = var.local_exec_interpreter
-    flux_helm_release_crd_yaml = replace(data.http.flux_helm_operator_crd_yaml.body, "\"", "\\\"")
   }
 
   depends_on = [
@@ -64,14 +59,14 @@ resource "null_resource" "apply_flux_helm_operator_crd" {
 
   provisioner "local-exec" {
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "crd_yaml=\"${self.triggers.flux_helm_release_crd_yaml}\"", "kubectl apply -f - <<< \"$crd_yaml\" "])
+    command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"])
   }
 
 
   provisioner "local-exec" {
     when    = destroy
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "crd_yaml=\"${self.triggers.flux_helm_release_crd_yaml}\"", "kubectl delete -f - <<< \"$crd_yaml\" "])
+    command = join("\n", [self.triggers.install_kubectl, "kubectl delete -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"])
   }
 
 }
