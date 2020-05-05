@@ -1,4 +1,4 @@
-variable "helm_operator_version" {
+variable "flux_helm_operator_version" {
   default = "1.0.1"
 }
 
@@ -11,7 +11,7 @@ resource "helm_release" "flux_helm_operator" {
   name       = "helm-operator"
   repository = "https://charts.fluxcd.io"
   chart      = "helm-operator"
-  version    = var.helm_operator_version
+  version    = var.flux_helm_operator_version
   namespace  = "flux"
 
   set {
@@ -47,14 +47,14 @@ resource "null_resource" "apply_flux_helm_operator_crd" {
 
   provisioner "local-exec" {
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"])
+    command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.flux_helm_operator_version}/deploy/crds.yaml"])
   }
 
 
   provisioner "local-exec" {
     when    = destroy
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "kubectl delete -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"])
+    command = join("\n", [self.triggers.install_kubectl, "kubectl delete -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.flux_helm_operator_version}/deploy/crds.yaml"])
   }
 
 }
