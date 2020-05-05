@@ -7,6 +7,7 @@ variable "enabled_helm_versions" {
 }
 
 resource "helm_release" "flux_helm_operator" {
+  count      = var.flux_enabled ? 1 : 0
   name       = "helm-operator"
   repository = "https://charts.fluxcd.io"
   chart      = "helm-operator"
@@ -23,19 +24,6 @@ resource "helm_release" "flux_helm_operator" {
     value = var.enabled_helm_versions
   }
 }
-
-//# installing helm-operator CRD
-//resource "null_resource" "apply_helm_operator_crd" {
-//  count      = var.flux_enabled && (!var.install_aws_cli || !var.install_kubectl) ? 1 : 0
-//  provisioner "local-exec" {
-//    command = "aws eks --region ${var.region} update-kubeconfig --name ${var.cluster_id} && kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"
-//  }
-//
-//  provisioner "local-exec" {
-//    when    = destroy
-//    command = "aws eks --region ${var.region} update-kubeconfig --name ${var.cluster_id} && kubectl delete -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.helm_operator_version}/deploy/crds.yaml"
-//  }
-//}
 
 # installing extra softwares + helm-operator CRD
 resource "null_resource" "apply_flux_helm_operator_crd" {
