@@ -1,3 +1,11 @@
+locals {
+  default_user_configmap_template = length(var.users) > 0 ? data.template_file.map_user_config.rendered : null
+  mapUsers = var.user_config_template != "" ? var.user_config_template : local.default_user_configmap_template
+
+  default_user_configmap_template = length(var.node_roles) > 0 ? data.template_file.map_role_config.rendered : null
+  mapRoles = var.role_config_template != "" ? var.role_config_template : local.default_user_configmap_template
+}
+
 data "template_file" "map_user_config" {
   template = <<EOF
 %{ for user_name, user_arn in var.users ~}
@@ -34,8 +42,8 @@ resource "kubernetes_config_map" "aws_auth" {
   }
 
   data = {
-    mapRoles = data.template_file.map_role_config.rendered
-    mapUsers = (length(var.users) > 0) ? data.template_file.map_user_config.rendered : null
+    mapRoles = local.mapRoles
+    mapUsers = local.mapUsers
   }
 
 }

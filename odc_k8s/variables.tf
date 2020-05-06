@@ -24,6 +24,7 @@ variable "cluster_id" {
 }
 
 variable "node_roles" {
+  default = {}
   type = map
   description = "A list of node roles that will be given access to the cluster"
 }
@@ -38,6 +39,18 @@ variable "users" {
   default = {}
   type = map
   description = "A list of users that will be given access to the cluster"
+}
+
+variable "role_config_template" {
+  default = ""
+  type = string
+  description = "aws-auth MapRoles config template"
+}
+
+variable "user_config_template" {
+  default = ""
+  type = string
+  description = "aws-auth MapUsers config template"
 }
 
 variable "db_hostname" {
