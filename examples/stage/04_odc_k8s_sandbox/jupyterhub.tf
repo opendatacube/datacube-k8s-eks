@@ -1,17 +1,17 @@
 data "template_file" "jupyterhub" {
   template = file("${path.module}/config/jupyterhub.yaml")
   vars = {
-    region          = local.region
-    cluster_name    = local.cluster_id
-    role_name       = module.odc_role_jupyterhub.role_name
-    certificate_arn = local.certificate_arn
-    waf_acl_id      = local.waf_acl_id
+    region            = local.region
+    cluster_name      = local.cluster_id
+    role_name         = module.odc_role_jupyterhub.role_name
+    certificate_arn   = local.certificate_arn
+    waf_acl_id        = local.waf_acl_id
     sandbox_host_name = local.sandbox_host_name
 
-    db_hostname     = local.db_hostname
-    db_username     = local.db_username
-    db_password     = local.db_password
-    db_name         = local.db_name
+    db_hostname = local.db_hostname
+    db_username = local.db_username
+    db_password = local.db_password
+    db_name     = local.db_name
 
     jhub_userpool_id        = local.cognito_auth_userpool_id
     jhub_userpool_domain    = local.cognito_auth_userpool_domain
@@ -22,7 +22,7 @@ data "template_file" "jupyterhub" {
 
 resource "kubernetes_secret" "jupyterhub" {
   metadata {
-    name = "jupyterhub"
+    name      = "jupyterhub"
     namespace = kubernetes_namespace.sandbox.metadata[0].name
   }
 

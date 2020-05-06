@@ -10,9 +10,9 @@ resource "aws_db_subnet_group" "db_sg" {
 
   tags = merge(
     {
-      Name = "${var.name}-db"
-      owner = var.owner
-      namespace = var.namespace
+      Name        = "${var.name}-db"
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -45,13 +45,13 @@ resource "aws_db_instance" "db" {
   backup_window           = var.backup_window
   backup_retention_period = var.backup_retention_period
   storage_encrypted       = var.storage_encrypted
-  snapshot_identifier     = (var.snapshot_identifier != "")? var.snapshot_identifier : null
+  snapshot_identifier     = (var.snapshot_identifier != "") ? var.snapshot_identifier : null
 
   tags = merge(
     {
-      Name = "db-${var.name}"
-      owner = var.owner
-      namespace = var.namespace
+      Name        = "db-${var.name}"
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags

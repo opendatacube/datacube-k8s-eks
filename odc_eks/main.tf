@@ -2,11 +2,11 @@ data "aws_availability_zones" "available" {
 }
 
 module "odc_eks_label" {
-  source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
-  namespace  = var.namespace
-  stage      = var.environment
+  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  namespace = var.namespace
+  stage     = var.environment
   name      = "eks"
-  delimiter  = "-"
+  delimiter = "-"
 }
 
 module "vpc" {
@@ -23,19 +23,19 @@ module "vpc" {
   database_subnets = var.database_subnet_cidrs
 
   private_subnet_tags = {
-    "SubnetType"  = "Private"
+    "SubnetType"                                       = "Private"
     "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
     "kubernetes.io/role/internal-elb"                  = "1"
   }
 
   public_subnet_tags = {
-    "SubnetType"  = "Utility"
+    "SubnetType"                                       = "Utility"
     "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
     "kubernetes.io/role/elb"                           = "1"
   }
 
   database_subnet_tags = {
-    "SubnetType"  = "Database"
+    "SubnetType" = "Database"
   }
 
   enable_dns_hostnames = true
@@ -47,9 +47,9 @@ module "vpc" {
 
   tags = merge(
     {
-      Name = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
-      owner = var.owner
-      namespace = var.namespace
+      Name        = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -67,20 +67,20 @@ module "db" {
   vpc_id                = module.vpc.vpc_id
   database_subnet_group = module.vpc.database_subnets
 
-  db_name                = var.db_name
-  rds_is_multi_az        = var.db_multi_az
+  db_name         = var.db_name
+  rds_is_multi_az = var.db_multi_az
   # extra_sg could be empty, so we run compact on the list to remove it if it is
   access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
   storage                = var.db_storage
   db_max_storage         = var.db_max_storage
 
   #Engine version
-  engine_version         = var.db_engine_version
+  engine_version = var.db_engine_version
 
   # Optional snapshot ID injection for migrations, only set if not null
   # Refer to - https://www.terraform.io/docs/providers/aws/r/db_instance.html#snapshot_identifier
-  snapshot_identifier    =  var.db_migrate_snapshot
-  
+  snapshot_identifier = var.db_migrate_snapshot
+
   # Default Tags
   owner       = var.owner
   namespace   = var.namespace
@@ -102,7 +102,7 @@ module "eks" {
   user_custom_policy         = var.user_custom_policy
   user_additional_policy_arn = var.user_additional_policy_arn
 
-  enable_ec2_ssm     = var.enable_ec2_ssm
+  enable_ec2_ssm = var.enable_ec2_ssm
 
   # Worker configuration
   min_nodes                    = var.min_nodes

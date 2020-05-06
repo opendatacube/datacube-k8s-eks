@@ -16,9 +16,9 @@ variable "cf_origin_dns_record" {
 }
 
 variable "cf_custom_aliases" {
-  type    = list(string)
+  type        = list(string)
   description = "Extra CNAMEs (alternate domain names), if any, for this distribution"
-  default = []
+  default     = []
 }
 
 variable "cf_certificate_arn" {
@@ -83,11 +83,11 @@ provider "aws" {
 }
 
 resource "aws_acm_certificate" "cert" {
-  provider          = aws.us
-  count             = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
-  domain_name       = "${var.cf_dns_record}.${local.cf_acm_domains[0]}"
+  provider                  = aws.us
+  count                     = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
+  domain_name               = "${var.cf_dns_record}.${local.cf_acm_domains[0]}"
   subject_alternative_names = slice(local.cf_acm_domains, 1, length(local.cf_acm_domains))
-  validation_method = "DNS"
+  validation_method         = "DNS"
 
   lifecycle {
     create_before_destroy = true
@@ -119,8 +119,8 @@ resource "aws_acm_certificate_validation" "cert" {
 
 locals {
   # set certificate_arn to either the existing cert or the generated cert
-  generated_cert_arn = (var.cf_certificate_create && var.cf_enable)? aws_acm_certificate_validation.cert[0].certificate_arn : ""
-  certificate_arn = (var.cf_certificate_arn != "" ) ? var.cf_certificate_arn : local.generated_cert_arn
+  generated_cert_arn = (var.cf_certificate_create && var.cf_enable) ? aws_acm_certificate_validation.cert[0].certificate_arn : ""
+  certificate_arn    = (var.cf_certificate_arn != "") ? var.cf_certificate_arn : local.generated_cert_arn
 
   origin_domain = "${var.cf_origin_dns_record}.${var.domain_name}"
 
@@ -132,12 +132,12 @@ locals {
   alias         = compact(concat(local.default_alias, var.cf_custom_aliases))
 
   # Get a bucket name without an extention: .s3.amazonaws.com
-  log_bucket = element(split(".s3.amazonaws.com",var.cf_log_bucket), 0)
+  log_bucket = element(split(".s3.amazonaws.com", var.cf_log_bucket), 0)
 }
 
 # create a policy document for the log bucket
 data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
-  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  count = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
   statement {
     effect = "Allow"
 
@@ -180,9 +180,9 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
 
   tags = merge(
     {
-      Name = local.log_bucket
-      owner = var.owner
-      namespace = var.namespace
+      Name        = local.log_bucket
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -192,7 +192,7 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
 # Create our cloudfront distribution
 resource "aws_cloudfront_distribution" "cloudfront" {
   count      = var.cf_enable ? 1 : 0
-  depends_on = [ aws_s3_bucket.cloudfront_log_bucket ]
+  depends_on = [aws_s3_bucket.cloudfront_log_bucket]
 
   origin {
     domain_name = local.origin_domain
@@ -211,7 +211,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = ""
-  aliases = local.alias
+  aliases             = local.alias
 
   default_cache_behavior {
     allowed_methods  = var.cf_default_allowed_methods

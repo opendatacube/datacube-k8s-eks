@@ -29,16 +29,16 @@ resource "helm_release" "flux_helm_operator" {
 
 # installing extra softwares + helm-operator CRD
 resource "null_resource" "apply_flux_helm_operator_crd" {
-  count      = var.flux_enabled ? 1 : 0
+  count = var.flux_enabled ? 1 : 0
 
   triggers = {
-    cluster_updated                     = var.cluster_id
-    kubernetes_namespace_updated        = kubernetes_namespace.flux[0].metadata[0].name
+    cluster_updated              = var.cluster_id
+    kubernetes_namespace_updated = kubernetes_namespace.flux[0].metadata[0].name
 
     # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners
     # need to re-run (the usual purpose as above) and to retain values you can access via self during the destroy phase.
     # This avoids dependency issues during the destory phase
-    install_kubectl = local.install_kubectl
+    install_kubectl        = local.install_kubectl
     local_exec_interpreter = var.local_exec_interpreter
   }
 
@@ -49,14 +49,14 @@ resource "null_resource" "apply_flux_helm_operator_crd" {
 
   provisioner "local-exec" {
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.flux_helm_operator_version}/deploy/crds.yaml"])
+    command     = join("\n", [self.triggers.install_kubectl, "kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.flux_helm_operator_version}/deploy/crds.yaml"])
   }
 
 
   provisioner "local-exec" {
-    when    = destroy
+    when        = destroy
     interpreter = [self.triggers.local_exec_interpreter, "-c"]
-    command = join("\n", [self.triggers.install_kubectl, "kubectl delete -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.flux_helm_operator_version}/deploy/crds.yaml"])
+    command     = join("\n", [self.triggers.install_kubectl, "kubectl delete -f https://raw.githubusercontent.com/fluxcd/helm-operator/${var.flux_helm_operator_version}/deploy/crds.yaml"])
   }
 
 }

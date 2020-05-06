@@ -2,7 +2,7 @@ data "template_file" "alb_ingress" {
   template = file("${path.module}/config/alb_ingress.yaml")
   vars = {
     cluster_name = local.cluster_id
-    role_name = module.odc_role_alb_ingress.role_name
+    role_name    = module.odc_role_alb_ingress.role_name
   }
 }
 
@@ -12,7 +12,7 @@ resource "kubernetes_secret" "alb_ingress" {
   ]
 
   metadata {
-    name = "alb-ingress"
+    name      = "alb-ingress"
     namespace = "admin"
   }
 

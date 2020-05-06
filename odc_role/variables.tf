@@ -1,20 +1,20 @@
 variable "namespace" {
   description = "The unique namespace for the environment, which could be your organization name or abbreviation"
-  default = "odc-test"
+  default     = "odc-test"
 }
 
 variable "owner" {
   description = "The owner of the environment"
-  default = "odc-test"
+  default     = "odc-test"
 }
 
 variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
-  default = "stage"
+  default     = "stage"
 }
 
 variable "cluster_id" {
-  type = string
+  type        = string
   description = "The name of your cluster for role based cluster access - attach to assume role policy"
 }
 

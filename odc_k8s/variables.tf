@@ -1,62 +1,62 @@
 variable "region" {
   description = "The AWS region to provision resources"
-  default = "ap-southeast-2"
+  default     = "ap-southeast-2"
 }
 
 variable "namespace" {
   description = "The unique namespace for the environment, which could be your organization name or abbreviation"
-  type = string
+  type        = string
 }
 
 variable "owner" {
   description = "The owner of the environment"
-  type = string
+  type        = string
 }
 
 variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
-  type = string
+  type        = string
 }
 
 variable "cluster_id" {
-  type = string
+  type        = string
   description = "The name of your cluster. Also used on all the resources as identifier"
 }
 
 variable "node_roles" {
-  default = {}
-  type = map
+  default     = {}
+  type        = map
   description = "A list of node roles that will be given access to the cluster"
 }
 
 variable "user_roles" {
-  default = {}
-  type = map
+  default     = {}
+  type        = map
   description = "A list of user roles that will be given access to the cluster"
 }
 
 variable "users" {
-  default = {}
-  type = map
+  default     = {}
+  type        = map
   description = "A list of users that will be given access to the cluster"
 }
 
 variable "role_config_template" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "aws-auth MapRoles config template"
 }
 
 variable "user_config_template" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "aws-auth MapUsers config template"
 }
 
 variable "db_hostname" {
-  type = string
+  type        = string
   description = "DB hostname for coredns config"
-  default = ""
+  default     = ""
 }
 
 variable "db_admin_username" {
@@ -74,7 +74,7 @@ variable "db_admin_password" {
 variable "store_db_creds" {
   default     = false
   description = "If true, store the db_admin_username and db_admin_password variables in a kubernetes secret"
-  type = bool
+  type        = bool
 }
 
 variable "tags" {

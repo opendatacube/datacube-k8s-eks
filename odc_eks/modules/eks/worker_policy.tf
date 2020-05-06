@@ -18,9 +18,9 @@ resource "aws_iam_role" "eks_node" {
 
   tags = merge(
     {
-      Name = "nodes.${var.cluster_id}"
-      owner = var.owner
-      namespace = var.namespace
+      Name        = "nodes.${var.cluster_id}"
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -28,8 +28,8 @@ resource "aws_iam_role" "eks_node" {
 }
 
 resource "aws_iam_policy" "eks_kube2iam" {
-  name = "${var.cluster_id}-kube2iam"
-  path = "/"
+  name        = "${var.cluster_id}-kube2iam"
+  path        = "/"
   description = "Enables Kube2iam to assume roles"
 
   policy = <<-EOF

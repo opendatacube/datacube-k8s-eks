@@ -7,14 +7,14 @@ module "odc_role_wms" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-wms"
+    name   = "${local.cluster_id}-wms"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -44,14 +44,14 @@ module "odc_role_wps" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-wps"
+    name   = "${local.cluster_id}-wps"
     policy = <<-EOF
     {
       "Version": "2012-10-17",

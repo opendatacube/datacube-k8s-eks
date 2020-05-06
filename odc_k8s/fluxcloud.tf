@@ -41,7 +41,7 @@ variable "fluxcloud_commit_template" {
 resource "kubernetes_service" "fluxcloud" {
   count = var.fluxcloud_enabled ? 1 : 0
   metadata {
-    name = "fluxcloud"
+    name      = "fluxcloud"
     namespace = kubernetes_namespace.flux[0].metadata[0].name
   }
 
@@ -60,13 +60,13 @@ resource "kubernetes_service" "fluxcloud" {
 resource "kubernetes_deployment" "fluxcloud" {
   count = var.fluxcloud_enabled ? 1 : 0
   metadata {
-    name = "fluxcloud"
+    name      = "fluxcloud"
     namespace = "flux"
   }
 
   spec {
     replicas = 1
-    
+
     selector {
       match_labels = {
         name = "fluxcloud"

@@ -38,20 +38,20 @@ locals {
   namespace   = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
 
-  domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
+  domain_name       = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   sandbox_host_name = "app.${local.domain_name}"
-  certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
-  waf_acl_id      = tolist(data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id)[0]
+  certificate_arn   = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
+  waf_acl_id        = tolist(data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id)[0]
 
   cognito_auth_userpool_id                 = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_id
   cognito_auth_userpool_domain             = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_domain
   cognito_auth_userpool_jhub_client_id     = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_id
   cognito_auth_userpool_jhub_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_secret
 
-  db_hostname       = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
+  db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username # This could be operational DB username/password
   db_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_password # This could be operational DB username/password
-  db_name           = data.terraform_remote_state.odc_eks-stage.outputs.db_name
+  db_name     = data.terraform_remote_state.odc_eks-stage.outputs.db_name
 
   node_group_name     = "sandbox"
   nodes_subnet_group  = data.aws_subnet_ids.nodes.ids

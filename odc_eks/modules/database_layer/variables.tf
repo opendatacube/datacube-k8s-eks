@@ -98,7 +98,7 @@ variable "extra_sg" {
 
 variable "snapshot_identifier" {
   default = ""
-  type = string
+  type    = string
   # via TF. docs Specifies whether or not to create this database from a snapshot. This correlates to the
   # snapshot ID you'd find in the RDS console, e.g: rds:production-2015-06-26-06-05.
   description = "Snapshot ID for database creation if a migration is being performed to deploy new infrastructure\nwith pre-existing data indexed. This variable can be used to point to Snapshot ID and perform a restore on create\nfor the new RDS instance. This variable is optional."

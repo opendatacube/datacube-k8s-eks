@@ -1,18 +1,18 @@
 module "odc_k8s" {
-//    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=master"
+  //    source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s?ref=master"
   source = "../../../odc_k8s"
 
   # Default Tags
-  owner        = local.owner
-  namespace    = local.namespace
-  environment  = local.environment
+  owner       = local.owner
+  namespace   = local.namespace
+  environment = local.environment
 
-  region       = local.region
-  cluster_id   = local.cluster_id
+  region     = local.region
+  cluster_id = local.cluster_id
 
   # Cluster Access Options
   node_roles = {
-    "system:node:{{EC2PrivateDNSName}}": data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+    "system:node:{{EC2PrivateDNSName}}" : data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
   }
   # Optional: user_roles and users
   # Example:
@@ -20,7 +20,7 @@ module "odc_k8s" {
   #   cluster-admin: <user-role-arn>
   # }
   users = {
-    eks-deployer: "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
+    eks-deployer : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
   }
 
   # Database
@@ -30,18 +30,18 @@ module "odc_k8s" {
   db_admin_password = local.db_admin_password
 
   # Setup Flux/FluxCloud
-  flux_enabled = false
+  flux_enabled      = false
   flux_git_repo_url = "git@github.com:opendatacube/flux-odc-sample.git"
-  flux_git_branch = "master"
-  flux_git_path = "flux"
+  flux_git_branch   = "master"
+  flux_git_path     = "flux"
   #flux_git_label = "flux-sync"
 
-  fluxcloud_enabled = false
-  fluxcloud_slack_url = ""
-  fluxcloud_slack_channel = ""
-  fluxcloud_slack_name = "Flux Example Deployer"
-  fluxcloud_slack_emoji = ":zoidberg:"
-  fluxcloud_github_url = "https://github.com/opendatacube/flux-odc-sample"
+  fluxcloud_enabled         = false
+  fluxcloud_slack_url       = ""
+  fluxcloud_slack_channel   = ""
+  fluxcloud_slack_name      = "Flux Example Deployer"
+  fluxcloud_slack_emoji     = ":zoidberg:"
+  fluxcloud_github_url      = "https://github.com/opendatacube/flux-odc-sample"
   fluxcloud_commit_template = "{{ .VCSLink }}/commits/{{ .Commit }}"
 
 

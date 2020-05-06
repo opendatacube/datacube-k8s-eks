@@ -18,9 +18,9 @@ resource "aws_security_group" "rds" {
 
   tags = merge(
     {
-      Name = "${var.name}-rds-sg"
-      owner = var.owner
-      namespace = var.namespace
+      Name        = "${var.name}-rds-sg"
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags

@@ -2,8 +2,8 @@ data "template_file" "cluster_autoscaler" {
   template = file("${path.module}/config/cluster_autoscaler.yaml")
   vars = {
     cluster_name = local.cluster_id
-    region = local.region
-    role_name = module.odc_role_autoscaler.role_name
+    region       = local.region
+    role_name    = module.odc_role_autoscaler.role_name
   }
 }
 
@@ -13,7 +13,7 @@ resource "kubernetes_secret" "cluster_autoscaler" {
   ]
 
   metadata {
-    name = "cluster-autoscaler"
+    name      = "cluster-autoscaler"
     namespace = "admin"
   }
 

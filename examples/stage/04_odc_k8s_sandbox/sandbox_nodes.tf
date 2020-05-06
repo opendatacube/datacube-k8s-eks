@@ -4,11 +4,11 @@ data "aws_subnet" "node_subnets" {
 }
 
 resource "aws_autoscaling_group" "nodes" {
-  count            = length(local.nodes_subnet_group)
-  desired_capacity = lookup(local.desired_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
-  max_size         = lookup(local.max_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
-  min_size         = lookup(local.min_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
-  name             = "${local.node_group_name}-${aws_launch_template.user_node.id}-nodes-${count.index}"
+  count               = length(local.nodes_subnet_group)
+  desired_capacity    = lookup(local.desired_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
+  max_size            = lookup(local.max_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
+  min_size            = lookup(local.min_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
+  name                = "${local.node_group_name}-${aws_launch_template.user_node.id}-nodes-${count.index}"
   vpc_zone_identifier = [data.aws_subnet.node_subnets[count.index].id]
 
   # Don't reset to default size every time terraform is applied
@@ -76,11 +76,11 @@ resource "aws_autoscaling_group" "nodes" {
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
-  count            = length(local.nodes_subnet_group)
-  desired_capacity = lookup(local.spot_desired_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
-  max_size         = lookup(local.spot_max_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
-  min_size         = lookup(local.spot_min_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
-  name             = "${local.node_group_name}-${aws_launch_template.user_node.id}-spot-nodes-${count.index}"
+  count               = length(local.nodes_subnet_group)
+  desired_capacity    = lookup(local.spot_desired_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
+  max_size            = lookup(local.spot_max_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
+  min_size            = lookup(local.spot_min_nodes, data.aws_subnet.node_subnets[count.index].availability_zone)
+  name                = "${local.node_group_name}-${aws_launch_template.user_node.id}-spot-nodes-${count.index}"
   vpc_zone_identifier = [data.aws_subnet.node_subnets[count.index].id]
 
   # Don't reset to default size every time terraform is applied
@@ -93,13 +93,13 @@ resource "aws_autoscaling_group" "spot_nodes" {
   mixed_instances_policy {
     instances_distribution {
       spot_allocation_strategy = "lowest-price"
-      spot_max_price = local.spot_max_price
+      spot_max_price           = local.spot_max_price
     }
 
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.worker_node.id
-        version = aws_launch_template.worker_node.latest_version
+        version            = aws_launch_template.worker_node.latest_version
       }
     }
   }

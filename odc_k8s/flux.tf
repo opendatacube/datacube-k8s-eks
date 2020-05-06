@@ -54,10 +54,10 @@ resource "kubernetes_namespace" "flux" {
 data "template_file" "flux_config" {
   template = file("${path.module}/config/flux.yaml")
   vars = {
-    git_repo_url = var.flux_git_repo_url
-    git_branch = var.flux_git_branch
-    git_path = var.flux_git_path
-    git_label = var.cluster_id
+    git_repo_url    = var.flux_git_repo_url
+    git_branch      = var.flux_git_branch
+    git_path        = var.flux_git_path
+    git_label       = var.cluster_id
     additional_args = var.flux_additional_args
   }
 }

@@ -2,9 +2,9 @@ module "cognito_auth" {
   # source = "github.com/opendatacube/datacube-k8s-eks//cognito?ref=master"
   source = "../../../cognito"
 
-  auto_verify = true
-  user_pool_name       = "${module.odc_cluster_label.id}-userpool"
-  user_pool_domain     = "${module.odc_cluster_label.id}-auth"
+  auto_verify      = true
+  user_pool_name   = "${module.odc_cluster_label.id}-userpool"
+  user_pool_domain = "${module.odc_cluster_label.id}-auth"
   user_groups = [
     {
       name        = "dev-group"
@@ -29,16 +29,16 @@ module "cognito_auth" {
   ]
   app_clients = [
     {
-      name          = "sandbox-client"
+      name = "sandbox-client"
       callback_urls = [
         "https://${local.sandbox_host_name}/oauth_callback",
         "https://${local.sandbox_host_name}"
       ]
-      logout_urls   = [
+      logout_urls = [
         "https://${local.sandbox_host_name}"
       ]
       default_redirect_uri = "https://${local.sandbox_host_name}"
-      explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_CUSTOM_AUTH"]
+      explicit_auth_flows  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_CUSTOM_AUTH"]
     }
   ]
 

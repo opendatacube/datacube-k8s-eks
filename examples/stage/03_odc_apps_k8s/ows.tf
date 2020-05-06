@@ -1,12 +1,12 @@
 data "template_file" "ows" {
   template = file("${path.module}/config/ows.yaml")
   vars = {
-    role_name = module.odc_role_wms.role_name
+    role_name   = module.odc_role_wms.role_name
     domain_name = local.domain_name
 
-    db_name = local.ows_db_name
+    db_name     = local.ows_db_name
     db_hostname = local.db_hostname
-    db_secret = kubernetes_secret.ows_db.metadata[0].name
+    db_secret   = kubernetes_secret.ows_db.metadata[0].name
 
     aws_creds_secret = kubernetes_secret.ows_user_creds.metadata[0].name
   }
@@ -14,7 +14,7 @@ data "template_file" "ows" {
 
 resource "kubernetes_secret" "ows" {
   metadata {
-    name = "ows"
+    name      = "ows"
     namespace = kubernetes_namespace.web.metadata[0].name
   }
 
@@ -31,12 +31,12 @@ module "odc_user_ows" {
   source = "../../../odc_user"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   user = {
-    name = "svc-${local.cluster_id}-ows-user"
+    name   = "svc-${local.cluster_id}-ows-user"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -66,9 +66,9 @@ resource "kubernetes_secret" "ows_user_creds" {
   }
 
   data = {
-    AWS_ACCESS_KEY_ID = module.odc_user_ows.id
+    AWS_ACCESS_KEY_ID     = module.odc_user_ows.id
     AWS_SECRET_ACCESS_KEY = module.odc_user_ows.secret
-    AWS_DEFAULT_REGION = local.region
+    AWS_DEFAULT_REGION    = local.region
   }
 
   type = "Opaque"

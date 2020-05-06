@@ -4,9 +4,9 @@ resource "aws_iam_user" "user" {
 
   tags = merge(
     {
-      Name = var.user.name
-      owner = var.owner
-      namespace = var.namespace
+      Name        = var.user.name
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -18,7 +18,7 @@ resource "aws_iam_access_key" "user" {
 }
 
 resource "aws_iam_user_policy" "policy" {
-  name = "${var.user.name}-policy"
-  user = aws_iam_user.user.name
+  name   = "${var.user.name}-policy"
+  user   = aws_iam_user.user.name
   policy = var.user.policy
 }

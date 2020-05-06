@@ -2,9 +2,9 @@
 # COGNITO
 
 resource "aws_cognito_user_pool" "pool" {
-  name = var.user_pool_name
-  alias_attributes           = ["email"]
-  auto_verified_attributes   = var.auto_verify ? ["email"] : null
+  name                     = var.user_pool_name
+  alias_attributes         = ["email"]
+  auto_verified_attributes = var.auto_verify ? ["email"] : null
 
   schema {
     name                = "email"
@@ -36,7 +36,7 @@ resource "aws_cognito_user_pool" "pool" {
     require_symbols   = false
   }
 
-    # admin_create_user_config
+  # admin_create_user_config
   dynamic "admin_create_user_config" {
     for_each = local.admin_create_user_config
     content {
@@ -66,9 +66,9 @@ resource "aws_cognito_user_pool" "pool" {
 
   tags = merge(
     {
-      Name = var.user_pool_name
-      owner = var.owner
-      namespace = var.namespace
+      Name        = var.user_pool_name
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -93,24 +93,24 @@ locals {
 
 # TODO: remove me! - This resource is deprecated. only kept to support v1.8.0 release.
 resource "aws_cognito_user_pool_client" "client" {
-  count = (length(var.app_clients) == 0) ? 1 : 0
-  name = "client"
-  user_pool_id = aws_cognito_user_pool.pool.id
-  generate_secret     = true
-  supported_identity_providers = ["COGNITO"]
-  callback_urls = (var.callback_url != "") ? [var.callback_url] : var.callback_urls
-  default_redirect_uri = var.default_redirect_uri
-  logout_urls = var.logout_urls
+  count                                = (length(var.app_clients) == 0) ? 1 : 0
+  name                                 = "client"
+  user_pool_id                         = aws_cognito_user_pool.pool.id
+  generate_secret                      = true
+  supported_identity_providers         = ["COGNITO"]
+  callback_urls                        = (var.callback_url != "") ? [var.callback_url] : var.callback_urls
+  default_redirect_uri                 = var.default_redirect_uri
+  logout_urls                          = var.logout_urls
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes = ["email", "aws.cognito.signin.user.admin", "openid"]
-  allowed_oauth_flows = ["code"]
+  allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
+  allowed_oauth_flows                  = ["code"]
 }
 
 resource "aws_cognito_user_pool_client" "clients" {
-  count           = length(var.app_clients)
-  name            = var.app_clients[count.index].name
-  user_pool_id    = aws_cognito_user_pool.pool.id
-  generate_secret = true
+  count                        = length(var.app_clients)
+  name                         = var.app_clients[count.index].name
+  user_pool_id                 = aws_cognito_user_pool.pool.id
+  generate_secret              = true
   supported_identity_providers = ["COGNITO"]
 
   callback_urls        = var.app_clients[count.index].callback_urls
@@ -119,8 +119,8 @@ resource "aws_cognito_user_pool_client" "clients" {
   explicit_auth_flows  = var.app_clients[count.index].explicit_auth_flows
 
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes = ["email", "aws.cognito.signin.user.admin", "openid"]
-  allowed_oauth_flows = ["code"]
+  allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
+  allowed_oauth_flows                  = ["code"]
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
