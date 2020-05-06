@@ -1,9 +1,9 @@
 locals {
-  default_user_configmap_template = length(var.users) > 0 ? data.template_file.map_user_config.rendered : null
-  mapUsers = var.user_config_template != "" ? var.user_config_template : local.default_user_configmap_template
+  default_user_config_template = length(var.users) > 0 ? data.template_file.map_user_config.rendered : null
+  mapUsers = var.user_config_template != "" ? var.user_config_template : local.default_user_config_template
 
-  default_user_configmap_template = length(var.node_roles) > 0 ? data.template_file.map_role_config.rendered : null
-  mapRoles = var.role_config_template != "" ? var.role_config_template : local.default_user_configmap_template
+  default_role_config_template = length(var.node_roles) > 0 ? data.template_file.map_role_config.rendered : null
+  mapRoles = var.role_config_template != "" ? var.role_config_template : local.default_role_config_template
 }
 
 data "template_file" "map_user_config" {
