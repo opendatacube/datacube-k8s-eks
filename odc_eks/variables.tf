@@ -61,50 +61,6 @@ variable "create_certificate" {
   default     = false
 }
 
-# Database
-# ================
-variable "db_name" {
-  type = string
-}
-
-variable "db_multi_az" {
-  type    = bool
-  default = false
-}
-
-variable "db_storage" {
-  default     = "180"
-  description = "Storage size in GB"
-  type        = string
-}
-
-variable "db_max_storage" {
-  default     = "0"
-  type        = string
-  description = "Enables storage autoscaling up to this amount, disabled if 0"
-}
-
-variable "db_extra_sg" {
-  default     = ""
-  type        = string
-  description = "enables an extra security group to access the RDS"
-}
-
-variable "db_engine_version" {
-  default = {
-    postgres = "9.6.11"
-  }
-  description = "PostgreSQL engine version used for initialization in specific deployments"
-}
-
-variable "db_migrate_snapshot" {
-  default = ""
-  type    = string
-  # via TF. docs Specifies whether or not to create this database from a snapshot. This correlates to the
-  # snapshot ID you'd find in the RDS console, e.g: rds:production-2015-06-26-06-05.
-  description = "Snapshot ID for database creation if a migration is being performed to deploy new infrastructure\nwith pre-existing data indexed. This variable can be used to point to Snapshot ID and perform a restore on create\nfor the new RDS instance. This variable is optional."
-}
-
 # VPC & subnets
 # =================
 variable "vpc_cidr" {

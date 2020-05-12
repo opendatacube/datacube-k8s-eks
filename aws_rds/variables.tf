@@ -121,4 +121,3 @@ variable "tags" {
   description = "Additional tags (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
-
