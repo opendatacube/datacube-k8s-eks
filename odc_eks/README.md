@@ -21,8 +21,7 @@ Terraform module designed to provision an Open Data Cube EKS cluster on AWS.
 The module provisions the following resources:
 
 - Creates VPC resources using [terraform-aws-vpc](https://github.com/terraform-aws-modules/terraform-aws-vpc) module.
-- Setup a new RDS instance with PostgreSQL database. Provide a snapshot ID to create the new RDS instance from existing RDS instance.\n
-This is useful if migration is being performed to deploy a new infrastructure with pre-existing data indexed.
+- Creates AWS EKS cluster
 
 ### Module Extensions(Optional Components)
 - Setup a AWS CloudFront Distribution to support Open Data Cube web services
@@ -47,7 +46,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 ```hcl-terraform
   module "odc_eks" {
     source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=master"
-    
+
     # Cluster config
     region          = "ap-southeast-2"
     cluster_id      = "odc-stage-cluster"   # optional - if not provided it uses odc_eks_label defined in the module.
@@ -69,11 +68,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     
     # ACM - used by ALB
     create_certificate  = true
-    
-    # DB config
-    db_name = "odc"
-    db_engine_version = { postgres = "11.5" }
-    db_multi_az = false
     
     # System node instances
     default_worker_instance_type = "t3.medium"
@@ -120,13 +114,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | user_custom_policy | The IAM custom policy to create and attach to EKS user role | string | "" | No |
 | user_additional_policy_arn | The list of pre-defined IAM policy required to EKS user role | list(string) | [] | No |
 | domain_name | The domain name to be used by applications deployed to the cluster and using ingress | string |  | Yes |
-| db_name | The name of your RDS database | string |  | Yes |
-| db_multi_az | If set to true your RDS will have read replicas in other Availability Zones, recommended for production environments to ensure the system will tolerate failure of an Availability Zone | bool | false | No |
-| db_storage | RDS storage size in GB. If this is increased it cannot be decreased | string | "180" | No |
-| db_max_storage | Enables storage autoscaling up to this amount, must be equal to or greater than db_storage, if this value is 0, storage autoscaling is disabled | string | "0" | No
-| db_extra_sg | Enables an extra security group to access the RDS, this is potentially useful if you wish to use lambda's or extra EC2 instances to perform database admin tasks | string | "" | No |
-| db_engine_version | Explicitly sets engine specific version for the database used | map | default = { postgres = "9.6.11" } | No |
-| db_migrate_snapshot | Snapshot ID for database creation if a migration is being performed to deploy new infrastructure | string | "" | No |
 | vpc_cidr | The network CIDR you wish to use for this VPC. Default is set to 10.0.0.0/16 for most use-cases | string | "10.0.0.0/16" | No |
 | public_subnet_cidrs | List of public cidrs, for all available availability zones. Used by VPC module to setup public subnets | list(string) | ["10.0.0.0/22", "10.0.4.0/22", "10.0.8.0/22"] | No |
 | private_subnet_cidrs | List of private cidrs, for all available availability zones. Used by VPC module to setup private subnets | list(string) | ["10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"] | No |
@@ -158,10 +145,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | owner | The owner of the environment | false |
 | namespace | The unique namespace for the environment | false |
 | environment | The name of the environment | false |
-| db_hostname | The RDS instance hostname | false |
-| db_admin_username | The RDS instance master username | true |
-| db_admin_password | The RDS instance master user password | true |
-| db_name | Name of the default database on RDS instance creation | false |
 | node_role_arn | IAM role ARN for EKS work node group | false |
 | node_security_group | security group for EKS work node group | false |
 | ami_image_id | AMI ID used for worker EC2 instances | false |

@@ -37,7 +37,7 @@ output "db_admin_password" {
 }
 
 output "db_name" {
-  value = module.db.db_name
+  value = local.db_name
 }
 
 output "node_role_arn" {
