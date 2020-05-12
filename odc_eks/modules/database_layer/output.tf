@@ -7,7 +7,7 @@ output "db_admin_password" {
 }
 
 output "db_hostname" {
-  
+
   value      = aws_db_instance.db.address
   depends_on = [aws_db_instance.db]
 }

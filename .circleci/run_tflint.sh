@@ -18,6 +18,9 @@ for a in $(ls examples/stage);
         rm -rf .terraform;
         cp main.tf main.tf.bck;
         cp ../../../.circleci/sample/main.tf.sample main.tf;
+        echo "terraform format check"
+        terraform fmt -check -recursive
+        echo "terraform lint check"
         terraform init;
         tflint --module main.tf;
         mv main.tf.bck main.tf;

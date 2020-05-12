@@ -1,33 +1,33 @@
 variable "region" {
   description = "The AWS region to provision resources"
-  type = string
-  default = "ap-southeast-2"
+  type        = string
+  default     = "ap-southeast-2"
 }
 
 variable "namespace" {
   description = "The unique namespace for the environment, which could be your organization name or abbreviation"
-  type = string
+  type        = string
 }
 
 variable "owner" {
   description = "The owner of the environment"
-  type = string
+  type        = string
 }
 
 variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
-  type = string
+  type        = string
 }
 
 variable "cluster_id" {
-  type = string
+  type        = string
   description = "The name of your cluster. Also used on all the resources as identifier"
-  default = ""
+  default     = ""
 }
 
 variable "cluster_version" {
   description = "EKS Cluster version to use"
-  type = string
+  type        = string
 }
 
 variable "admin_access_CIDRs" {
@@ -68,25 +68,25 @@ variable "db_name" {
 }
 
 variable "db_multi_az" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "db_storage" {
   default     = "180"
   description = "Storage size in GB"
-  type = string
+  type        = string
 }
 
 variable "db_max_storage" {
   default     = "0"
-  type = string
+  type        = string
   description = "Enables storage autoscaling up to this amount, disabled if 0"
 }
 
 variable "db_extra_sg" {
   default     = ""
-  type = string
+  type        = string
   description = "enables an extra security group to access the RDS"
 }
 
@@ -99,7 +99,7 @@ variable "db_engine_version" {
 
 variable "db_migrate_snapshot" {
   default = ""
-  type = string
+  type    = string
   # via TF. docs Specifies whether or not to create this database from a snapshot. This correlates to the
   # snapshot ID you'd find in the RDS console, e.g: rds:production-2015-06-26-06-05.
   description = "Snapshot ID for database creation if a migration is being performed to deploy new infrastructure\nwith pre-existing data indexed. This variable can be used to point to Snapshot ID and perform a restore on create\nfor the new RDS instance. This variable is optional."
@@ -179,17 +179,17 @@ variable "max_spot_nodes" {
 
 variable "max_spot_price" {
   default = "0.40"
-  type = string
+  type    = string
 }
 
 variable "volume_size" {
   default = 20
-  type = number
+  type    = number
 }
 
 variable "spot_volume_size" {
   default = 20
-  type = number
+  type    = number
 }
 
 variable "extra_userdata" {

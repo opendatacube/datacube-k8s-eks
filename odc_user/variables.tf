@@ -1,19 +1,19 @@
 variable "namespace" {
-  type = string
+  type        = string
   description = "The unique namespace for the environment, which could be your organization name or abbreviation"
-  default = "odc-test"
+  default     = "odc-test"
 }
 
 variable "owner" {
-  type = string
+  type        = string
   description = "The owner of the environment"
-  default = "odc-test"
+  default     = "odc-test"
 }
 
 variable "environment" {
-  type = string
+  type        = string
   description = "The name of the environment - e.g. dev, stage, prod"
-  default = "stage"
+  default     = "stage"
 }
 
 variable "tags" {

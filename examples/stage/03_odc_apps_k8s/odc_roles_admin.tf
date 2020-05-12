@@ -7,14 +7,14 @@ module "odc_role_autoscaler" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-autoscaler"
+    name   = "${local.cluster_id}-autoscaler"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -43,14 +43,14 @@ module "odc_role_alb_ingress" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-alb-ingress"
+    name   = "${local.cluster_id}-alb-ingress"
     policy = <<-EOF
       {
         "Version": "2012-10-17",
@@ -188,14 +188,14 @@ module "odc_role_external_dns" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-external-dns"
+    name   = "${local.cluster_id}-external-dns"
     policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -230,8 +230,8 @@ module "odc_role_fluentd" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id

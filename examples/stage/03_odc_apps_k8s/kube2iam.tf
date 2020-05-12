@@ -7,7 +7,7 @@ data "template_file" "kube2iam" {
 
 resource "kubernetes_secret" "kube2iam" {
   metadata {
-    name = "kube2iam"
+    name      = "kube2iam"
     namespace = "kube-system"
   }
 

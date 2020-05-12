@@ -7,7 +7,7 @@ data "template_file" "merge_ingress" {
 
 resource "kubernetes_config_map" "merge_ingress" {
   metadata {
-    name = "merged-ingress"
+    name      = "merged-ingress"
     namespace = kubernetes_namespace.web.metadata[0].name
   }
 

@@ -46,9 +46,9 @@ USERDATA
 }
 
 resource "aws_launch_template" "node" {
-  name_prefix = aws_eks_cluster.eks.id
-  image_id = local.ami_id
-  user_data = base64encode(local.eks-node-userdata)
+  name_prefix   = aws_eks_cluster.eks.id
+  image_id      = local.ami_id
+  user_data     = base64encode(local.eks-node-userdata)
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
@@ -57,8 +57,8 @@ resource "aws_launch_template" "node" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [aws_security_group.eks_node.id]
-    delete_on_termination = true
+    security_groups             = [aws_security_group.eks_node.id]
+    delete_on_termination       = true
   }
 
   lifecycle {
@@ -75,10 +75,10 @@ resource "aws_launch_template" "node" {
 }
 
 resource "aws_launch_template" "spot" {
-  count = var.spot_nodes_enabled ? 1 : 0
-  name_prefix = aws_eks_cluster.eks.id
-  image_id = local.ami_id
-  user_data = base64encode(local.eks-spot-userdata)
+  count         = var.spot_nodes_enabled ? 1 : 0
+  name_prefix   = aws_eks_cluster.eks.id
+  image_id      = local.ami_id
+  user_data     = base64encode(local.eks-spot-userdata)
   instance_type = var.default_worker_instance_type
 
   iam_instance_profile {
@@ -94,8 +94,8 @@ resource "aws_launch_template" "spot" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [aws_security_group.eks_node.id]
-    delete_on_termination = true
+    security_groups             = [aws_security_group.eks_node.id]
+    delete_on_termination       = true
   }
 
   lifecycle {

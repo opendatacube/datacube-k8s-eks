@@ -10,7 +10,7 @@ output "domain_name" {
   value = module.odc_eks.domain_name
 }
 
-output "owner"  {
+output "owner" {
   value = module.odc_eks.owner
 }
 
@@ -27,12 +27,12 @@ output "db_hostname" {
 }
 
 output "db_admin_username" {
-  value = module.odc_eks.db_admin_username
+  value     = module.odc_eks.db_admin_username
   sensitive = true
 }
 
 output "db_admin_password" {
-  value = module.odc_eks.db_admin_password
+  value     = module.odc_eks.db_admin_password
   sensitive = true
 }
 
@@ -69,21 +69,21 @@ output "cognito_auth_userpool_domain" {
 }
 
 output "cognito_auth_userpool_jhub_client_id" {
-  value = module.cognito_auth.client_ids[0]
+  value     = module.cognito_auth.client_ids[0]
   sensitive = true
 }
 
 output "cognito_auth_userpool_jhub_client_secret" {
-  value = module.cognito_auth.client_secrets[0]
+  value     = module.cognito_auth.client_secrets[0]
   sensitive = true
 }
 
 output "cognito_auth_userpool_airflow_client_id" {
-  value = module.cognito_auth.client_ids[1]
+  value     = module.cognito_auth.client_ids[1]
   sensitive = true
 }
 
 output "cognito_auth_userpool_airflow_client_secret" {
-  value = module.cognito_auth.client_secrets[1]
+  value     = module.cognito_auth.client_secrets[1]
   sensitive = true
 }

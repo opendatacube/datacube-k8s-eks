@@ -4,14 +4,14 @@ module "odc_role_jupyterhub" {
   source = "../../../odc_role"
 
   # Default Tags
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
 
   cluster_id = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-jhub"
+    name   = "${local.cluster_id}-jhub"
     policy = <<-EOF
     {
       "Version": "2012-10-17",

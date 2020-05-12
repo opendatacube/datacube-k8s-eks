@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {
 }
 
 resource "aws_iam_role" "role" {
-  name  = var.role.name
+  name = var.role.name
 
   assume_role_policy = <<-EOF
   {
@@ -30,9 +30,9 @@ resource "aws_iam_role" "role" {
 
   tags = merge(
     {
-      Name = var.role.name
-      owner = var.owner
-      namespace = var.namespace
+      Name        = var.role.name
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -40,7 +40,7 @@ resource "aws_iam_role" "role" {
 }
 
 resource "aws_iam_role_policy" "role_policy" {
-  name  = var.role.name
-  role  = aws_iam_role.role.id
+  name   = var.role.name
+  role   = aws_iam_role.role.id
   policy = var.role.policy
 }

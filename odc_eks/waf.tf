@@ -198,11 +198,11 @@ variable "waf_url_whitelist_url_host" {
 }
 
 module "waf_label" {
-  source     = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
-  namespace  = var.namespace
-  stage      = var.environment
+  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  namespace = var.namespace
+  stage     = var.environment
   name      = "waf"
-  delimiter  = "-"
+  delimiter = "-"
 }
 
 # Module: https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules
@@ -216,10 +216,10 @@ module "waf_label" {
 module "owasp_top_10_rules" {
   source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
 
-  owner          = var.owner
-  namespace      = var.namespace
-  environment    = (var.waf_enable) ? var.environment : ""
-  waf_prefix     = "wafowasp"
+  owner       = var.owner
+  namespace   = var.namespace
+  environment = (var.waf_enable) ? var.environment : ""
+  waf_prefix  = "wafowasp"
 
   target_scope      = (var.waf_enable) ? var.waf_target_scope : ""
   create_rule_group = "true"
@@ -299,9 +299,9 @@ resource "aws_s3_bucket" "waf_log_bucket" {
 
   tags = merge(
     {
-      Name = var.waf_log_bucket
-      owner = var.owner
-      namespace = var.namespace
+      Name        = var.waf_log_bucket
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags
@@ -309,13 +309,13 @@ resource "aws_s3_bucket" "waf_log_bucket" {
 }
 
 data "aws_s3_bucket" "waf_log_bucket" {
-  count = (var.waf_enable) ? 1 : 0
+  count  = (var.waf_enable) ? 1 : 0
   bucket = (var.waf_log_bucket_create) ? aws_s3_bucket.waf_log_bucket[0].id : var.waf_log_bucket
 }
 
 # Policy document that will allow the Firehose to assume an IAM Role.
 data "aws_iam_policy_document" "firehose_assume_role_policy" {
-  count  = (var.waf_enable) ? 1 : 0
+  count = (var.waf_enable) ? 1 : 0
   statement {
     actions = [
       "sts:AssumeRole",
@@ -337,12 +337,12 @@ resource "aws_iam_role" "waf_firehose_role" {
   path        = "/service-role/firehose/"
   description = "Service Role for wafowasp-WebACL Firehose"
 
-  assume_role_policy    = data.aws_iam_policy_document.firehose_assume_role_policy[0].json
+  assume_role_policy = data.aws_iam_policy_document.firehose_assume_role_policy[0].json
 }
 
 # Policy document that will be attached to the S3 Bucket, to make the bucket accessible by the Firehose.
 data "aws_iam_policy_document" "allow_s3_actions" {
-  count  = (var.waf_enable) ? 1 : 0
+  count = (var.waf_enable) ? 1 : 0
   statement {
     effect = "Allow"
 
@@ -390,7 +390,7 @@ resource "aws_cloudwatch_log_stream" "firehose_error_log_stream" {
 }
 
 data "aws_iam_policy_document" "allow_put_log_events" {
-  count  = (var.waf_enable) ? 1 : 0
+  count = (var.waf_enable) ? 1 : 0
   statement {
     sid = "AllowWritingToLogStreams"
     actions = [
@@ -413,7 +413,7 @@ resource "aws_iam_role_policy" "allow_put_log_events" {
 
 # Creating the Firehose.
 resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
-  count       = (var.waf_enable) ? 1 : 0
+  count = (var.waf_enable) ? 1 : 0
   # The Kinesis Firehose Delivery Stream name must begin with aws-waf-logs-
   name        = "aws-waf-logs-${module.waf_label.id}-delivery-stream"
   destination = "extended_s3"
@@ -437,9 +437,9 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
 
   tags = merge(
     {
-      Name = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
-      owner = var.owner
-      namespace = var.namespace
+      Name        = "aws-waf-logs-${module.waf_label.id}-delivery_stream"
+      owner       = var.owner
+      namespace   = var.namespace
       environment = var.environment
     },
     var.tags

@@ -2,7 +2,7 @@ data "template_file" "prometheus" {
   template = file("${path.module}/config/prometheus.yaml")
   vars = {
     certificate_arn = local.certificate_arn
-    domain_name = local.domain_name
+    domain_name     = local.domain_name
   }
 }
 
@@ -12,7 +12,7 @@ resource "kubernetes_secret" "prometheus-operator" {
   ]
 
   metadata {
-    name = "prometheus-operator"
+    name      = "prometheus-operator"
     namespace = "admin"
   }
 

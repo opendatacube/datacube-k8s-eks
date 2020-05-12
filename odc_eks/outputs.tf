@@ -19,15 +19,15 @@ output "domain_name" {
   value = var.domain_name
 }
 
-output "owner"  {
+output "owner" {
   value = var.owner
 }
 
-output "namespace"  {
+output "namespace" {
   value = var.namespace
 }
 
-output "environment"  {
+output "environment" {
   value = var.environment
 }
 
@@ -36,12 +36,12 @@ output "db_hostname" {
 }
 
 output "db_admin_username" {
-  value = module.db.db_admin_username
+  value     = module.db.db_admin_username
   sensitive = true
 }
 
 output "db_admin_password" {
-  value = module.db.db_admin_password
+  value     = module.db.db_admin_password
   sensitive = true
 }
 
@@ -65,9 +65,9 @@ data "aws_caller_identity" "current" {
 }
 
 output "certificate_arn" {
-  value = (var.create_certificate)? aws_acm_certificate.wildcard_cert.*.arn : null
+  value = (var.create_certificate) ? aws_acm_certificate.wildcard_cert.*.arn : null
 }
 
 output "waf_acl_id" {
-  value = (var.waf_enable)? aws_wafregional_web_acl.waf_webacl.*.id : null
+  value = (var.waf_enable) ? aws_wafregional_web_acl.waf_webacl.*.id : null
 }
