@@ -1,17 +1,3 @@
-locals {
-  region      = "ap-southeast-2"
-  owner       = "odc-test"
-  namespace   = "odc-test"
-  environment = "stage"
-
-  domain_name       = "test.dea.ga.gov.au"
-  sandbox_host_name = "app.${local.domain_name}"
-
-  # ACM - used by ALB.
-  # To create a new cert, set this flag to true
-  create_certificate = false
-}
-
 module "odc_cluster_label" {
   source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
   namespace = local.namespace
@@ -42,13 +28,7 @@ module "odc_eks" {
   # ACM - used by ALB
   create_certificate = local.create_certificate
 
-  # DB config
-  db_name           = "odctest"
-  db_engine_version = { postgres = "11.5" }
-  db_multi_az       = false
-
   # System node instances
-  #default_worker_instance_type = "m4.large"
   default_worker_instance_type = "t3.medium"
   spot_nodes_enabled           = true
   min_nodes                    = 2

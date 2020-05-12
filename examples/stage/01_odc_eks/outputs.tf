@@ -23,21 +23,21 @@ output "environment" {
 }
 
 output "db_hostname" {
-  value = module.odc_eks.db_hostname
+  value = module.db.db_hostname
 }
 
 output "db_admin_username" {
-  value     = module.odc_eks.db_admin_username
+  value     = module.db.db_admin_username
   sensitive = true
 }
 
 output "db_admin_password" {
-  value     = module.odc_eks.db_admin_password
+  value     = module.db.db_admin_password
   sensitive = true
 }
 
 output "db_name" {
-  value = module.odc_eks.db_name
+  value = module.db.db_name
 }
 
 output "node_role_arn" {
