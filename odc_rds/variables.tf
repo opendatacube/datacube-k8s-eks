@@ -27,12 +27,7 @@ variable "vpc_id" {
 # Database
 #--------------------------------------------------------------
 
-variable "identifier" {
-  default     = "mydb-rds"
-  description = "Identifier for your DB"
-}
-
-variable "storage" {
+variable "db_storage" {
   default     = "180"
   description = "Storage size in GB"
 }
@@ -51,11 +46,11 @@ variable "engine_version" {
   description = "Engine version"
 
   default = {
-    postgres = "9.6.11"
+    postgres = "11.5"
   }
 }
 
-variable "instance_class" {
+variable "instance_type" {
   default     = "db.m4.xlarge"
   description = "aws instance"
 }
@@ -69,13 +64,13 @@ variable "db_admin_username" {
   default = "superuser"
 }
 
-variable "rds_is_multi_az" {
+variable "db_multi_az" {
   default = false
 }
 
 variable "backup_retention_period" {
   # Days
-  default = "30"
+  default = 30
 }
 
 variable "backup_window" {
@@ -90,10 +85,6 @@ variable "storage_encrypted" {
 variable "db_port_num" {
   default     = "5432"
   description = "Default port for database"
-}
-
-variable "extra_sg" {
-  default = ""
 }
 
 variable "snapshot_identifier" {
@@ -121,4 +112,3 @@ variable "tags" {
   description = "Additional tags (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
-

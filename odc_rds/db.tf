@@ -23,13 +23,13 @@ resource "aws_db_instance" "db" {
   identifier = "db-${var.name}"
 
   # Instance parameters
-  allocated_storage      = var.storage
+  allocated_storage      = var.db_storage
   max_allocated_storage  = var.db_max_storage
   storage_type           = "gp2"
-  instance_class         = var.instance_class
+  instance_class         = var.instance_type
   vpc_security_group_ids = [aws_security_group.rds.id]
   db_subnet_group_name   = aws_db_subnet_group.db_sg.id
-  multi_az               = var.rds_is_multi_az
+  multi_az               = var.db_multi_az
 
   # DB parameters
   name           = var.db_name
@@ -62,4 +62,3 @@ resource "random_string" "password" {
   length  = 16
   special = false
 }
-

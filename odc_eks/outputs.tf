@@ -31,24 +31,6 @@ output "environment" {
   value = var.environment
 }
 
-output "db_hostname" {
-  value = module.db.db_hostname
-}
-
-output "db_admin_username" {
-  value     = module.db.db_admin_username
-  sensitive = true
-}
-
-output "db_admin_password" {
-  value     = module.db.db_admin_password
-  sensitive = true
-}
-
-output "db_name" {
-  value = var.db_name
-}
-
 output "node_role_arn" {
   value = module.eks.node_role_arn
 }
@@ -70,4 +52,12 @@ output "certificate_arn" {
 
 output "waf_acl_id" {
   value = (var.waf_enable) ? aws_wafregional_web_acl.waf_webacl.*.id : null
+}
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}
+
+output "database_subnets" {
+  value = module.vpc.database_subnets
 }

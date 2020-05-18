@@ -56,40 +56,6 @@ module "vpc" {
   )
 }
 
-# Database
-module "db" {
-  source = "./modules/database_layer"
-
-  # Label prefix for db resources
-  name = (var.cluster_id != "") ? var.cluster_id : module.odc_eks_label.id
-
-  # Networking
-  vpc_id                = module.vpc.vpc_id
-  database_subnet_group = module.vpc.database_subnets
-
-  db_name         = var.db_name
-  rds_is_multi_az = var.db_multi_az
-  # extra_sg could be empty, so we run compact on the list to remove it if it is
-  access_security_groups = compact([module.eks.node_security_group, var.db_extra_sg])
-  storage                = var.db_storage
-  db_max_storage         = var.db_max_storage
-
-  #Engine version
-  engine_version = var.db_engine_version
-
-  # Optional snapshot ID injection for migrations, only set if not null
-  # Refer to - https://www.terraform.io/docs/providers/aws/r/db_instance.html#snapshot_identifier
-  snapshot_identifier = var.db_migrate_snapshot
-
-  # Default Tags
-  owner       = var.owner
-  namespace   = var.namespace
-  environment = var.environment
-
-  tags = var.tags
-}
-
-
 # Creates network and Kuberenetes master nodes
 module "eks" {
   source             = "./modules/eks"
