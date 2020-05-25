@@ -39,6 +39,15 @@ resource "aws_s3_bucket" "terraform-state-storage-s3" {
   tags = module.odc_backend_label.tags
 }
 
+resource "aws_s3_bucket_public_access_block" "terraform-state-storage-s3" {
+  bucket = aws_s3_bucket.terraform-state-storage-s3.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 # The terraform lock database resource
 resource "aws_dynamodb_table" "terraform_state_lock" {
   name           = "${module.odc_backend_label.id}-terraform-lock"
