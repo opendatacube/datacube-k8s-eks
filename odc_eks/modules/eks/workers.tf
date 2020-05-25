@@ -23,23 +23,8 @@ resource "aws_autoscaling_group" "nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "owner"
-      value               = var.owner
-      propagate_at_launch = true
-    },
-    {
-      key                 = "namespace"
-      value               = var.namespace
-      propagate_at_launch = true
-    },
-    {
       key                 = "environment"
       value               = var.environment
-      propagate_at_launch = true
-    },
-    {
-      key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
-      value               = "owned"
       propagate_at_launch = true
     },
     {
@@ -55,6 +40,21 @@ resource "aws_autoscaling_group" "nodes" {
     {
       key                 = "k8s.io/cluster-autoscaler/node-template/label/nodetype"
       value               = "ondemand"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
+      value               = "owned"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "namespace"
+      value               = var.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "owner"
+      value               = var.owner
       propagate_at_launch = true
     },
   ]
@@ -91,23 +91,8 @@ resource "aws_autoscaling_group" "spot_nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "owner"
-      value               = var.owner
-      propagate_at_launch = true
-    },
-    {
-      key                 = "namespace"
-      value               = var.namespace
-      propagate_at_launch = true
-    },
-    {
       key                 = "environment"
       value               = var.environment
-      propagate_at_launch = true
-    },
-    {
-      key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
-      value               = "owned"
       propagate_at_launch = true
     },
     {
@@ -123,6 +108,21 @@ resource "aws_autoscaling_group" "spot_nodes" {
     {
       key                 = "k8s.io/cluster-autoscaler/node-template/label/nodetype"
       value               = "spot"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
+      value               = "owned"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "namespace"
+      value               = var.namespace
+      propagate_at_launch = true
+    },
+    {
+      key                 = "owner"
+      value               = var.owner
       propagate_at_launch = true
     },
   ]
