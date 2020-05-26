@@ -91,32 +91,17 @@ locals {
   admin_create_user_config = [local.admin_create_user_config_default]
 }
 
-# TODO: remove me! - This resource is deprecated. only kept to support v1.8.0 release.
-resource "aws_cognito_user_pool_client" "client" {
-  count                                = (length(var.app_clients) == 0) ? 1 : 0
-  name                                 = "client"
-  user_pool_id                         = aws_cognito_user_pool.pool.id
-  generate_secret                      = true
-  supported_identity_providers         = ["COGNITO"]
-  callback_urls                        = (var.callback_url != "") ? [var.callback_url] : var.callback_urls
-  default_redirect_uri                 = var.default_redirect_uri
-  logout_urls                          = var.logout_urls
-  allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
-  allowed_oauth_flows                  = ["code"]
-}
-
 resource "aws_cognito_user_pool_client" "clients" {
-  count                        = length(var.app_clients)
-  name                         = var.app_clients[count.index].name
+  for_each                     = var.app_clients
+  name                         = each.key
   user_pool_id                 = aws_cognito_user_pool.pool.id
   generate_secret              = true
   supported_identity_providers = ["COGNITO"]
 
-  callback_urls        = var.app_clients[count.index].callback_urls
-  default_redirect_uri = var.app_clients[count.index].default_redirect_uri
-  logout_urls          = var.app_clients[count.index].logout_urls
-  explicit_auth_flows  = var.app_clients[count.index].explicit_auth_flows
+  callback_urls        = each.value.callback_urls
+  default_redirect_uri = each.value.default_redirect_uri
+  logout_urls          = each.value.logout_urls
+  explicit_auth_flows  = each.value.explicit_auth_flows
 
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
@@ -129,9 +114,9 @@ resource "aws_cognito_user_pool_domain" "domain" {
 }
 
 resource "aws_cognito_user_group" "group" {
-  count        = length(var.user_groups)
+  for_each     = var.user_groups
   user_pool_id = aws_cognito_user_pool.pool.id
-  name         = var.user_groups[count.index].name
-  description  = var.user_groups[count.index].description
-  precedence   = var.user_groups[count.index].precedence
+  name         = each.key
+  description  = each.value.description
+  precedence   = each.value.precedence
 }
