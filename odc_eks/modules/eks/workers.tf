@@ -28,13 +28,13 @@ resource "aws_autoscaling_group" "nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/enabled"
-      value               = "true"
+      key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
+      value               = "owned"
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
-      value               = "owned"
+      key                 = "k8s.io/cluster-autoscaler/enabled"
+      value               = "true"
       propagate_at_launch = true
     },
     {
@@ -96,13 +96,13 @@ resource "aws_autoscaling_group" "spot_nodes" {
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/enabled"
-      value               = "true"
+      key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
+      value               = "owned"
       propagate_at_launch = true
     },
     {
-      key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
-      value               = "owned"
+      key                 = "k8s.io/cluster-autoscaler/enabled"
+      value               = "true"
       propagate_at_launch = true
     },
     {
