@@ -6,7 +6,7 @@ data "template_file" "ows" {
 
     db_name     = local.ows_db_name
     db_hostname = local.db_hostname
-    db_secret   = kubernetes_secret.ows_db.metadata[0].name
+    db_secret   = kubernetes_secret.ows_db_ro.metadata[0].name
 
     aws_creds_secret = kubernetes_secret.ows_user_creds.metadata[0].name
   }

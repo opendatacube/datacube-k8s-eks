@@ -32,7 +32,8 @@ data "aws_eks_cluster_auth" "cluster" {
   name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 }
 
-# Sanbox DB user from param-store
+# NOTE: read SANDBOX db reader creds from parameter store
+#   check examples/scripts/init_sandbox_db.sh script for reference
 data "aws_ssm_parameter" "sandbox_db_ro_creds" {
   name = "/${local.cluster_id}/sandbox_ro/db.creds"
 }
