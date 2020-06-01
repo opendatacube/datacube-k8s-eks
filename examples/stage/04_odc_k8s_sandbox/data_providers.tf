@@ -32,6 +32,11 @@ data "aws_eks_cluster_auth" "cluster" {
   name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 }
 
+# Sanbox DB user from param-store
+data "aws_ssm_parameter" "sandbox_db_ro_creds" {
+  name = "/${local.cluster_id}/sandbox_ro/db.creds"
+}
+
 locals {
   region      = data.terraform_remote_state.odc_eks-stage.outputs.region
   owner       = data.terraform_remote_state.odc_eks-stage.outputs.owner
@@ -41,7 +46,7 @@ locals {
   domain_name       = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   sandbox_host_name = "app.${local.domain_name}"
   certificate_arn   = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
-  waf_acl_id        = tolist(data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id)[0]
+  # waf_acl_id        = tolist(data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id)[0]
 
   cognito_auth_userpool_id                 = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_id
   cognito_auth_userpool_domain             = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_domain
@@ -49,9 +54,10 @@ locals {
   cognito_auth_userpool_jhub_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_secret
 
   db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
-  db_username = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_username # This could be operational DB username/password
-  db_password = data.terraform_remote_state.odc_eks-stage.outputs.db_admin_password # This could be operational DB username/password
-  db_name     = data.terraform_remote_state.odc_eks-stage.outputs.db_name
+
+  sandbox_db_name        = "ows"
+  sandbox_db_ro_username = element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 0)
+  sandbox_db_ro_password = element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 1)
 
   node_group_name     = "sandbox"
   nodes_subnet_group  = data.aws_subnet_ids.nodes.ids

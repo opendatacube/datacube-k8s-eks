@@ -19,10 +19,6 @@ module "odc_eks" {
   namespace   = local.namespace
   environment = local.environment
 
-  admin_access_CIDRs = {
-    "Everywhere" = "0.0.0.0/0"
-  }
-
   domain_name = local.domain_name
 
   # ACM - used by ALB

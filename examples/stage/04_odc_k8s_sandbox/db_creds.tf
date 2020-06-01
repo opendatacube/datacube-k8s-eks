@@ -1,16 +1,12 @@
-resource "kubernetes_secret" "db" {
-  depends_on = [
-    kubernetes_namespace.sandbox
-  ]
-
+resource "kubernetes_secret" "sandbox_db_ro" {
   metadata {
-    name      = "db"
+    name      = "sandbox-db-ro"
     namespace = kubernetes_namespace.sandbox.metadata[0].name
   }
 
   data = {
-    postgres-username = local.db_username
-    postgres-password = local.db_password
+    postgres-username = local.sandbox_db_ro_username
+    postgres-password = local.sandbox_db_ro_password
   }
 
   type = "Opaque"

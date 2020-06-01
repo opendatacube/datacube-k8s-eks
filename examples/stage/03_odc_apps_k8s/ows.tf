@@ -1,7 +1,7 @@
 data "template_file" "ows" {
   template = file("${path.module}/config/ows.yaml")
   vars = {
-    role_name   = module.odc_role_wms.role_name
+    role_name   = module.odc_role_ows.role_name
     domain_name = local.domain_name
 
     db_name     = local.ows_db_name
