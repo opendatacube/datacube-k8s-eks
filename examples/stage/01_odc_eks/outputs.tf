@@ -56,9 +56,9 @@ output "certificate_arn" {
   value = (local.create_certificate) ? module.odc_eks.certificate_arn[0] : data.aws_acm_certificate.domain_cert[0].arn
 }
 
-output "waf_acl_id" {
-  value = module.odc_eks.waf_acl_id
-}
+#output "waf_acl_id" {
+#  value = module.odc_eks.waf_acl_id
+#}
 
 output "cognito_auth_userpool_id" {
   value = module.cognito_auth.userpool_id

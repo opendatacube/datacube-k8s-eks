@@ -1,5 +1,6 @@
 # Database
 module "db" {
+  # source = "github.com/opendatacube/datacube-k8s-eks//odc_rds?ref=master"
   source = "../../../odc_rds"
 
   # Label prefix for db resources

@@ -30,7 +30,7 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}
-    alb.ingress.kubernetes.io/waf-acl-id: ${waf_acl_id}
+#    alb.ingress.kubernetes.io/waf-acl-id: ${waf_acl_id}
   hosts:
     - ${sandbox_host_name}
   pathSuffix: "*"
