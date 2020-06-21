@@ -42,6 +42,12 @@ variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
 }
 
+variable "region" {
+  description = "The AWS region to provision cognito resources"
+  type        = string
+  default     = "ap-southeast-2"
+}
+
 # admin_create_user_config
 variable "admin_create_user_config" {
   description = "The configuration for AdminCreateUser requests"
