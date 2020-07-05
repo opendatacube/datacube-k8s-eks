@@ -26,8 +26,19 @@ The complete Open Data Cube terraform AWS example is provided for kick start [he
 Copy the example to create your own live repo to setup ODC infrastructure to run [jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) notebook and ODC web services to your own AWS account.
 
 ```hcl-terraform
+  provider "aws" {
+    alias       = "usw2"
+    region      = "us-west-2"
+    max_retries = 10
+  }
+
   module "cognito_auth" {
     source = "github.com/opendatacube/datacube-k8s-eks//cognito?ref=master"
+  
+    # Optional configuration require if you want to override the default provider
+    providers = {
+      aws = aws.usw2
+    }
 
     auto_verify       = true
     user_pool_name    = "odc-stage-cluster-userpool"
