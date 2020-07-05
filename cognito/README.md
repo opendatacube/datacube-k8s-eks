@@ -28,8 +28,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 ```hcl-terraform
   module "cognito_auth" {
     source = "github.com/opendatacube/datacube-k8s-eks//cognito?ref=master"
-    
-    region = "ap-southeast-2"
 
     auto_verify       = true
     user_pool_name    = "odc-stage-cluster-userpool"
@@ -80,7 +78,6 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | owner | The owner of the environment | string |  | yes |
 | namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | yes |
 | environment | The name of the environment - e.g. dev, stage | string |  | yes |
-| region | The AWS region to provision cognito resources | string | "ap-southeast-2" | no |
 | app_clients | Map of Cognito user pool app clients | map |  | yes |
 | admin_create_user_config | The configuration for AdminCreateUser requests | map | {} | no |
 | admin_create_user_config_allow_admin_create_user_only | Set to True if only the administrator is allowed to create user profiles. Set to False if users can sign themselves up via an app | bool | false | No | 
