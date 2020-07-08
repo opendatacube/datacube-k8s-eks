@@ -39,6 +39,12 @@ variable "flux_additional_args" {
   default     = ""
 }
 
+variable "flux_registry_exclude_images" {
+  type        = string
+  description = "comma separated string lists of registry images to exclud from flux auto release"
+  default     = ""
+}
+
 resource "kubernetes_namespace" "flux" {
   count = var.flux_enabled ? 1 : 0
 
@@ -54,11 +60,12 @@ resource "kubernetes_namespace" "flux" {
 data "template_file" "flux_config" {
   template = file("${path.module}/config/flux.yaml")
   vars = {
-    git_repo_url    = var.flux_git_repo_url
-    git_branch      = var.flux_git_branch
-    git_path        = var.flux_git_path
-    git_label       = var.cluster_id
-    additional_args = var.flux_additional_args
+    git_repo_url            = var.flux_git_repo_url
+    git_branch              = var.flux_git_branch
+    git_path                = var.flux_git_path
+    git_label               = var.cluster_id
+    additional_args         = var.flux_additional_args
+    registry_exclude_images = var.flux_registry_exclude_images
   }
 }
 

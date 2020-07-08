@@ -9,6 +9,10 @@ git:
   pollInterval: 1m
 registry:
   pollInterval: 1m
+  %{ if registry_exclude_images != "" }
+  excludeImages:
+    - ${registry_exclude_images}
+  - ${endif}
 %{ if additional_args != "" }
 additionalArgs:
   - ${additional_args}
