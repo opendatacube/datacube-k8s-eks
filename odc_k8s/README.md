@@ -160,6 +160,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | flux_git_path | Relative path inside specified git repository to search for manifest files | string | "" | No | 
 | flux_git_label | Label prefix that is used to track flux syncing inside the git repository | string | "flux-sync" | No | 
 | flux_additional_args | Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud | string | "" | No | 
+| flux_registry_exclude_images | comma separated string lists of registry images to exclud from flux auto release: docker.io/*,index.docker.io/* | string | "" | No | 
 | flux_helm_operator_version | Flux helm-operator release version | string | "1.0.1" | No | 
 | enabled_helm_versions | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"` | string | "v2\\,v3" | No | 
 
