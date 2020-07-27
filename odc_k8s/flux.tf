@@ -41,8 +41,22 @@ variable "flux_additional_args" {
 
 variable "flux_registry_exclude_images" {
   type        = string
-  description = "comma separated string lists of registry images to exclud from flux auto release"
+  description = "comma separated string lists of registry images to exclude from flux auto release"
   default     = ""
+}
+
+variable "flux_registry_ecr" {
+  description = "Use flux_registry_ecr for fluxcd ecr configuration"
+  type = object({
+    region    = string
+    includeId = string
+    excludeId = string
+  })
+  default = {
+    region    = ""             # Restrict ECR scanning to these AWS regions
+    includeId = ""             # Restrict ECR scanning to these AWS account IDs
+    excludeId = "602401143452" # EKS system account
+  }
 }
 
 resource "kubernetes_namespace" "flux" {
@@ -57,18 +71,6 @@ resource "kubernetes_namespace" "flux" {
   }
 }
 
-data "template_file" "flux_config" {
-  template = file("${path.module}/config/flux.yaml")
-  vars = {
-    git_repo_url            = var.flux_git_repo_url
-    git_branch              = var.flux_git_branch
-    git_path                = var.flux_git_path
-    git_label               = var.cluster_id
-    additional_args         = var.flux_additional_args
-    registry_exclude_images = var.flux_registry_exclude_images
-  }
-}
-
 resource "helm_release" "flux" {
   count      = var.flux_enabled ? 1 : 0
   name       = "flux"
@@ -78,6 +80,14 @@ resource "helm_release" "flux" {
   namespace  = kubernetes_namespace.flux[0].metadata[0].name
 
   values = [
-    data.template_file.flux_config.rendered
+    templatefile("${path.module}/config/flux.yaml", {
+      git_repo_url            = var.flux_git_repo_url
+      git_branch              = var.flux_git_branch
+      git_path                = var.flux_git_path
+      git_label               = var.cluster_id
+      additional_args         = var.flux_additional_args
+      registry_exclude_images = var.flux_registry_exclude_images
+      flux_registry_ecr       = var.flux_registry_ecr
+    })
   ]
 }
