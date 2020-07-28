@@ -45,6 +45,12 @@ variable "flux_registry_exclude_images" {
   default     = ""
 }
 
+variable "flux_service_account_arn" {
+  type        = string
+  description = "provide flux OIDC service account role arn"
+  default     = ""
+}
+
 variable "flux_registry_ecr" {
   description = "Use flux_registry_ecr for fluxcd ecr configuration"
   type = object({
@@ -88,6 +94,7 @@ resource "helm_release" "flux" {
       additional_args         = var.flux_additional_args
       registry_exclude_images = var.flux_registry_exclude_images
       flux_registry_ecr       = var.flux_registry_ecr
+      service_account_arn     = var.flux_service_account_arn
     })
   ]
 }
