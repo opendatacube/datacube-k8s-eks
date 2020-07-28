@@ -67,6 +67,13 @@ users = {
 user_config_template = "<renderd aws-auth MaapUsers config template>"
 ```
 
+### IAM roles for Kubernetes service accounts
+With the introduction of IAM roles for services accounts (IRSA), you can create an IAM role specific to your workload’s requirement in Kubernetes.
+This also enables the security principle of least privilege by creating fine grained roles at a pod level instead of node level.
+The IAM roles for service accounts feature is available on new Amazon EKS Kubernetes version 1.14 and later clusters.
+For more detail read - [Introducing fine-grained IAM roles for service accounts](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/)
+
+
 ## Usage
 
 The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
