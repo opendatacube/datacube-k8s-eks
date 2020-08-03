@@ -54,14 +54,14 @@ variable "flux_service_account_arn" {
 variable "flux_registry_ecr" {
   description = "Use flux_registry_ecr for fluxcd ecr configuration"
   type = object({
-    region    = string
-    includeId = string
-    excludeId = string
+    regions    = list(string)
+    includeIds = list(string)
+    excludeIds = list(string)
   })
   default = {
-    region    = ""             # Restrict ECR scanning to these AWS regions
-    includeId = ""             # Restrict ECR scanning to these AWS account IDs
-    excludeId = "602401143452" # EKS system account
+    regions    = []               # Restrict ECR scanning to these AWS regions
+    includeIds = []               # Restrict ECR scanning to these AWS account IDs
+    excludeIds = ["602401143452"] # Restrict ECR scanning to exclude these AWS account IDs. Default resticted to EKS system account
   }
 }
 

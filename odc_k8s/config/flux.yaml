@@ -9,11 +9,11 @@ git:
   pollInterval: 1m
 registry:
   pollInterval: 1m
-  %{ if flux_registry_ecr.includeId != "" }
+  %{ if length(flux_registry_ecr.includeIds) > 0 }
   ecr:
-    region: "${flux_registry_ecr.region}"
-    includeId: "${flux_registry_ecr.includeId}"
-    excludeId: "${flux_registry_ecr.excludeId}"
+    region: "${join(",", flux_registry_ecr.regions)}"
+    includeId: "${join(",", flux_registry_ecr.includeIds)}"
+    excludeId: "${join(",", flux_registry_ecr.excludeIds)}"
   %{ endif }
   %{ if registry_exclude_images != "" }
   excludeImage: ${registry_exclude_images}
