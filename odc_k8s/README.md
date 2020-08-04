@@ -174,7 +174,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | flux_additional_args | Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud | string | "" | No | 
 | flux_registry_exclude_images | comma separated string lists of registry images to exclud from flux auto release: docker.io/*,index.docker.io/* | string | "" | No | 
 | flux_helm_operator_version | Flux helm-operator release version | string | "1.0.1" | No | 
-| flux_registry_ecr | Use flux_registry_ecr for fluxcd ecr configuration | object({regions=list(string) includeIds=list(string) excludeId=list(string)}) | { region="" includeId="" excludeId="602401143452" } | No | 
+| flux_registry_ecr | Use flux_registry_ecr for fluxcd ecr configuration | object({regions=list(string) includeIds=list(string) excludeIds=list(string)}) | { regions=[] includeIds=[] excludeIds=["602401143452"] } | No | 
 | flux_service_account_arn | provide flux OIDC service account role arn | "" | No | 
 | enabled_helm_versions | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"` | string | "v2\\,v3" | No | 
 
