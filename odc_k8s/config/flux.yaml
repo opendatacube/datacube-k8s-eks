@@ -9,6 +9,12 @@ git:
   pollInterval: 1m
 registry:
   pollInterval: 1m
+  %{ if length(flux_registry_ecr.includeIds) > 0 }
+  ecr:
+    region: "${join(",", flux_registry_ecr.regions)}"
+    includeId: "${join(",", flux_registry_ecr.includeIds)}"
+    excludeId: "${join(",", flux_registry_ecr.excludeIds)}"
+  %{ endif }
   %{ if registry_exclude_images != "" }
   excludeImage: ${registry_exclude_images}
   %{ endif }
@@ -18,3 +24,11 @@ additionalArgs:
 %{ endif }
 image:
   repository: fluxcd/flux
+%{ if service_account_arn != "" }
+rbac:
+  create: true
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: "${service_account_arn}"
+%{ endif }

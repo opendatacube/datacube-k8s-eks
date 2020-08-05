@@ -67,6 +67,13 @@ users = {
 user_config_template = "<renderd aws-auth MaapUsers config template>"
 ```
 
+### IAM roles for Kubernetes service accounts
+With the introduction of IAM roles for services accounts (IRSA), you can create an IAM role specific to your workload’s requirement in Kubernetes.
+This also enables the security principle of least privilege by creating fine grained roles at a pod level instead of node level.
+The IAM roles for service accounts feature is available on new Amazon EKS Kubernetes version 1.14 and later clusters.
+For more detail read - [Introducing fine-grained IAM roles for service accounts](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/)
+
+
 ## Usage
 
 The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
@@ -122,6 +129,11 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     fluxcloud_slack_emoji = ":zoidberg:"
     fluxcloud_github_url = "https://github.com/opendatacube/flux-odc-sample"
     fluxcloud_commit_template = "{{ .VCSLink }}/commits/{{ .Commit }}"
+    flux_registry_ecr = {
+      regions    = []               # Restrict ECR scanning to these AWS regions
+      includeIds = []               # Restrict ECR scanning to these AWS account IDs
+      excludeIds = ["602401143452"] # Restrict ECR scanning to exclude these AWS account IDs. Default resticted to EKS system account
+    }
     
     # Cloudwatch Log Group - for fluentd
     cloudwatch_logs_enabled  = true
@@ -162,6 +174,8 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | flux_additional_args | Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud | string | "" | No | 
 | flux_registry_exclude_images | comma separated string lists of registry images to exclud from flux auto release: docker.io/*,index.docker.io/* | string | "" | No | 
 | flux_helm_operator_version | Flux helm-operator release version | string | "1.0.1" | No | 
+| flux_registry_ecr | Use flux_registry_ecr for fluxcd ecr configuration | object({regions=list(string) includeIds=list(string) excludeIds=list(string)}) | { regions=[] includeIds=[] excludeIds=["602401143452"] } | No | 
+| flux_service_account_arn | provide flux OIDC service account role arn | "" | No | 
 | enabled_helm_versions | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"` | string | "v2\\,v3" | No | 
 
 ### Inputs - FluxCloud
