@@ -1,5 +1,5 @@
 variable "flux_helm_operator_version" {
-  default = "1.0.1"
+  default = "1.2.0"
 }
 
 variable "enabled_helm_versions" {
