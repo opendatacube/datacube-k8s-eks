@@ -35,6 +35,8 @@ resource "null_resource" "apply_flux_helm_operator_crd" {
     cluster_updated              = var.cluster_id
     kubernetes_namespace_updated = kubernetes_namespace.flux[0].metadata[0].name
 
+    flux_helm_operator_version_updated = var.flux_helm_operator_version
+
     # Special trigger: When using null_resource, you can use the triggers map both to signal when the provisioners
     # need to re-run (the usual purpose as above) and to retain values you can access via self during the destroy phase.
     # This avoids dependency issues during the destory phase
