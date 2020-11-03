@@ -82,7 +82,7 @@ provider "aws" {
 }
 
 resource "aws_acm_certificate" "cert" {
-  provider                  = aws.us
+  provider                  = aws.us-east-1
   count                     = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
   domain_name               = "${var.cf_dns_record}.${local.cf_acm_domains[0]}"
   subject_alternative_names = slice(local.cf_acm_domains, 1, length(local.cf_acm_domains))
@@ -110,7 +110,7 @@ resource "aws_route53_record" "cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "cert" {
-  provider                = aws.us
+  provider                = aws.us-east-1
   count                   = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
   certificate_arn         = aws_acm_certificate.cert[0].arn
   validation_record_fqdns = aws_route53_record.cert_validation.*.fqdn
