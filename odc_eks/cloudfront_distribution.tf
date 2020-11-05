@@ -100,20 +100,37 @@ data "aws_route53_zone" "zone" {
   private_zone = false
 }
 
+locals {
+  # Use a local to set the domain_valid_options to an empty set when the certs aren't created
+  # this will prevent the resource from being created and prevents an error when trying to access the index [0] when it disabled
+  cert_domain_validation_options = (var.cf_certificate_create && var.cf_enable) ? aws_acm_certificate.cert[0].domain_validation_options : []
+}
+
 resource "aws_route53_record" "cert_validation" {
-  count   = (var.cf_certificate_create && var.cf_enable) ? length(local.cf_acm_domains) : 0
-  name    = aws_acm_certificate.cert[0].domain_validation_options[count.index].resource_record_name
-  type    = aws_acm_certificate.cert[0].domain_validation_options[count.index].resource_record_type
+
   zone_id = data.aws_route53_zone.zone[0].id
-  records = [aws_acm_certificate.cert[0].domain_validation_options[count.index].resource_record_value]
+
+  for_each = {
+    for dvo in local.cert_domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  name    = each.value.name
+  type    = each.value.type
+
+  records = [each.value.record]
   ttl     = 60
+
 }
 
 resource "aws_acm_certificate_validation" "cert" {
-  provider                = aws.us-east-1
   count                   = (var.cf_certificate_create && var.cf_enable) ? 1 : 0
+  provider                = aws.us-east-1
   certificate_arn         = aws_acm_certificate.cert[0].arn
-  validation_record_fqdns = aws_route53_record.cert_validation.*.fqdn
+  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
 
 locals {
@@ -162,7 +179,6 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
   count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
   bucket = local.log_bucket
-  region = var.region
   acl    = "private"
   policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
 
