@@ -2,7 +2,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "odc_eks_label" {
-  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.5.0"
   namespace = var.namespace
   stage     = var.environment
   name      = "eks"
@@ -10,10 +10,7 @@ module "odc_eks_label" {
 }
 
 module "vpc" {
-  # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.2.0"
-  #source  = "terraform-aws-modules/vpc/aws"
-  #version = "2.2.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.64.0"
 
   name             = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
   cidr             = var.vpc_cidr
