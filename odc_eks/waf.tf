@@ -286,7 +286,6 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 resource "aws_s3_bucket" "waf_log_bucket" {
   count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
   bucket = var.waf_log_bucket
-  region = var.region
   acl    = "private"
 
   server_side_encryption_configuration {
