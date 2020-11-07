@@ -7,6 +7,10 @@ output "userpool_domain" {
   value = aws_cognito_user_pool_domain.domain.domain
 }
 
+output "userpool_arn" {
+  value = aws_cognito_user_pool.pool.arn
+}
+
 output "client_ids" {
   value = {
     for client in aws_cognito_user_pool_client.clients :
