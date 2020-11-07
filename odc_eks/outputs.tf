@@ -47,11 +47,11 @@ data "aws_caller_identity" "current" {
 }
 
 output "certificate_arn" {
-  value = (var.create_certificate) ? aws_acm_certificate.wildcard_cert.*.arn : null
+  value = (var.create_certificate) ? aws_acm_certificate.wildcard_cert[0].arn : null
 }
 
 output "waf_acl_id" {
-  value = (var.waf_enable) ? aws_wafregional_web_acl.waf_webacl.*.id : null
+  value = (var.waf_enable) ? aws_wafregional_web_acl.waf_webacl[0].id : null
 }
 
 output "vpc_id" {
@@ -60,4 +60,8 @@ output "vpc_id" {
 
 output "database_subnets" {
   value = module.vpc.database_subnets
+}
+
+output "private_subnets" {
+  value = module.vpc.private_subnets
 }
