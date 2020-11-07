@@ -1,6 +1,6 @@
 variable "region" {
   description = "The AWS region to provision resources"
-  default     = "ap-southeast-2"
+  default     = ""
 }
 
 variable "namespace" {
