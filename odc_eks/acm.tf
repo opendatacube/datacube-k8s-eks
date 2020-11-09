@@ -19,9 +19,6 @@ locals {
 }
 
 resource "aws_route53_record" "wildcard_cert_validation" {
-
-  zone_id = data.aws_route53_zone.wildcard_zone[0].id
-
   for_each = {
     for dvo in local.wildcard_cert_domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -30,9 +27,9 @@ resource "aws_route53_record" "wildcard_cert_validation" {
     }
   }
 
+  zone_id = data.aws_route53_zone.wildcard_zone[0].id
   name    = each.value.name
   type    = each.value.type
-
   records = [each.value.record]
   ttl     = 60
 }

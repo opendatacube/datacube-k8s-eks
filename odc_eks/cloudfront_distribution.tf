@@ -78,7 +78,7 @@ variable "cf_price_class" {
 
 # Create a new certificate, this must be in us-east-1 to work with cloudfront
 provider "aws" {
-  alias  = "us-east-1"
+  alias = "us-east-1"
 }
 
 resource "aws_acm_certificate" "cert" {
@@ -107,9 +107,6 @@ locals {
 }
 
 resource "aws_route53_record" "cert_validation" {
-
-  zone_id = data.aws_route53_zone.zone[0].id
-
   for_each = {
     for dvo in local.cert_domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -118,9 +115,9 @@ resource "aws_route53_record" "cert_validation" {
     }
   }
 
+  zone_id = data.aws_route53_zone.zone[0].id
   name    = each.value.name
   type    = each.value.type
-
   records = [each.value.record]
   ttl     = 60
 
