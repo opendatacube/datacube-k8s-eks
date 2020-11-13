@@ -34,6 +34,7 @@ resource "aws_cognito_user_pool" "pool" {
     require_lowercase = true
     require_numbers   = true
     require_symbols   = false
+    temporary_password_validity_days = 7
   }
 
   # admin_create_user_config
