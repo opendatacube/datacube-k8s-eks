@@ -88,4 +88,5 @@ module "eks" {
   environment = var.environment
 
   tags = var.tags
+  node_extra_tags = var.node_extra_tags
 }

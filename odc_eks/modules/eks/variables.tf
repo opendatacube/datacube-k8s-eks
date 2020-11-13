@@ -126,3 +126,9 @@ variable "wait_for_cluster_interpreter" {
   type        = list(string)
   default     = ["/bin/sh", "-c"]
 }
+
+variable "node_extra_tags" {
+  type        = map(string)
+  description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
+  default     = {}
+}
