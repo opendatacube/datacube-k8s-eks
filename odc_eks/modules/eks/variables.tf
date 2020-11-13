@@ -114,3 +114,9 @@ variable "tags" {
   description = "Additional tags (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
+
+variable "node_extra_tags" {
+  type        = map(string)
+  description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
+  default     = {}
+}
