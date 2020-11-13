@@ -3,6 +3,10 @@ resource "aws_acm_certificate" "wildcard_cert" {
   count             = var.create_certificate ? 1 : 0
   domain_name       = "*.${var.domain_name}"
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Automatically validate the cert using DNS validation
