@@ -87,6 +87,6 @@ module "eks" {
   namespace   = var.namespace
   environment = var.environment
 
-  tags = var.tags
+  tags            = var.tags
   node_extra_tags = var.node_extra_tags
 }
