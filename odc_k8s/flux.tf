@@ -90,7 +90,7 @@ resource "helm_release" "flux" {
       git_repo_url            = var.flux_git_repo_url
       git_branch              = var.flux_git_branch
       git_path                = var.flux_git_path
-      git_label               = var.cluster_id
+      git_label               = var.flux_git_label
       additional_args         = var.flux_additional_args
       registry_exclude_images = var.flux_registry_exclude_images
       flux_registry_ecr       = var.flux_registry_ecr
