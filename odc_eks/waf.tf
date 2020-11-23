@@ -198,7 +198,7 @@ variable "waf_url_whitelist_url_host" {
 }
 
 module "waf_label" {
-  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.4.0"
+  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.5.0"
   namespace = var.namespace
   stage     = var.environment
   name      = "waf"
@@ -286,7 +286,6 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 resource "aws_s3_bucket" "waf_log_bucket" {
   count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
   bucket = var.waf_log_bucket
-  region = var.region
   acl    = "private"
 
   server_side_encryption_configuration {

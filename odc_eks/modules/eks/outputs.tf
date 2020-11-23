@@ -31,7 +31,11 @@ output "node_role_arn" {
 }
 
 output "cluster_id" {
-  value = aws_eks_cluster.eks.id
+  description = "The name/id of the EKS cluster. Will block on cluster creation until the cluster is really ready"
+  value       = aws_eks_cluster.eks.id
+  # So that calling plans wait for the cluster to be available before attempting
+  # to use it. They will not need to duplicate this null_resource
+  depends_on = [null_resource.wait_for_cluster]
 }
 
 output "ami_image_id" {

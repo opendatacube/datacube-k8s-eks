@@ -21,3 +21,18 @@ resource "aws_eks_cluster" "eks" {
     Environment = var.environment
   }
 }
+
+resource "null_resource" "wait_for_cluster" {
+
+  depends_on = [
+    aws_eks_cluster.eks,
+  ]
+
+  provisioner "local-exec" {
+    command     = var.wait_for_cluster_cmd
+    interpreter = var.wait_for_cluster_interpreter
+    environment = {
+      ENDPOINT = aws_eks_cluster.eks.endpoint
+    }
+  }
+}
