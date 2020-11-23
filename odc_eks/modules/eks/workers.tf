@@ -161,6 +161,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
     }
   }
 
+
   # Don't break cluster autoscaler
   suspended_processes = ["AZRebalance"]
 
