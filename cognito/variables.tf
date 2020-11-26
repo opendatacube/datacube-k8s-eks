@@ -19,6 +19,12 @@ variable "user_groups" {
   type        = map
 }
 
+variable "enable_pinpoint" {
+  description = "Set to true to enable PinPoint based analytics module to be provisioned"
+  type        = bool
+  default     = false
+}
+
 variable "auto_verify" {
   description = "Set to true to allow the users account to be auto verified. False - admin will need to verify"
   type        = bool

@@ -97,6 +97,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | admin_create_user_config_email_subject | The subject line for email messages | string | null | No |
 | admin_create_user_config_sms_message | The message template for SMS messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively | string | null | No |
 | auto_verify | Set to true to allow the user account to be auto verified. False - admin will need to verify | bool | | yes |
+| enable_pinpoint | Set to true to enable pinpoint analytics on all user-pools | bool | false | no |
 | email_verification_message | A string representing the email verification message | string | null | No |
 | email_verification_subject | A string representing the email verification subject | string | null | No |
 | user_groups | Cognito user groups | map | {} | no |
