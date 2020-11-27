@@ -1,6 +1,8 @@
 # Create a PinPoint app for every app client
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "current" {}
+
 resource "aws_pinpoint_app" "pinpoint_app" {
   for_each = var.enable_pinpoint ? var.app_clients : {}
   name     = each.key
@@ -49,7 +51,7 @@ resource "aws_iam_role_policy" "pinpoint_app_role" {
           "mobiletargeting:PutItems"
         ],
         "Effect": "Allow",
-        "Resource": "arn:aws:mobiletargeting:*:${data.aws_caller_identity.current.account_id}:apps/*"
+        "Resource": "arn:aws:mobiletargeting:${data.current.aws_region.name}:${data.aws_caller_identity.current.account_id}:apps/*"
       }
     ]
   }
