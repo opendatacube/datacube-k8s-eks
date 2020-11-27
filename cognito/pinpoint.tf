@@ -48,3 +48,8 @@ resource "aws_iam_role_policy" "pinpoint_app_role" {
 }
 EOF
 }
+
+resource "aws_iam_role_policy_attachment" "pinpoint_app_CognitoManagedPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonCognitoIdpServiceRolePolicy"
+  role       = aws_iam_role.pinpoint_role[0].id
+}
