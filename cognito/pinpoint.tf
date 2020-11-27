@@ -25,3 +25,24 @@ resource "aws_iam_role" "pinpoint_role" {
 }
 EOF
 }
+
+resource "aws_iam_role_policy" "pinpoint_app_role" {
+  name = "role_policy"
+  role = aws_iam_role.pinpoint_role.id
+
+  policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "mobiletargeting:UpdateEndpoint",
+        "mobiletargeting:PutItems"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:mobiletargeting:*:${data.aws_caller_identity.current.account_id}:apps/*"
+    }
+  ]
+}
+EOF
+}
