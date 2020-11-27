@@ -102,11 +102,14 @@ resource "aws_cognito_user_pool_client" "clients" {
   allowed_oauth_flows                  = ["code"]
 
   # TODO : Make this block conditional
-  analytics_configuration {
-    application_id   = aws_pinpoint_app.pinpoint_app.application_id
-    external_id      = "odc_eks"
-    role_arn         = aws_iam_role.pinpoint_role.arn
-    user_data_shared = true
+  dynamic "analytics_configuration" {
+    for_each = var.enable_pinpoint ? [1] : []
+    content {
+      application_id = aws_pinpoint_app.pinpoint_app[each.key].application_id
+      external_id = each.key
+      role_arn = aws_iam_role.pinpoint_role[0].arn
+      user_data_shared = true
+    }
   }
 }
 

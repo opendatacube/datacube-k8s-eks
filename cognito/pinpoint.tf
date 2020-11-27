@@ -1,6 +1,6 @@
 # Create a PinPoint app for every app client
 resource "aws_pinpoint_app" "pinpoint_app" {
-  for_each   = var.enable_pinpoint ? var.app_clients : null
+  for_each   = var.enable_pinpoint ? var.app_clients : {}
   name       = each.key
 }
 
