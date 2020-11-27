@@ -51,7 +51,7 @@ resource "aws_iam_role_policy" "pinpoint_app_role" {
           "mobiletargeting:PutItems"
         ],
         "Effect": "Allow",
-        "Resource": "arn:aws:mobiletargeting:${data.current.aws_region.name}:${data.aws_caller_identity.current.account_id}:apps/*"
+        "Resource": "arn:aws:mobiletargeting:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:apps/*"
       }
     ]
   }
