@@ -33,23 +33,25 @@ resource "aws_iam_role_policy" "pinpoint_app_role" {
   role = aws_iam_role.pinpoint_role[0].id
 
   policy = <<-EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "mobiletargeting:UpdateEndpoint",
-        "mobiletargeting:PutItems"
-      ],
-      "Effect": "Allow",
-      "Resource": "arn:aws:mobiletargeting:*:${data.aws_caller_identity.current.account_id}:apps/*"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "pinpoint_app_CognitoManagedPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonCognitoIdpServiceRolePolicy"
-  role       = aws_iam_role.pinpoint_role[0].id
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+          "Effect": "Allow",
+          "Action": [
+              "cognito-idp:Describe*"
+          ],
+          "Resource": "*"
+      },
+      {
+        "Action": [
+          "mobiletargeting:UpdateEndpoint",
+          "mobiletargeting:PutItems"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:mobiletargeting:*:${data.aws_caller_identity.current.account_id}:apps/*"
+      }
+    ]
+  }
+  EOF
 }
