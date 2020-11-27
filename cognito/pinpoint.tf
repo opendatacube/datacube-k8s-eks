@@ -1,7 +1,7 @@
 # Create a PinPoint app for every app client
 resource "aws_pinpoint_app" "pinpoint_app" {
-  for_each   = var.enable_pinpoint ? var.app_clients : {}
-  name       = each.key
+  for_each = var.enable_pinpoint ? var.app_clients : {}
+  name     = each.key
 }
 
 # Conditionally create role if pin point is enabled in module
