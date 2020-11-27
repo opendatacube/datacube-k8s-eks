@@ -31,8 +31,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "pinpoint_app_role" {
-  name = "role_policy"
-  role = aws_iam_role.pinpoint_role[0].id
+  count = var.enable_pinpoint ? 1 : 0
+  name  = "role_policy"
+  role  = aws_iam_role.pinpoint_role[0].id
 
   policy = <<-EOF
   {
