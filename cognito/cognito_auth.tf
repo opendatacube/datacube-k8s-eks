@@ -101,7 +101,6 @@ resource "aws_cognito_user_pool_client" "clients" {
   allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
   allowed_oauth_flows                  = ["code"]
 
-  # TODO : Make this block conditional
   dynamic "analytics_configuration" {
     for_each = var.enable_pinpoint ? [1] : []
     content {
