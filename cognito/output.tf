@@ -26,3 +26,10 @@ output "client_secrets" {
   }
   sensitive = true
 }
+
+output "pinpoint_app_ids" {
+  value = {
+    for pinpoint_app in aws_pinpoint_app.pinpoint_app :
+    pinpoint_app.name => pinpoint_app.application_id
+  }
+}

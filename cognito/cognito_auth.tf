@@ -100,6 +100,16 @@ resource "aws_cognito_user_pool_client" "clients" {
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
   allowed_oauth_flows                  = ["code"]
+
+  dynamic "analytics_configuration" {
+    for_each = var.enable_pinpoint ? [1] : []
+    content {
+      application_id   = aws_pinpoint_app.pinpoint_app[each.key].application_id
+      external_id      = each.key
+      role_arn         = aws_iam_role.pinpoint_role[0].arn
+      user_data_shared = true
+    }
+  }
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
