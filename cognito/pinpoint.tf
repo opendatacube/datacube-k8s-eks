@@ -36,29 +36,31 @@ EOF
 }
 
 resource "aws_iam_role_policy" "pinpoint_app_role" {
-  name = "role_policy"
-  role = aws_iam_role.pinpoint_role[0].id
+  count = var.enable_pinpoint ? 1 : 0
+  name  = "role_policy"
+  role  = aws_iam_role.pinpoint_role[0].id
 
-  policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
       {
-          "Effect": "Allow",
-          "Action": [
-              "cognito-idp:Describe*"
-          ],
-          "Resource": "*"
+        Effect = "Allow",
+        Action = [
+          "cognito-idp:Describe*"
+        ],
+        Resource = "*"
       },
       {
-        "Action": [
+        Action = [
           "mobiletargeting:UpdateEndpoint",
           "mobiletargeting:PutItems"
         ],
-        "Effect": "Allow",
-        "Resource": "arn:aws:mobiletargeting:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:apps/*"
+        Effect = "Allow",
+        Resource = [
+          for pinpoint_app in aws_pinpoint_app.pinpoint_app :
+          "${pinpoint_app.arn}*"
+        ]
       }
     ]
-  }
-  EOF
+  })
 }
