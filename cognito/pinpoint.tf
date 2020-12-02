@@ -22,6 +22,11 @@ resource "aws_iam_role" "pinpoint_role" {
       "Principal": {
         "Service": "cognito-idp.amazonaws.com"
       },
+      Condition = {
+        "StringEquals" = {
+          "sts:ExternalId" = "*"
+        }
+      },
       "Effect": "Allow",
       "Sid": ""
     }
