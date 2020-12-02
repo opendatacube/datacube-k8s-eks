@@ -24,7 +24,7 @@ resource "aws_iam_role" "pinpoint_role" {
       },
       "Condition" : {
         "StringEquals" : {
-          "sts:ExternalId" = "*"
+          "sts:ExternalId" : "*"
         }
       },
       "Effect": "Allow",
