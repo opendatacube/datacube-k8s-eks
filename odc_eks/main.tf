@@ -9,10 +9,14 @@ module "odc_eks_label" {
   delimiter = "-"
 }
 
+locals {
+  cluster_id = (var.cluster_id != "") ? var.cluster_id : module.odc_eks_label.id
+}
+
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.64.0"
 
-  name             = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
+  name             = "${local.cluster_id}-vpc"
   cidr             = var.vpc_cidr
   azs              = data.aws_availability_zones.available.names
   public_subnets   = var.public_subnet_cidrs
@@ -20,15 +24,15 @@ module "vpc" {
   database_subnets = var.database_subnet_cidrs
 
   private_subnet_tags = {
-    "SubnetType"                                       = "Private"
-    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
-    "kubernetes.io/role/internal-elb"                  = "1"
+    "SubnetType"                                = "Private"
+    "kubernetes.io/cluster/${local.cluster_id}" = "shared"
+    "kubernetes.io/role/internal-elb"           = "1"
   }
 
   public_subnet_tags = {
-    "SubnetType"                                       = "Utility"
-    "kubernetes.io/cluster/${module.odc_eks_label.id}" = "shared"
-    "kubernetes.io/role/elb"                           = "1"
+    "SubnetType"                                = "Utility"
+    "kubernetes.io/cluster/${local.cluster_id}" = "shared"
+    "kubernetes.io/role/elb"                    = "1"
   }
 
   database_subnet_tags = {
@@ -44,7 +48,7 @@ module "vpc" {
 
   tags = merge(
     {
-      Name        = (var.cluster_id != "") ? "${var.cluster_id}-vpc" : "${module.odc_eks_label.id}-vpc"
+      Name        = "${local.cluster_id}-vpc"
       owner       = var.owner
       namespace   = var.namespace
       environment = var.environment
@@ -58,7 +62,7 @@ module "eks" {
   source             = "./modules/eks"
   vpc_id             = module.vpc.vpc_id
   eks_subnet_ids     = module.vpc.private_subnets
-  cluster_id         = (var.cluster_id != "") ? var.cluster_id : module.odc_eks_label.id
+  cluster_id         = local.cluster_id
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
 
