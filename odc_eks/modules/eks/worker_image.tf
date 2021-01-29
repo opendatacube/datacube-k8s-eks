@@ -26,7 +26,7 @@ ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' \
 --kubelet-extra-args \
   "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=$id,ami-id=$ami \
-   --cloud-provider=aws"
+   --cloud-provider=aws ${var.extra_kubelet_args}" 
 ${var.extra_userdata}
 USERDATA
 
@@ -39,7 +39,7 @@ ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' \
 --kubelet-extra-args \
   "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$id,ami-id=$ami \
-   --cloud-provider=aws"
+   --cloud-provider=aws ${var.extra_kubelet_args}" 
 ${var.extra_userdata}
 USERDATA
 

@@ -88,6 +88,12 @@ variable "spot_volume_size" {
   default = 20
 }
 
+variable "extra_kubelet_args" {
+  type        = string
+  description = "Additional kubelet command-line arguments (e.g. '--arg1=value --arg2')"
+  default     = ""
+}
+
 variable "extra_userdata" {
   type        = string
   description = "Additional EC2 user data commands that will be passed to EKS nodes"

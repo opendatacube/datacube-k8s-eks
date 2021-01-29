@@ -82,6 +82,7 @@ module "eks" {
   default_worker_instance_type = var.default_worker_instance_type
   spot_nodes_enabled           = var.spot_nodes_enabled
   max_spot_price               = var.max_spot_price
+  extra_kubelet_args           = var.extra_kubelet_args
   extra_userdata               = var.extra_userdata
   volume_size                  = var.volume_size
   spot_volume_size             = var.spot_volume_size
