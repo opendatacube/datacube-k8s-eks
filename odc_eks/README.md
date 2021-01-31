@@ -131,6 +131,7 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | max_spot_price | The max in USD you want to pay for each spot instance per hour. Check market price for you instance type to set its value | string | "0.40" | No |
 | volume_size | The Disk size for your on-demand nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this. | number | 20 | No |
 | spot_volume_size | The Disk size for your spot nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this. | number | 20 | No |
+| extra_kubelet_args | Additional kubelet command-line arguments | string | "--arg1=value --arg2" | No |
 | extra_userdata | Additional EC2 user data commands that will be passed to EKS nodes | string | <<USERDATA echo "" USERDATA | No |
 | tags | Additional tags - e.g. `map('StackName','XYZ')` | map(string) | {} | no |
 
