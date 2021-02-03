@@ -14,7 +14,7 @@ locals {
 }
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.64.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.70.0"
 
   name             = "${local.cluster_id}-vpc"
   cidr             = var.vpc_cidr
