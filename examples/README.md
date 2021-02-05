@@ -1,17 +1,17 @@
 # Live Examples to exercise this suite of TerraForm Modules
 
 ## Usage
-- Select the correct AWS credentials to use with sufficient priviledges to spin up the infrastructure, e.g. `export AWS_PROFILE=admin`
-- Create a backend to store terraform state if requires. There is an example provided under `examples/backend_int` that creates s3 bucket to store terraform state and dynamodb table to store terraform state lock. 
-- To create a full Open Data Cube (ODC) eks infrastructure on AWS platform, execute each modules defined under `examples/stage/<module>`. Please note that number in front, e.g. `01_`, represents it's order of execution to manage dependencies.
-- You require to adjust some of the configuration params such as `owner`, `namespace`, `environment`, `region` and `terraform backend` - unique to your organisation.
+- Select the correct AWS credentials to use with sufficient privileges to spin up the infrastructure, e.g. `export AWS_PROFILE=admin`
+- Create a backend to store terraform state if requires. There is an example provided under `examples/backend_int` that creates the s3 bucket to store terraform state and the dynamodb table to store terraform state lock. 
+- To create a full Open Data Cube (ODC) eks infrastructure on AWS platform, execute each module defined under `examples/stage/<module>`. Please note that the number in front, e.g. `01_`, represents the correct order of execution to manage dependencies.
+- You need to adjust some of the configuration params such as `owner`, `namespace`, `environment`, `region` and `terraform backend` - so they are unique to your organisation.
 
 ## How to setup a new ODC cluster environment
-Once you have create a terraform backend and updated a configuration parameters, you can perform following steps to setup a new ODC cluster environment -
+Once you have created a terraform backend and updated the configuration parameters, you can perform the following steps to setup a new ODC cluster environment -
 - Change directory to `examples/stage/01_odc_eks/`
 - Run `terraform init` to initialize Terraform state tracking
 - Run `terraform plan` to do a dry run and validate examples and interaction of modules
-- Run `terraform apply` to spin up infrastructure (a new ODC EKS Cluster), can take upto 15-20minutes
+- Run `terraform apply` to spin up infrastructure (a new ODC EKS Cluster), -- can take upto 15-2 0minutes
 - Validate a fresh kubernetes cluster has been created by adding a new kubernetes context and getting clusterinfo
 ```shell script
     aws eks update-kubeconfig --name <cluster-id>
@@ -19,13 +19,13 @@ Once you have create a terraform backend and updated a configuration parameters,
 ```
 - Change directory to `examples/stage/02_odc_k8s/`
 - Run `terraform init`, `terraform plan`, `terraform apply` as above and deploy flux, tiller etc. to the live k8s cluster
-- Get pods from the kubernetes admin namespace to verify services such as flux and tiller got deployed
+- Get pods from the kubernetes admin namespace to verify services such as flux and tiller were deployed
 ```shell script
   kubectl get pods —all-namespaces
 ```
 
 ## Deploy apps using Flux and Helm Release
-- FluxCD is configured (in `02_odc_k8s` module) to monitor [flux-odc-sample](https://github.com/opendatacube/flux-odc-sample) repo that defines Helm Releases for ODC cluster. Create your own live repo and update flux configuration.
+- FluxCD is configured (in `02_odc_k8s` module) to monitor [flux-odc-sample](https://github.com/opendatacube/flux-odc-sample) repo that defines Helm Releases for the ODC cluster. Create your own live repo and update flux configuration.
 - Execute example modules `examples/stage/03_odc_apps_k8s` and `examples/stage/04_odc_k8s_sandbox`. 
 This will setup a full sandbox/jupyterhub environment, ows web service and also installs necessary admin & monitoring components, roles and kubernetes secrets, etc to manage your cluster.
 - Fetch a flux deployment key and copy it to repo ssh public key or deploy keys section:
@@ -36,15 +36,15 @@ This will setup a full sandbox/jupyterhub environment, ows web service and also 
 ```shell script
   kubectl get hr —all-namespaces
 ```
-- To access Grafana (prometheus), get the password using below command. It is base64 encoded password.
+- To access Grafana (prometheus), get the password using the below command. It is a base64 encoded password.
 ```shell script
   kubectl get secret prometheus-operator-grafana -n monitoring -o yaml | grep "admin-password:" | sed 's/admin-password: //' | base64 -d -i`
 ```
 
 ## Destroy a newly created infrastructure
 
-1. Remove `flux` deploy ssh key. This will stop flux to read/write from your live repo.
-2. Delete helm releases (HRs) in the following order. Assuming that you have similar setup as defined in example -
+1. Remove `flux` deploy ssh key. This will stop flux to be able to read/write from your live repo.
+2. Delete helm releases (HRs) in the following order. Assuming that you have a similar setup as defined in example -
 - First delete all the apps under `sandbox`, `processing` and `web` kubernetes namespace
 ```shell script
   kubectl delete hr --all=true -n sandbox
