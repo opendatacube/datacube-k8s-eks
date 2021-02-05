@@ -11,7 +11,7 @@ Once you have created a terraform backend and updated the configuration paramete
 - Change directory to `examples/stage/01_odc_eks/`
 - Run `terraform init` to initialize Terraform state tracking
 - Run `terraform plan` to do a dry run and validate examples and interaction of modules
-- Run `terraform apply` to spin up infrastructure (a new ODC EKS Cluster), -- can take upto 15-2 0minutes
+- Run `terraform apply` to spin up infrastructure (a new ODC EKS Cluster), -- can take upto 15-20 minutes
 - Validate a fresh kubernetes cluster has been created by adding a new kubernetes context and getting clusterinfo
 ```shell script
     aws eks update-kubeconfig --name <cluster-id>
@@ -43,7 +43,7 @@ This will setup a full sandbox/jupyterhub environment, ows web service and also 
 
 ## Destroy a newly created infrastructure
 
-1. Remove `flux` deploy ssh key. This will stop flux to be able to read/write from your live repo.
+1. Remove `flux` deploy ssh key. This will stop flux from being able to read/write from your live repo.
 2. Delete helm releases (HRs) in the following order. Assuming that you have a similar setup as defined in example -
 - First delete all the apps under `sandbox`, `processing` and `web` kubernetes namespace
 ```shell script
