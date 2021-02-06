@@ -2,7 +2,7 @@
 
 ## Pre-requisites
 
-You'll need to know how to build the cluster first this is covered in detail in the [Getting Started Guid](./getting_started.md) 
+You'll need to know how to build the cluster first. This is covered in detail in the [Getting Started Guid](./getting_started.md) 
 
 You'll need either:
 1. a user account with mfa enabled. See the [AWS guide for setting up MFA](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html)
@@ -69,9 +69,9 @@ you'll need to know your account id for the next step, you can find it using the
 now edit the config file and add the following section:
 
 ```config
-  [profile <ypur-cluster-id>]
+  [profile <your-cluster-id>]
   source_profile = default
-  role_arn = arn:aws:iam::<aws-account>:role/user.<ypur-cluster-id>-clusteradmin # Needed if using a role based access
+  role_arn = arn:aws:iam::<aws-account>:role/user.<your-cluster-id>-clusteradmin # Needed if using a role based access
   mfa_serial = arn:aws:iam::<aws-account>:mfa/janedoe # Needed if  using a user with mfa based access
 ```
 - `profile` defines what you want to call the local profile when calling it using the cli
