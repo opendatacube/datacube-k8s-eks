@@ -121,14 +121,14 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | enable_ec2_ssm | Enables the IAM policy required for AWS EC2 System Manager in the EKS Node IAM role created | bool | true | No |
 | ami_image_id | This variable can be used to deploy a patched / customised version of the Amazon EKS image | string | "" | No |
 | node_group_name | Autoscaling node group name. This name is used to tag instances and ASGs | string | "eks" | No |
-| default_worker_instance_type | The Worker instance type that the cluster nodes will run, for production we recommend something with a good network, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge | string |  | Yes |
+| default_worker_instance_type | The Worker instance type that the cluster nodes will run, for production we recommend something with a good network capability, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge | string |  | Yes |
 | min_nodes | The minimum number of on-demand nodes to run | number | 0 | No |
 | desired_nodes | Desired number of nodes only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler | number | 0 | No |
 | max_nodes | Max number of nodes you want to run, useful for controlling max cost of the cluster | number | 0 | No |
 | spot_nodes_enabled | Creates a second set of Autoscaling groups (one per AZ) that are configured to run Spot instances, these instances are cheaper but can be removed any-time. Useful for fault tolerant processing work | bool | false | No | 
 | min_spot_nodes | The minimum number of spot nodes to run | bool | 0 | No |
 | max_spot_nodes | Max number of spot you want to run, useful for controlling max cost of the cluster | number | 0 | No |
-| max_spot_price | The max in USD you want to pay for each spot instance per hour. Check market price for you instance type to set its value | string | "0.40" | No |
+| max_spot_price | The max in USD you want to pay for each spot instance per hour. Check market price for your instance type to set its value | string | "0.40" | No |
 | volume_size | The Disk size for your on-demand nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this. | number | 20 | No |
 | spot_volume_size | The Disk size for your spot nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this. | number | 20 | No |
 | extra_kubelet_args | Additional kubelet command-line arguments | string | "--arg1=value --arg2" | No |
