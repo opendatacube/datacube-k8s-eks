@@ -40,8 +40,8 @@ string match filter for allow users to compose and save jupyterhub `notebooks` t
 
 ## Usage
 
-The complete Open Data Cube terraform AWS example is provided for kick start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
-Copy the example to create your own live repo to setup ODC infrastructure to run [jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) notebook and ODC web services to your own AWS account.
+The complete Open Data Cube terraform AWS example is provided for kick-start [here](https://github.com/opendatacube/datacube-k8s-eks/tree/master/examples/stage).
+Copy the example to create your own live repo to set up ODC infrastructure to run [jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) notebooks and ODC web services in your own AWS account.
 
 ```hcl-terraform
   module "odc_eks" {
@@ -91,8 +91,8 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
     waf_enable             = true
     waf_target_scope       = "regional"
     waf_log_bucket         = "odc-stage-waf-logs"
-    # Additional setting required to setup URL whitelist string match filter
-    # Recommanded if WAF is enabled for `jupyterhub` setup
+    # Additional setting required to set up URL whitelist string match filter
+    # Recommended if WAF is enabled for `jupyterhub` setup
     waf_enable_url_whitelist_string_match_set = true
     waf_url_whitelist_uri_prefix              = "/user"
     waf_url_whitelist_url_host                = app.example.domain.com
@@ -115,20 +115,20 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
 | user_additional_policy_arn | The list of pre-defined IAM policy required to EKS user role | list(string) | [] | No |
 | domain_name | The domain name to be used by applications deployed to the cluster and using ingress | string |  | Yes |
 | vpc_cidr | The network CIDR you wish to use for this VPC. Default is set to 10.0.0.0/16 for most use-cases | string | "10.0.0.0/16" | No |
-| public_subnet_cidrs | List of public cidrs, for all available availability zones. Used by VPC module to setup public subnets | list(string) | ["10.0.0.0/22", "10.0.4.0/22", "10.0.8.0/22"] | No |
-| private_subnet_cidrs | List of private cidrs, for all available availability zones. Used by VPC module to setup private subnets | list(string) | ["10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"] | No |
-| database_subnet_cidrs | List of database cidrs, for all available availability zones. Used by VPC module to setup database subnets | list(string) | ["10.0.20.0/22", "10.0.24.0/22", "10.0.28.0/22"] | No |
+| public_subnet_cidrs | List of public cidrs, for all available availability zones. Used by VPC module to set up public subnets | list(string) | ["10.0.0.0/22", "10.0.4.0/22", "10.0.8.0/22"] | No |
+| private_subnet_cidrs | List of private cidrs, for all available availability zones. Used by VPC module to set up private subnets | list(string) | ["10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"] | No |
+| database_subnet_cidrs | List of database cidrs, for all available availability zones. Used by VPC module to set up database subnets | list(string) | ["10.0.20.0/22", "10.0.24.0/22", "10.0.28.0/22"] | No |
 | enable_ec2_ssm | Enables the IAM policy required for AWS EC2 System Manager in the EKS Node IAM role created | bool | true | No |
 | ami_image_id | This variable can be used to deploy a patched / customised version of the Amazon EKS image | string | "" | No |
 | node_group_name | Autoscaling node group name. This name is used to tag instances and ASGs | string | "eks" | No |
-| default_worker_instance_type | The Worker instance type that the cluster nodes will run, for production we recommend something with a good network, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge | string |  | Yes |
+| default_worker_instance_type | The Worker instance type that the cluster nodes will run, for production we recommend something with a good network capability, as most of the Open Data Cube work is I/O bound, For example r4.4xlarge or c5n.4xlarge | string |  | Yes |
 | min_nodes | The minimum number of on-demand nodes to run | number | 0 | No |
 | desired_nodes | Desired number of nodes only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler | number | 0 | No |
 | max_nodes | Max number of nodes you want to run, useful for controlling max cost of the cluster | number | 0 | No |
 | spot_nodes_enabled | Creates a second set of Autoscaling groups (one per AZ) that are configured to run Spot instances, these instances are cheaper but can be removed any-time. Useful for fault tolerant processing work | bool | false | No | 
 | min_spot_nodes | The minimum number of spot nodes to run | bool | 0 | No |
 | max_spot_nodes | Max number of spot you want to run, useful for controlling max cost of the cluster | number | 0 | No |
-| max_spot_price | The max in USD you want to pay for each spot instance per hour. Check market price for you instance type to set its value | string | "0.40" | No |
+| max_spot_price | The max in USD you want to pay for each spot instance per hour. Check market price for your instance type to set its value | string | "0.40" | No |
 | volume_size | The Disk size for your on-demand nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this. | number | 20 | No |
 | spot_volume_size | The Disk size for your spot nodes. If you're getting pods evicted for ephemeral storage saving, you should increase this. | number | 20 | No |
 | extra_kubelet_args | Additional kubelet command-line arguments | string | "--arg1=value --arg2" | No |
