@@ -20,16 +20,20 @@ locals {
   eks-node-userdata = <<USERDATA
 [settings.kubernetes]
 api-server = "${aws_eks_cluster.eks.endpoint}"
-cluster-certificate ="${aws_eks_cluster.eks.certificate_authority[0].data}"
+cluster-certificate = "${aws_eks_cluster.eks.certificate_authority[0].data}"
 cluster-name = "${aws_eks_cluster.eks.id}"
+[settings.kubernetes.node-labels]
+cluster= "${aws_eks_cluster.eks.id}"
 ${var.extra_userdata}
 USERDATA
 
   eks-spot-userdata = <<USERDATA
 [settings.kubernetes]
 api-server = "${aws_eks_cluster.eks.endpoint}"
-cluster-certificate ="${aws_eks_cluster.eks.certificate_authority[0].data}"
+cluster-certificate = "${aws_eks_cluster.eks.certificate_authority[0].data}"
 cluster-name = "${aws_eks_cluster.eks.id}"
+[settings.kubernetes.node-labels]
+cluster= "${aws_eks_cluster.eks.id}"
 ${var.extra_userdata}
 USERDATA
 
