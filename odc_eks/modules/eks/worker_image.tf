@@ -18,28 +18,18 @@ locals {
   ami_id = coalesce(var.ami_image_id, data.aws_ami.eks_worker.id)
 
   eks-node-userdata = <<USERDATA
-#!/bin/bash
-set -o xtrace
-# Get instance and ami id from the aws ec2 metadate endpoint 
-id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
-ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' \
---kubelet-extra-args \
-  "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=$id,ami-id=$ami \
-   --cloud-provider=aws ${var.extra_kubelet_args}" 
+[settings.kubernetes]
+api-server = "${aws_eks_cluster.eks.endpoint}"
+cluster-certificate ="${aws_eks_cluster.eks.certificate_authority[0].data}"
+cluster-name = "${aws_eks_cluster.eks.id}"
 ${var.extra_userdata}
 USERDATA
 
   eks-spot-userdata = <<USERDATA
-#!/bin/bash
-set -o xtrace
-# Get instance and ami id from the aws ec2 metadate endpoint 
-id=$(curl http://169.254.169.254/latest/meta-data/instance-id -s)
-ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' \
---kubelet-extra-args \
-  "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$id,ami-id=$ami \
-   --cloud-provider=aws ${var.extra_kubelet_args}" 
+[settings.kubernetes]
+api-server = "${aws_eks_cluster.eks.endpoint}"
+cluster-certificate ="${aws_eks_cluster.eks.certificate_authority[0].data}"
+cluster-name = "${aws_eks_cluster.eks.id}"
 ${var.extra_userdata}
 USERDATA
 
@@ -110,4 +100,3 @@ resource "aws_launch_template" "spot" {
   }
 
 }
-
