@@ -102,7 +102,26 @@ resource "aws_launch_template" "spot" {
     }
   }
 
-  resource "aws_launch_template" "bottlerocket" {
+  network_interfaces {
+    associate_public_ip_address = false
+    security_groups             = [aws_security_group.eks_node.id]
+    delete_on_termination       = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      volume_size = var.spot_volume_size
+    }
+  }
+
+}
+
+resource "aws_launch_template" "bottlerocket" {
   count         = var.bottlerocket_nodes_enabled ? 1 : 0
   name_prefix   = aws_eks_cluster.eks.id
   image_id      = var.bottlerocket_ami_id
@@ -136,5 +155,4 @@ resource "aws_launch_template" "spot" {
       volume_size = var.spot_volume_size
     }
   }
-
 }
