@@ -173,3 +173,29 @@ variable "node_extra_tags" {
   description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
+
+# Bottlerocket Node configuration
+# ===============================
+variable "bottlerocket_node_extra_tags" {
+  type        = map(string)
+  description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
+  default     = {}
+}
+
+variable "bottlerocket_extra_userdata" {
+  type        = string
+  description = "Additional Bottlerocket user data toml configuration that will be passed to EKS nodes"
+  default     = <<USERDATA
+echo ""
+USERDATA
+
+}
+
+variable "bottlerocket_ami_id" {
+  default     = ""
+  description = "Overwrites the default ami (latest Amazon Bottlerocket EKS)"
+}
+
+variable "bottlerocket_nodes_enabled" {
+  default = false
+}
