@@ -50,7 +50,7 @@ cluster-certificate = "${aws_eks_cluster.eks.certificate_authority[0].data}"
 cluster-name = "${aws_eks_cluster.eks.id}"
 [settings.kubernetes.node-labels]
 cluster= "${aws_eks_cluster.eks.id}"
-${var.extra_bottlerocket_userdata}
+${var.bottlerocket_extra_userdata}
 USERDATA
 
 }
