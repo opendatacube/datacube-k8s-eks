@@ -124,7 +124,7 @@ resource "aws_launch_template" "spot" {
 resource "aws_launch_template" "bottlerocket" {
   count         = var.bottlerocket_nodes_enabled ? 1 : 0
   name_prefix   = aws_eks_cluster.eks.id
-  image_id      = var.bottlerocket_ami_id
+  image_id      = var.bottlerocket_ami_image_id
   user_data     = base64encode(local.eks-bottlerocket-userdata)
   instance_type = var.default_worker_instance_type
 

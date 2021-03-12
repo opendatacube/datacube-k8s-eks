@@ -156,7 +156,7 @@ echo ""
 USERDATA
 }
 
-variable "bottlerocket_ami_id" {
+variable "bottlerocket_ami_image_id" {
   default     = ""
   description = "Overwrites the default ami (latest Amazon Bottlerocket EKS)"
 }
