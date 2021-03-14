@@ -173,7 +173,7 @@ resource "aws_autoscaling_group" "bottlerocket_spot_nodes" {
   desired_capacity    = var.desired_nodes
   max_size            = var.max_spot_nodes
   min_size            = var.min_spot_nodes
-  name                = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
+  name                = "${var.node_group_name}-${aws_launch_template.bottlerocket[0].id}-bottlerocket"
   vpc_zone_identifier = var.eks_subnet_ids
 
   # Don't reset to default size every time terraform is applied
@@ -183,8 +183,8 @@ resource "aws_autoscaling_group" "bottlerocket_spot_nodes" {
   }
 
   launch_template {
-    id      = aws_launch_template.spot[0].id
-    version = aws_launch_template.spot[0].latest_version
+    id      = aws_launch_template.bottlerocket[0].id
+    version = aws_launch_template.bottlerocket[0].latest_version
   }
 
   # Use a dyanmic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
@@ -201,7 +201,7 @@ resource "aws_autoscaling_group" "bottlerocket_spot_nodes" {
       [
         {
           key                 = "Name"
-          value               = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
+          value               = "${var.node_group_name}-${aws_launch_template.bottlerocket[0].id}-bottlerocket"
           propagate_at_launch = true
         },
         {
@@ -251,5 +251,5 @@ resource "aws_autoscaling_group" "bottlerocket_spot_nodes" {
   # Don't break cluster autoscaler
   suspended_processes = ["AZRebalance"]
 
-  depends_on = [aws_launch_template.spot]
+  depends_on = [aws_launch_template.bottlerocket]
 }
