@@ -91,8 +91,9 @@ module "eks" {
   bottlerocket_nodes_enabled      = var.bottlerocket_nodes_enabled
   bottlerocket_ami_image_id       = var.bottlerocket_ami_image_id
   bottlerocket_extra_userdata     = var.bottlerocket_extra_userdata
-  bottlerocket_node_extra_labels  = var.bottlerocket_node_extra_labels
-
+  bottlerocket_node_extra_tags    = var.bottlerocket_node_extra_tags
+  bottlerocket_node_label         = var.bottlerocket_node_label
+  bottlerocket_interface_version  = var.bottlerocket_interface_version
 
   # Default Tags
   owner       = var.owner

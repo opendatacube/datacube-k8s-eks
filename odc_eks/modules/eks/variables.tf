@@ -142,9 +142,9 @@ variable "node_extra_tags" {
 #--------------------------
 # Bottlerocket OS variables
 #--------------------------
-variable "bottlerocket_node_extra_labels" {
+variable "bottlerocket_node_extra_tags" {
   type        = map(string)
-  description = "Additional labels for EKS nodes (e.g. `map('StackName','XYZ')`"
+  description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
 
@@ -154,6 +154,16 @@ variable "bottlerocket_extra_userdata" {
   default     = <<USERDATA
 echo ""
 USERDATA
+}
+
+variable "bottlerocket_node_label" {
+  default     = ""
+  description = "Overwrites the updater interface label (latest Amazon Bottlerocket EKS)"
+}
+
+variable "bottlerocket_interface_version" {
+  default     = ""
+  description = "Overwrites the updater interface version (latest Amazon Bottlerocket EKS)"
 }
 
 variable "bottlerocket_ami_image_id" {
