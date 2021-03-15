@@ -191,10 +191,10 @@ resource "aws_autoscaling_group" "bottlerocket_spot_nodes" {
   dynamic "tag" {
     for_each = concat(
       flatten([
-        for key in keys(var.bottlerocket_node_extra_tags) :
+        for key in keys(var.bottlerocket_node_extra_labels) :
         {
           key                 = key
-          value               = var.bottlerocket_node_extra_tags[key]
+          value               = var.bottlerocket_node_extra_labels[key]
           propagate_at_launch = true
         }
       ]),

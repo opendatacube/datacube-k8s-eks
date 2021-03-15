@@ -142,9 +142,9 @@ variable "node_extra_tags" {
 #--------------------------
 # Bottlerocket OS variables
 #--------------------------
-variable "bottlerocket_node_extra_tags" {
+variable "bottlerocket_node_extra_labels" {
   type        = map(string)
-  description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
+  description = "Additional labels for EKS nodes (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
 
