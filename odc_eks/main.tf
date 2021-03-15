@@ -87,6 +87,13 @@ module "eks" {
   volume_size                  = var.volume_size
   spot_volume_size             = var.spot_volume_size
 
+  # Bottlerocket
+  bottlerocket_nodes_enabled   = var.bottlerocket_nodes_enabled
+  bottlerocket_ami_image_id    = var.bottlerocket_ami_image_id
+  bottlerocket_extra_userdata  = var.bottlerocket_extra_userdata
+  bottlerocket_node_extra_tags = var.bottlerocket_node_extra_tags
+
+
   # Default Tags
   owner       = var.owner
   namespace   = var.namespace
