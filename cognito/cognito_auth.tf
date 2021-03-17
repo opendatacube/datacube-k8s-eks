@@ -104,7 +104,7 @@ resource "aws_cognito_user_pool_client" "clients" {
   dynamic "analytics_configuration" {
     for_each = var.enable_pinpoint ? [1] : []
     content {
-      application_arn   = aws_pinpoint_app.pinpoint_app[each.key].arn
+      application_arn  = aws_pinpoint_app.pinpoint_app[each.key].arn
       user_data_shared = true
     }
   }
