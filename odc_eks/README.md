@@ -118,6 +118,7 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
 | public_subnet_cidrs | List of public cidrs, for all available availability zones. Used by VPC module to set up public subnets | list(string) | ["10.0.0.0/22", "10.0.4.0/22", "10.0.8.0/22"] | No |
 | private_subnet_cidrs | List of private cidrs, for all available availability zones. Used by VPC module to set up private subnets | list(string) | ["10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"] | No |
 | database_subnet_cidrs | List of database cidrs, for all available availability zones. Used by VPC module to set up database subnets | list(string) | ["10.0.20.0/22", "10.0.24.0/22", "10.0.28.0/22"] | No |
+| enable_s3_endpoint | Whether to provision an S3 endpoint to the VPC. Default is set to 'true' | bool | true | No |
 | enable_ec2_ssm | Enables the IAM policy required for AWS EC2 System Manager in the EKS Node IAM role created | bool | true | No |
 | ami_image_id | This variable can be used to deploy a patched / customised version of the Amazon EKS image | string | "" | No |
 | node_group_name | Autoscaling node group name. This name is used to tag instances and ASGs | string | "eks" | No |

@@ -87,6 +87,12 @@ variable "database_subnet_cidrs" {
 
 }
 
+variable "enable_s3_endpoint" {
+  type        = bool
+  description = "Whether to provision an S3 endpoint to the VPC. Default is set to 'true'"
+  default     = true
+}
+
 # EC2 Worker Roles
 # ==================
 variable "enable_ec2_ssm" {

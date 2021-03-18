@@ -44,7 +44,7 @@ module "vpc" {
 
   enable_nat_gateway           = true
   create_database_subnet_group = true
-  enable_s3_endpoint           = true
+  enable_s3_endpoint           = var.enable_s3_endpoint
 
   tags = merge(
     {
