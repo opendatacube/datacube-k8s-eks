@@ -151,6 +151,7 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
 | node_security_group | security group for EKS work node group | false |
 | ami_image_id | AMI ID used for worker EC2 instances | false |
 | certificate_arn | Certificate ARN | false |
+| public_route_table_ids | Public subnet route tables | false |
 
 ### Input - Extensions
 
