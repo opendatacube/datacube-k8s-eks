@@ -83,6 +83,12 @@ locals {
   }
 
   admin_create_user_config = [local.admin_create_user_config_default]
+
+  token_validity_units_default = {
+    access_token  = "minutes"
+    id_token      = "minutes"
+    refresh_token = "days"
+  }
 }
 
 resource "aws_cognito_user_pool_client" "clients" {
@@ -108,6 +114,16 @@ resource "aws_cognito_user_pool_client" "clients" {
       user_data_shared = true
     }
   }
+
+  token_validity_units {
+    access_token  = lookup(each.value, "access_token", null) == null ? local.token_validity_units_default.access_token : each.value.access_token
+    id_token      = lookup(each.value, "id_token", null) == null ? local.token_validity_units_default.id_token : each.value.id_token
+    refresh_token = lookup(each.value, "refresh_token", null) == null ? local.token_validity_units_default.refresh_token : each.value.refresh_token
+  }
+  access_token_validity  = lookup(each.value, "access_token_validity", 60)
+  id_token_validity      = lookup(each.value, "id_token_validity", 60)
+  refresh_token_validity = lookup(each.value, "refresh_token_validity", 30)
+
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
