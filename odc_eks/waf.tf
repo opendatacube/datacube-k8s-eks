@@ -198,7 +198,7 @@ variable "waf_url_whitelist_url_host" {
 }
 
 module "waf_label" {
-  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.5.0"
+  source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
   namespace = var.namespace
   stage     = var.environment
   name      = "waf"
@@ -214,7 +214,7 @@ module "waf_label" {
 # - Updates to allow disable specific XSS and PATH based rules filters
 # - Updates to address URL whitelisting
 module "owasp_top_10_rules" {
-  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
+  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=tf-015-compat-fixes"
 
   owner       = var.owner
   namespace   = var.namespace

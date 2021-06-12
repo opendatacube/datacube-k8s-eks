@@ -77,10 +77,6 @@ variable "cf_price_class" {
 }
 
 # Create a new certificate, this must be in us-east-1 to work with cloudfront
-provider "aws" {
-  alias = "us-east-1"
-}
-
 resource "aws_acm_certificate" "cert" {
   provider                  = aws.us-east-1
   count                     = (var.cf_certificate_create && var.cf_enable) ? 1 : 0

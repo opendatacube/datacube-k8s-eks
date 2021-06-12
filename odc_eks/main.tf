@@ -2,7 +2,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "odc_eks_label" {
-  source    = "git::https://github.com/cloudposse/terraform-terraform-label.git?ref=tags/0.5.0"
+  source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
   namespace = var.namespace
   stage     = var.environment
   name      = "eks"
