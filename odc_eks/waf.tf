@@ -214,7 +214,7 @@ module "waf_label" {
 # - Updates to allow disable specific XSS and PATH based rules filters
 # - Updates to address URL whitelisting
 module "owasp_top_10_rules" {
-  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=tf-015-compat-fixes"
+  source = "git::https://github.com/opendatacube/terraform-aws-waf-owasp-top-10-rules.git?ref=master"
 
   owner       = var.owner
   namespace   = var.namespace
