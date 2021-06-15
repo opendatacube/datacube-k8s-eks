@@ -116,9 +116,9 @@ resource "aws_cognito_user_pool_client" "clients" {
   }
 
   token_validity_units {
-    access_token  = lookup(each.value, "access_token", null) == null ? local.token_validity_units_default.access_token : each.value.access_token
-    id_token      = lookup(each.value, "id_token", null) == null ? local.token_validity_units_default.id_token : each.value.id_token
-    refresh_token = lookup(each.value, "refresh_token", null) == null ? local.token_validity_units_default.refresh_token : each.value.refresh_token
+    access_token  = lookup(each.value.token_validity_units, "access_token", null) == null ? local.token_validity_units_default.access_token : each.value.token_validity_units["access_token"]
+    id_token      = lookup(each.value.token_validity_units, "id_token", null) == null ? local.token_validity_units_default.id_token : each.value.token_validity_units["id_token"]
+    refresh_token = lookup(each.value.token_validity_units, "refresh_token", null) == null ? local.token_validity_units_default.refresh_token : each.value.token_validity_units["refresh_token"]
   }
   access_token_validity  = lookup(each.value, "access_token_validity", 60)
   id_token_validity      = lookup(each.value, "id_token_validity", 60)
