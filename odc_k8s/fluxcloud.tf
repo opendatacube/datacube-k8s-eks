@@ -55,6 +55,8 @@ resource "kubernetes_service" "fluxcloud" {
       target_port = "3032"
     }
   }
+
+  wait_for_load_balancer = true
 }
 
 resource "kubernetes_deployment" "fluxcloud" {
@@ -81,6 +83,7 @@ resource "kubernetes_deployment" "fluxcloud" {
       }
 
       spec {
+        automount_service_account_token = false
         container {
           name  = "fluxcloud"
           image = "justinbarrick/fluxcloud:v0.3.8"
