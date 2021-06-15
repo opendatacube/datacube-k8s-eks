@@ -1,6 +1,6 @@
 variable "app_clients" {
   description = "Map of Cognito user pool app clients"
-  type        = map
+  type        = map(any)
 }
 
 variable "user_pool_name" {
@@ -16,7 +16,7 @@ variable "user_pool_domain" {
 variable "user_groups" {
   default     = {}
   description = "Map of Cognito user groups"
-  type        = map
+  type        = map(any)
 }
 
 variable "enable_pinpoint" {
@@ -51,7 +51,7 @@ variable "environment" {
 # admin_create_user_config
 variable "admin_create_user_config" {
   description = "The configuration for AdminCreateUser requests"
-  type        = map
+  type        = map(any)
   default     = {}
 }
 

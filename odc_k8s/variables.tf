@@ -25,19 +25,19 @@ variable "cluster_id" {
 
 variable "node_roles" {
   default     = {}
-  type        = map
+  type        = map(any)
   description = "A list of node roles that will be given access to the cluster"
 }
 
 variable "user_roles" {
   default     = {}
-  type        = map
+  type        = map(any)
   description = "A list of user roles that will be given access to the cluster"
 }
 
 variable "users" {
   default     = {}
-  type        = map
+  type        = map(any)
   description = "A list of users that will be given access to the cluster"
 }
 

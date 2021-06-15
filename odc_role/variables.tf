@@ -19,7 +19,7 @@ variable "cluster_id" {
 }
 
 variable "role" {
-  type        = map
+  type        = map(any)
   description = "Provision a role that can be used by pods/applications on the k8s cluster"
 }
 

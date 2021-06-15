@@ -23,6 +23,6 @@ variable "tags" {
 }
 
 variable "user" {
-  type        = map
+  type        = map(any)
   description = "Provision a user that can be used by pods/applications on the k8s cluster"
 }
