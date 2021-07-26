@@ -57,17 +57,17 @@ output "waf_acl_id" {
 }
 
 output "vpc_id" {
-  value = module.vpc.vpc_id
+  value = var.create_vpc ? module.vpc[0].vpc_id : ""
 }
 
 output "database_subnets" {
-  value = module.vpc.database_subnets
+  value = var.create_vpc ? module.vpc[0].database_subnets : var.database_subnets
 }
 
 output "private_subnets" {
-  value = module.vpc.private_subnets
+  value = var.create_vpc ? module.vpc[0].private_subnets : var.private_subnets
 }
 
 output "public_route_table_ids" {
-  value = module.vpc.public_route_table_ids
+  value = var.create_vpc ? module.vpc[0].public_route_table_ids : var.public_route_table_ids
 }
