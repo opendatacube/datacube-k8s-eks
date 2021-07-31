@@ -20,18 +20,20 @@ Terraform module designed to provision an Open Data Cube EKS cluster on AWS.
 
 The module provisions the following resources:
 
-- Creates VPC resources using [terraform-aws-vpc](https://github.com/terraform-aws-modules/terraform-aws-vpc) module.
-- Creates AWS EKS cluster
+- Creates AWS EKS cluster in a VPC with subnets
+- (Optionally) Creates VPC resources using [terraform-aws-vpc](https://github.com/terraform-aws-modules/terraform-aws-vpc) module with the default configuration and internet facing resources, _or_
+- (Optionally) Use a supplied VPC and subnets configured and _tagged_ as required by AWS EKS - see [VPC considerations](https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html) and the requirements on subnet tagging for the [Application load balancing on Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html)
+
 
 ### Module Extensions(Optional Components)
 - Setup a AWS CloudFront Distribution to support Open Data Cube web services
 - Setup AWS WAF for web application security for web application.
-- Issue a domain certificate using AWS Certificate Manager. It uses Route53 to validate certificate. 
+- Issue a domain certificate using AWS Certificate Manager. It uses Route53 to validate certificate.
 
 ### WAF Important Consideration
-- If you are using WAF for `jupyterhub` setup, make sure to enable `waf_enable_url_whitelist_string_match_set` - 
+- If you are using WAF for `jupyterhub` setup, make sure to enable `waf_enable_url_whitelist_string_match_set` -
 string match filter for allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
-- Pass additional settings to support WAF for jupyterhub - 
+- Pass additional settings to support WAF for jupyterhub -
 ```hcl-terraform
   waf_enable_url_whitelist_string_match_set = true
   waf_url_whitelist_uri_prefix              = "/user"
@@ -51,24 +53,24 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
     region          = "ap-southeast-2"
     cluster_id      = "odc-stage-cluster"   # optional - if not provided it uses odc_eks_label defined in the module.
     cluster_version = 1.14
-    
+
     # Default tags + resource labels
     owner           = "odc-owner"
     namespace       = "odc"
     environment     = "stage"
-    
+
     # Additional Tags
     tags = {
       "stack_name" = "odc-stage-cluster"
       "cost_code" = "CC1234"
       "project" = "ODC"
     }
-    
+
     domain_name = "example.domain.com"
-    
+
     # ACM - used by ALB
     create_certificate  = true
-    
+
     # System node instances
     default_worker_instance_type = "t3.medium"
     spot_nodes_enabled = true
@@ -76,7 +78,7 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
     max_nodes = 4
     min_spot_nodes = 0
     max_spot_nodes = 4
-    
+
     # Cloudfront CDN
     cf_enable                 = true
     cf_dns_record             = "odc"
@@ -86,7 +88,7 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
     cf_origin_protocol_policy = "https-only"
     cf_log_bucket_create      = true
     cf_log_bucket             = "odc-stage-cloudfront-logs"
-    
+
     # WAF
     waf_enable             = true
     waf_target_scope       = "regional"
@@ -114,10 +116,15 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
 | user_custom_policy | The IAM custom policy to create and attach to EKS user role | string | "" | No |
 | user_additional_policy_arn | The list of pre-defined IAM policy required to EKS user role | list(string) | [] | No |
 | domain_name | The domain name to be used by applications deployed to the cluster and using ingress | string |  | Yes |
-| vpc_cidr | The network CIDR you wish to use for this VPC. Default is set to 10.0.0.0/16 for most use-cases | string | "10.0.0.0/16" | No |
-| public_subnet_cidrs | List of public cidrs, for all available availability zones. Used by VPC module to set up public subnets | list(string) | ["10.0.0.0/22", "10.0.4.0/22", "10.0.8.0/22"] | No |
-| private_subnet_cidrs | List of private cidrs, for all available availability zones. Used by VPC module to set up private subnets | list(string) | ["10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"] | No |
-| database_subnet_cidrs | List of database cidrs, for all available availability zones. Used by VPC module to set up database subnets | list(string) | ["10.0.20.0/22", "10.0.24.0/22", "10.0.28.0/22"] | No |
+| create_vpc | Create a default VPC and subnet configuration  | bool | true | No |
+| vpc_cidr | The network CIDR you wish to use for the VPC module subnets. Default is set to 10.0.0.0/16 for most use-cases. Requires create_vpc = true | string | "10.0.0.0/16" | No |
+| public_subnet_cidrs | List of public cidrs, for all available availability zones. Used by VPC module to set up public subnets. Requires create_vpc = true | list(string) | ["10.0.0.0/22", "10.0.4.0/22", "10.0.8.0/22"] | No |
+| private_subnet_cidrs | List of private cidrs, for all available availability zones. Used by VPC module to set up private subnets. Requires create_vpc = true | list(string) | ["10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"] | No |
+| database_subnet_cidrs | List of database cidrs, for all available availability zones. Used by VPC module to set up database subnets. Requires create_vpc = true | list(string) | ["10.0.20.0/22", "10.0.24.0/22", "10.0.28.0/22"] | No |
+| vpc_id | Supplied VPC to use. Requires create_vpc = false  | string | "" | No |
+| private_subnets | Private subnet ids for supplied VPC. Requires create_vpc = false  | list(string) | [] | No |
+| database_subnets | Supplied VPC to use. Requires create_vpc = false  | list(string) | [] | No |
+| public_route_table_ids | List of public_route_table_ids for supplied VPC. Requires create_vpc = false  | string | "" | No |
 | enable_s3_endpoint | Whether to provision an S3 endpoint to the VPC. Default is set to 'true' | bool | true | No |
 | enable_ec2_ssm | Enables the IAM policy required for AWS EC2 System Manager in the EKS Node IAM role created | bool | true | No |
 | ami_image_id | This variable can be used to deploy a patched / customised version of the Amazon EKS image | string | "" | No |
@@ -126,7 +133,7 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
 | min_nodes | The minimum number of on-demand nodes to run | number | 0 | No |
 | desired_nodes | Desired number of nodes only used when first launching the cluster afterwards you should scale with something like cluster-autoscaler | number | 0 | No |
 | max_nodes | Max number of nodes you want to run, useful for controlling max cost of the cluster | number | 0 | No |
-| spot_nodes_enabled | Creates a second set of Autoscaling groups (one per AZ) that are configured to run Spot instances, these instances are cheaper but can be removed any-time. Useful for fault tolerant processing work | bool | false | No | 
+| spot_nodes_enabled | Creates a second set of Autoscaling groups (one per AZ) that are configured to run Spot instances, these instances are cheaper but can be removed any-time. Useful for fault tolerant processing work | bool | false | No |
 | min_spot_nodes | The minimum number of spot nodes to run | bool | 0 | No |
 | max_spot_nodes | Max number of spot you want to run, useful for controlling max cost of the cluster | number | 0 | No |
 | max_spot_price | The max in USD you want to pay for each spot instance per hour. Check market price for your instance type to set its value | string | "0.40" | No |
@@ -162,7 +169,7 @@ Copy the example to create your own live repo to set up ODC infrastructure to ru
 | cf_dns_record | The domain used by point to cloudfront | string | "" | No |
 | cf_origin_dns_record | The domain of load balancer that will be created by kubernetes | string | "" | No |
 | cf_custom_aliases | Extra CNAMEs (alternate domain names), if any, for this distribution | list(string) | [] | No |
-| cf_certificate_create | Whether to create a certificate for cloudfront distribution | bool | true | No | 
+| cf_certificate_create | Whether to create a certificate for cloudfront distribution | bool | true | No |
 | cf_certificate_arn | Provide your own us-east-1 certificate ARN when setting additional aliases. Needed when `cf_certificate_create` set to false | string | "" | No |
 | cf_log_bucket_create | Whether to create cloudfront log bucket | bool | false | No |
 | cf_log_bucket | Name of your cloudfront log bucket | string | "" | No |
