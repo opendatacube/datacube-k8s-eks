@@ -88,9 +88,9 @@ variable "database_subnets" {
 }
 
 variable "public_route_table_ids" {
-  type = string
+  type = list(string)
   description = "Will just pass through to outputs if use create_vpc = false. For backwards compatibility."
-  default = ""
+  default = []
 }
 
 ## Create VPC = true
