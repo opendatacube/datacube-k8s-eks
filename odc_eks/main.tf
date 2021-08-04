@@ -16,6 +16,8 @@ locals {
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.70.0"
 
+  count = var.create_vpc ? 1 : 0
+
   name             = "${local.cluster_id}-vpc"
   cidr             = var.vpc_cidr
   azs              = data.aws_availability_zones.available.names
@@ -60,8 +62,8 @@ module "vpc" {
 # Creates network and Kuberenetes master nodes
 module "eks" {
   source             = "./modules/eks"
-  vpc_id             = module.vpc.vpc_id
-  eks_subnet_ids     = module.vpc.private_subnets
+  vpc_id             = var.create_vpc ? module.vpc[0].vpc_id : var.vpc_id
+  eks_subnet_ids     = var.create_vpc ? module.vpc[0].private_subnets : var.private_subnets
   cluster_id         = local.cluster_id
   cluster_version    = var.cluster_version
   admin_access_CIDRs = var.admin_access_CIDRs
