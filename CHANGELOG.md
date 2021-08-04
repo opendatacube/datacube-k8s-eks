@@ -8,6 +8,7 @@ Result:
   * Outputs may be reported as updated (`database_subnet`) but the values will be identical and there will be no upstream impacts.
 
 ```
+terraform state mv module.odc_eks.module.vpc module.odc_eks.module.vpc[0]
 terraform state mv module.odc_eks.module.vpc.data.aws_vpc_endpoint_service.s3[0] module.odc_eks.module.vpc[0].data.aws_vpc_endpoint_service.s3[0]
 terraform state mv module.odc_eks.module.vpc.aws_db_subnet_group.database[0] module.odc_eks.module.vpc[0].aws_db_subnet_group.database[0]
 terraform state mv module.odc_eks.module.vpc.aws_eip.nat[0] module.odc_eks.module.vpc[0].aws_eip.nat[0]
