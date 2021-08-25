@@ -66,31 +66,31 @@ variable "create_certificate" {
 variable "create_vpc" {
   type        = bool
   description = "Whether to create the VPC and subnets or to supply them. If supplied then subnets and tagging must be configured correctly for AWS EKS use - see AWS EKS VPC requirments documentation"
-  default = true
+  default     = true
 }
 ## Create VPC = false
 variable "vpc_id" {
-  type = string
+  type        = string
   description = "VPC ID to use if create_vpc = false"
-  default = ""
+  default     = ""
 }
 
 variable "private_subnets" {
-  type = list(string)
+  type        = list(string)
   description = "list of private subnets to use if create_vpc = false"
-  default = []
+  default     = []
 }
 
 variable "database_subnets" {
-  type = list(string)
+  type        = list(string)
   description = "list of database subnets to use if create_vpc = false"
-  default = []
+  default     = []
 }
 
 variable "public_route_table_ids" {
-  type = list(string)
+  type        = list(string)
   description = "Will just pass through to outputs if use create_vpc = false. For backwards compatibility."
-  default = []
+  default     = []
 }
 
 ## Create VPC = true
@@ -102,19 +102,19 @@ variable "vpc_cidr" {
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
-  default = []
+  default     = []
 }
 
 variable "private_subnet_cidrs" {
   description = "List of private cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
-  default = []
+  default     = []
 }
 
 variable "database_subnet_cidrs" {
   description = "List of database cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
-  default = []
+  default     = []
 }
 
 variable "enable_s3_endpoint" {

@@ -89,6 +89,8 @@ locals {
     id_token      = "minutes"
     refresh_token = "days"
   }
+  allowed_oauth_scopes_default = ["email", "aws.cognito.signin.user.admin", "openid"]
+  allowed_oauth_flows_default  = ["code"]
 }
 
 resource "aws_cognito_user_pool_client" "clients" {
@@ -104,8 +106,8 @@ resource "aws_cognito_user_pool_client" "clients" {
   explicit_auth_flows  = each.value.explicit_auth_flows
 
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes                 = ["email", "aws.cognito.signin.user.admin", "openid"]
-  allowed_oauth_flows                  = ["code"]
+  allowed_oauth_scopes                 = lookup(each.value, "allowed_oauth_scopes", local.allowed_oauth_scopes_default)
+  allowed_oauth_flows                  = lookup(each.value, "allowed_oauth_flows", local.allowed_oauth_flows_default)
 
   dynamic "analytics_configuration" {
     for_each = var.enable_pinpoint ? [1] : []
