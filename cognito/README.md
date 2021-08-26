@@ -64,12 +64,15 @@ Copy the example to create your own live repo to setup ODC infrastructure to run
         ]
         default_redirect_uri = "app.jupyterhub.example.com"
         explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_CUSTOM_AUTH"]
+        
         # Optional attribute to override below defaults
         token_validity_units = {
           access_token  = "minutes"
           id_token      = "minutes"
           refresh_token = "days"
         }
+        allowed_oauth_scopes   = ["email", "aws.cognito.signin.user.admin", "openid"]
+        allowed_oauth_flows    = ["code"]
         access_token_validity  = 60
         id_token_validity      = 60
         refresh_token_validity = 30
