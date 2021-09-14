@@ -41,6 +41,7 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 * ods_k8s - Kubernetes service pods required to perform Continuous deployment of applications.
   * [Flux](https://www.weave.works/oss/flux/)
   * [Tiller/Helm](https://helm.sh/)
+
 :warning: Soon to be deprecated :warning:
 * odc_role - ODC supporting module that creates IAM role for cluster pods
 * odc_user - ODC supporting module that creates IAM user for cluster pods

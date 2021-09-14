@@ -13,15 +13,15 @@ Once you have created a terraform backend and updated the configuration paramete
 - Run `terraform plan` to do a dry run and validate examples and interaction of modules
 - Run `terraform apply` to spin up infrastructure (a new ODC EKS Cluster), -- can take upto 15-20 minutes
 - Validate a fresh kubernetes cluster has been created by adding a new kubernetes context and getting clusterinfo
-```shell script
-    aws eks update-kubeconfig --name <cluster-id>
-    kubectl cluster-info
+```sh
+aws eks update-kubeconfig --name <cluster-id>
+kubectl cluster-info
 ```
 - Change directory to `examples/stage/02_odc_k8s/`
 - Run `terraform init`, `terraform plan`, `terraform apply` as above and deploy flux, tiller etc. to the live k8s cluster
 - Get pods from the kubernetes admin namespace to verify services such as flux and tiller were deployed
-```shell script
-  kubectl get pods —all-namespaces
+```sh
+kubectl get pods —all-namespaces
 ```
 
 ## Deploy apps using Flux and Helm Release
@@ -29,16 +29,16 @@ Once you have created a terraform backend and updated the configuration paramete
 - Execute example modules `examples/stage/03_odc_apps_k8s` and `examples/stage/04_odc_k8s_sandbox`. 
 This will setup a full sandbox/jupyterhub environment, ows web service and also installs necessary admin & monitoring components, roles and kubernetes secrets, etc to manage your cluster.
 - Fetch a flux deployment key and copy it to repo ssh public key or deploy keys section:
-```bash
-    kubectl -n flux logs deployment/flux | grep identity.pub |cut -d '"' -f2
+```sh
+kubectl -n flux logs deployment/flux | grep identity.pub |cut -d '"' -f2
 ```
 - Make sure all the releases are deployed. Verify using - 
-```shell script
-  kubectl get hr —all-namespaces
+```sh
+kubectl get hr —all-namespaces
 ```
 - To access Grafana (prometheus), get the password using the below command. It is a base64 encoded password.
-```shell script
-  kubectl get secret prometheus-operator-grafana -n monitoring -o yaml | grep "admin-password:" | sed 's/admin-password: //' | base64 -d -i`
+```sh
+kubectl get secret prometheus-operator-grafana -n monitoring -o yaml | grep "admin-password:" | sed 's/admin-password: //' | base64 -d -i`
 ```
 
 ## Destroy a newly created infrastructure
@@ -46,28 +46,28 @@ This will setup a full sandbox/jupyterhub environment, ows web service and also 
 1. Remove `flux` deploy ssh key. This will stop flux from being able to read/write from your live repo.
 2. Delete helm releases (HRs) in the following order. Assuming that you have a similar setup as defined in example -
 - First delete all the apps under `sandbox`, `processing` and `web` kubernetes namespace
-```shell script
-  kubectl delete hr --all=true -n sandbox
-  kubectl delete hr --all=true -n processing
-  kubectl delete hr --all=true -n web
+```sh
+kubectl delete hr --all=true -n sandbox
+kubectl delete hr --all=true -n processing
+kubectl delete hr --all=true -n web
 ```
 - Delete prometheus-operator HR and CRDs and everything under monitoring namespaces
-```shell script
-  kubectl delete hr prometheus-operator -n monitoring
-  kubectl delete crd prometheuses.monitoring.coreos.com
-  kubectl delete crd prometheusrules.monitoring.coreos.com
-  kubectl delete crd servicemonitors.monitoring.coreos.com
-  kubectl delete crd podmonitors.monitoring.coreos.com
-  kubectl delete crd alertmanagers.monitoring.coreos.com
-  kubectl delete hr --all=true -n monitoring
+```sh
+kubectl delete hr prometheus-operator -n monitoring
+kubectl delete crd prometheuses.monitoring.coreos.com
+kubectl delete crd prometheusrules.monitoring.coreos.com
+kubectl delete crd servicemonitors.monitoring.coreos.com
+kubectl delete crd podmonitors.monitoring.coreos.com
+kubectl delete crd alertmanagers.monitoring.coreos.com
+kubectl delete hr --all=true -n monitoring
 ```
 - Delete all the apps under `admin` namespace. Also make sure external DNS has cleared all the DNS entry in Route53
-```shell script
-  kubectl delete hr --all=true -n admin
+```sh
+kubectl delete hr --all=true -n admin
 ```
 - Delete kube2iam
-```shell script
-  kubectl delete hr kube2iam -n kube-system
+```sh
+kubectl delete hr kube2iam -n kube-system
 ```
 
 3. Destroy all the terraform infrastructure in reverse order. Run `terraform init --upgrade` and `terraform destroy` command under each namespace
