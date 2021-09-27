@@ -35,9 +35,9 @@ The module provisions the following resources:
 string match filter for allow users to compose and save jupyterhub `notebooks` that contains rich HTML contents.
 - Pass additional settings to support WAF for jupyterhub -
 ```terraform
-  waf_enable_url_whitelist_string_match_set = true
-  waf_url_whitelist_uri_prefix              = "/user"
-  waf_url_whitelist_url_host                = "app.example.domain.com"
+waf_enable_url_whitelist_string_match_set = true
+waf_url_whitelist_uri_prefix              = "/user"
+waf_url_whitelist_url_host                = "app.example.domain.com"
 ```
 
 ## Usage

@@ -13,7 +13,7 @@ resource "kubernetes_secret" "alb_ingress" {
 
   metadata {
     name      = "alb-ingress"
-    namespace = "admin"
+    namespace = resource.kubernetes_namespace.admin.metadata[0].name
   }
 
   data = {

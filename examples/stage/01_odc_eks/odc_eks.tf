@@ -10,6 +10,10 @@ module "odc_eks" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_eks?ref=master"
   source = "../../../odc_eks"
 
+  providers = {
+    aws.us-east-1 = aws
+  }
+
   # Cluster config
   region          = local.region
   cluster_id      = module.odc_cluster_label.id # optional - if not provided it uses odc_eks_label defined in the module.

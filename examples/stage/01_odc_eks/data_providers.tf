@@ -4,7 +4,7 @@ locals {
   namespace   = "odc-test"
   environment = "stage"
 
-  domain_name       = "test.dea.ga.gov.au"
+  domain_name       = "stage.dea.ga.gov.au"
   sandbox_host_name = "app.${local.domain_name}"
 
   # ACM - used by ALB.

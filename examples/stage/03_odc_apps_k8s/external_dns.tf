@@ -19,7 +19,7 @@ resource "kubernetes_secret" "external_dns" {
 
   metadata {
     name      = "external-dns"
-    namespace = "admin"
+    namespace = resource.kubernetes_namespace.admin.metadata[0].name
   }
 
   data = {

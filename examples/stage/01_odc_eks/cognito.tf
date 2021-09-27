@@ -38,6 +38,14 @@ module "cognito_auth" {
         "ALLOW_USER_SRP_AUTH",
         "ALLOW_CUSTOM_AUTH"
       ]
+      "token_validity_units" = {
+        access_token  = "days"
+        id_token      = "days"
+        refresh_token = "days"
+      }
+      "access_token_validity"  = 1
+      "id_token_validity"      = 1
+      "refresh_token_validity" = 30
     }
   }
 

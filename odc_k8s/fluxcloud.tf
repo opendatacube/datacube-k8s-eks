@@ -55,8 +55,6 @@ resource "kubernetes_service" "fluxcloud" {
       target_port = "3032"
     }
   }
-
-  wait_for_load_balancer = true
 }
 
 resource "kubernetes_deployment" "fluxcloud" {

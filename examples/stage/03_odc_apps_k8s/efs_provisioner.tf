@@ -55,21 +55,21 @@ output "efs_provisoner_fsid" {
 }
 
 data "template_file" "efs_provisioner" {
-  template = file("${path.module}/config/efs-provisioner.yaml")
+  template = file("${path.module}/config/efs_provisioner.yaml")
   vars = {
-    role_name = module.odc_role_efs-provisioner.role_name
+    role_name       = module.odc_role_efs-provisioner.role_name
     efsFileSystemId = aws_efs_file_system.user_storage.id
     awsRegion       = local.region
     environment     = local.environment
     path            = "/"
     dnsName         = aws_efs_file_system.user_storage.dns_name
-    cluster_name = local.cluster_id
+    cluster_name    = local.cluster_id
   }
 }
 
 resource "kubernetes_secret" "efs_provisioner" {
   metadata {
-    name = "efs-provisioner"
+    name      = "efs-provisioner"
     namespace = kubernetes_namespace.admin.metadata[0].name
   }
 
@@ -89,13 +89,13 @@ module "odc_role_efs-provisioner" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
-  owner = local.owner
-  namespace = local.namespace
+  owner       = local.owner
+  namespace   = local.namespace
   environment = local.environment
-  cluster_id = local.cluster_id
+  cluster_id  = local.cluster_id
 
   role = {
-    name = "${local.cluster_id}-efs-provisioner"
+    name   = "${local.cluster_id}-efs-provisioner"
     policy = data.aws_iam_policy.efs_ro.policy
   }
 }

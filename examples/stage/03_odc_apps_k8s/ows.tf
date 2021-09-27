@@ -25,6 +25,20 @@ resource "kubernetes_secret" "ows" {
   type = "Opaque"
 }
 
+data "aws_iam_policy_document" "ows_user_trust_policy" {
+  statement {
+    resources = [
+      "arn:aws:s3:::dea-public-data",
+      "arn:aws:s3:::dea-public-data/*"
+    ]
+    actions = [
+      "S3:ListBucket",
+      "s3:ListObjects",
+      "S3:GetObject"
+    ]
+  }
+}
+
 # OWS App Service User
 module "odc_user_ows" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_user?ref=master"
@@ -37,25 +51,7 @@ module "odc_user_ows" {
 
   user = {
     name   = "svc-${local.cluster_id}-ows-user"
-    policy = <<-EOF
-    {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Action": [
-              "S3:ListBucket",
-              "s3:ListObjects",
-              "S3:GetObject"
-          ],
-          "Resource": [
-            "arn:aws:s3:::dea-public-data",
-            "arn:aws:s3:::dea-public-data/*"
-          ]
-        }
-      ]
-    }
-    EOF
+    policy = data.aws_iam_policy_document.ows_user_trust_policy.json
   }
 }
 

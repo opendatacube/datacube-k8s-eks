@@ -13,7 +13,7 @@ resource "kubernetes_secret" "prometheus-operator" {
 
   metadata {
     name      = "prometheus-operator"
-    namespace = "admin"
+    namespace = resource.kubernetes_namespace.admin.metadata[0].name
   }
 
   data = {
