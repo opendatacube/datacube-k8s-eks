@@ -22,19 +22,19 @@ output "environment" {
   value = module.odc_eks.environment
 }
 
-output "db_hostname" {
-  value = module.db.db_hostname
-}
-
-output "db_admin_username" {
-  value     = module.db.db_admin_username
-  sensitive = true
-}
-
-output "db_admin_password" {
-  value     = module.db.db_admin_password
-  sensitive = true
-}
+//output "db_hostname" {
+//  value = module.db.db_hostname
+//}
+//
+//output "db_admin_username" {
+//  value     = module.db.db_admin_username
+//  sensitive = true
+//}
+//
+//output "db_admin_password" {
+//  value     = module.db.db_admin_password
+//  sensitive = true
+//}
 
 output "db_name" {
   value = local.db_name
@@ -53,7 +53,7 @@ output "ami_image_id" {
 }
 
 output "certificate_arn" {
-  value = (local.create_certificate) ? module.odc_eks.certificate_arn[0] : data.aws_acm_certificate.domain_cert[0].arn
+  value = data.aws_acm_certificate.domain_cert.arn
 }
 
 #output "waf_acl_id" {
@@ -61,11 +61,13 @@ output "certificate_arn" {
 #}
 
 output "cognito_auth_userpool_id" {
-  value = module.cognito_auth.userpool_id
+  value     = module.cognito_auth.userpool_id
+  sensitive = true
 }
 
-output "cognito_auth_userpool_domain" {
-  value = module.cognito_auth.userpool_domain
+output "cognito_auth_userpool_arn" {
+  value     = module.cognito_auth.userpool_arn
+  sensitive = true
 }
 
 output "cognito_auth_userpool_jhub_client_id" {
