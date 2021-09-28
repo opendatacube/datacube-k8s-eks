@@ -1,9 +1,9 @@
 data "terraform_remote_state" "odc_eks-stage" {
   backend = "s3"
   config = {
-    bucket = "odc-test-stage-backend-tfstate"
+    bucket = "odc-test-devtest-backend-tfstate"
     key    = "odc_eks_terraform.tfstate"
-    region = "ap-southeast-2"
+    region = "af-south-1"
   }
 }
 

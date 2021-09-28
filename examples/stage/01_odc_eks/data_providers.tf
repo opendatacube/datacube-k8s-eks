@@ -4,12 +4,12 @@ locals {
   namespace   = "odc-test"
   environment = "devtest"
 
-  domain_name       = "devtest.digitalearth.africa"
-  sandbox_host_name = "sandbox.${local.domain_name}"
+  domain_name       = "digitalearth.africa"
+  sandbox_host_name = "devtest.${local.domain_name}"
 
   # ACM - used by ALB.
   # To create a new cert, set this flag to true
-  create_certificate = true
+  create_certificate = false
 
   cognito_region           = "us-west-2"
   cognito_user_pool_name   = "${local.namespace}-${local.environment}-eks-userpool"

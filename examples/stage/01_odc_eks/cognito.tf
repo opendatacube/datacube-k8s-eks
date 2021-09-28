@@ -55,7 +55,7 @@ module "cognito_auth" {
     email_message                = <<EOT
 Dear {username},
 
-Welcome to Open Data c\Cube Sandbox.
+Welcome to Open Data Cube Sandbox.
 
 Your username is {username} and temporary password is {####}.
 
