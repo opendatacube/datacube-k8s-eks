@@ -1,6 +1,6 @@
 variable "region" {
   description = "The AWS region to provision resources"
-  default     = "ap-southeast-2"
+  default     = "af-south-1"
 }
 
 variable "namespace" {
@@ -15,5 +15,5 @@ variable "owner" {
 
 variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
-  default     = "stage"
+  default     = "devtest"
 }
