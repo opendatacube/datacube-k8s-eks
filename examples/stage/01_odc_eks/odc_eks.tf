@@ -13,7 +13,7 @@ module "odc_eks" {
   # Cluster config
   region          = local.region
   cluster_id      = module.odc_cluster_label.id
-  cluster_version = 1.18
+  cluster_version = local.cluster_version
 
   # Default Tags
   owner       = local.owner
@@ -47,7 +47,7 @@ module "odc_eks" {
   }
 
   # Cloudfront CDN
-  cf_enable                 = false
+  cf_enable                 = local.cf_enable
   cf_dns_record             = "odc"
   cf_origin_dns_record      = "cached-alb"
   cf_custom_aliases         = []
@@ -57,7 +57,7 @@ module "odc_eks" {
   cf_log_bucket             = "${local.namespace}-${local.environment}-cloudfront-logs"
 
   # WAF
-  waf_enable            = false
+  waf_enable            = local.waf_enable
   waf_target_scope      = "regional"
   waf_log_bucket_create = true
   waf_log_bucket        = "${local.namespace}-${local.environment}-waf-logs"
