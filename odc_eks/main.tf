@@ -20,6 +20,7 @@ module "vpc" {
 
   name             = "${local.cluster_id}-vpc"
   cidr             = var.vpc_cidr
+  secondary_cidr_blocks = var.secondary_cidr_blocks
   azs              = data.aws_availability_zones.available.names
   public_subnets   = var.public_subnet_cidrs
   private_subnets  = var.private_subnet_cidrs
@@ -44,7 +45,8 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  enable_nat_gateway           = true
+  enable_nat_gateway           = var.enable_nat_gateway
+  create_igw                   = var.create_igw
   create_database_subnet_group = true
   enable_s3_endpoint           = var.enable_s3_endpoint
 

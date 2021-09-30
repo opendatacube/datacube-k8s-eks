@@ -99,6 +99,13 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "secondary_cidr_blocks" {
+  type        = list(string)
+  default     = []
+  description = "Secondary VPC CIDRs, optional, default no secondary CIDRs"
+}
+
+
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
@@ -122,6 +129,20 @@ variable "enable_s3_endpoint" {
   description = "Whether to provision an S3 endpoint to the VPC. Default is set to 'true'"
   default     = true
 }
+
+variable "enable_nat_gateway" {
+  type        = bool
+  description = "Whether to provision a NAT Gateway in the VPC. Default is set to 'true'"
+  default     = true
+}
+
+
+variable "create_igw" {
+  type        = bool
+  description = "Whether to provision an Internet Gateway in the VPC. Default is true (False for private routing)"
+  default     = true
+}
+
 
 # EC2 Worker Roles
 # ==================
