@@ -20,12 +20,14 @@ module "vpc" {
 
   name             = "${local.cluster_id}-vpc"
   cidr             = var.vpc_cidr
-  secondary_cidr_blocks = var.secondary_cidr_blocks
   azs              = data.aws_availability_zones.available.names
   public_subnets   = var.public_subnet_cidrs
   private_subnets  = var.private_subnet_cidrs
   database_subnets = var.database_subnet_cidrs
 
+  secondary_cidr_blocks   = var.secondary_cidr_blocks
+  map_public_ip_on_launch = var.map_public_ip_on_launch
+  
   private_subnet_tags = {
     "SubnetType"                                = "Private"
     "kubernetes.io/cluster/${local.cluster_id}" = "shared"
