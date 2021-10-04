@@ -99,6 +99,13 @@ variable "public_route_table_ids" {
   default     = []
 }
 
+variable "private_route_table_ids" {
+  type        = list(string)
+  description = "Will just pass through to outputs if use create_vpc = false. For backwards compatibility."
+  default     = []
+}
+
+
 ## Create VPC = true
 variable "vpc_cidr" {
   type    = string
