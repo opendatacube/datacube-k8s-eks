@@ -125,6 +125,12 @@ variable "public_subnet_cidrs" {
   default     = []
 }
 
+variable "map_public_ip_on_launch" {
+  description = "Should be false if you do not want to auto-assign public IP on launch"
+  type        = bool
+  default     = true
+}
+
 variable "private_subnet_cidrs" {
   description = "List of private cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
