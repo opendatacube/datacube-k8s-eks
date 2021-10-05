@@ -169,7 +169,7 @@ module "odc_role_autoscaler" {
 
   service_account_role = {
     name                      = "${local.cluster_id}-autoscaler"
-    service_account_namespace = resource.kubernetes_namespace.admin.metadata[0].name
+    service_account_namespace = kubernetes_namespace.admin.metadata[0].name
     service_account_name      = "*"
     policy                    = data.aws_iam_policy_document.autoscaler_trust_policy.json
   }
@@ -188,7 +188,7 @@ module "odc_role_alb_ingress" {
 
   service_account_role = {
     name                      = "${local.cluster_id}-alb-ingress"
-    service_account_namespace = resource.kubernetes_namespace.admin.metadata[0].name
+    service_account_namespace = kubernetes_namespace.admin.metadata[0].name
     service_account_name      = "*"
     policy                    = data.aws_iam_policy_document.alb_ingress_trust_policy.json
   }
@@ -207,7 +207,7 @@ module "odc_role_external_dns" {
 
   service_account_role = {
     name                      = "${local.cluster_id}-external-dns"
-    service_account_namespace = resource.kubernetes_namespace.admin.metadata[0].name
+    service_account_namespace = kubernetes_namespace.admin.metadata[0].name
     service_account_name      = "*"
     policy                    = data.aws_iam_policy_document.external_dns_trust_policy.json
   }
@@ -226,7 +226,7 @@ module "odc_role_fluentd" {
 
   service_account_role = {
     name                      = "${local.cluster_id}-fluentd"
-    service_account_namespace = resource.kubernetes_namespace.admin.metadata[0].name
+    service_account_namespace = kubernetes_namespace.admin.metadata[0].name
     service_account_name      = "*"
     policy                    = data.aws_iam_policy_document.fluentd_trust_policy.json
   }

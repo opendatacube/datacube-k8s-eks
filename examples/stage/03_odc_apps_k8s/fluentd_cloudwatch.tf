@@ -14,7 +14,7 @@ resource "kubernetes_secret" "fluentd_cloudwatch" {
 
   metadata {
     name      = "fluentd-cloudwatch"
-    namespace = resource.kubernetes_namespace.admin.metadata[0].name
+    namespace = kubernetes_namespace.admin.metadata[0].name
   }
 
   data = {

@@ -26,7 +26,7 @@ module "odc_role_ows" {
 
   service_account_role = {
     name                      = "${local.cluster_id}-ows"
-    service_account_namespace = resource.kubernetes_namespace.web.metadata[0].name
+    service_account_namespace = kubernetes_namespace.web.metadata[0].name
     service_account_name      = "*"
     policy                    = data.aws_iam_policy_document.ows_trust_policy.json
   }
