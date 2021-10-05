@@ -33,14 +33,14 @@ data "aws_ssm_parameter" "ows_db_ro_creds" {
 }
 
 locals {
-  region              = data.terraform_remote_state.odc_eks-stage.outputs.region
-  owner               = data.terraform_remote_state.odc_eks-stage.outputs.owner
-  namespace           = data.terraform_remote_state.odc_eks-stage.outputs.namespace
-  environment         = data.terraform_remote_state.odc_eks-stage.outputs.environment
+  region      = data.terraform_remote_state.odc_eks-stage.outputs.region
+  owner       = data.terraform_remote_state.odc_eks-stage.outputs.owner
+  namespace   = data.terraform_remote_state.odc_eks-stage.outputs.namespace
+  environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
 
-  cluster_id          = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
-  domain_name         = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
-  certificate_arn     = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
+  cluster_id      = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
+  domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
+  certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
 
   #EKS service account variables
   oidc_arn = data.terraform_remote_state.odc_k8s.outputs.oidc_arn
