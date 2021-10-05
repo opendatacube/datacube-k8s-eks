@@ -30,12 +30,13 @@ module "odc_k8s" {
   db_admin_password = local.db_admin_password
 
   # Setup Flux/FluxCloud
-  flux_enabled      = false
-  flux_version      = "1.10.2"
-  flux_git_repo_url = "git@github.com:opendatacube/flux-odc-sample.git"
-  flux_git_branch   = "master"
-  flux_git_path     = "flux"
-  flux_git_label    = local.cluster_id
+  flux_enabled             = false
+  flux_version             = "1.10.2"
+  flux_git_repo_url        = "git@github.com:opendatacube/flux-odc-sample.git"
+  flux_git_branch          = "master"
+  flux_git_path            = "flux"
+  flux_git_label           = local.cluster_id
+  flux_service_account_arn = module.role_flux.role_arn
   # Flux helm-operator
   flux_helm_operator_version = "1.4.0"
   enabled_helm_versions      = "v3"

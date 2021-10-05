@@ -1,9 +1,20 @@
 data "terraform_remote_state" "odc_eks-stage" {
   backend = "s3"
   config = {
-    bucket = "odc-test-stage-backend-tfstate"
-    key    = "odc_eks_terraform.tfstate"
-    region = "ap-southeast-2"
+    bucket                 = "odc-test-devtest-backend-tfstate"
+    key                    = "odc_eks_terraform.tfstate"
+    region                 = "af-south-1"
+    skip_region_validation = true
+  }
+}
+
+data "terraform_remote_state" "odc_k8s" {
+  backend = "s3"
+  config = {
+    bucket                 = "odc-test-devtest-backend-tfstate"
+    key                    = "odc_k8s_terraform.tfstate"
+    region                 = "af-south-1"
+    skip_region_validation = true
   }
 }
 
@@ -24,12 +35,16 @@ data "aws_ssm_parameter" "ows_db_ro_creds" {
 locals {
   region              = data.terraform_remote_state.odc_eks-stage.outputs.region
   owner               = data.terraform_remote_state.odc_eks-stage.outputs.owner
-  cluster_id          = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   namespace           = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment         = data.terraform_remote_state.odc_eks-stage.outputs.environment
+
+  cluster_id          = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   domain_name         = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   certificate_arn     = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
-  node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
+
+  #EKS service account variables
+  oidc_arn = data.terraform_remote_state.odc_k8s.outputs.oidc_arn
+  oidc_url = data.terraform_remote_state.odc_k8s.outputs.oidc_url
 
   db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_port     = "5432"

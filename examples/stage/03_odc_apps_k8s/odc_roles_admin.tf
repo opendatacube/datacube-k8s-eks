@@ -164,8 +164,8 @@ module "odc_role_autoscaler" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = aws_iam_openid_connect_provider.identity_provider_example.arn
-  oidc_url    = aws_iam_openid_connect_provider.identity_provider_example.url
+  oidc_arn    = local.oidc_arn
+  oidc_url    = local.oidc_url
 
   service_account_role = {
     name                      = "${local.cluster_id}-autoscaler"
@@ -183,8 +183,8 @@ module "odc_role_alb_ingress" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = aws_iam_openid_connect_provider.identity_provider_example.arn
-  oidc_url    = aws_iam_openid_connect_provider.identity_provider_example.url
+  oidc_arn    = local.oidc_arn
+  oidc_url    = local.oidc_url
 
   service_account_role = {
     name                      = "${local.cluster_id}-alb-ingress"
@@ -202,8 +202,8 @@ module "odc_role_external_dns" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = aws_iam_openid_connect_provider.identity_provider_example.arn
-  oidc_url    = aws_iam_openid_connect_provider.identity_provider_example.url
+  oidc_arn    = local.oidc_arn
+  oidc_url    = local.oidc_url
 
   service_account_role = {
     name                      = "${local.cluster_id}-external-dns"
@@ -221,8 +221,8 @@ module "odc_role_fluentd" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = aws_iam_openid_connect_provider.identity_provider_example.arn
-  oidc_url    = aws_iam_openid_connect_provider.identity_provider_example.url
+  oidc_arn    = local.oidc_arn
+  oidc_url    = local.oidc_url
 
   service_account_role = {
     name                      = "${local.cluster_id}-fluentd"
