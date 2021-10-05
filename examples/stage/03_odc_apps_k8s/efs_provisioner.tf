@@ -1,13 +1,15 @@
 resource "aws_efs_file_system" "user_storage" {
   # Creation token is optional and needs to be unique. terraform will create a value for us.
 
-  tags = {
-    Name        = "${local.cluster_id}-efs-storage"
-    Cluster     = local.cluster_id
-    Owner       = local.owner
-    Namespace   = local.namespace
-    Environment = local.environment
-  }
+  tags = merge(
+    {
+      Name        = "${local.cluster_id}-efs-storage"
+      owner       = local.owner
+      namespace   = local.namespace
+      environment = local.environment
+    },
+    local.tags
+  )
 
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"
@@ -41,13 +43,15 @@ resource "aws_security_group" "efs" {
     )
   }
 
-  tags = {
-    Name        = "${local.cluster_id}-efs-sg"
-    Cluster     = local.cluster_id
-    Owner       = local.owner
-    Namespace   = local.namespace
-    Environment = local.environment
-  }
+  tags = merge(
+    {
+      Name        = "${local.cluster_id}-efs-sg"
+      owner       = local.owner
+      namespace   = local.namespace
+      environment = local.environment
+    },
+    local.tags
+  )
 }
 
 output "efs_provisoner_fsid" {
@@ -57,13 +61,12 @@ output "efs_provisoner_fsid" {
 data "template_file" "efs_provisioner" {
   template = file("${path.module}/config/efs_provisioner.yaml")
   vars = {
-    role_name       = module.odc_role_efs-provisioner.role_name
-    efsFileSystemId = aws_efs_file_system.user_storage.id
-    awsRegion       = local.region
-    environment     = local.environment
-    path            = "/"
-    dnsName         = aws_efs_file_system.user_storage.dns_name
-    cluster_name    = local.cluster_id
+    service_account_arn = module.svc_role_efs_provisioner.role_arn
+    efsFileSystemId     = aws_efs_file_system.user_storage.id
+    awsRegion           = local.region
+    environment         = local.environment
+    path                = "/"
+    dnsName             = aws_efs_file_system.user_storage.dns_name
   }
 }
 
@@ -85,17 +88,26 @@ data "aws_iam_policy" "efs_ro" {
   arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemReadOnlyAccess"
 }
 
-module "odc_role_efs-provisioner" {
-  # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
-  source = "../../../odc_role"
+# cluster efs-provisioner service account role
+module "svc_role_efs_provisioner" {
+  source = "../../../odc_k8s_service_account_role"
 
+  # Default Tags
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  cluster_id  = local.cluster_id
 
-  role = {
-    name   = "${local.cluster_id}-efs-provisioner"
-    policy = data.aws_iam_policy.efs_ro.policy
+  #OIDC
+  oidc_arn = local.oidc_arn
+  oidc_url = local.oidc_url
+
+  # Additional Tags
+  tags = local.tags
+
+  service_account_role = {
+    name                      = "svc-${local.cluster_id}-efs-provisioner"
+    service_account_namespace = "admin"
+    service_account_name      = "*"
+    policy                    = data.aws_iam_policy.efs_ro.policy
   }
 }

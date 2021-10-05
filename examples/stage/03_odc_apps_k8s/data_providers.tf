@@ -28,9 +28,9 @@ data "aws_eks_cluster_auth" "cluster" {
 
 # NOTE: read OWS db reader creds from parameter store
 #   check examples/scripts/init_ows_db.sh script for reference
-data "aws_ssm_parameter" "ows_db_ro_creds" {
-  name = "/${local.cluster_id}/ows_ro/db.creds"
-}
+# data "aws_ssm_parameter" "ows_db_ro_creds" {
+#   name = "/${local.cluster_id}/ows_ro/db.creds"
+# }
 
 locals {
   region      = data.terraform_remote_state.odc_eks-stage.outputs.region
@@ -48,12 +48,14 @@ locals {
   oidc_arn = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_arn
   oidc_url = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_url
 
-  db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
-  db_port     = "5432"
+  tags = {}
 
-  ows_db_name        = "ows"
-  ows_db_ro_username = element(split(":", data.aws_ssm_parameter.ows_db_ro_creds.value), 0)
-  ows_db_ro_password = element(split(":", data.aws_ssm_parameter.ows_db_ro_creds.value), 1)
+  # db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
+  # db_port     = "5432"
+
+  # ows_db_name        = "ows"
+  # ows_db_ro_username = element(split(":", data.aws_ssm_parameter.ows_db_ro_creds.value), 0)
+  # ows_db_ro_password = element(split(":", data.aws_ssm_parameter.ows_db_ro_creds.value), 1)
 }
 
 data "aws_caller_identity" "current" {
