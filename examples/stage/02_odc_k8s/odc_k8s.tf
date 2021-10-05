@@ -12,7 +12,7 @@ module "odc_k8s" {
 
   # Cluster Access Options
   node_roles = {
-    "system:node:{{EC2PrivateDNSName}}" : data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+    "system:node:{{EC2PrivateDNSName}}" = data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
   }
   # Optional: user_roles and users
   # Example:
@@ -20,14 +20,15 @@ module "odc_k8s" {
   #   cluster-admin: <user-role-arn>
   # }
   users = {
-    eks-deployer : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
+    dominic = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer",
+    ngandhi = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
   }
 
   # Database
-  store_db_creds    = true
-  db_hostname       = local.db_hostname
-  db_admin_username = local.db_admin_username
-  db_admin_password = local.db_admin_password
+  store_db_creds    = local.store_db_creds
+  # db_hostname       = local.db_hostname
+  # db_admin_username = local.db_admin_username
+  # db_admin_password = local.db_admin_password
 
   # Setup Flux/FluxCloud
   flux_enabled             = false
