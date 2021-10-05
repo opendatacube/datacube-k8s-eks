@@ -14,7 +14,7 @@ resource "kubernetes_secret" "cluster_autoscaler" {
 
   metadata {
     name      = "cluster-autoscaler"
-    namespace = resource.kubernetes_namespace.admin.metadata[0].name
+    namespace = kubernetes_namespace.admin.metadata[0].name
   }
 
   data = {

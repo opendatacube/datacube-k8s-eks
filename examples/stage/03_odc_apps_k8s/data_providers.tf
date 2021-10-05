@@ -8,7 +8,7 @@ data "terraform_remote_state" "odc_eks-stage" {
   }
 }
 
-data "terraform_remote_state" "odc_k8s" {
+data "terraform_remote_state" "odc_k8s-stage" {
   backend = "s3"
   config = {
     bucket                 = "odc-test-devtest-backend-tfstate"
@@ -42,9 +42,11 @@ locals {
   domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   certificate_arn = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
 
+  node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
+
   #EKS service account variables
-  oidc_arn = data.terraform_remote_state.odc_k8s.outputs.oidc_arn
-  oidc_url = data.terraform_remote_state.odc_k8s.outputs.oidc_url
+  oidc_arn = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_arn
+  oidc_url = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_url
 
   db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_port     = "5432"
