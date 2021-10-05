@@ -31,11 +31,15 @@ module "odc_k8s" {
 
   # Setup Flux/FluxCloud
   flux_enabled      = false
+  flux_version      = "1.10.2"
   flux_git_repo_url = "git@github.com:opendatacube/flux-odc-sample.git"
   flux_git_branch   = "master"
   flux_git_path     = "flux"
-  #flux_git_label = "flux-sync"
-
+  flux_git_label    = local.cluster_id
+  # Flux helm-operator
+  flux_helm_operator_version = "1.4.0"
+  enabled_helm_versions      = "v3"
+  # Flux FluxCloud
   fluxcloud_enabled         = false
   fluxcloud_slack_url       = ""
   fluxcloud_slack_channel   = ""
