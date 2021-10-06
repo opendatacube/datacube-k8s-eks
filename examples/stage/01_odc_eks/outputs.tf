@@ -22,19 +22,23 @@ output "environment" {
   value = module.odc_eks.environment
 }
 
-//output "db_hostname" {
-//  value = module.db.db_hostname
-//}
-//
-//output "db_admin_username" {
-//  value     = module.db.db_admin_username
-//  sensitive = true
-//}
-//
-//output "db_admin_password" {
-//  value     = module.db.db_admin_password
-//  sensitive = true
-//}
+output "db_enabled" {
+  value = local.db_enabled
+}
+
+output "db_hostname" {
+  value = local.db_enabled ? module.db.db_hostname : ""
+}
+
+output "db_admin_username" {
+  value     = local.db_enabled ? module.db.db_admin_username : ""
+  sensitive = true
+}
+
+output "db_admin_password" {
+  value     = local.db_enabled ? module.db.db_admin_password : ""
+  sensitive = true
+}
 
 output "db_name" {
   value = local.db_name
@@ -67,6 +71,11 @@ output "cognito_auth_userpool_id" {
 
 output "cognito_auth_userpool_arn" {
   value     = module.cognito_auth.userpool_arn
+  sensitive = true
+}
+
+output "cognito_auth_userpool_domain" {
+  value     = module.cognito_auth.userpool_domain
   sensitive = true
 }
 

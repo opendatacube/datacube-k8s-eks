@@ -6,13 +6,14 @@ data "template_file" "ows" {
 
     db_name     = local.ows_db_name
     db_hostname = local.db_hostname
-    db_secret   = kubernetes_secret.ows_db_ro.metadata[0].name
+    db_secret   = local.db_enabled ? kubernetes_secret.ows_db_ro[0].metadata[0].name : ""
 
-    aws_creds_secret = kubernetes_secret.ows_user_creds.metadata[0].name
+    aws_creds_secret = local.db_enabled ? kubernetes_secret.ows_user_creds[0].metadata[0].name : ""
   }
 }
 
 resource "kubernetes_secret" "ows" {
+  count = local.db_enabled ? 1 : 0
   metadata {
     name      = "ows"
     namespace = kubernetes_namespace.web.metadata[0].name
@@ -43,6 +44,7 @@ data "aws_iam_policy_document" "ows_user_trust_policy" {
 module "odc_user_ows" {
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_user?ref=master"
   source = "../../../odc_user"
+  count  = local.db_enabled ? 1 : 0
 
   # Default Tags
   owner       = local.owner
@@ -56,14 +58,15 @@ module "odc_user_ows" {
 }
 
 resource "kubernetes_secret" "ows_user_creds" {
+  count = local.db_enabled ? 1 : 0
   metadata {
     name      = "ows-user-creds"
     namespace = kubernetes_namespace.web.metadata[0].name
   }
 
   data = {
-    AWS_ACCESS_KEY_ID     = module.odc_user_ows.id
-    AWS_SECRET_ACCESS_KEY = module.odc_user_ows.secret
+    AWS_ACCESS_KEY_ID     = module.odc_user_ows[0].id
+    AWS_SECRET_ACCESS_KEY = module.odc_user_ows[0].secret
     AWS_DEFAULT_REGION    = local.region
   }
 

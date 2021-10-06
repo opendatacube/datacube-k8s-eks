@@ -21,6 +21,7 @@ locals {
   cognito_user_pool_domain = "${local.namespace}-${local.environment}-eks-auth"
 
   # DB config
+  db_enabled        = false
   db_name           = "odc"
   db_engine_version = { postgres = "12.5" }
   db_multi_az       = false

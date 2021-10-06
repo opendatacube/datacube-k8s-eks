@@ -8,10 +8,10 @@ data "template_file" "jupyterhub" {
     # waf_acl_id        = local.waf_acl_id
     sandbox_host_name = local.sandbox_host_name
 
-    db_hostname = local.db_hostname
-    db_username = local.sandbox_db_ro_username
-    db_password = local.sandbox_db_ro_password
-    db_name     = local.sandbox_db_name
+    #db_hostname = local.db_hostname
+    #db_username = local.sandbox_db_ro_username
+    #db_password = local.sandbox_db_ro_password
+    #db_name     = local.sandbox_db_name
 
     jhub_userpool_id        = local.cognito_auth_userpool_id
     jhub_userpool_domain    = local.cognito_auth_userpool_domain

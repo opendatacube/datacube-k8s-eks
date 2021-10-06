@@ -1,11 +1,6 @@
 singleuser:
   extraAnnotations:
     iam.amazonaws.com/role: ${role_name}
-  extraEnv:
-    DB_HOSTNAME: ${db_hostname}
-    DB_USERNAME: ${db_username}
-    DB_PASSWORD: ${db_password}
-    DB_DATABASE: ${db_name}
 hub:
   pdb:
     extraAnnotations:
@@ -30,7 +25,6 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}
-#    alb.ingress.kubernetes.io/waf-acl-id: ${waf_acl_id}
   hosts:
     - ${sandbox_host_name}
   pathSuffix: "*"
