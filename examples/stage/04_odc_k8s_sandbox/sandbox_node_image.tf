@@ -27,10 +27,10 @@ data "template_file" "core_node_userdata" {
     endpoint              = local.endpoint
     certificate_authority = local.certificate_authority
 
-    node_group         = local.node_group_name
-    node_type          = "ondemand"
-    node_size          = each.value.node_size
-    node_purpose       = "core"
+    node_group   = local.node_group_name
+    node_type    = "ondemand"
+    node_size    = each.value.node_size
+    node_purpose = "core"
   }
 }
 
@@ -42,10 +42,10 @@ data "template_file" "spot_node_userdata" {
     endpoint              = local.endpoint
     certificate_authority = local.certificate_authority
 
-    node_group         = local.node_group_name
-    node_type          = "spot"
-    node_size          = each.value.node_size
-    node_purpose       = "worker"
+    node_group   = local.node_group_name
+    node_type    = "spot"
+    node_size    = each.value.node_size
+    node_purpose = "worker"
   }
 }
 
@@ -57,10 +57,10 @@ data "template_file" "user_node_userdata" {
     endpoint              = local.endpoint
     certificate_authority = local.certificate_authority
 
-    node_group         = local.node_group_name
-    node_type          = "ondemand"
-    node_size          = each.value.node_size
-    node_purpose       = "user"
+    node_group   = local.node_group_name
+    node_type    = "ondemand"
+    node_size    = each.value.node_size
+    node_purpose = "user"
   }
 }
 

@@ -151,8 +151,8 @@ locals {
   dask_scheduler_node_purpose  = "dask-scheduler" # used for taint-tolerations configuration
   dask_worker_node_purpose     = "dask-worker"    # used for taint-tolerations configuration
   dask_worker_default_profile  = "r5_L"           # choose from one of the worker prefered node_size
-  dask_per_cluster_max_cores   = 40              # Maximum number of cores per cluster
-  dask_per_cluster_max_workers = 5               # Maximum number of workers per cluster
+  dask_per_cluster_max_cores   = 40               # Maximum number of cores per cluster
+  dask_per_cluster_max_workers = 5                # Maximum number of workers per cluster
   # NOTE: Currently only support one nodegroup for dask-core
   dask_core_node = {
     instance_types       = ["r5.large"],

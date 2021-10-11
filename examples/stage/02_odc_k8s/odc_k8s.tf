@@ -25,7 +25,7 @@ module "odc_k8s" {
   }
 
   # Database
-  store_db_creds = local.store_db_creds
+  store_db_creds    = local.store_db_creds
   db_hostname       = local.db_hostname
   db_admin_username = local.db_admin_username
   db_admin_password = local.db_admin_password
