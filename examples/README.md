@@ -2,13 +2,19 @@
 
 ## Usage
 - Select the correct AWS credentials to use with sufficient privileges to spin up the infrastructure, e.g. `export AWS_PROFILE=admin`
-- Create a backend to store terraform state if requires. There is an example provided under `examples/backend_int` that creates the s3 bucket to store terraform state and the dynamodb table to store terraform state lock. 
+- Create a backend to store terraform state if requires. There is an example provided under `examples/backend_int` that creates the s3 bucket to store terraform state and the dynamodb table to store terraform state lock.
 - To create a full Open Data Cube (ODC) eks infrastructure on AWS platform, execute each module defined under `examples/stage/<module>`. Please note that the number in front, e.g. `01_`, represents the correct order of execution to manage dependencies.
 - You need to adjust some of the configuration params such as `owner`, `namespace`, `environment`, `region` and `terraform backend` - so they are unique to your organisation.
 
 ## How to setup a new ODC cluster environment
 Once you have created a terraform backend and updated the configuration parameters, you can perform the following steps to setup a new ODC cluster environment -
 - Change directory to `examples/stage/01_odc_eks/`
+- Modify `data_providers.tf`:
+  - Change `region`, `owner`, `namespace`, and `environment` to the values from `backend_init`.
+  - If you do not want a database change `db_enabled` to `false`
+- Modify `main.tf`:
+  - `bucket`: `<namespace>-<environment>-backend-tfstate`
+  - `region` : `<region>`
 - Run `terraform init` to initialize Terraform state tracking
 - Run `terraform plan` to do a dry run and validate examples and interaction of modules
 - Run `terraform apply` to spin up infrastructure (a new ODC EKS Cluster), -- can take upto 15-20 minutes
@@ -18,7 +24,15 @@ aws eks update-kubeconfig --name <cluster-id>
 kubectl cluster-info
 ```
 - Change directory to `examples/stage/02_odc_k8s/`
+- Modify `data_providers.tf` with the following:
+  - Modify the `bucket` and `region` such that:
+    - `bucket`: `<namespace>-<environment>-backend-tfstate`
+    - `region` : `<region>`
+- Modify `main.tf`:
+  - `bucket`: `<namespace>-<environment>-backend-tfstate`
+  - `region` : `<region>`
 - Run `terraform init`, `terraform plan`, `terraform apply` as above and deploy flux, tiller etc. to the live k8s cluster
+- If you enabled the database it is now when you need to create the AWS SSM variables for the database access. The name of the new variable should be `/<namespce>-<environment>-eks/ows_ro/db.creds` And should have the content of `<db_username>:<db_password>`
 - Get pods from the kubernetes admin namespace to verify services such as flux and tiller were deployed
 ```sh
 kubectl get pods —all-namespaces
@@ -26,13 +40,21 @@ kubectl get pods —all-namespaces
 
 ## Deploy apps using Flux and Helm Release
 - FluxCD is configured (in `02_odc_k8s` module) to monitor [flux-odc-sample](https://github.com/opendatacube/flux-odc-sample) repo that defines Helm Releases for the ODC cluster. Create your own live repo and update flux configuration.
-- Execute example modules `examples/stage/03_odc_apps_k8s` and `examples/stage/04_odc_k8s_sandbox`. 
+- Execute example modules `examples/stage/03_odc_apps_k8s` and `examples/stage/04_odc_k8s_sandbox`.
+- For each of the stages `03` and `04` you need to modify the following files:
+  - Modify `data_providers.tf` with the following:
+    - Modify the `bucket` and `region` such that:
+      - `bucket`: `<namespace>-<environment>-backend-tfstate`
+      - `region` : `<region>`
+  - Modify `main.tf`:
+    - `bucket`: `<namespace>-<environment>-backend-tfstate`
+    - `region` : `<region>`
 This will setup a full sandbox/jupyterhub environment, ows web service and also installs necessary admin & monitoring components, roles and kubernetes secrets, etc to manage your cluster.
 - Fetch a flux deployment key and copy it to repo ssh public key or deploy keys section:
 ```sh
 kubectl -n flux logs deployment/flux | grep identity.pub |cut -d '"' -f2
 ```
-- Make sure all the releases are deployed. Verify using - 
+- Make sure all the releases are deployed. Verify using -
 ```sh
 kubectl get hr —all-namespaces
 ```
@@ -76,13 +98,13 @@ kubectl delete hr kube2iam -n kube-system
 - Destroy k8s tf infra - `02_odc-k8s`
 - Destroy eks tf infra - `01_odc-eks`
 
-## Troubleshoot - Known Issues 
+## Troubleshoot - Known Issues
 * Issue deleting `01_odc_eks` module:
 ```text
-    * VPC module destroy may have issue cleanup itself properly - 
-    
+    * VPC module destroy may have issue cleanup itself properly -
+
      Error: Error deleting VPC: DependencyViolation: The vpc 'vpc-09a9c52f9a2a53a4e' has dependencies and cannot be deleted.
         status code: 400, request id: 4548f188-8f1e-4cb5-a8e8-c92ba56e9401
-        
+
      Resolve: Destroy VPC manually
 ```

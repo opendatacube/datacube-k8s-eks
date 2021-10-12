@@ -3,7 +3,7 @@ data "terraform_remote_state" "odc_eks-stage" {
   config = {
     bucket = "odc-test-devtest-backend-tfstate"
     key    = "odc_eks_terraform.tfstate"
-    region = "af-south-1"
+    region = "ap-southeast-2"
     # skip region validation until terraform provider supports this new region
     skip_region_validation = true
   }
@@ -39,9 +39,9 @@ data "aws_eks_cluster_auth" "cluster" {
   name = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
 }
 
-# data "aws_ssm_parameter" "sandbox_db_reader_creds" {
-#   name = "/${local.cluster_id}/sandbox_reader/db.creds"
-# }
+data "aws_ssm_parameter" "sandbox_db_ro_creds" {
+  name = "/${local.cluster_id}/ows_ro/db.creds"
+}
 
 locals {
   region      = data.terraform_remote_state.odc_eks-stage.outputs.region
@@ -57,21 +57,22 @@ locals {
   # To capture ALB access logs
   alb_log_bucket = "${local.namespace}-${local.environment}-eks-alb-logs"
 
-  cognito_region                           = "af-south-1"
+  cognito_region                           = "ap-southeast-2"
   cognito_auth_userpool_id                 = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_id
   cognito_auth_userpool_domain             = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_domain
   cognito_auth_userpool_jhub_client_id     = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_id
   cognito_auth_userpool_jhub_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_jhub_client_secret
 
-  # db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
+  db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
+  db_enabled = data.terraform_remote_state.odc_eks-stage.outputs.db_enabled
 
-  # sandbox_db_name        = "ows"
-  # sandbox_db_ro_username = element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 0)
-  # sandbox_db_ro_password = element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 1)
+  sandbox_db_name        = "ows"
+  sandbox_db_ro_username = local.db_enabled ? element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 0) : ""
+  sandbox_db_ro_password = local.db_enabled ? element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 1) : ""
 
   node_group_name     = "sandbox"
   node_subnets        = data.aws_subnet.node_subnets
-  node_asg_zones      = ["af-south-1c"] # creates ASG for specified zones
+  node_asg_zones      = ["ap-southeast-2"] # creates ASG for specified zones
   node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
 
   ami_image_id = data.terraform_remote_state.odc_eks-stage.outputs.ami_image_id

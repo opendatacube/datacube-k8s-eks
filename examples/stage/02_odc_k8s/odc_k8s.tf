@@ -20,8 +20,7 @@ module "odc_k8s" {
   #   cluster-admin: <user-role-arn>
   # }
   users = {
-    dominic = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dominic",
-    ngandhi = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/ngandhi"
+    eks-deployer = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/eks-deployer"
   }
 
   # Database

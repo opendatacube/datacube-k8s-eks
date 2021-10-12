@@ -3,7 +3,7 @@ data "terraform_remote_state" "odc_eks-stage" {
   config = {
     bucket                 = "odc-test-devtest-backend-tfstate"
     key                    = "odc_eks_terraform.tfstate"
-    region                 = "af-south-1"
+    region                 = "ap-southeast-2"
     skip_region_validation = true
   }
 }
