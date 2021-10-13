@@ -49,11 +49,15 @@ locals {
   namespace   = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
 
-  cluster_id        = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   domain_name       = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
   sandbox_host_name = "sandbox.${local.domain_name}"
   certificate_arn   = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
   waf_acl_id        = data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id
+
+  cluster_id            = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
+  cluster_version       = data.aws_eks_cluster.cluster.version
+  endpoint              = data.aws_eks_cluster.cluster.endpoint
+  certificate_authority = data.aws_eks_cluster.cluster.certificate_authority[0].data
 
   # To capture ALB access logs
   alb_log_bucket = "${local.namespace}-${local.environment}-eks-alb-logs"
