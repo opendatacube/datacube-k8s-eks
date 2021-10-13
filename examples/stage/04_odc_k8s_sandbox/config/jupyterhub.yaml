@@ -1,48 +1,49 @@
 singleuser:
-  extraAnnotations:
-    iam.amazonaws.com/role: ${role_name}
   extraEnv:
     DB_HOSTNAME: ${db_hostname}
     DB_USERNAME: ${db_username}
     DB_PASSWORD: ${db_password}
     DB_DATABASE: ${db_name}
-hub:
-  pdb:
-    extraAnnotations:
-      iam.amazonaws.com/role: ${role_name}
-  extraEnv:
-    JUPYTERHUB_USERPOOL_ID: ${jhub_userpool_id}
+    # can access public s3 bucket without providing role permission
     AWS_DEFAULT_REGION: ${region}
-    AWSCOGNITO_DOMAIN: ${jhub_userpool_domain}.auth.${region}.amazoncognito.com
-    OAUTH2_AUTHORIZE_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/authorize
-    OAUTH2_TOKEN_URL: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
-  cookieSecret: 65732236ed9aca1180053b99f1d43382eba09bd7bc5c401804959127a80f774c # Replace
-proxy:
-  secretToken: 1ad45878c40c6f4921fff6d234acaac806f3370c61eb7dcda1dded36c4560f4f # Replace
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/tls-acme: "true"
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/healthcheck-path: /hub/login
-    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: instance
-    alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}
-  hosts:
-    - ${sandbox_host_name}
-  pathSuffix: "*"
-auth:
-  state:
-    enabled: True
-    cryptoKey: 356e9462b05e983c6ffcced3702b9b78c5859a22fd6c9380513701ed8e075184 # Replace
-  custom:
-    className: oauthenticator.awscognito.AWSCognitoAuthenticator
-    config:
+    AWS_NO_SIGN_REQUEST: "YES"
+    AWS_S3_ENDPOINT: "s3.${region}.amazonaws.com"
+hub:
+  config:
+    Authenticator:
+      enable_auth_state: true
+    CryptKeeper:
+      keys:
+        - ${auth_state_cryptoKey}
+    JupyterHub:
+      authenticator_class: generic-oauth
+    GenericOAuthenticator:
       client_id: ${jhub_auth_client_id}
       client_secret: ${jhub_auth_client_secret}
-      token_url: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/token
-      userdata_url: https://${jhub_userpool_domain}.auth.${region}.amazoncognito.com/oauth2/userInfo
+      login_service: cognito
       oauth_callback_url: https://${sandbox_host_name}/oauth_callback
-      oauth_logout_redirect_url: https://${sandbox_host_name}
+      authorize_url: https://${jhub_userpool_domain}.auth.${cognito_region}.amazoncognito.com/oauth2/authorize
+      token_url: https://${jhub_userpool_domain}.auth.${cognito_region}.amazoncognito.com/oauth2/token
+      userdata_url: https://${jhub_userpool_domain}.auth.${cognito_region}.amazoncognito.com/oauth2/userInfo
+      username_key: username
+  extraEnv:
+    - name: COGNITO_REGION
+      value: ${cognito_region}
+    - name: JUPYTERHUB_USERPOOL_ID
+      value: ${jhub_userpool_id}
+    - name: DB_HOSTNAME
+      value: ${db_hostname}
+    - name: DB_USERNAME
+      value: ${db_username}
+    - name: DB_PASSWORD
+      value: ${db_password}
+    - name: DB_DATABASE
+      value: ${db_name}
+  cookieSecret: ${hub_cookieSecret}
+
+proxy:
+  secretToken: ${proxy_secretToken}
+
+ingress:
+  hosts:
+    - ${sandbox_host_name}

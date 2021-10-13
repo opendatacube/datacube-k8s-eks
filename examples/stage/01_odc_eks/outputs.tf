@@ -60,9 +60,9 @@ output "certificate_arn" {
   value = data.aws_acm_certificate.domain_cert.arn
 }
 
-#output "waf_acl_id" {
-#  value = module.odc_eks.waf_acl_id
-#}
+output "waf_acl_id" {
+  value = module.odc_eks.waf_acl_id
+}
 
 output "cognito_auth_userpool_id" {
   value     = module.cognito_auth.userpool_id
@@ -87,4 +87,8 @@ output "cognito_auth_userpool_jhub_client_id" {
 output "cognito_auth_userpool_jhub_client_secret" {
   value     = module.cognito_auth.client_secrets["sandbox-client"]
   sensitive = true
+}
+
+output "cognito_region" {
+  value = local.cognito_region
 }

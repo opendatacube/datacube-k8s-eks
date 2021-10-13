@@ -56,7 +56,7 @@ locals {
   db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_port     = "5432"
 
-  ows_db_name        = "ows"
+  ows_db_name        = data.terraform_remote_state.odc_eks-stage.outputs.db_name
   ows_db_ro_username = local.db_enabled ? element(split(":", data.aws_ssm_parameter.ows_db_ro_creds[0].value), 0) : ""
   ows_db_ro_password = local.db_enabled ? element(split(":", data.aws_ssm_parameter.ows_db_ro_creds[0].value), 1) : ""
 }

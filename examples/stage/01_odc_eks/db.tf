@@ -1,6 +1,6 @@
 # Database
 module "db" {
-  count = 0
+  count = local.db_enabled ? 1 : 0
   # source = "github.com/opendatacube/datacube-k8s-eks//odc_rds?ref=master"
   source = "../../../odc_rds"
 
