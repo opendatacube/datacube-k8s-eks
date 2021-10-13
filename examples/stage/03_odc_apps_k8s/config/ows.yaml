@@ -1,11 +1,7 @@
-wms:
-  annotations:
-    iam.amazonaws.com/role: ${role_name}
 database:
   database: ${db_name}
   host: ${db_hostname}
   existingSecret: ${db_secret}
-awsCredentialsSecret: ${aws_creds_secret}
 ingress:
   hosts:
     - ows.${domain_name}
