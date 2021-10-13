@@ -17,3 +17,13 @@ resource "kubernetes_namespace" "web" {
     }
   }
 }
+
+resource "kubernetes_namespace" "service" {
+  metadata {
+    name = "service"
+
+    labels = {
+      managed-by = "Terraform"
+    }
+  }
+}

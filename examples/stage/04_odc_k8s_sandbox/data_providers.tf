@@ -48,7 +48,7 @@ data "aws_eks_cluster_auth" "cluster" {
 
 data "aws_ssm_parameter" "sandbox_db_ro_creds" {
   count = local.db_enabled ? 1 : 0
-  name  = "/${local.cluster_id}/sandbox_ro/db.creds"
+  name  = "/${local.cluster_id}/sandbox_reader/db.creds"
 }
 
 locals {

@@ -27,16 +27,16 @@ output "db_enabled" {
 }
 
 output "db_hostname" {
-  value = local.db_enabled ? module.db.db_hostname : ""
+  value = local.db_enabled ? module.db[0].db_hostname : ""
 }
 
 output "db_admin_username" {
-  value     = local.db_enabled ? module.db.db_admin_username : ""
+  value     = local.db_enabled ? module.db[0].db_admin_username : ""
   sensitive = true
 }
 
 output "db_admin_password" {
-  value     = local.db_enabled ? module.db.db_admin_password : ""
+  value     = local.db_enabled ? module.db[0].db_admin_password : ""
   sensitive = true
 }
 

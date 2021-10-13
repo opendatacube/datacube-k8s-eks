@@ -13,6 +13,7 @@ module "db" {
 
   db_name     = local.db_name
   db_multi_az = local.db_multi_az
+  instance_type = local.db_instance_type
   # extra_sg could be empty, so we run compact on the list to remove it if it is
   access_security_groups = [module.odc_eks.node_security_group]
   #Engine version

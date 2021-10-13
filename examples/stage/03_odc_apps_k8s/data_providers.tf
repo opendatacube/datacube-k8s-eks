@@ -30,7 +30,7 @@ data "aws_eks_cluster_auth" "cluster" {
 #   check examples/scripts/init_ows_db.sh script for reference
 data "aws_ssm_parameter" "ows_db_ro_creds" {
   count = local.db_enabled ? 1 : 0
-  name  = "/${local.cluster_id}/ows_ro/db.creds"
+  name  = "/${local.cluster_id}/ows_reader/db.creds"
 }
 
 locals {

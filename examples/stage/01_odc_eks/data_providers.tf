@@ -2,11 +2,11 @@ locals {
   region      = "ap-southeast-2"
   owner       = "odc-test"
   namespace   = "odc-test"
-  environment = "staging"
+  environment = "devtest"
 
   cluster_version = 1.18
 
-  domain_name       = "infra.digitalearth.africa"
+  domain_name       = "infra.digitalearth.africa" #TODO
   sandbox_host_name = "sandbox.${local.domain_name}"
 
   # ACM - used by ALB.
@@ -24,5 +24,6 @@ locals {
   db_enabled        = true
   db_name           = "odc"
   db_engine_version = { postgres = "12.5" }
+  db_instance_type  = "db.m5.xlarge"
   db_multi_az       = false
 }
