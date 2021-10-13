@@ -11,8 +11,8 @@ module "db" {
   vpc_id                = module.odc_eks.vpc_id
   database_subnet_group = module.odc_eks.database_subnets
 
-  db_name     = local.db_name
-  db_multi_az = local.db_multi_az
+  db_name       = local.db_name
+  db_multi_az   = local.db_multi_az
   instance_type = local.db_instance_type
   # extra_sg could be empty, so we run compact on the list to remove it if it is
   access_security_groups = [module.odc_eks.node_security_group]

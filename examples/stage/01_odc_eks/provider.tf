@@ -1,11 +1,11 @@
 provider "aws" {
-  region                 = "ap-southeast-2"
-  max_retries            = 10
+  region      = "ap-southeast-2"
+  max_retries = 10
 }
 
 provider "aws" {
   alias       = "cognito-region"
-  region      = "us-west-2"
+  region      = "ap-southeast-2"
   max_retries = 10
 }
 

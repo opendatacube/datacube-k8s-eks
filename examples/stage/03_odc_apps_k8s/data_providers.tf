@@ -1,18 +1,18 @@
 data "terraform_remote_state" "odc_eks-stage" {
   backend = "s3"
   config = {
-    bucket                 = "odc-test-stage-backend-tfstate"
-    key                    = "odc_eks_terraform.tfstate"
-    region                 = "ap-southeast-2"
+    bucket = "odc-test-stage-backend-tfstate"
+    key    = "odc_eks_terraform.tfstate"
+    region = "ap-southeast-2"
   }
 }
 
 data "terraform_remote_state" "odc_k8s-stage" {
   backend = "s3"
   config = {
-    bucket                 = "odc-test-stage-backend-tfstate"
-    key                    = "odc_k8s_terraform.tfstate"
-    region                 = "ap-southeast-2"
+    bucket = "odc-test-stage-backend-tfstate"
+    key    = "odc_k8s_terraform.tfstate"
+    region = "ap-southeast-2"
   }
 }
 

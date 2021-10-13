@@ -6,7 +6,7 @@ locals {
 
   cluster_version = 1.18
 
-  domain_name       = "infra.digitalearth.africa" #TODO
+  domain_name       = "test.odc.gov.au" # Replace to your domain
   sandbox_host_name = "sandbox.${local.domain_name}"
 
   # ACM - used by ALB.
@@ -16,7 +16,7 @@ locals {
   cf_enable          = false
   waf_enable         = false
 
-  cognito_region           = "us-west-2"
+  cognito_region           = local.region
   cognito_user_pool_name   = "${local.namespace}-${local.environment}-eks-userpool"
   cognito_user_pool_domain = "${local.namespace}-${local.environment}-eks-auth"
 
