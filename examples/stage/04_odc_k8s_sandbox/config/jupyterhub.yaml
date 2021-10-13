@@ -1,6 +1,11 @@
 singleuser:
   extraAnnotations:
     iam.amazonaws.com/role: ${role_name}
+  extraEnv:
+    DB_HOSTNAME: ${db_hostname}
+    DB_USERNAME: ${db_username}
+    DB_PASSWORD: ${db_password}
+    DB_DATABASE: ${db_name}
 hub:
   pdb:
     extraAnnotations:

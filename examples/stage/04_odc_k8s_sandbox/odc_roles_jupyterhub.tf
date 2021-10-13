@@ -12,7 +12,6 @@ data "aws_iam_policy_document" "jupyterhub_trust_policy" {
 }
 
 module "odc_role_jupyterhub" {
-  # source = "github.com/opendatacube/datacube-k8s-eks//odc_role?ref=master"
   source = "../../../odc_role"
 
   # Default Tags

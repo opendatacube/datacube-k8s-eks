@@ -11,7 +11,7 @@ data "aws_ami" "user_node" {
   }
 
   most_recent = true
-  owners      = ["602401143452", "877085696533"] # Amazon EKS AMI Account ID
+  owners      = ["602401143452"] # Amazon EKS AMI Account ID
 }
 
 locals {

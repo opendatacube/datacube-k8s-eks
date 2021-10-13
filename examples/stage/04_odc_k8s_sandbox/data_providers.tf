@@ -40,7 +40,7 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 data "aws_ssm_parameter" "sandbox_db_ro_creds" {
-  name = "/${local.cluster_id}/ows_ro/db.creds"
+  name = "/${local.cluster_id}/sandbox_ro/db.creds"
 }
 
 locals {
@@ -49,10 +49,11 @@ locals {
   namespace   = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
 
+  cluster_id        = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   domain_name       = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
-  sandbox_host_name = "app.${local.domain_name}"
+  sandbox_host_name = "sandbox.${local.domain_name}"
   certificate_arn   = data.terraform_remote_state.odc_eks-stage.outputs.certificate_arn
-  # waf_acl_id        = data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id
+  waf_acl_id        = data.terraform_remote_state.odc_eks-stage.outputs.waf_acl_id
 
   # To capture ALB access logs
   alb_log_bucket = "${local.namespace}-${local.environment}-eks-alb-logs"
@@ -66,7 +67,7 @@ locals {
   db_hostname = data.terraform_remote_state.odc_eks-stage.outputs.db_hostname
   db_enabled = data.terraform_remote_state.odc_eks-stage.outputs.db_enabled
 
-  sandbox_db_name        = "ows"
+  sandbox_db_name        = data.terraform_remote_state.odc_eks-stage.outputs.db_name
   sandbox_db_ro_username = local.db_enabled ? element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 0) : ""
   sandbox_db_ro_password = local.db_enabled ? element(split(":", data.aws_ssm_parameter.sandbox_db_ro_creds.value), 1) : ""
 
@@ -107,30 +108,6 @@ locals {
       max_nodes       = 2,
       ebs_volume_size = 20,
     },
-    {
-      instance_type   = "r5.2xlarge",
-      node_size       = "2XL",
-      min_nodes       = 0,
-      desired_nodes   = 0,
-      max_nodes       = 2,
-      ebs_volume_size = 20,
-    },
-    {
-      instance_type   = "r5.4xlarge",
-      node_size       = "4XL",
-      min_nodes       = 0,
-      desired_nodes   = 0,
-      max_nodes       = 2,
-      ebs_volume_size = 20,
-    },
-    {
-      instance_type   = "r5.8xlarge",
-      node_size       = "8XL",
-      min_nodes       = 0,
-      desired_nodes   = 0,
-      max_nodes       = 2,
-      ebs_volume_size = 20,
-    },
   ]
 
   # each creates spot nodegroup(asg) with provided configurations
@@ -145,92 +122,6 @@ locals {
       max_price       = "0.40"
     }
   ]
-
-  # dask spot nodegroup configuration - scheduler and worker
-  dask_cluster_asg_zone        = local.node_asg_zones[0]
-  dask_core_node_purpose       = "dask-core"      # used for taint-tolerations configuration
-  dask_scheduler_node_purpose  = "dask-scheduler" # used for taint-tolerations configuration
-  dask_worker_node_purpose     = "dask-worker"    # used for taint-tolerations configuration
-  dask_worker_default_profile  = "r5_L"           # choose from one of the worker prefered node_size
-  dask_per_cluster_max_cores   = 40               # Maximum number of cores per cluster
-  dask_per_cluster_max_workers = 5                # Maximum number of workers per cluster
-  # NOTE: Currently only support one nodegroup for dask-core
-  dask_core_node = {
-    instance_types       = ["r5.large"],
-    node_size            = "r5_L",
-    min_nodes            = 1,
-    desired_nodes        = 1,
-    max_nodes            = 2,
-    ebs_volume_size      = 20,
-    on_demand_percentage = 100
-  }
-  # NOTE: Currently only support one nodegroup for dask-scheduler
-  dask_scheduler_node = {
-    instance_types       = ["r5.large", "r5d.large"],
-    node_size            = "r5_L",
-    min_nodes            = 0,
-    desired_nodes        = 0,
-    max_nodes            = 2,
-    ebs_volume_size      = 20,
-    on_demand_percentage = 100,
-    max_cores            = 2,
-    max_memory           = 16
-  }
-  dask_worker_nodes = [
-    {
-      instance_types       = ["r5.large", "r5d.large"],
-      node_size            = "r5_L",
-      min_nodes            = 0,
-      desired_nodes        = 0,
-      max_nodes            = 2,
-      ebs_volume_size      = 20,
-      max_price            = "0.075",
-      on_demand_percentage = 0,
-      max_cores            = 2,
-      max_memory           = 16
-    },
-    {
-      instance_types       = ["r5.xlarge", "r5d.xlarge"],
-      node_size            = "r5_XL",
-      min_nodes            = 0,
-      desired_nodes        = 0,
-      max_nodes            = 2,
-      ebs_volume_size      = 20,
-      max_price            = "0.15",
-      on_demand_percentage = 0,
-      max_cores            = 4,
-      max_memory           = 32
-    },
-    {
-      instance_types       = ["r5.2xlarge", "r5d.2xlarge"],
-      node_size            = "r5_2XL",
-      min_nodes            = 0,
-      desired_nodes        = 0,
-      max_nodes            = 2,
-      ebs_volume_size      = 20,
-      max_price            = "0.20",
-      on_demand_percentage = 0,
-      max_cores            = 8,
-      max_memory           = 64
-    },
-    {
-      instance_types       = ["r5.4xlarge", "r5d.4xlarge"],
-      node_size            = "r5_4XL",
-      min_nodes            = 0,
-      desired_nodes        = 0,
-      max_nodes            = 2,
-      ebs_volume_size      = 20,
-      max_price            = "0.40",
-      on_demand_percentage = 0,
-      max_cores            = 16,
-      max_memory           = 128
-    }
-  ]
-
-  cluster_id            = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
-  cluster_version       = data.aws_eks_cluster.cluster.version
-  endpoint              = data.aws_eks_cluster.cluster.endpoint
-  certificate_authority = data.aws_eks_cluster.cluster.certificate_authority[0].data
 }
 
 resource "random_id" "jhub_dask_api_token" {
