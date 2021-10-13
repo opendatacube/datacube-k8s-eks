@@ -127,7 +127,3 @@ locals {
     }
   ]
 }
-
-resource "random_id" "jhub_dask_api_token" {
-  byte_length = 32
-}
