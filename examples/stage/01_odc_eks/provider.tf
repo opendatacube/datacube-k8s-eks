@@ -1,12 +1,11 @@
 provider "aws" {
-  region                 = local.region
+  region                 = "ap-southeast-2"
   max_retries            = 10
-  skip_region_validation = true
 }
 
 provider "aws" {
   alias       = "cognito-region"
-  region      = local.cognito_region
+  region      = "us-west-2"
   max_retries = 10
 }
 

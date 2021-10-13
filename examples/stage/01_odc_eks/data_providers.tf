@@ -2,7 +2,7 @@ locals {
   region      = "ap-southeast-2"
   owner       = "odc-test"
   namespace   = "odc-test"
-  environment = "devtest"
+  environment = "stage"
 
   cluster_version = 1.18
 

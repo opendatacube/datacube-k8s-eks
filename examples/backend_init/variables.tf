@@ -15,5 +15,5 @@ variable "owner" {
 
 variable "environment" {
   description = "The name of the environment - e.g. dev, stage, prod"
-  default     = "devtest"
+  default     = "stage"
 }
