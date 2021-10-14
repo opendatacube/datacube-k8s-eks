@@ -1,3 +1,6 @@
+# WARNING: This setup is using deprecated helm chart: https://github.com/kubernetes/charts/tree/master/stable/efs-provisioner
+#   Consider using the newer efs csi driver - https://github.com/kubernetes-sigs/aws-efs-csi-driver
+
 resource "aws_efs_file_system" "user_storage" {
   # Creation token is optional and needs to be unique. terraform will create a value for us.
 
