@@ -86,7 +86,7 @@ locals {
 
   node_group_name     = "sandbox"
   node_subnets        = data.aws_subnet.node_subnets
-  node_asg_zones      = ["af-south-1a"] # creates ASG for specified zones
+  node_asg_zones      = ["ap-southeast-1a"] # creates ASG for specified zones
   node_security_group = data.terraform_remote_state.odc_eks-stage.outputs.node_security_group
 
   ami_image_id = data.terraform_remote_state.odc_eks-stage.outputs.ami_image_id
@@ -94,7 +94,7 @@ locals {
   # each creates core nodegroup(asg) with provided configurations
   core_nodes = [
     {
-      instance_type   = "m5.large",
+      instance_type   = "r5.large",
       node_size       = "L",
       min_nodes       = 1,
       desired_nodes   = 1,
