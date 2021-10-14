@@ -47,7 +47,10 @@ locals {
   oidc_arn = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_arn
   oidc_url = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_url
 
-  tags = {}
+  tags = data.terraform_remote_state.odc_k8s-stage.outputs.tags
+
+  cognito_auth_userpool_grafana_client_id     = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_grafana_client_id
+  cognito_auth_userpool_grafana_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_grafana_client_secret
 
   db_enabled = data.terraform_remote_state.odc_eks-stage.outputs.db_enabled
 

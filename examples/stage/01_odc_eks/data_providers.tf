@@ -26,4 +26,7 @@ locals {
   db_engine_version = { postgres = "12.5" }
   db_instance_type  = "db.m5.xlarge"
   db_multi_az       = false
+
+  # provide organisation tags
+  tags = {}
 }

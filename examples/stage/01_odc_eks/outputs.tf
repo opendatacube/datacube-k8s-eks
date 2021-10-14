@@ -89,6 +89,20 @@ output "cognito_auth_userpool_jhub_client_secret" {
   sensitive = true
 }
 
+output "cognito_auth_userpool_grafana_client_id" {
+  value     = module.cognito_auth.client_ids["grafana-client"]
+  sensitive = true
+}
+
+output "cognito_auth_userpool_grafana_client_secret" {
+  value     = module.cognito_auth.client_secrets["grafana-client"]
+  sensitive = true
+}
+
 output "cognito_region" {
   value = local.cognito_region
+}
+
+output "tags" {
+  value = local.tags
 }

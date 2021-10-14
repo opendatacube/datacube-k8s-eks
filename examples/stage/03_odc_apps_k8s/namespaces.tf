@@ -8,6 +8,16 @@ resource "kubernetes_namespace" "admin" {
   }
 }
 
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+
+    labels = {
+      managed-by = "Terraform"
+    }
+  }
+}
+
 resource "kubernetes_namespace" "web" {
   metadata {
     name = "web"

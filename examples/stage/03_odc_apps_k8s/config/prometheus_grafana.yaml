@@ -1,0 +1,70 @@
+grafana:
+  # AWS EKS (cloudwatch) setup doc - https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+  serviceAccount:
+    create: true
+    name: grafana-datasource-cloudwatch-sa
+    annotations:
+      eks.amazonaws.com/role-arn: ${service_account_role_arn}
+  extraSecretMounts:
+    - name: aws-iam-token
+      mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
+      readOnly: true
+      projected:
+        defaultMode: 420
+        sources:
+          - serviceAccountToken:
+              audience: sts.amazonaws.com
+              expirationSeconds: 86400
+              path: token
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/healthcheck-path: "/metrics"
+      alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}  # Replace
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    hosts:
+      - monitor.${domain_name} # Replace
+    path: /*
+  env:
+    GF_SERVER_ROOT_URL: https://monitor.${domain_name}/  # Replace
+  # force chart to generate password as prometheus-operator-grafana secret
+  adminPassword: null
+  ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
+  ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
+  sidecar:
+    image:
+      repository: kiwigrid/k8s-sidecar
+      tag: 0.1.151
+    imagePullPolicy: IfNotPresent
+    # Automatically load any configmaps with grafana_datasource=1 in the monitoring namespace into grafana as a datasource
+    datasources:
+      enabled: true
+      # label that the configmaps with datasources are marked with
+      label: grafana_datasource
+  grafana.ini:
+    # Keep default values
+    paths:
+      data: /var/lib/grafana/data
+      logs: /var/log/grafana
+      plugins: /var/lib/grafana/plugins
+      provisioning: /etc/grafana/provisioning
+    analytics:
+      check_for_updates: true
+    log:
+      mode: console
+    grafana_net:
+      url: https://grafana.net
+    # Configure oauth
+    auth.generic_oauth:
+      name: DEA
+      enabled: true
+      allow_sign_up: true
+      client_id: ${cognito_client_id}
+      client_secret: ${cognito_client_secret}
+      scopes: openid aws.cognito.signin.user.admin email
+      auth_url: https://${cognito_userpool_domain}.auth.${cognito_region}.amazoncognito.com/oauth2/authorize
+      token_url: https://${cognito_userpool_domain}.auth.${cognito_region}.amazoncognito.com/oauth2/token
+      api_url: https://${cognito_userpool_domain}.auth.${cognito_region}.amazoncognito.com/oauth2/userInfo

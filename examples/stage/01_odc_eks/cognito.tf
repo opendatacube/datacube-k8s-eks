@@ -47,6 +47,25 @@ module "cognito_auth" {
       "id_token_validity"      = 1
       "refresh_token_validity" = 30
     },
+    "grafana-client" = {
+      "callback_urls" = [
+        "https://monitor.${local.domain_name}/login/generic_oauth",
+        "https://monitor.${local.domain_name}"
+      ]
+      "logout_urls"          = ["https://monitor.${local.domain_name}"]
+      "default_redirect_uri" = "https://monitor.${local.domain_name}"
+      "explicit_auth_flows"  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_CUSTOM_AUTH"]
+      "token_validity_units" = {
+        access_token  = "minutes"
+        id_token      = "minutes"
+        refresh_token = "days"
+      }
+      "allowed_oauth_scopes"   = ["email", "aws.cognito.signin.user.admin", "openid"]
+      "allowed_oauth_flows"    = ["code"]
+      "access_token_validity"  = 60
+      "id_token_validity"      = 60
+      "refresh_token_validity" = 30
+    },
   }
 
   admin_create_user_config = {
