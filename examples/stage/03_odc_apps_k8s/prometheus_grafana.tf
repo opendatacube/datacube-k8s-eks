@@ -36,10 +36,10 @@ module "svc_role_grafana_cloudwatch" {
   tags = local.tags
 
   service_account_role = {
-    name = "svc-${local.cluster_id}-grafana-cloudwatch"
+    name                      = "svc-${local.cluster_id}-grafana-cloudwatch"
     service_account_namespace = "monitoring"
-    service_account_name = "*"
-    policy = data.aws_iam_policy_document.grafana_cloudwatch_trust_policy
+    service_account_name      = "*"
+    policy                    = data.aws_iam_policy_document.grafana_cloudwatch_trust_policy
   }
 }
 
@@ -62,10 +62,10 @@ data "template_file" "prometheus-grafana" {
     certificate_arn = local.certificate_arn
     domain_name     = local.domain_name
 
-    cognito_region              = local.cognito_region
-    cognito_userpool_domain     = local.cognito_auth_userpool_domain
-    cognito_client_id           = local.cognito_auth_userpool_grafana_client_id
-    cognito_client_secret       = local.cognito_auth_userpool_grafana_client_secret
+    cognito_region          = local.cognito_region
+    cognito_userpool_domain = local.cognito_auth_userpool_domain
+    cognito_client_id       = local.cognito_auth_userpool_grafana_client_id
+    cognito_client_secret   = local.cognito_auth_userpool_grafana_client_secret
 
     service_account_role_arn = module.svc_role_grafana_cloudwatch.role_arn
   }
