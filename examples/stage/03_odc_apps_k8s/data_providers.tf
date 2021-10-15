@@ -36,6 +36,7 @@ locals {
   owner       = data.terraform_remote_state.odc_eks-stage.outputs.owner
   namespace   = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
+  tags        = data.terraform_remote_state.odc_eks-stage.outputs.tags
 
   cluster_id      = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
@@ -47,8 +48,10 @@ locals {
   oidc_arn = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_arn
   oidc_url = data.terraform_remote_state.odc_k8s-stage.outputs.oidc_url
 
-  tags = data.terraform_remote_state.odc_k8s-stage.outputs.tags
-
+  cognito_region                              = data.terraform_remote_state.odc_eks-stage.outputs.cognito_region
+  cognito_auth_userpool_id                    = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_id
+  cognito_auth_userpool_arn                   = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_arn
+  cognito_auth_userpool_domain                = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_domain
   cognito_auth_userpool_grafana_client_id     = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_grafana_client_id
   cognito_auth_userpool_grafana_client_secret = data.terraform_remote_state.odc_eks-stage.outputs.cognito_auth_userpool_grafana_client_secret
 

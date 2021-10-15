@@ -20,6 +20,7 @@ locals {
   owner       = data.terraform_remote_state.odc_eks-stage.outputs.owner
   namespace   = data.terraform_remote_state.odc_eks-stage.outputs.namespace
   environment = data.terraform_remote_state.odc_eks-stage.outputs.environment
+  tags        = data.terraform_remote_state.odc_eks-stage.outputs.tags
 
   cluster_id      = data.terraform_remote_state.odc_eks-stage.outputs.cluster_id
   domain_name     = data.terraform_remote_state.odc_eks-stage.outputs.domain_name
