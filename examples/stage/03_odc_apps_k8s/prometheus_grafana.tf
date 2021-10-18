@@ -39,7 +39,7 @@ module "svc_role_grafana_cloudwatch" {
     name                      = "svc-${local.cluster_id}-grafana-cloudwatch"
     service_account_namespace = "monitoring"
     service_account_name      = "*"
-    policy                    = data.aws_iam_policy_document.grafana_cloudwatch_trust_policy
+    policy                    = data.aws_iam_policy_document.grafana_cloudwatch_trust_policy.json
   }
 }
 
