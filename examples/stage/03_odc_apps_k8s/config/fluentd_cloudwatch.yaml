@@ -1,3 +1,6 @@
-awsRole: ${role_name}
+rbac:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "${service_account_arn}"
 logGroupName: ${cluster_name}-logs
 awsRegion: ${region}
