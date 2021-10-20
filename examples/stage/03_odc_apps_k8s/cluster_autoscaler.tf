@@ -21,8 +21,12 @@ module "odc_role_autoscaler" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = local.oidc_arn
-  oidc_url    = local.oidc_url
+
+  oidc_arn = local.oidc_arn
+  oidc_url = local.oidc_url
+
+  # Additional Tags
+  tags = local.tags
 
   service_account_role = {
     name                      = "${local.cluster_id}-autoscaler"
@@ -35,9 +39,9 @@ module "odc_role_autoscaler" {
 data "template_file" "cluster_autoscaler" {
   template = file("${path.module}/config/cluster_autoscaler.yaml")
   vars = {
-    cluster_name = local.cluster_id
-    region       = local.region
-    role_name    = module.odc_role_autoscaler.role_name
+    cluster_name        = local.cluster_id
+    region              = local.region
+    service_account_arn = module.odc_role_autoscaler.role_arn
   }
 }
 

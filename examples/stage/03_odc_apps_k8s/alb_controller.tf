@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "alb_ingress_trust_policy" {
+data "aws_iam_policy_document" "alb_controller_trust_policy" {
   statement {
     resources = ["*"]
     actions = [
@@ -79,6 +79,12 @@ data "aws_iam_policy_document" "alb_ingress_trust_policy" {
   statement {
     resources = ["*"]
     actions = [
+      "cognito-idp:DescribeUserPoolClient"
+    ]
+  }
+  statement {
+    resources = ["*"]
+    actions = [
       "waf-regional:GetWebACLForResource",
       "waf-regional:GetWebACL",
       "waf-regional:AssociateWebACL",
@@ -99,18 +105,55 @@ data "aws_iam_policy_document" "alb_ingress_trust_policy" {
   statement {
     resources = ["*"]
     actions = [
-      "acm:ListCertificates",
-      "acm:DescribeCertificate",
-      "acm:GetCertificate"
+      "wafv2:GetWebACL",
+      "wafv2:GetWebACLForResource",
+      "wafv2:AssociateWebACL",
+      "wafv2:DisassociateWebACL"
     ]
   }
   statement {
     resources = ["*"]
-    actions   = ["cognito-idp:DescribeUserPoolClient"]
+    actions = [
+      "shield:DescribeProtection",
+      "shield:GetSubscriptionState",
+      "shield:DeleteProtection",
+      "shield:CreateProtection",
+      "shield:DescribeSubscription",
+      "shield:ListProtections"
+    ]
+  }
+  statement {
+    resources = ["arn:aws:ec2:*:*:security-group/*"]
+    actions = [
+      "ec2:CreateTags",
+      "ec2:DeleteTags"
+    ]
+    condition {
+      test     = "StringEquals"
+      values   = ["false"]
+      variable = "aws:ResourceTag/ingress.k8s.aws/cluster"
+    }
+  }
+  statement {
+    resources = [
+      "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*",
+      "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
+      "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
+    ]
+    actions = [
+      "elasticloadbalancing:AddTags",
+      "elasticloadbalancing:RemoveTags",
+      "elasticloadbalancing:DeleteTargetGroup"
+    ]
+    condition {
+      test     = "StringEquals"
+      values   = ["false"]
+      variable = "aws:ResourceTag/ingress.k8s.aws/cluster"
+    }
   }
 }
 
-module "odc_role_alb_ingress" {
+module "odc_role_alb_controller" {
   //  source = "github.com/opendatacube/datacube-k8s-eks//odc_k8s_service_account_role?ref=master"
   source = "../../../odc_k8s_service_account_role"
 
@@ -118,37 +161,38 @@ module "odc_role_alb_ingress" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = local.oidc_arn
-  oidc_url    = local.oidc_url
+
+  # OIDC
+  oidc_arn = local.oidc_arn
+  oidc_url = local.oidc_url
+
+  # Additional Tags
+  tags = local.tags
 
   service_account_role = {
-    name                      = "${local.cluster_id}-alb-ingress"
+    name                      = "${local.cluster_id}-alb-controller"
     service_account_namespace = kubernetes_namespace.admin.metadata[0].name
     service_account_name      = "*"
-    policy                    = data.aws_iam_policy_document.alb_ingress_trust_policy.json
+    policy                    = data.aws_iam_policy_document.alb_controller_trust_policy.json
   }
 }
 
-data "template_file" "alb_ingress" {
-  template = file("${path.module}/config/alb_ingress.yaml")
+data "template_file" "alb_controller" {
+  template = file("${path.module}/config/alb_controller.yaml")
   vars = {
-    cluster_name = local.cluster_id
-    role_name    = module.odc_role_alb_ingress.role_name
+    cluster_name        = local.cluster_id
+    service_account_arn = module.odc_role_alb_controller.role_arn
   }
 }
 
-resource "kubernetes_secret" "alb_ingress" {
-  depends_on = [
-    kubernetes_namespace.admin
-  ]
-
+resource "kubernetes_secret" "alb_controller" {
   metadata {
-    name      = "alb-ingress"
+    name      = "alb-controller"
     namespace = kubernetes_namespace.admin.metadata[0].name
   }
 
   data = {
-    "values.yaml" = data.template_file.alb_ingress.rendered
+    "values.yaml" = data.template_file.alb_controller.rendered
   }
 
   type = "Opaque"

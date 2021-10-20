@@ -24,8 +24,13 @@ module "odc_role_external_dns" {
   owner       = local.owner
   namespace   = local.namespace
   environment = local.environment
-  oidc_arn    = local.oidc_arn
-  oidc_url    = local.oidc_url
+
+  # OIDC
+  oidc_arn = local.oidc_arn
+  oidc_url = local.oidc_url
+
+  # Additional Tags
+  tags = local.tags
 
   service_account_role = {
     name                      = "${local.cluster_id}-external-dns"
@@ -38,10 +43,10 @@ module "odc_role_external_dns" {
 data "template_file" "external_dns" {
   template = file("${path.module}/config/external_dns.yaml")
   vars = {
-    cluster_name   = local.cluster_id
-    hosted_zone_id = data.aws_route53_zone.domain.zone_id
-    domain_name    = local.domain_name
-    role_name      = module.odc_role_external_dns.role_name
+    cluster_name        = local.cluster_id
+    hosted_zone_id      = data.aws_route53_zone.domain.zone_id
+    domain_name         = local.domain_name
+    service_account_arn = module.odc_role_external_dns.role_arn
   }
 }
 
