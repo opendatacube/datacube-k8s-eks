@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "grafana_cloudwatch_trust_policy" {
 }
 
 module "svc_role_grafana_cloudwatch" {
-  source = "../../../modules/k8s_service_account_role"
+  source = "../../../odc_k8s_service_account_role"
 
   # Default Tags
   owner       = local.owner
