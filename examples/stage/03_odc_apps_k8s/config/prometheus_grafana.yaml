@@ -59,7 +59,6 @@ grafana:
       url: https://grafana.net
     # Configure oauth
     auth.generic_oauth:
-      name: DEA
       enabled: true
       allow_sign_up: true
       client_id: ${cognito_client_id}

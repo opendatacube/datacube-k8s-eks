@@ -1,4 +1,5 @@
 resource "kubernetes_service" "db_endpoint_web_ns" {
+  count = local.db_enabled ? 1 : 0
   metadata {
     name      = "db-endpoint"
     namespace = kubernetes_namespace.web.metadata[0].name
@@ -11,6 +12,7 @@ resource "kubernetes_service" "db_endpoint_web_ns" {
 }
 
 resource "kubernetes_service" "db_endpoint_service_ns" {
+  count = local.db_enabled ? 1 : 0
   metadata {
     name      = "db-endpoint"
     namespace = kubernetes_namespace.service.metadata[0].name
