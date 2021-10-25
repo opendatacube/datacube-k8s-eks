@@ -1,6 +1,6 @@
 # Terraform Open Data Cube EKS Module: odc_k8s
 
-Terraform ODC supporting module that provision a kubernetes core components on top of Open Data Cube EKS cluster. 
+Terraform ODC supporting module that provision a kubernetes core components on top of Open Data Cube EKS cluster.
 
 #### Warning
 
@@ -24,14 +24,14 @@ Terraform ODC supporting module that provision a kubernetes core components on t
 
 The module provisions the following resources:
 
-- Install kubernetes core components - tiller, helm, flux, fluxcloud.
+- Install kubernetes core components - helm, flux, fluxcloud.
 - Optionally creates a AWS CloudWatch log group to collect logs for your cluster.
 - Setup `aws-auth` ConfigMap settings for user/role based cluster access.
 
-## Manage Cluster Access 
+## Manage Cluster Access
 
-When you create an Amazon EKS cluster, the IAM entity user or role, such as a federated user that creates the cluster, 
-is automatically granted `system:masters` permissions in the cluster's RBAC configuration. To grant additional AWS users 
+When you create an Amazon EKS cluster, the IAM entity user or role, such as a federated user that creates the cluster,
+is automatically granted `system:masters` permissions in the cluster's RBAC configuration. To grant additional AWS users
 or roles the ability to interact with your cluster, you must edit the `aws-auth` ConfigMap within Kubernetes.
 
 ### MapRoles config

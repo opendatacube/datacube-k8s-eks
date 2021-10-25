@@ -31,9 +31,9 @@ kubectl cluster-info
 - Modify `main.tf`:
   - `bucket`: `<namespace>-<environment>-backend-tfstate`
   - `region` : `<region>`
-- Run `terraform init`, `terraform plan`, `terraform apply` as above and deploy flux, tiller etc. to the live k8s cluster
+- Run `terraform init`, `terraform plan`, `terraform apply` as above and deploy flux, helm etc. to the live k8s cluster
 - If you enabled the database it is now when you need to create the AWS SSM variables for the database access. The name of the new variable should be `/<namespce>-<environment>-eks/ows_ro/db.creds` And should have the content of `<db_username>:<db_password>`
-- Get pods from the kubernetes admin namespace to verify services such as flux and tiller were deployed
+- Get pods from the kubernetes admin namespace to verify services such as flux and helm were deployed
 ```sh
 kubectl get pods —all-namespaces
 ```
