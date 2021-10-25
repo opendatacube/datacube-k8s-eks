@@ -51,10 +51,6 @@ data "template_file" "external_dns" {
 }
 
 resource "kubernetes_secret" "external_dns" {
-  depends_on = [
-    kubernetes_namespace.admin
-  ]
-
   metadata {
     name      = "external-dns"
     namespace = kubernetes_namespace.admin.metadata[0].name
