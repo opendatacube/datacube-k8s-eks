@@ -1,2 +1,0 @@
-extraArgs:
-  base-role-arn: arn:aws:iam::${account_id}:role/

@@ -87,10 +87,6 @@ kubectl delete hr --all=true -n monitoring
 ```sh
 kubectl delete hr --all=true -n admin
 ```
-- Delete kube2iam
-```sh
-kubectl delete hr kube2iam -n kube-system
-```
 
 3. Destroy all the terraform infrastructure in reverse order. Run `terraform init --upgrade` and `terraform destroy` command under each namespace
 - Destroy jupyterhub tf infra - `04_odc-k8s-sandbox`

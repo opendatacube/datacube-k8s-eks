@@ -1,5 +1,7 @@
 # Terraform Open Data Cube EKS Supporting Module: odc_role
 
+> This is a deprecated module, please use [ODC Kubernetes Service Account Role](../odc_k8s_service_account_role) instead. This module will be removed soon.
+
 Terraform ODC supporting module that creates IAM role for cluster pods with provided JSON IAM polices documents.
 
 #### Warning
