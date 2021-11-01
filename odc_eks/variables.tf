@@ -143,6 +143,18 @@ variable "database_subnet_cidrs" {
   default     = []
 }
 
+variable "private_subnet_elb_role" {
+  type    = string
+  description = "ELB role for private subnets "
+  default = "internal-elb"
+}
+
+variable "public_subnet_elb_role" {
+  type    = string
+  description = "ELB role for public subnets "
+  default = "elb"
+}
+
 variable "enable_s3_endpoint" {
   type        = bool
   description = "Whether to provision an S3 endpoint to the VPC. Default is set to 'true'"

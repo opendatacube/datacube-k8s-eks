@@ -29,15 +29,16 @@ module "vpc" {
   map_public_ip_on_launch = var.map_public_ip_on_launch
   
   private_subnet_tags = {
-    "SubnetType"                                = "Private"
-    "kubernetes.io/cluster/${local.cluster_id}" = "shared"
-    "kubernetes.io/role/internal-elb"           = "1"
+    "SubnetType"                                        = "Private"
+    "kubernetes.io/cluster/${local.cluster_id}"         = "shared"
+    "kubernetes.io/role/internal-elb" = var.private_subnet_elb_role == "internal-elb" ? 1 : null
+    "kubernetes.io/role/elb" = var.private_subnet_elb_role == "elb" ? 1 : null
   }
-
   public_subnet_tags = {
-    "SubnetType"                                = "Utility"
-    "kubernetes.io/cluster/${local.cluster_id}" = "shared"
-    "kubernetes.io/role/elb"                    = "1"
+    "SubnetType"                                        = "Utility"
+    "kubernetes.io/cluster/${local.cluster_id}"         = "shared"
+    "kubernetes.io/role/internal-elb" = var.public_subnet_elb_role == "internal-elb" ? 1 : null
+    "kubernetes.io/role/elb" = var.public_subnet_elb_role == "elb" ? 1 : null
   }
 
   database_subnet_tags = {
