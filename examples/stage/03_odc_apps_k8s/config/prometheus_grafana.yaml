@@ -22,11 +22,13 @@ grafana:
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/target-type: ip
-      alb.ingress.kubernetes.io/healthcheck-path: "/metrics"
+      alb.ingress.kubernetes.io/success-codes: '200'
+      alb.ingress.kubernetes.io/healthcheck-path: '/metrics'
       alb.ingress.kubernetes.io/certificate-arn: ${certificate_arn}  # Replace
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
     hosts:
-      - monitor.${domain_name} # Replace
+      - mgmt.${domain_name} # Replace
     path: /*
   env:
     GF_SERVER_ROOT_URL: https://monitor.${domain_name}/  # Replace
