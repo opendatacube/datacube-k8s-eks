@@ -1,32 +1,29 @@
 data "aws_caller_identity" "current" {
 }
 
-resource "aws_iam_role" "role" {
-  name = var.role.name
-
-  assume_role_policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Sid": "",
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "ec2.amazonaws.com"
-        },
-        "Action": "sts:AssumeRole"
-      },
-      {
-        "Sid": "",
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"
-        },
-        "Action": "sts:AssumeRole"
-      }
-    ]
+data "aws_iam_policy_document" "trust_policy" {
+  statement {
+    sid = ""
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
   }
-  EOF
+
+  statement {
+    sid = ""
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/nodes.${var.cluster_id}"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "role" {
+  name               = var.role.name
+  assume_role_policy = data.aws_iam_policy_document.trust_policy.json
 
   tags = merge(
     {

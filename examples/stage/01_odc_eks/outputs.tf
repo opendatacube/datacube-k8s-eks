@@ -22,17 +22,21 @@ output "environment" {
   value = module.odc_eks.environment
 }
 
+output "db_enabled" {
+  value = local.db_enabled
+}
+
 output "db_hostname" {
-  value = module.db.db_hostname
+  value = local.db_enabled ? module.db[0].db_hostname : ""
 }
 
 output "db_admin_username" {
-  value     = module.db.db_admin_username
+  value     = local.db_enabled ? module.db[0].db_admin_username : ""
   sensitive = true
 }
 
 output "db_admin_password" {
-  value     = module.db.db_admin_password
+  value     = local.db_enabled ? module.db[0].db_admin_password : ""
   sensitive = true
 }
 
@@ -53,19 +57,26 @@ output "ami_image_id" {
 }
 
 output "certificate_arn" {
-  value = (local.create_certificate) ? module.odc_eks.certificate_arn[0] : data.aws_acm_certificate.domain_cert[0].arn
+  value = data.aws_acm_certificate.domain_cert.arn
 }
 
-#output "waf_acl_id" {
-#  value = module.odc_eks.waf_acl_id
-#}
+output "waf_acl_id" {
+  value = module.odc_eks.waf_acl_id
+}
 
 output "cognito_auth_userpool_id" {
-  value = module.cognito_auth.userpool_id
+  value     = module.cognito_auth.userpool_id
+  sensitive = true
+}
+
+output "cognito_auth_userpool_arn" {
+  value     = module.cognito_auth.userpool_arn
+  sensitive = true
 }
 
 output "cognito_auth_userpool_domain" {
-  value = module.cognito_auth.userpool_domain
+  value     = module.cognito_auth.userpool_domain
+  sensitive = true
 }
 
 output "cognito_auth_userpool_jhub_client_id" {
@@ -76,4 +87,22 @@ output "cognito_auth_userpool_jhub_client_id" {
 output "cognito_auth_userpool_jhub_client_secret" {
   value     = module.cognito_auth.client_secrets["sandbox-client"]
   sensitive = true
+}
+
+output "cognito_auth_userpool_grafana_client_id" {
+  value     = module.cognito_auth.client_ids["grafana-client"]
+  sensitive = true
+}
+
+output "cognito_auth_userpool_grafana_client_secret" {
+  value     = module.cognito_auth.client_secrets["grafana-client"]
+  sensitive = true
+}
+
+output "cognito_region" {
+  value = local.cognito_region
+}
+
+output "tags" {
+  value = local.tags
 }

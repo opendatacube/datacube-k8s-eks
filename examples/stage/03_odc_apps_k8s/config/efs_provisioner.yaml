@@ -8,6 +8,9 @@ efsProvisioner:
   efsFileSystemId: ${efsFileSystemId}
   awsRegion: ${awsRegion}
   path: ${path}
-podAnnotations: {
-  iam.amazonaws.com/role: ${iam_role_name}
-}
+rbac:
+  create: true
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account_arn}

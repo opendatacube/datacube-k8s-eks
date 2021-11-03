@@ -1,5 +1,9 @@
-podAnnotations:
-  iam.amazonaws.com/role: ${role_name}
+rbac:
+  create: true
+  serviceAccount:
+    create: true
+    annotations:
+      eks.amazonaws.com/role-arn: ${service_account_arn}
 autoDiscovery:
   clusterName: ${cluster_name}
 cloudProvider: aws

@@ -1,42 +1,52 @@
 # Getting Started
 
-## Install AWS CLI
+## Install Tools
 
-The AWS cli is required for using Terraform and the iam authenticator, it's good to have around anyway! [AWS CLI](https://aws.amazon.com/cli/)
-
-## Install Kubectl
-
-In order to interact with our kubernetes cluster we'll need to install the [Kubectl CLI tool](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-You should also install the amazon authenticator to manage user access to your cluster [aws-iam-authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
-
-## Install Helm
-
-We use helm to deploy application templates to our cluster [Helm](https://github.com/kubernetes/helm#install)
-
-## Install terraform
-
-Terraform enables us to deploy repeatable infrastructure using declarative configuration files [Terraform](https://www.terraform.io/downloads.html)
+* AWS CLI - required for Terraform and the iam authenticator
+  * <https://aws.amazon.com/cli/>
+* Kubectl - interact with our kubernetes cluster
+  * <https://kubernetes.io/docs/tasks/tools/install-kubectl/>
+* AWS IAM Authenticator - manage user access to your cluster
+  * <https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html>
+* Helm - We use helm to deploy application templates to our cluster
+  * <https://github.com/kubernetes/helm#install>
+* Terraform - enables us to deploy repeatable infrastructure using declarative configuration files
+  * <https://www.terraform.io/downloads.html>
 
 ## Setup your environment
 
-In order to create the infrastructure you'll need to configure your aws cli to have security credentials to access to your account. This can be done using the [Configuring the AWS CLI Guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+In order to create the infrastructure you'll need to configure your aws cli to have security credentials to access to
+your account. This can be done using the [Configuring the AWS CLI Guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
-You'll also need a public Route53 zone so your applications can be accessed externally. This can be configured using the following guide [A Public Route53 Hosted Zone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingHostedZone.html)
+You'll also need a public Route53 zone so your applications can be accessed externally. This can be configured using
+the following guide [A Public Route53 Hosted Zone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingHostedZone.html)
 
 ## Create your live repo
 
-This repo provides odc terraform modules require to setup an Open Data Cube EKS cluster on AWS platform. 
+This repo provides ODC terraform modules required to setup an Open Data Cube EKS cluster on AWS platform.
 
-In order to setup odc infrastructure, you need to create a your own live repo showed in `examples/` that contains `examples/backend_init` and `examples/stage`.
+In order to setup ODC infrastructure, you need to create your own live repo showed in `examples/` that contains
+`examples/backend_init` and `examples/stage`.
 
 ## Create the terraform backend
 
-We store the current state of the infrastructure on an AWS S3 bucket to ensure terraform knows what infrastructure it has created, even if something happens to the machine. We also use a simple dynamodb table as a lock to ensure multiple people can't make a deployment at the same time.
+We store the current state of the infrastructure on an AWS S3 bucket to ensure terraform knows what infrastructure it
+has created, even if something happens to the machine.
 
-To set up this infrastructure, if you'll need to adjust this variables - `region`, `owner`, `namespace` and `environment`. The backend id will need to be unique to your project.
+We also use a simple dynamodb table as a lock to ensure multiple people can't make a deployment at the same time.
 
-Run this command to create the required infrastructure to store terraform state:
+To set up this infrastructure, you'll need to adjust the following variables in `examples/backend_init/variables.tf`
+
+| Variable      | Description                                                                     | Default            |
+| :---          | :---                                                                            | ---                |
+| `region`      | The AWS region to provision resources                                           | `"ap-southeast-2"` |
+| `owner`       | The owner of the environment                                                    | `"odc-test"`       |
+| `namespace`   | The name used for creation of backend resources like the terraform state bucket | `"odc-test"`       |
+| `environment` | The name of the environment - e.g. `dev`, `stage`, `prod`                       | `"stage"`          |
+
+The `namespace` and `environment` combination needs to be unique for your project.
+
+Run these commands in order to create the required infrastructure to store terraform state:
 
 ```shell script
   cd examples/backend_init
@@ -47,7 +57,7 @@ Run this command to create the required infrastructure to store terraform state:
 
 Terraform will create the required resources, at the end you'll see: 
 
-> Apply complete!
+> `Apply complete!`
 
 
 ```properties

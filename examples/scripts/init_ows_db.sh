@@ -46,7 +46,7 @@ psql -h "$DB_HOSTNAME" -p "$DB_PORT" -U "$ADMIN_USER" -d "$DB_NAME" -c "GRANT SE
 
 echo "Adding OWS Reader user credentials to param-store"
 aws ssm put-parameter --region "${REGION}" \
-  --name "/${CLUSTER_ID}/ows_ro/db.creds" \
+  --name "/${CLUSTER_ID}/ows_reader/db.creds" \
   --value "${NEW_DB_USER}:${random}" \
   --description "OWS Reader user credentials" \
   --type "SecureString" --overwrite

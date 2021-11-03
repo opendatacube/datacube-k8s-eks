@@ -1,7 +1,7 @@
 # Datacube Kubernetes EKS
 
 This repository will build and manage a production scale kubernetes cluster using the AWS EKS engine
-for running Open Data Cube applications. 
+for running Open Data Cube applications.
 
 [![Master](https://circleci.com/gh/opendatacube/datacube-k8s-eks/tree/master.svg?style=shield)](https://circleci.com/gh/opendatacube/datacube-k8s-eks/tree/master)
 
@@ -40,7 +40,8 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 * odc_eks - Core components required to run an EKS cluster for ODC
 * ods_k8s - Kubernetes service pods required to perform Continuous deployment of applications.
   * [Flux](https://www.weave.works/oss/flux/)
-  * [Tiller/Helm](https://helm.sh/)
+  * [Helm](https://helm.sh/)
+
 :warning: Soon to be deprecated :warning:
 * odc_role - ODC supporting module that creates IAM role for cluster pods
 * odc_user - ODC supporting module that creates IAM user for cluster pods

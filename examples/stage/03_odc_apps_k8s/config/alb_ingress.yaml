@@ -1,3 +1,0 @@
-clusterName: ${cluster_name}
-podAnnotations:
-  iam.amazonaws.com/role: ${role_name}

@@ -12,7 +12,7 @@ module "odc_k8s" {
 
   # Cluster Access Options
   node_roles = {
-    "system:node:{{EC2PrivateDNSName}}" : data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
+    "system:node:{{EC2PrivateDNSName}}" = data.terraform_remote_state.odc_eks-stage.outputs.node_role_arn
   }
   # Optional: user_roles and users
   # Example:
@@ -20,22 +20,27 @@ module "odc_k8s" {
   #   cluster-admin: <user-role-arn>
   # }
   users = {
-    eks-deployer : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/dev-eks-deployer"
+    eks-deployer = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/eks-deployer"
   }
 
   # Database
-  store_db_creds    = true
+  store_db_creds    = local.store_db_creds
   db_hostname       = local.db_hostname
   db_admin_username = local.db_admin_username
   db_admin_password = local.db_admin_password
 
   # Setup Flux/FluxCloud
-  flux_enabled      = false
-  flux_git_repo_url = "git@github.com:opendatacube/flux-odc-sample.git"
-  flux_git_branch   = "master"
-  flux_git_path     = "flux"
-  #flux_git_label = "flux-sync"
-
+  flux_enabled             = false
+  flux_version             = "1.10.2"
+  flux_git_repo_url        = "git@github.com:opendatacube/flux-odc-sample.git"
+  flux_git_branch          = "master"
+  flux_git_path            = "flux"
+  flux_git_label           = local.cluster_id
+  flux_service_account_arn = module.role_flux.role_arn
+  # Flux helm-operator
+  flux_helm_operator_version = "1.4.0"
+  enabled_helm_versions      = "v3"
+  # Flux FluxCloud
   fluxcloud_enabled         = false
   fluxcloud_slack_url       = ""
   fluxcloud_slack_channel   = ""

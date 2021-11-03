@@ -16,7 +16,6 @@ module "odc_backend_label" {
 # create an S3 bucket to store the state file in
 resource "aws_s3_bucket" "terraform-state-storage-s3" {
   bucket = "${module.odc_backend_label.id}-tfstate"
-  region = var.region
   acl    = "private"
 
   versioning {
