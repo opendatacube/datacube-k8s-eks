@@ -28,6 +28,26 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
+  # Limitations:
+  # - standard attributes can only be selected during the pool creation and cannot be changed
+  # - standard attributes cannot be switched between required and not required after a user pool has been created
+  # - custom attributes can be defined as a string or a number only
+  # - custom attributes can't be set to required
+  # - custom attributes can't be removed or changed once added to the user pool
+  dynamic "schema" {
+    for_each = var.additional_attributes
+    content {
+      name                = schema.value.attribute_name
+      attribute_data_type = schema.value.attribute_data_type
+      mutable             = schema.value.mutable
+      required            = schema.value.required
+      string_attribute_constraints {
+        min_length = schema.value.min_length
+        max_length = schema.value.max_length
+      }
+    }
+  }
+
   password_policy {
     minimum_length                   = 8
     require_uppercase                = true
