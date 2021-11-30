@@ -86,8 +86,8 @@ module "cognito_auth" {
       "attribute_data_type" = "String"
       "mutable"             = false
       "required"            = true
-      "min_length"          = 0
-      "max_length"          = 256
+      "min_length"          = 1
+      "max_length"          = 10
     },
     "organisation" = {
       "attribute_name"      = "organisation"
