@@ -79,6 +79,26 @@ module "cognito_auth" {
     }
   }
 
+  # Optional configuration to add additional attributes - standard and/or custom
+  additional_attributes = {
+    "gender" = {
+      "attribute_name"      = "gender"
+      "attribute_data_type" = "String"
+      "mutable"             = false
+      "required"            = true
+      "min_length"          = 1
+      "max_length"          = 10
+    },
+    "organisation" = {
+      "attribute_name"      = "organisation"
+      "attribute_data_type" = "String"
+      "mutable"             = false
+      "required"            = false
+      "min_length"          = 0
+      "max_length"          = 256
+    },
+  }
+
   # Default tags + resource labels
   owner           = "odc-owner"
   namespace       = "odc"
@@ -92,6 +112,15 @@ module "cognito_auth" {
   }
 }
 ```
+
+## Attribute Limitations
+
+- standard attributes can only be selected during the pool creation and cannot be changed
+- standard attributes cannot be switched between required and not required after a user pool has been created
+- custom attributes can be defined as a string or a number only
+- custom attributes can't be set to required
+- custom attributes can't be removed or changed once added to the user pool
+- custom attributes are always nullable (point 4) and therefore do not appear on the signup form unless you create a custom flow
 
 ## Variables
 
@@ -109,6 +138,7 @@ module "cognito_auth" {
 | admin_create_user_config_email_subject                | The subject line for email messages                                                                                                             | string      | null    | No       |
 | admin_create_user_config_sms_message                  | The message template for SMS messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively   | string      | null    | No       |
 | auto_verify                                           | Set to true to allow the user account to be auto verified. False - admin will need to verify                                                    | bool        |         | yes      |
+| additional_attributes                                 | The configuration for adding additional standard or custom attributes                                                                           | map         | {}      | no       |
 | enable_pinpoint                                       | Set to true to enable pinpoint analytics on all user-pools                                                                                      | bool        | false   | no       |
 | email_verification_message                            | A string representing the email verification message                                                                                            | string      | null    | No       |
 | email_verification_subject                            | A string representing the email verification subject                                                                                            | string      | null    | No       |

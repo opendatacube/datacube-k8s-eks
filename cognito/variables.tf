@@ -103,3 +103,9 @@ variable "tags" {
   description = "Additional tags (e.g. `map('StackName','XYZ')`)"
   default     = {}
 }
+
+variable "additional_attributes" {
+  description = "The configuration for adding additional standard or custom attributes"
+  type        = map(any)
+  default     = {}
+}
