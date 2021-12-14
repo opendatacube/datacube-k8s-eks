@@ -178,6 +178,12 @@ variable "volume_size" {
   type    = number
 }
 
+variable "volume_type" {
+  default     = ""
+  type        = string
+  description = "Override EBS volume type e.g. gp2, gp3"
+}
+
 variable "spot_volume_size" {
   default = 20
   type    = number
