@@ -59,6 +59,10 @@ variable "cf_default_cached_methods" {
   default = ["GET", "HEAD"]
 }
 
+variable "cf_default_forwarded_headers" {
+  default = ["Host"]
+}
+
 variable "cf_min_ttl" {
   default = 0
 }
@@ -228,7 +232,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
     forwarded_values {
       query_string = true
-      headers      = ["Host"]
+      headers      = var.cf_default_forwarded_headers
 
       cookies {
         forward = "none"
