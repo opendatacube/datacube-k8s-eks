@@ -33,6 +33,12 @@ variable "flux_git_label" {
   default     = "flux-sync"
 }
 
+variable "flux_git_timeout" {
+  type        = string
+  description = "Duration after which git operations time out."
+  default     = "20s"
+}
+
 variable "flux_additional_args" {
   type        = string
   description = "Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud"
@@ -97,6 +103,7 @@ resource "helm_release" "flux" {
       git_branch              = var.flux_git_branch
       git_path                = var.flux_git_path
       git_label               = var.flux_git_label
+      git_timeout             = var.flux_git_timeout
       additional_args         = var.flux_additional_args
       registry_exclude_images = var.flux_registry_exclude_images
       flux_registry_ecr       = var.flux_registry_ecr

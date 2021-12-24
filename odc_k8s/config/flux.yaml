@@ -4,6 +4,7 @@ git:
   path: ${git_path}
   label: ${git_label}
   pollInterval: 1m
+  timeout: ${git_timeout}
 registry:
   pollInterval: 1m
   %{ if length(flux_registry_ecr.includeIds) > 0 }
