@@ -73,6 +73,8 @@ module "eks" {
 
   enable_ec2_ssm = var.enable_ec2_ssm
 
+  enabled_cluster_log_types = var.enabled_cluster_log_types
+
   # Worker configuration
   min_nodes                    = var.min_nodes
   max_nodes                    = var.max_nodes

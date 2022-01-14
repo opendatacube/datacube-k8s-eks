@@ -215,3 +215,8 @@ variable "node_extra_tags" {
   description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
   default     = {}
 }
+
+variable "enabled_cluster_log_types" {
+  type        = list(string)
+  description = "Enable EKS control plane logging to CloudWatch"
+}
