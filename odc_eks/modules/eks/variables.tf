@@ -114,6 +114,12 @@ variable "enabled_cluster_log_types" {
   description = "Enable EKS control plane logging to CloudWatch"
 }
 
+variable "log_retention_period" {
+  type        = number
+  description = "Retention period in days of enabled EKS cluster logs"
+  default     = 30
+}
+
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------

@@ -5,6 +5,8 @@ resource "aws_eks_cluster" "eks" {
 
   enabled_cluster_log_types = var.enabled_cluster_log_types
 
+  depends_on = [ aws_cloudwatch_log_group.eks_logs ]
+
   vpc_config {
     security_group_ids = [aws_security_group.eks_cluster.id]
     subnet_ids         = var.eks_subnet_ids
