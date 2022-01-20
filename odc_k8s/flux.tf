@@ -51,6 +51,12 @@ variable "flux_service_account_arn" {
   default     = ""
 }
 
+variable "flux_monitoring" {
+  description = "Whether to enable prometheus monitoring"
+  type        = bool
+  default     = false
+}
+
 variable "flux_registry_ecr" {
   description = "Use flux_registry_ecr for fluxcd ecr configuration"
   type = object({
@@ -95,6 +101,7 @@ resource "helm_release" "flux" {
       registry_exclude_images = var.flux_registry_exclude_images
       flux_registry_ecr       = var.flux_registry_ecr
       service_account_arn     = var.flux_service_account_arn
+      monitoring              = var.flux_monitoring
     })
   ]
 }
