@@ -32,7 +32,7 @@ serviceAccount:
 %{ if monitoring }
 prometheus:
   enabled: true
-dashboard:
+dashboards:
   enabled: true
   namespace: monitoring
   nameprefix: flux-dashboard
