@@ -29,3 +29,11 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: "${service_account_arn}"
 %{ endif }
+%{ if monitoring }
+prometheus:
+  enabled: true
+dashboard:
+  enabled: true
+  namespace: monitoring
+  nameprefix: flux-dashboard
+%{ endif }
