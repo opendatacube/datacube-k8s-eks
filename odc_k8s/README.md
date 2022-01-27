@@ -164,7 +164,7 @@ module "odc_k8s" {
 
 ### Inputs - FluxCD
 | Name                         | Description                                                                                                     | Type                                                                           | Default                                                  | Required |
-|------------------------------|-----------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------:|:--------------------------------------------------------:|:--------:|
+| ------                       | -------------                                                                                                   | :----:                                                                         | :-----:                                                  | :-----:  |
 | flux_enabled                 | Flag to enable flux helm release                                                                                | bool                                                                           | false                                                    | No       |
 | flux_version                 | Flux helm release version                                                                                       | string                                                                         | "1.3.0"                                                  | No       |
 | flux_git_repo_url            | URL pointing to the git repository that flux will monitor and commit to                                         | string                                                                         | ""                                                       | No       |
@@ -177,7 +177,7 @@ module "odc_k8s" {
 | flux_helm_operator_version   | Flux helm-operator release version                                                                              | string                                                                         | "1.0.1"                                                  | No       |
 | flux_registry_ecr            | Use flux_registry_ecr for fluxcd ecr configuration                                                              | object({regions=list(string) includeIds=list(string) excludeIds=list(string)}) | { regions=[] includeIds=[] excludeIds=["602401143452"] } | No       |
 | flux_service_account_arn     | provide flux OIDC service account role arn                                                                      | string                                                                         | ""                                                       | No       |
-| flux_monitoring              | If true, enable prometheus metrics                                                                              | false                                                                          | No                                                       |          |
+| flux_monitoring              | If true, enable prometheus metrics            | false                                                    | No       |
 | enabled_helm_versions        | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"`                               | string                                                                         | "v2\\,v3"                                                | No       |
 
 ### Inputs - FluxCloud
