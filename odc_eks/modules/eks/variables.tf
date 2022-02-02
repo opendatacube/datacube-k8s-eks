@@ -112,6 +112,7 @@ USERDATA
 variable "enabled_cluster_log_types" {
   type        = list(string)
   description = "Enable EKS control plane logging to CloudWatch"
+  default     = []
 }
 
 variable "log_retention_period" {
