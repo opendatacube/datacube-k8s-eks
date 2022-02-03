@@ -16,9 +16,17 @@ resource "aws_autoscaling_group" "nodes" {
     version = aws_launch_template.node.latest_version
   }
 
-  # Use a dyanmic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
+  # Use a dynamic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
   dynamic "tag" {
     for_each = concat(
+      flatten([
+        for key in keys(var.tags) :
+        {
+          key                 = key
+          value               = var.tags[key]
+          propagate_at_launch = true
+        }
+      ]),
       flatten([
         for key in keys(var.node_extra_tags) :
         {
@@ -101,9 +109,17 @@ resource "aws_autoscaling_group" "spot_nodes" {
     version = aws_launch_template.spot[0].latest_version
   }
 
-  # Use a dyanmic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
+  # Use a dynamic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
   dynamic "tag" {
     for_each = concat(
+      flatten([
+        for key in keys(var.tags) :
+        {
+          key                 = key
+          value               = var.tags[key]
+          propagate_at_launch = true
+        }
+      ]),
       flatten([
         for key in keys(var.node_extra_tags) :
         {
