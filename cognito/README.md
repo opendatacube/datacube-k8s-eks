@@ -80,24 +80,26 @@ module "cognito_auth" {
   }
 
   # Optional configuration to add additional attributes - standard and/or custom
-  additional_attributes = {
-    "gender" = {
-      "attribute_name"      = "gender"
-      "attribute_data_type" = "String"
-      "mutable"             = false
-      "required"            = true
-      "min_length"          = 1
-      "max_length"          = 10
+  schema_additional_attributes = [
+    {
+      attribute_name           = "gender"
+      attribute_data_type      = "String"
+      developer_only_attribute = false,
+      mutable                  = false
+      required                 = true
+      min_value                = 1
+      max_value                = 10
     },
-    "organisation" = {
-      "attribute_name"      = "organisation"
-      "attribute_data_type" = "String"
-      "mutable"             = false
-      "required"            = false
-      "min_length"          = 0
-      "max_length"          = 256
+    {
+      attribute_name           = "organisation"
+      attribute_data_type      = "String"
+      developer_only_attribute = false,
+      mutable                  = true
+      required                 = false
+      min_value                = 0
+      max_value                = 2048
     },
-  }
+  ]
 
   # Default tags + resource labels
   owner           = "odc-owner"
@@ -127,25 +129,28 @@ module "cognito_auth" {
 ### Inputs
 | Name                                                  | Description                                                                                                                                     | Type        | Default | Required |
 | ------                                                | -------------                                                                                                                                   | :----:      | :-----: | :-----:  |
-| owner                                                 | The owner of the environment                                                                                                                    | string      |         | yes      |
-| namespace                                             | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc'                                     | string      |         | yes      |
-| environment                                           | The name of the environment - e.g. dev, stage                                                                                                   | string      |         | yes      |
-| app_clients                                           | Map of Cognito user pool app clients                                                                                                            | map         |         | yes      |
-| admin_create_user_config                              | The configuration for AdminCreateUser requests                                                                                                  | map         | {}      | no       |
+| owner                                                 | The owner of the environment                                                                                                                    | string      |         | Yes      |
+| namespace                                             | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc'                                     | string      |         | Yes      |
+| environment                                           | The name of the environment - e.g. dev, stage                                                                                                   | string      |         | Yes      |
+| app_clients                                           | Map of Cognito user pool app clients                                                                                                            | map         |         | Yes      |
+| admin_create_user_config                              | The configuration for AdminCreateUser requests                                                                                                  | map         | {}      | No       |
 | admin_create_user_config_allow_admin_create_user_only | Set to True if only the administrator is allowed to create user profiles. Set to False if users can sign themselves up via an app               | bool        | false   | No       |
 | admin_create_user_config_unused_account_validity_days | The user account expiration limit, in days, after which the account is no longer usable                                                         | number      | 0       | No       |
 | admin_create_user_config_email_message                | The message template for email messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively | string      | null    | No       |
 | admin_create_user_config_email_subject                | The subject line for email messages                                                                                                             | string      | null    | No       |
 | admin_create_user_config_sms_message                  | The message template for SMS messages. Must contain `{username}` and `{####}` placeholders, for username and temporary password, respectively   | string      | null    | No       |
 | auto_verify                                           | Set to true to allow the user account to be auto verified. False - admin will need to verify                                                    | bool        |         | yes      |
-| additional_attributes                                 | The configuration for adding additional standard or custom attributes                                                                           | map         | {}      | no       |
-| enable_pinpoint                                       | Set to true to enable pinpoint analytics on all user-pools                                                                                      | bool        | false   | no       |
+| alias_attributes                                      | (Optional) Attributes supported as an alias for this user pool. Possible values: 'phone_number', 'email', or 'preferred_username'. Conflicts with username_attributes | set(string) | null | No |
+| username_attributes                                   | (Optional) Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up. Conflicts with alias_attributes | set(string) | null  | No       |
+| enable_username_case_sensitivity                      | (Optional) Specifies whether username case sensitivity will be applied for all users in the user pool through Cognito APIs                      | bool        | null    | No       |
+| schema_additional_attributes                          | (Optional) A list of schema attributes of a user pool. You can add a maximum of 25 custom attributes                                            | any         | []      | No       |
+| enable_pinpoint                                       | Set to true to enable pinpoint analytics on all user-pools                                                                                      | bool        | false   | No       |
 | email_verification_message                            | A string representing the email verification message                                                                                            | string      | null    | No       |
 | email_verification_subject                            | A string representing the email verification subject                                                                                            | string      | null    | No       |
-| user_groups                                           | Cognito user groups                                                                                                                             | map         | {}      | no       |
-| user_pool_name                                        | Map of Cognito user pool name                                                                                                                   | string      |         | yes      |
-| user_pool_domain                                      | Cognito user pool domain                                                                                                                        | string      |         | yes      |
-| tags                                                  | Additional tags - e.g. `map('StackName','XYZ')`                                                                                                 | map(string) | {}      | no       |
+| user_groups                                           | Cognito user groups                                                                                                                             | map         | {}      | No       |
+| user_pool_name                                        | Map of Cognito user pool name                                                                                                                   | string      |         | Yes      |
+| user_pool_domain                                      | Cognito user pool domain                                                                                                                        | string      |         | Yes      |
+| tags                                                  | Additional tags - e.g. `map('StackName','XYZ')`                                                                                                 | map(string) | {}      | No       |
 
 ### Outputs
 | Name             | Description                             | Sensitive |
