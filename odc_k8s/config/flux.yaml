@@ -3,10 +3,10 @@ git:
   branch: ${git_branch}
   path: ${git_path}
   label: ${git_label}
-  pollInterval: 1m
+  pollInterval: ${git_poll_interval}
   timeout: ${git_timeout}
 registry:
-  pollInterval: 1m
+  pollInterval: ${registry_poll_interval}
   %{ if length(flux_registry_ecr.includeIds) > 0 }
   ecr:
     region: "${join(",", flux_registry_ecr.regions)}"
