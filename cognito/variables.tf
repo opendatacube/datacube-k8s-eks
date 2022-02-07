@@ -30,6 +30,24 @@ variable "auto_verify" {
   type        = bool
 }
 
+variable "alias_attributes" {
+  type        = set(string)
+  description = "(Optional) Attributes supported as an alias for this user pool. Possible values: 'phone_number', 'email', or 'preferred_username'. Conflicts with username_attributes."
+  default     = null
+}
+
+variable "username_attributes" {
+  type        = set(string)
+  description = "(Optional) Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up. Conflicts with alias_attributes."
+  default     = null
+}
+
+variable "enable_username_case_sensitivity" {
+  type        = bool
+  description = "(Optional) Specifies whether username case sensitivity will be applied for all users in the user pool through Cognito APIs."
+  default     = null
+}
+
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
@@ -104,8 +122,22 @@ variable "tags" {
   default     = {}
 }
 
-variable "additional_attributes" {
-  description = "The configuration for adding additional standard or custom attributes"
-  type        = map(any)
-  default     = {}
+variable "schema_additional_attributes" {
+  description = "(Optional) A list of schema attributes of a user pool. You can add a maximum of 25 custom attributes."
+  type        = any
+  default     = []
+  #
+  # Example:
+  #
+  # schema_additional_attributes = [
+  #   {
+  #     attribute_name           = "alternative_name"
+  #     attribute_data_type      = "String"
+  #     developer_only_attribute = false,
+  #     mutable                  = true,
+  #     required                 = false,
+  #     min_length               = 0,
+  #     max_length               = 2048
+  #   },
+  # ]
 }
