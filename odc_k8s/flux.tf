@@ -33,6 +33,18 @@ variable "flux_git_label" {
   default     = "flux-sync"
 }
 
+variable "flux_git_poll_interval" {
+  type        = string
+  description = "Period at which to poll git repo for new commits."
+  default     = "1m"
+}
+
+variable "flux_git_timeout" {
+  type        = string
+  description = "Duration after which git operations time out."
+  default     = "20s"
+}
+
 variable "flux_additional_args" {
   type        = string
   description = "Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud"
@@ -43,6 +55,12 @@ variable "flux_registry_exclude_images" {
   type        = string
   description = "comma separated string lists of registry images to exclude from flux auto release"
   default     = ""
+}
+
+variable "flux_registry_poll_interval" {
+  type        = string
+  description = "Period at which to check for updated images."
+  default     = "1m"
 }
 
 variable "flux_service_account_arn" {
@@ -97,7 +115,10 @@ resource "helm_release" "flux" {
       git_branch              = var.flux_git_branch
       git_path                = var.flux_git_path
       git_label               = var.flux_git_label
+      git_poll_interval       = var.flux_git_poll_interval
+      git_timeout             = var.flux_git_timeout
       additional_args         = var.flux_additional_args
+      registry_poll_interval  = var.flux_registry_poll_interval
       registry_exclude_images = var.flux_registry_exclude_images
       flux_registry_ecr       = var.flux_registry_ecr
       service_account_arn     = var.flux_service_account_arn
