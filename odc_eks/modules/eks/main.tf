@@ -13,13 +13,16 @@ resource "aws_eks_cluster" "eks" {
     aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy,
   ]
 
-  tags = {
-    Name        = var.cluster_id
-    Cluster     = var.cluster_id
-    Owner       = var.owner
-    Namespace   = var.namespace
-    Environment = var.environment
-  }
+  tags = merge(
+    {
+      Name        = var.cluster_id
+      cluster     = var.cluster_id
+      owner       = var.owner
+      namespace   = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 resource "null_resource" "wait_for_cluster" {
