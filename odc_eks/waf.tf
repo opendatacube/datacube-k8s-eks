@@ -286,15 +286,6 @@ resource "aws_wafregional_rate_based_rule" "rate_limiter_rule" {
 resource "aws_s3_bucket" "waf_log_bucket" {
   count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
   bucket = var.waf_log_bucket
-  acl    = "private"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
 
   tags = merge(
     {
@@ -305,6 +296,23 @@ resource "aws_s3_bucket" "waf_log_bucket" {
     },
     var.tags
   )
+}
+
+resource "aws_s3_bucket_acl" "argo_artifact_bucket" {
+  count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
+  bucket = aws_s3_bucket.waf_log_bucket[0].id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "waf_log_bucket" {
+  count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
+  bucket = aws_s3_bucket.waf_log_bucket[0].bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
 }
 
 data "aws_s3_bucket" "waf_log_bucket" {
