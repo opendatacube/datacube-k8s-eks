@@ -298,7 +298,7 @@ resource "aws_s3_bucket" "waf_log_bucket" {
   )
 }
 
-resource "aws_s3_bucket_acl" "argo_artifact_bucket" {
+resource "aws_s3_bucket_acl" "waf_log_bucket" {
   count  = (var.waf_log_bucket_create && var.waf_enable) ? 1 : 0
   bucket = aws_s3_bucket.waf_log_bucket[0].id
   acl    = "private"
