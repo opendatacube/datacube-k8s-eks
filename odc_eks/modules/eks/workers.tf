@@ -76,7 +76,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
 
         "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"    = "owned"
         "k8s.io/cluster-autoscaler/enabled"                      = "true"
-        "k8s.io/cluster-autoscaler/node-template/label/nodetype" = "true"
+        "k8s.io/cluster-autoscaler/node-template/label/nodetype" = "spot"
         "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"        = "owned"
       },
       var.tags,
