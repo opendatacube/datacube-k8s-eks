@@ -16,26 +16,35 @@ module "odc_backend_label" {
 # create an S3 bucket to store the state file in
 resource "aws_s3_bucket" "terraform-state-storage-s3" {
   bucket = "${module.odc_backend_label.id}-tfstate"
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
 
   # Uncomment this to prevent unintended destruction of state
   # lifecycle {
   #   prevent_destroy = true
   # }
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+  tags = module.odc_backend_label.tags
+}
+
+resource "aws_s3_bucket_acl" "terraform-state-storage-s3" {
+  bucket = aws_s3_bucket.terraform-state-storage-s3.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "terraform-state-storage-s3" {
+  bucket = aws_s3_bucket.terraform-state-storage-s3.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform-state-storage-s3" {
+  bucket = aws_s3_bucket.terraform-state-storage-s3.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
-
-  tags = module.odc_backend_label.tags
 }
 
 resource "aws_s3_bucket_public_access_block" "terraform-state-storage-s3" {

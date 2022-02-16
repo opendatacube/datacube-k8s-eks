@@ -43,9 +43,6 @@ output "ami_image_id" {
   value = module.eks.ami_image_id
 }
 
-data "aws_caller_identity" "current" {
-}
-
 # The length check here is to prevent destroy plans referencing the wildcard_cert[0] value which doesn't exist on destroy
 output "certificate_arn" {
   value = (var.create_certificate && (length(aws_acm_certificate.wildcard_cert) > 0)) ? aws_acm_certificate.wildcard_cert[0].arn : null
