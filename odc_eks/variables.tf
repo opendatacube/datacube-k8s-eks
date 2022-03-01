@@ -195,6 +195,12 @@ variable "extra_kubelet_args" {
   default     = ""
 }
 
+variable "extra_bootstrap_args" {
+  type        = string
+  description = "Additional bootstrap.sh command-line arguments (e.g. '--arg1=value --arg2')"
+  default     = ""
+}
+
 variable "extra_userdata" {
   type        = string
   description = "Additional EC2 user data commands that will be passed to EKS nodes"
