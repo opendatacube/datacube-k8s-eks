@@ -1,5 +1,17 @@
 # Terraform Open Data Cube EKS Module: odc_k8s
 
+> **:warning: Flux V1 Installations - Soon to be deprecated :warning:**
+>
+> This repository contains the installations for Flux Legacy, or Flux v1. Flux V1 is in [maintenance mode](https://github.com/fluxcd/flux/issues/3320)
+> and will be removed from this module soon.
+> Switch to [Flux V2](https://github.com/fluxcd/flux2), [Argo CD](https://github.com/argoproj/argo-cd) or other preferred GitOps tooling.
+
+> Uninstall Flux V1, FluxCloud and HelmRelease V1 resources by passing below parameters to the module:
+> ```
+> flux_enabled      = flase
+> fluxcloud_enabled = false
+> ```
+
 Terraform ODC supporting module that provision a kubernetes core components on top of Open Data Cube EKS cluster.
 
 #### Warning
@@ -24,7 +36,7 @@ Terraform ODC supporting module that provision a kubernetes core components on t
 
 The module provisions the following resources:
 
-- Install kubernetes core components - helm, flux, fluxcloud.
+- Optionally install GitOps/CD tools - HelmRelease, Flux, FluxCloud
 - Optionally creates a AWS CloudWatch log group to collect logs for your cluster.
 - Setup `aws-auth` ConfigMap settings for user/role based cluster access.
 
@@ -163,6 +175,9 @@ module "odc_k8s" {
 | tags                 | Additional tags - e.g. `map('StackName','XYZ')`                                                                       | map(string) | {}      | no       |
 
 ### Inputs - FluxCD
+
+:warning: Soon to be deprecated :warning:
+
 | Name                         | Description                                                                                                     | Type                                                                           | Default                                                  | Required |
 | ------                       | -------------                                                                                                   | :----:                                                                         | :-----:                                                  | :-----:  |
 | flux_enabled                 | Flag to enable flux helm release                                                                                | bool                                                                           | false                                                    | No       |
@@ -183,6 +198,8 @@ module "odc_k8s" {
 | enabled_helm_versions        | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"`                               | string                                                                         | "v2\\,v3"                                                | No       |
 
 ### Inputs - FluxCloud
+
+:warning: Soon to be deprecated :warning:
 
 | Name                      | Description                                                               | Type   | Default                               | Required |
 | ------                    | -------------                                                             | :----: | :-----:                               | :-----:  |
