@@ -33,7 +33,7 @@ variable "auto_verify" {
 variable "auto_verified_attributes" {
   description = "If auto_verify is true, which fields to auto verify. Valid values are: email, phone_number"
   type        = set(string)
-  default     = [ "email" ]
+  default     = ["email"]
 }
 
 variable "alias_attributes" {

@@ -126,7 +126,7 @@ resource "aws_cognito_user_pool" "pool" {
     # Enable prevent destroy
     # prevent_destroy = true
     ignore_changes = [
-      lambda_config  # Create these linkages with a null_resource to avoid circular dependencies
+      lambda_config # Create these linkages with a null_resource to avoid circular dependencies
     ]
   }
 
