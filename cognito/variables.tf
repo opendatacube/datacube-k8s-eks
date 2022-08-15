@@ -30,6 +30,12 @@ variable "auto_verify" {
   type        = bool
 }
 
+variable "auto_verified_attributes" {
+  description = "If auto_verify is true, which fields to auto verify. Valid values are: email, phone_number"
+  type        = set(string)
+  default     = [ "email" ]
+}
+
 variable "alias_attributes" {
   type        = set(string)
   description = "(Optional) Attributes supported as an alias for this user pool. Possible values: 'phone_number', 'email', or 'preferred_username'. Conflicts with username_attributes."
