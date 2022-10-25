@@ -8,6 +8,8 @@ resource "aws_eks_cluster" "eks" {
     subnet_ids         = var.eks_subnet_ids
   }
 
+  enabled_cluster_log_types = var.enabled_cluster_log_types
+
   depends_on = [
     aws_iam_role_policy_attachment.eks-cluster-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy,

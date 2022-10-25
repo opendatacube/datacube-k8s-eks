@@ -73,7 +73,8 @@ module "eks" {
   user_custom_policy         = var.user_custom_policy
   user_additional_policy_arn = var.user_additional_policy_arn
 
-  enable_ec2_ssm = var.enable_ec2_ssm
+  enable_ec2_ssm            = var.enable_ec2_ssm
+  enabled_cluster_log_types = var.enabled_cluster_log_types
 
   # Worker configuration
   min_nodes                    = var.min_nodes

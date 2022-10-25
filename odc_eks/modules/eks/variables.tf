@@ -27,6 +27,12 @@ variable "enable_ec2_ssm" {
   description = "Enables the IAM policy required for AWS EC2 System Manager."
 }
 
+variable "enabled_cluster_log_types" {
+  description = "List of the desired control plane logging channels to enable. Allowed values: api, audit, authenticator, controllerManager, scheduler"
+  type        = list(string)
+  default     = []
+}
+
 variable "user_custom_policy" {
   description = "The IAM custom policy to create and attach to EKS user role"
   type        = string

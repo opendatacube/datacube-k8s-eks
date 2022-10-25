@@ -123,6 +123,12 @@ variable "enable_s3_endpoint" {
   default     = true
 }
 
+variable "enabled_cluster_log_types" {
+  description = "List of the desired control plane logging channels to enable. Allowed values: api, audit, authenticator, controllerManager, scheduler"
+  type        = list(string)
+  default     = []
+}
+
 # EC2 Worker Roles
 # ==================
 variable "enable_ec2_ssm" {
