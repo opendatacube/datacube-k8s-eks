@@ -1,5 +1,17 @@
 # Terraform Open Data Cube EKS Module: odc_k8s
 
+> **:warning: Flux V1 Installations - Soon to be deprecated :warning:**
+>
+> This repository contains the installations for Flux Legacy, or Flux v1. Flux V1 is in [maintenance mode](https://github.com/fluxcd/flux/issues/3320)
+> and will be removed from this module soon.
+> Switch to [Flux V2](https://github.com/fluxcd/flux2), [Argo CD](https://github.com/argoproj/argo-cd) or other preferred GitOps tooling.
+
+> Uninstall Flux V1, FluxCloud and HelmRelease V1 resources by passing below parameters to the module:
+> ```
+> flux_enabled      = flase
+> fluxcloud_enabled = false
+> ```
+
 Terraform ODC supporting module that provision a kubernetes core components on top of Open Data Cube EKS cluster.
 
 #### Warning
@@ -24,7 +36,7 @@ Terraform ODC supporting module that provision a kubernetes core components on t
 
 The module provisions the following resources:
 
-- Install kubernetes core components - helm, flux, fluxcloud.
+- Optionally install GitOps/CD tools - HelmRelease, Flux, FluxCloud
 - Optionally creates a AWS CloudWatch log group to collect logs for your cluster.
 - Setup `aws-auth` ConfigMap settings for user/role based cluster access.
 
@@ -163,6 +175,9 @@ module "odc_k8s" {
 | tags                 | Additional tags - e.g. `map('StackName','XYZ')`                                                                       | map(string) | {}      | no       |
 
 ### Inputs - FluxCD
+
+:warning: Soon to be deprecated :warning:
+
 | Name                         | Description                                                                                                     | Type                                                                           | Default                                                  | Required |
 | ------                       | -------------                                                                                                   | :----:                                                                         | :-----:                                                  | :-----:  |
 | flux_enabled                 | Flag to enable flux helm release                                                                                | bool                                                                           | false                                                    | No       |
@@ -171,14 +186,20 @@ module "odc_k8s" {
 | flux_git_branch              | Branch of the specified git repository to monitor and commit to                                                 | string                                                                         | ""                                                       | No       |
 | flux_git_path                | Relative path inside specified git repository to search for manifest files                                      | string                                                                         | ""                                                       | No       |
 | flux_git_label               | Label prefix that is used to track flux syncing inside the git repository                                       | string                                                                         | "flux-sync"                                              | No       |
+| flux_git_poll_interval       | Period at which to poll git for new commits                                                                     | string                                                                         | "1m"                                                     | No       |
+| flux_git_timeout             | Duration after which git operations will timeout                                                                | string                                                                         | "20s"                                                    | No       |
 | flux_additional_args         | Use additional arg for connect flux to fluxcloud. Syntext: --connect=ws://fluxcloud                             | string                                                                         | ""                                                       | No       |
 | flux_registry_exclude_images | comma separated string lists of registry images to exclud from flux auto release: docker.io/*,index.docker.io/* | string                                                                         | ""                                                       | No       |
+| flux_registry_poll_interval  | Period at which to check for new images                                                                         | string                                                                         | "1m"                                                     | No       |
 | flux_helm_operator_version   | Flux helm-operator release version                                                                              | string                                                                         | "1.0.1"                                                  | No       |
 | flux_registry_ecr            | Use flux_registry_ecr for fluxcd ecr configuration                                                              | object({regions=list(string) includeIds=list(string) excludeIds=list(string)}) | { regions=[] includeIds=[] excludeIds=["602401143452"] } | No       |
 | flux_service_account_arn     | provide flux OIDC service account role arn                                                                      | string                                                                         | ""                                                       | No       |
+| flux_monitoring              | If true, enable prometheus metrics            | false                                                    | No       |
 | enabled_helm_versions        | Helm options to support release versions. Valid values: `"v2"`/`"v3"`/`"v2\\,v3"`                               | string                                                                         | "v2\\,v3"                                                | No       |
 
 ### Inputs - FluxCloud
+
+:warning: Soon to be deprecated :warning:
 
 | Name                      | Description                                                               | Type   | Default                               | Required |
 | ------                    | -------------                                                             | :----: | :-----:                               | :-----:  |

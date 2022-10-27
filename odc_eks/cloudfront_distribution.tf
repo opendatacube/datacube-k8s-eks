@@ -176,19 +176,9 @@ data "aws_iam_policy_document" "cloudfront_log_bucket_policy_doc" {
 resource "aws_s3_bucket" "cloudfront_log_bucket" {
   count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
   bucket = local.log_bucket
-  acl    = "private"
-  policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
 
   # Needed if you want to delete the bucket
   # force_destroy = true
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
 
   tags = merge(
     {
@@ -200,6 +190,51 @@ resource "aws_s3_bucket" "cloudfront_log_bucket" {
     var.tags
   )
 }
+
+resource "aws_s3_bucket_acl" "cloudfront_log_bucket" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  bucket = aws_s3_bucket.cloudfront_log_bucket[0].id
+
+  access_control_policy {
+    grant {
+      grantee {
+        id   = data.aws_canonical_user_id.current.id
+        type = "CanonicalUser"
+      }
+      permission = "FULL_CONTROL"
+    }
+
+    grant {
+      grantee {
+        id   = data.aws_cloudfront_log_delivery_canonical_user_id.awslogsdelivery.id
+        type = "CanonicalUser"
+      }
+      permission = "FULL_CONTROL"
+    }
+
+    owner {
+      id = data.aws_canonical_user_id.current.id
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudfront_log_bucket" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  bucket = aws_s3_bucket.cloudfront_log_bucket[0].bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "cloudfront_log_bucket" {
+  count  = (var.cf_log_bucket_create && var.cf_enable) ? 1 : 0
+  bucket = aws_s3_bucket.cloudfront_log_bucket[0].id
+  policy = data.aws_iam_policy_document.cloudfront_log_bucket_policy_doc[0].json
+}
+
 
 # Create our cloudfront distribution
 resource "aws_cloudfront_distribution" "cloudfront" {

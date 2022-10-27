@@ -16,63 +16,27 @@ resource "aws_autoscaling_group" "nodes" {
     version = aws_launch_template.node.latest_version
   }
 
-  # Use a dyanmic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
+  # Use a dynamic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
   dynamic "tag" {
-    for_each = concat(
-      flatten([
-        for key in keys(var.node_extra_tags) :
-        {
-          key                 = key
-          value               = var.node_extra_tags[key]
-          propagate_at_launch = true
-        }
-      ]),
-      [
-        {
-          key                 = "Name"
-          value               = "${var.node_group_name}-${aws_launch_template.node.id}-nodes"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "environment"
-          value               = var.environment
-          propagate_at_launch = true
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
-          value               = "owned"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/enabled"
-          value               = "true"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/node-template/label/nodetype"
-          value               = "ondemand"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
-          value               = "owned"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "namespace"
-          value               = var.namespace
-          propagate_at_launch = true
-        },
-        {
-          key                 = "owner"
-          value               = var.owner
-          propagate_at_launch = true
-        },
-    ])
+    for_each = merge(
+      {
+        Name        = "${var.node_group_name}-${aws_launch_template.node.id}-nodes"
+        environment = var.environment
+        namespace   = var.namespace
+        owner       = var.owner
+
+        "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"    = "owned"
+        "k8s.io/cluster-autoscaler/enabled"                      = "true"
+        "k8s.io/cluster-autoscaler/node-template/label/nodetype" = "ondemand"
+        "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"        = "owned"
+      },
+      var.tags,
+      var.node_extra_tags
+    )
     content {
-      key                 = tag.value.key
-      value               = tag.value.value
-      propagate_at_launch = tag.value.propagate_at_launch
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
     }
   }
 
@@ -101,66 +65,29 @@ resource "aws_autoscaling_group" "spot_nodes" {
     version = aws_launch_template.spot[0].latest_version
   }
 
-  # Use a dyanmic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
+  # Use a dynamic tag block rather than tags = [<list of tags>] to workaround this issue https://github.com/hashicorp/terraform-provider-aws/issues/14085
   dynamic "tag" {
-    for_each = concat(
-      flatten([
-        for key in keys(var.node_extra_tags) :
-        {
-          key                 = key
-          value               = var.node_extra_tags[key]
-          propagate_at_launch = true
-        }
-      ]),
-      [
-        {
-          key                 = "Name"
-          value               = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "environment"
-          value               = var.environment
-          propagate_at_launch = true
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"
-          value               = "owned"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/enabled"
-          value               = "true"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/node-template/label/nodetype"
-          value               = "spot"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"
-          value               = "owned"
-          propagate_at_launch = true
-        },
-        {
-          key                 = "namespace"
-          value               = var.namespace
-          propagate_at_launch = true
-        },
-        {
-          key                 = "owner"
-          value               = var.owner
-          propagate_at_launch = true
-        },
-    ])
+    for_each = merge(
+      {
+        Name        = "${var.node_group_name}-${aws_launch_template.spot[0].id}-spot"
+        environment = var.environment
+        namespace   = var.namespace
+        owner       = var.owner
+
+        "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"    = "owned"
+        "k8s.io/cluster-autoscaler/enabled"                      = "true"
+        "k8s.io/cluster-autoscaler/node-template/label/nodetype" = "spot"
+        "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"        = "owned"
+      },
+      var.tags,
+      var.node_extra_tags
+    )
     content {
-      key                 = tag.value.key
-      value               = tag.value.value
-      propagate_at_launch = tag.value.propagate_at_launch
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
     }
   }
-
 
   # Don't break cluster autoscaler
   suspended_processes = ["AZRebalance"]

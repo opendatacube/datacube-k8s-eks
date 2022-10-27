@@ -134,4 +134,9 @@ resource "kubernetes_deployment" "fluxcloud" {
       type = "Recreate"
     }
   }
+
+  depends_on = [
+    kubernetes_namespace.flux[0]
+  ]
+
 }

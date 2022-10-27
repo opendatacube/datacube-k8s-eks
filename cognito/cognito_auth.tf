@@ -1,9 +1,34 @@
 # ======================================
 # COGNITO
 
+locals {
+  alias_attributes = var.alias_attributes == null && var.username_attributes == null ? ["email"] : null
+
+  # admin_create_user_config
+  # If no admin_create_user_config list is provided, build a admin_create_user_config using the default values
+  admin_create_user_config_default = {
+    allow_admin_create_user_only = lookup(var.admin_create_user_config, "allow_admin_create_user_only", null) == null ? var.admin_create_user_config_allow_admin_create_user_only : lookup(var.admin_create_user_config, "allow_admin_create_user_only")
+    email_message                = lookup(var.admin_create_user_config, "email_message", null) == null ? (var.email_verification_message == "" || var.email_verification_message == null ? var.admin_create_user_config_email_message : var.email_verification_message) : lookup(var.admin_create_user_config, "email_message")
+    email_subject                = lookup(var.admin_create_user_config, "email_subject", null) == null ? (var.email_verification_subject == "" || var.email_verification_subject == null ? var.admin_create_user_config_email_subject : var.email_verification_subject) : lookup(var.admin_create_user_config, "email_subject")
+    sms_message                  = lookup(var.admin_create_user_config, "sms_message", null) == null ? var.admin_create_user_config_sms_message : lookup(var.admin_create_user_config, "sms_message")
+
+  }
+
+  admin_create_user_config = [local.admin_create_user_config_default]
+
+  token_validity_units_default = {
+    access_token  = "minutes"
+    id_token      = "minutes"
+    refresh_token = "days"
+  }
+  allowed_oauth_scopes_default = ["email", "aws.cognito.signin.user.admin", "openid"]
+  allowed_oauth_flows_default  = ["code"]
+}
+
 resource "aws_cognito_user_pool" "pool" {
   name                     = var.user_pool_name
-  alias_attributes         = ["email"]
+  alias_attributes         = var.alias_attributes != null ? var.alias_attributes : local.alias_attributes
+  username_attributes      = var.username_attributes
   auto_verified_attributes = var.auto_verify ? ["email"] : null
 
   schema {
@@ -28,6 +53,13 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
+  dynamic "username_configuration" {
+    for_each = var.enable_username_case_sensitivity != null ? [true] : []
+    content {
+      case_sensitive = var.enable_username_case_sensitivity
+    }
+  }
+
   # Limitations:
   # - standard attributes can only be selected during the pool creation and cannot be changed
   # - standard attributes cannot be switched between required and not required after a user pool has been created
@@ -35,15 +67,31 @@ resource "aws_cognito_user_pool" "pool" {
   # - custom attributes can't be set to required
   # - custom attributes can't be removed or changed once added to the user pool
   dynamic "schema" {
-    for_each = var.additional_attributes
+    for_each = var.schema_additional_attributes
+    iterator = attribute
     content {
-      name                = schema.value.attribute_name
-      attribute_data_type = schema.value.attribute_data_type
-      mutable             = schema.value.mutable
-      required            = schema.value.required
-      string_attribute_constraints {
-        min_length = schema.value.min_length
-        max_length = schema.value.max_length
+      name                     = attribute.value.attribute_name
+      attribute_data_type      = attribute.value.attribute_data_type
+      developer_only_attribute = try(attribute.value.developer_only_attribute, false)
+      mutable                  = try(attribute.value.mutable, true)
+      required                 = try(attribute.value.required, false)
+
+      dynamic "number_attribute_constraints" {
+        for_each = attribute.value.attribute_data_type == "Number" ? [true] : []
+
+        content {
+          min_value = lookup(attribute.value, "min_value", null)
+          max_value = lookup(attribute.value, "max_value", null)
+        }
+      }
+
+      dynamic "string_attribute_constraints" {
+        for_each = attribute.value.attribute_data_type == "String" ? [true] : []
+
+        content {
+          min_length = lookup(attribute.value, "min_length", 0)
+          max_length = lookup(attribute.value, "max_length", 2048)
+        }
       }
     }
   }
@@ -88,29 +136,6 @@ resource "aws_cognito_user_pool" "pool" {
     },
     var.tags
   )
-}
-
-locals {
-
-  # admin_create_user_config
-  # If no admin_create_user_config list is provided, build a admin_create_user_config using the default values
-  admin_create_user_config_default = {
-    allow_admin_create_user_only = lookup(var.admin_create_user_config, "allow_admin_create_user_only", null) == null ? var.admin_create_user_config_allow_admin_create_user_only : lookup(var.admin_create_user_config, "allow_admin_create_user_only")
-    email_message                = lookup(var.admin_create_user_config, "email_message", null) == null ? (var.email_verification_message == "" || var.email_verification_message == null ? var.admin_create_user_config_email_message : var.email_verification_message) : lookup(var.admin_create_user_config, "email_message")
-    email_subject                = lookup(var.admin_create_user_config, "email_subject", null) == null ? (var.email_verification_subject == "" || var.email_verification_subject == null ? var.admin_create_user_config_email_subject : var.email_verification_subject) : lookup(var.admin_create_user_config, "email_subject")
-    sms_message                  = lookup(var.admin_create_user_config, "sms_message", null) == null ? var.admin_create_user_config_sms_message : lookup(var.admin_create_user_config, "sms_message")
-
-  }
-
-  admin_create_user_config = [local.admin_create_user_config_default]
-
-  token_validity_units_default = {
-    access_token  = "minutes"
-    id_token      = "minutes"
-    refresh_token = "days"
-  }
-  allowed_oauth_scopes_default = ["email", "aws.cognito.signin.user.admin", "openid"]
-  allowed_oauth_flows_default  = ["code"]
 }
 
 resource "aws_cognito_user_pool_client" "clients" {

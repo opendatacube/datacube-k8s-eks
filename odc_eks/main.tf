@@ -1,5 +1,7 @@
-data "aws_availability_zones" "available" {
-}
+data "aws_availability_zones" "available" {}
+data "aws_caller_identity" "current" {}
+data "aws_canonical_user_id" "current" {}
+data "aws_cloudfront_log_delivery_canonical_user_id" "awslogsdelivery" {}
 
 module "odc_eks_label" {
   source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
@@ -88,6 +90,7 @@ module "eks" {
   spot_nodes_enabled           = var.spot_nodes_enabled
   max_spot_price               = var.max_spot_price
   extra_kubelet_args           = var.extra_kubelet_args
+  extra_bootstrap_args         = var.extra_bootstrap_args
   extra_userdata               = var.extra_userdata
   volume_size                  = var.volume_size
   volume_type                  = var.volume_type

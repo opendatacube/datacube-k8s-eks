@@ -3,9 +3,10 @@ git:
   branch: ${git_branch}
   path: ${git_path}
   label: ${git_label}
-  pollInterval: 1m
+  pollInterval: ${git_poll_interval}
+  timeout: ${git_timeout}
 registry:
-  pollInterval: 1m
+  pollInterval: ${registry_poll_interval}
   %{ if length(flux_registry_ecr.includeIds) > 0 }
   ecr:
     region: "${join(",", flux_registry_ecr.regions)}"
@@ -28,4 +29,12 @@ serviceAccount:
   create: true
   annotations:
     eks.amazonaws.com/role-arn: "${service_account_arn}"
+%{ endif }
+%{ if monitoring }
+prometheus:
+  enabled: true
+dashboards:
+  enabled: true
+  namespace: monitoring
+  nameprefix: flux-dashboard
 %{ endif }
