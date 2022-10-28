@@ -121,6 +121,12 @@ variable "enabled_cluster_log_types" {
   default     = []
 }
 
+variable "enable_custom_cluster_log_group" {
+  type        = bool
+  description = "Create a custom CloudWatch Log Group for the cluster. Note that if you supply enabled_cluster_log_types and leave this false, EKS will create a log group automatically with default retention values."
+  default     = false
+}
+
 variable "log_retention_period" {
   type        = number
   description = "Retention period in days of enabled EKS cluster logs"

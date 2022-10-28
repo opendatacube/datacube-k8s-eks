@@ -75,8 +75,9 @@ module "eks" {
 
   enable_ec2_ssm = var.enable_ec2_ssm
 
-  enabled_cluster_log_types = var.enabled_cluster_log_types
-  log_retention_period      = var.log_retention_period
+  enabled_cluster_log_types       = var.enabled_cluster_log_types
+  enable_custom_cluster_log_group = var.enable_custom_cluster_log_group
+  log_retention_period            = var.log_retention_period
 
   # Worker configuration
   min_nodes                    = var.min_nodes
