@@ -87,11 +87,24 @@ variable "database_subnets" {
   default     = []
 }
 
+variable "public_subnets" {
+  type        = list(string)
+  description = "list of public subnets to use if create_vpc = false"
+  default     = []
+}
+
 variable "public_route_table_ids" {
   type        = list(string)
   description = "Will just pass through to outputs if use create_vpc = false. For backwards compatibility."
   default     = []
 }
+
+variable "private_route_table_ids" {
+  type        = list(string)
+  description = "Will just pass through to outputs if use create_vpc = false. For backwards compatibility."
+  default     = []
+}
+
 
 ## Create VPC = true
 variable "vpc_cidr" {
@@ -99,10 +112,23 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "secondary_cidr_blocks" {
+  type        = list(string)
+  default     = []
+  description = "Secondary VPC CIDRs, optional, default no secondary CIDRs"
+}
+
+
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
   default     = []
+}
+
+variable "map_public_ip_on_launch" {
+  description = "Should be false if you do not want to auto-assign public IP on launch"
+  type        = bool
+  default     = true
 }
 
 variable "private_subnet_cidrs" {
@@ -117,11 +143,37 @@ variable "database_subnet_cidrs" {
   default     = []
 }
 
+variable "private_subnet_elb_role" {
+  type        = string
+  description = "ELB role for private subnets "
+  default     = "internal-elb"
+}
+
+variable "public_subnet_elb_role" {
+  type        = string
+  description = "ELB role for public subnets "
+  default     = "elb"
+}
+
 variable "enable_s3_endpoint" {
   type        = bool
   description = "Whether to provision an S3 endpoint to the VPC. Default is set to 'true'"
   default     = true
 }
+
+variable "enable_nat_gateway" {
+  type        = bool
+  description = "Whether to provision a NAT Gateway in the VPC. Default is set to 'true'"
+  default     = true
+}
+
+
+variable "create_igw" {
+  type        = bool
+  description = "Whether to provision an Internet Gateway in the VPC. Default is true (False for private routing)"
+  default     = true
+}
+
 
 # EC2 Worker Roles
 # ==================

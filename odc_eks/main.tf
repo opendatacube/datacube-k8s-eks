@@ -27,16 +27,20 @@ module "vpc" {
   private_subnets  = var.private_subnet_cidrs
   database_subnets = var.database_subnet_cidrs
 
+  secondary_cidr_blocks   = var.secondary_cidr_blocks
+  map_public_ip_on_launch = var.map_public_ip_on_launch
+
   private_subnet_tags = {
     "SubnetType"                                = "Private"
     "kubernetes.io/cluster/${local.cluster_id}" = "shared"
-    "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/role/internal-elb"           = var.private_subnet_elb_role == "internal-elb" ? 1 : null
+    "kubernetes.io/role/elb"                    = var.private_subnet_elb_role == "elb" ? 1 : null
   }
-
   public_subnet_tags = {
     "SubnetType"                                = "Utility"
     "kubernetes.io/cluster/${local.cluster_id}" = "shared"
-    "kubernetes.io/role/elb"                    = "1"
+    "kubernetes.io/role/internal-elb"           = var.public_subnet_elb_role == "internal-elb" ? 1 : null
+    "kubernetes.io/role/elb"                    = var.public_subnet_elb_role == "elb" ? 1 : null
   }
 
   database_subnet_tags = {
@@ -46,7 +50,8 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  enable_nat_gateway           = true
+  enable_nat_gateway           = var.enable_nat_gateway
+  create_igw                   = var.create_igw
   create_database_subnet_group = true
   enable_s3_endpoint           = var.enable_s3_endpoint
 
