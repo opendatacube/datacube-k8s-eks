@@ -109,4 +109,6 @@ module "eks" {
 
   tags            = var.tags
   node_extra_tags = var.node_extra_tags
+
+  metadata_options = var.metadata_options
 }
