@@ -171,6 +171,6 @@ variable "node_extra_tags" {
 
 variable "metadata_options" {
   description = "Metadata options for the EKS node launch templates. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#metadata-options"
-  type        = object(any)
+  type        = map(any)
   default     = {}
 }
