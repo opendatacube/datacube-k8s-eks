@@ -51,16 +51,12 @@ resource "aws_launch_template" "node" {
   user_data     = base64encode(local.eks-node-userdata)
   instance_type = var.default_worker_instance_type
 
-  dynamic "metadata_options" {
-    for_each = var.metadata_options ? [var.metadata_options] : []
-
-    content {
+  metadata_options {
       http_endpoint               = lookup(metadata_options.value, "http_endpoint", null)
       http_tokens                 = lookup(metadata_options.value, "http_tokens", null)
       http_put_response_hop_limit = lookup(metadata_options.value, "http_put_response_hop_limit", null)
       http_protocol_ipv6          = lookup(metadata_options.value, "http_protocol_ipv6", null)
       instance_metadata_tags      = lookup(metadata_options.value, "instance_metadata_tags", null)
-    }
   }
 
   iam_instance_profile {
@@ -94,16 +90,12 @@ resource "aws_launch_template" "spot" {
   user_data     = base64encode(local.eks-spot-userdata)
   instance_type = var.default_worker_instance_type
 
-  dynamic "metadata_options" {
-    for_each = var.metadata_options ? [var.metadata_options] : []
-
-    content {
+  metadata_options {
       http_endpoint               = lookup(metadata_options.value, "http_endpoint", null)
       http_tokens                 = lookup(metadata_options.value, "http_tokens", null)
       http_put_response_hop_limit = lookup(metadata_options.value, "http_put_response_hop_limit", null)
       http_protocol_ipv6          = lookup(metadata_options.value, "http_protocol_ipv6", null)
       instance_metadata_tags      = lookup(metadata_options.value, "instance_metadata_tags", null)
-    }
   }
 
   iam_instance_profile {
