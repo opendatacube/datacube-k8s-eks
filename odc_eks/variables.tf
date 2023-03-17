@@ -294,19 +294,6 @@ variable "log_retention_period" {
 
 variable "metadata_options" {
   description = "Metadata options for the EKS node launch templates. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#metadata-options"
-
-  type = object({
-    http_endpoint               = string
-    http_tokens                 = string
-    http_put_response_hop_limit = number
-    http_protocol_ipv6          = string
-    instance_metadata_tags      = string
-  })
-  default = {
-    http_endpoint               = null
-    http_tokens                 = null
-    http_put_response_hop_limit = null
-    http_protocol_ipv6          = null
-    instance_metadata_tags      = null
-  }
+  type        = object(any)
+  default     = {}
 }
