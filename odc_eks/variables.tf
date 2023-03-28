@@ -305,7 +305,7 @@ variable "metadata_options" {
 
   # If http_tokens is required then http_endpoint must be enabled.
   validation {
-    condition     = lookup(var, "http_tokens", null) != "required" || lookup(var, "http_endpoint", null) == "enabled"
+    condition     = lookup(var.metadata_options, "http_tokens", null) != "required" || lookup(var.metadata_options, "http_endpoint", null) == "enabled"
     error_message = "If http_tokens is required for nodes then http_endpoint must be enabled."
   }
 }
