@@ -302,4 +302,10 @@ variable "metadata_options" {
   description = "Metadata options for the EKS node launch templates. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#metadata-options"
   type        = map(any)
   default     = {}
+
+  # If http_tokens is required then http_endpoint must be enabled.
+  validation {
+    condition     = lookup(var, "http_tokens", null) != "required" || lookup(var, "http_endpoint", null) == "enabled"
+    error_message = "If http_tokens is required for nodes then http_endpoint must be enabled."
+  }
 }
