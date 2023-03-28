@@ -123,6 +123,7 @@ resource "aws_launch_template" "spot" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
+      encrypted   = var.volume_encrypted != null ? var.volume_encrypted : null
       volume_size = var.spot_volume_size
       volume_type = var.volume_type != "" ? var.volume_type : null
     }
