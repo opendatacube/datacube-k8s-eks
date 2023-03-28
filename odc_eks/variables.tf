@@ -225,6 +225,12 @@ variable "max_spot_price" {
   type    = string
 }
 
+variable "volume_encrypted" {
+  default     = null
+  type        = bool
+  description = "Whether to encrypt the root EBS volume."
+}
+
 variable "volume_size" {
   default = 20
   type    = number

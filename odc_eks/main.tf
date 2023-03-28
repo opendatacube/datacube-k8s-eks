@@ -98,6 +98,7 @@ module "eks" {
   extra_kubelet_args           = var.extra_kubelet_args
   extra_bootstrap_args         = var.extra_bootstrap_args
   extra_userdata               = var.extra_userdata
+  volume_encrypted             = var.volume_encrypted
   volume_size                  = var.volume_size
   volume_type                  = var.volume_type
   spot_volume_size             = var.spot_volume_size
