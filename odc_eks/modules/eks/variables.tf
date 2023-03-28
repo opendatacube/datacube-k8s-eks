@@ -80,6 +80,11 @@ variable "max_spot_price" {
   default = "0.40"
 }
 
+variable "volume_encrypted" {
+  default = null
+  type    = bool
+}
+
 variable "volume_size" {
   default = 20
 }
