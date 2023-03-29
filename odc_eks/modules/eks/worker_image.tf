@@ -52,11 +52,11 @@ resource "aws_launch_template" "node" {
   instance_type = var.default_worker_instance_type
 
   metadata_options {
-      http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)
-      http_tokens                 = lookup(var.metadata_options, "http_tokens", null)
-      http_put_response_hop_limit = lookup(var.metadata_options, "http_put_response_hop_limit", null)
-      http_protocol_ipv6          = lookup(var.metadata_options, "http_protocol_ipv6", null)
-      instance_metadata_tags      = lookup(var.metadata_options, "instance_metadata_tags", null)
+    http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)
+    http_tokens                 = lookup(var.metadata_options, "http_tokens", null)
+    http_put_response_hop_limit = lookup(var.metadata_options, "http_put_response_hop_limit", null)
+    http_protocol_ipv6          = lookup(var.metadata_options, "http_protocol_ipv6", null)
+    instance_metadata_tags      = lookup(var.metadata_options, "instance_metadata_tags", null)
   }
 
   iam_instance_profile {
@@ -92,11 +92,11 @@ resource "aws_launch_template" "spot" {
   instance_type = var.default_worker_instance_type
 
   metadata_options {
-      http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)
-      http_tokens                 = lookup(var.metadata_options, "http_tokens", null)
-      http_put_response_hop_limit = lookup(var.metadata_options, "http_put_response_hop_limit", null)
-      http_protocol_ipv6          = lookup(var.metadata_options, "http_protocol_ipv6", null)
-      instance_metadata_tags      = lookup(var.metadata_options, "instance_metadata_tags", null)
+    http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)
+    http_tokens                 = lookup(var.metadata_options, "http_tokens", null)
+    http_put_response_hop_limit = lookup(var.metadata_options, "http_put_response_hop_limit", null)
+    http_protocol_ipv6          = lookup(var.metadata_options, "http_protocol_ipv6", null)
+    instance_metadata_tags      = lookup(var.metadata_options, "instance_metadata_tags", null)
   }
 
   iam_instance_profile {
