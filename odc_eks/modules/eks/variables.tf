@@ -80,6 +80,11 @@ variable "max_spot_price" {
   default = "0.40"
 }
 
+variable "volume_encrypted" {
+  default = null
+  type    = bool
+}
+
 variable "volume_size" {
   default = 20
 }
@@ -166,5 +171,11 @@ variable "wait_for_cluster_interpreter" {
 variable "node_extra_tags" {
   type        = map(string)
   description = "Additional tags for EKS nodes (e.g. `map('StackName','XYZ')`"
+  default     = {}
+}
+
+variable "metadata_options" {
+  description = "Metadata options for the EKS node launch templates. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#metadata-options"
+  type        = map(any)
   default     = {}
 }

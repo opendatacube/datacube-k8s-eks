@@ -51,6 +51,14 @@ resource "aws_launch_template" "node" {
   user_data     = base64encode(local.eks-node-userdata)
   instance_type = var.default_worker_instance_type
 
+  metadata_options {
+    http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)
+    http_tokens                 = lookup(var.metadata_options, "http_tokens", null)
+    http_put_response_hop_limit = lookup(var.metadata_options, "http_put_response_hop_limit", null)
+    http_protocol_ipv6          = lookup(var.metadata_options, "http_protocol_ipv6", null)
+    instance_metadata_tags      = lookup(var.metadata_options, "instance_metadata_tags", null)
+  }
+
   iam_instance_profile {
     name = aws_iam_instance_profile.eks_node.id
   }
@@ -68,6 +76,7 @@ resource "aws_launch_template" "node" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
+      encrypted   = var.volume_encrypted != null ? var.volume_encrypted : null
       volume_size = var.volume_size
       volume_type = var.volume_type != "" ? var.volume_type : null
     }
@@ -81,6 +90,14 @@ resource "aws_launch_template" "spot" {
   image_id      = local.ami_id
   user_data     = base64encode(local.eks-spot-userdata)
   instance_type = var.default_worker_instance_type
+
+  metadata_options {
+    http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)
+    http_tokens                 = lookup(var.metadata_options, "http_tokens", null)
+    http_put_response_hop_limit = lookup(var.metadata_options, "http_put_response_hop_limit", null)
+    http_protocol_ipv6          = lookup(var.metadata_options, "http_protocol_ipv6", null)
+    instance_metadata_tags      = lookup(var.metadata_options, "instance_metadata_tags", null)
+  }
 
   iam_instance_profile {
     name = aws_iam_instance_profile.eks_node.id
@@ -106,6 +123,7 @@ resource "aws_launch_template" "spot" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
+      encrypted   = var.volume_encrypted != null ? var.volume_encrypted : null
       volume_size = var.spot_volume_size
       volume_type = var.volume_type != "" ? var.volume_type : null
     }

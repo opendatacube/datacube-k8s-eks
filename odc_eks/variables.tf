@@ -225,6 +225,12 @@ variable "max_spot_price" {
   type    = string
 }
 
+variable "volume_encrypted" {
+  default     = null
+  type        = bool
+  description = "Whether to encrypt the root EBS volume."
+}
+
 variable "volume_size" {
   default = 20
   type    = number
@@ -290,4 +296,16 @@ variable "log_retention_period" {
   type        = number
   description = "Retention period in days of enabled EKS cluster logs"
   default     = 30
+}
+
+variable "metadata_options" {
+  description = "Metadata options for the EKS node launch templates. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#metadata-options"
+  type        = map(any)
+  default     = {}
+
+  # If http_tokens is required then http_endpoint must be enabled.
+  validation {
+    condition     = lookup(var.metadata_options, "http_tokens", null) != "required" || lookup(var.metadata_options, "http_endpoint", null) == "enabled"
+    error_message = "If http_tokens is required for nodes then http_endpoint must be enabled."
+  }
 }
