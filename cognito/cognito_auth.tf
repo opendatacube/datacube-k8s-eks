@@ -29,7 +29,7 @@ resource "aws_cognito_user_pool" "pool" {
   name                     = var.user_pool_name
   alias_attributes         = var.alias_attributes != null ? var.alias_attributes : local.alias_attributes
   username_attributes      = var.username_attributes
-  auto_verified_attributes = var.auto_verify ? ["email"] : null
+  auto_verified_attributes = var.auto_verify ? var.auto_verified_attributes : null
 
   schema {
     name                = "email"
@@ -125,6 +125,9 @@ resource "aws_cognito_user_pool" "pool" {
   lifecycle {
     # Enable prevent destroy
     # prevent_destroy = true
+    ignore_changes = [
+      lambda_config # Create these linkages with a null_resource to avoid circular dependencies
+    ]
   }
 
   tags = merge(
