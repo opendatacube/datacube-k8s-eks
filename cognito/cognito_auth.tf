@@ -184,4 +184,5 @@ resource "aws_cognito_user_group" "group" {
   name         = each.key
   description  = each.value.description
   precedence   = each.value.precedence
+  role_arn     = try(each.value.role_arn, null)
 }
