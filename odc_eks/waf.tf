@@ -429,8 +429,8 @@ resource "aws_kinesis_firehose_delivery_stream" "waf_delivery_stream" {
     role_arn   = aws_iam_role.waf_firehose_role[0].arn
     bucket_arn = data.aws_s3_bucket.waf_log_bucket[0].arn
 
-    buffer_size     = var.waf_firehose_buffer_size
-    buffer_interval = var.waf_firehose_buffer_interval
+    buffering_size     = var.waf_firehose_buffer_size
+    buffering_interval = var.waf_firehose_buffer_interval
 
     prefix              = "logs/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/"
     error_output_prefix = "errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}"
