@@ -16,7 +16,7 @@ locals {
 }
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v2.70.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.5.2"
 
   count = var.create_vpc ? 1 : 0
 
@@ -53,7 +53,6 @@ module "vpc" {
   enable_nat_gateway           = var.enable_nat_gateway
   create_igw                   = var.create_igw
   create_database_subnet_group = true
-  enable_s3_endpoint           = var.enable_s3_endpoint
 
   tags = merge(
     {
@@ -65,6 +64,44 @@ module "vpc" {
     var.tags
   )
 }
+
+
+module "vpc_endpoints" {
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc//modules/vpc-endpoints?ref=v5.5.2"
+
+  vpc_id = var.create_vpc ? module.vpc[0].vpc_id : var.vpc_id
+
+  create_security_group = false
+
+  endpoints = {
+    s3 = {
+      service         = "s3"
+      service_type    = "Gateway"
+      route_table_ids = var.create_vpc ? concat(module.vpc[0].private_route_table_ids, module.vpc[0].public_route_table_ids) : null
+      tags = merge(
+        {
+          Name        = "${local.cluster_id}-vpc"
+          owner       = var.owner
+          namespace   = var.namespace
+          environment = var.environment
+        },
+        var.tags
+      )
+    }
+  }
+
+  tags = merge(
+    {
+      Name        = "${local.cluster_id}-vpc"
+      owner       = var.owner
+      namespace   = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
+}
+
+
 
 # Creates network and Kuberenetes master nodes
 module "eks" {
