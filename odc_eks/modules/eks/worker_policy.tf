@@ -49,8 +49,38 @@ resource "aws_iam_policy" "eks_kube2iam" {
 
 }
 
+resource "aws_iam_policy" "ecr_pullthrough_cache" {
+  name        = "${var.cluster_id}-ecr-pull-through-cache"
+  path        = "/"
+  description = "Enables cluster to use ecr pull-through cache"
+
+  policy = <<-EOF
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [
+            "ecr:BatchImportUpstreamImage",
+            "ecr:CreateRepository",
+            "ecr:TagResource",
+            "ecr:CreatePullThroughCacheRule"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ]
+    }
+  EOF
+
+}
+
 resource "aws_iam_role_policy_attachment" "eks_node_kube2iam" {
   policy_arn = aws_iam_policy.eks_kube2iam.arn
+  role       = aws_iam_role.eks_node.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_node_pullthrough" {
+  policy_arn = aws_iam_policy.ecr_pullthrough_cache.arn
   role       = aws_iam_role.eks_node.name
 }
 
