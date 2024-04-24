@@ -138,6 +138,12 @@ variable "log_retention_period" {
   default     = 30
 }
 
+variable "enable_ecr_pullthough_cache_permissions" {
+  type        = bool
+  description = "Create additional cluster node IAM permissions to allow cluster to use ecr pull-through cache rules."
+  default     = false
+}
+
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
