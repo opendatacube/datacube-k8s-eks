@@ -92,10 +92,10 @@ module "vpc_endpoints" {
         module.vpc[0].private_route_table_ids,
         module.vpc[0].public_route_table_ids
       ])
-
-      tags = local.tags
     }
   }
+
+  tags = local.tags
 }
 
 # Creates network and Kuberenetes master nodes
