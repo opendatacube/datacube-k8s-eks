@@ -1,3 +1,14 @@
+# master
+
+* The update to the version of Terraform AWS VPC module will require the following manual edits to the state file:
+
+```bash
+terraform state rm module.odc_eks.module.vpc[0].aws_vpc_endpoint_route_table_association.private_s3
+terraform state rm module.odc_eks.module.vpc[0].aws_vpc_endpoint_route_table_association.public_s3
+```
+
+See Terraform AWS VPC module upgrade instructions at https://github.com/terraform-aws-modules/terraform-aws-vpc/blob/fbd4ff646b4caaa6fcc1fb71bc88d377cc8b3b48/UPGRADE-3.0.md?plain=1#L25.
+
 # v1.10.0 odc_eks - Optional vpc creation update procedure
 
 Making VPC creation optional has added a `count` to the `module.odc_eks.module.vpc` resource path.
