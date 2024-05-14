@@ -82,7 +82,7 @@ resource "aws_iam_role_policy_attachment" "eks_node_kube2iam" {
 
 resource "aws_iam_role_policy_attachment" "eks_node_pullthrough" {
   count      = (var.enable_ecr_pullthough_cache_permissions ? 1 : 0)
-  policy_arn = aws_iam_policy.ecr_pullthrough_cache.arn
+  policy_arn = aws_iam_policy.ecr_pullthrough_cache[0].arn
   role       = aws_iam_role.eks_node.name
 }
 
