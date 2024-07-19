@@ -73,15 +73,15 @@ module "vpc" {
 
 moved {
   from = module.vpc[0].aws_vpc_endpoint.s3[0]
-  to   =  module.vpc_endpoints[0].aws_vpc_endpoint.this["s3"]
+  to   = module.vpc_endpoints[0].aws_vpc_endpoint.this["s3"]
 }
 
 module "vpc_endpoints" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git//modules/vpc-endpoints?ref=v5.1.1"
   count  = var.create_vpc && var.enable_s3_endpoint ? 1 : 0
 
-  vpc_id = module.vpc[0].vpc_id
-  security_group_ids = [ module.vpc[0].default_security_group_id ]
+  vpc_id             = module.vpc[0].vpc_id
+  security_group_ids = [module.vpc[0].default_security_group_id]
 
   endpoints = {
     s3 = {
