@@ -12,6 +12,7 @@ module "s3_bucket" {
   version = "~> 3.0"
 
   bucket = var.flow_log_s3_bucket_name
+  attach_policy = true
   policy = data.aws_iam_policy_document.flow_log_s3[0].json
 
   force_destroy = true
