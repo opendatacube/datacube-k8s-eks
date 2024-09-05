@@ -28,6 +28,10 @@ locals {
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.5.2"
 
+  locals {
+    log_group_arn = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:${flow_log_cloudwatch_log_group_name_prefix}:*"
+  }
+
   count = var.create_vpc ? 1 : 0
 
   name             = "${local.cluster_id}-vpc"
@@ -68,7 +72,22 @@ module "vpc" {
   manage_default_network_acl    = false
   manage_default_route_table    = false
 
-  tags = local.tags
+  enable_flow_log                   = var.create_vpc_flow_logs
+  flow_log_destination_type         = "s3"
+  flow_log_max_agreegation_interval = (var.create_vpc_flow_logs) ? var.flow_log_max_aggregation_interval : null
+  flow_log_traffic_type             = (var.create_vpc_flow_logs) ? var.flow_log_traffic_type : null
+  flow_log_file_format              = (var.create_vpc_flow_logs) ? var.flow_log_log_format : null
+  flow_log_destination_arn          = (var.create_vpc_flow_logs) ? "arn:aws:s3:::${var.flow_log_s3_bucket_name}" : null
+  
+  tags = merge(
+    {
+      Name        = "${local.cluster_id}-vpc-flow-logs"
+      owner       = var.owner
+      namespace   = var.namespace
+      environment = var.environment
+    },
+    var.tags
+  )
 }
 
 moved {

@@ -167,13 +167,47 @@ variable "enable_nat_gateway" {
   default     = true
 }
 
-
 variable "create_igw" {
   type        = bool
   description = "Whether to provision an Internet Gateway in the VPC. Default is true (False for private routing)"
   default     = true
 }
 
+variable "create_vpc_flow_logs" {
+  type        = bool
+  description = "Whether to create VPC flow logs. Default is set to 'false'"
+  default     = false
+}
+
+variable "flow_log_max_aggregation_interval" {
+  description = "The maximum interval of time during which a flow of packets is captured and aggregated into a flow log record. Valid Values: `60` seconds or `600` seconds"
+  type        = number
+  default     = 600
+}
+
+variable "flow_log_traffic_type" {
+  description = "The type of traffic to capture. Valid values: ACCEPT, REJECT, ALL"
+  type        = string
+  default     = "ALL"
+}
+
+variable "flow_log_file_format" {
+  description = "(Optional) The format for the flow log. Valid values: `plain-text`, `parquet`"
+  type        = string
+  default     = "plain-text"
+}
+
+variable "create_flow_log_s3_bucket" {
+  type        = bool
+  description = "Whether to create a S3 bucket for the vpc flow logs. Default is set to 'false'"
+  default     = false
+}
+
+variable "flow_log_s3_bucket_name" {
+  description = "The name of the bucket used to store the logs"
+  type        = string
+  default     = ""
+}
 
 # EC2 Worker Roles
 # ==================
