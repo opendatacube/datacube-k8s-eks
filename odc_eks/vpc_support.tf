@@ -12,7 +12,7 @@ module "s3_bucket" {
   version = "~> 3.0"
 
   bucket = var.flow_log_s3_bucket_name
-  policy = data.aws_iam_policy_document.flow_log_s3[0].json
+  policy = data.aws_iam_policy_document.flow_log_s3[1].json
 
   tags = var.tags
 }
