@@ -23,15 +23,13 @@ locals {
     },
     var.tags
   )
+
+  log_group_arn = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:${flow_log_cloudwatch_log_group_name_prefix}:*"
+
 }
 
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.5.2"
-
-  locals {
-    log_group_arn = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:${flow_log_cloudwatch_log_group_name_prefix}:*"
-  }
-
   count = var.create_vpc ? 1 : 0
 
   name             = "${local.cluster_id}-vpc"
