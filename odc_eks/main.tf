@@ -28,14 +28,17 @@ locals {
 
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.5.2"
-  count = var.create_vpc ? 1 : 0
+  count  = var.create_vpc ? 1 : 0
 
-  name             = "${local.cluster_id}-vpc"
-  cidr             = var.vpc_cidr
-  azs              = data.aws_availability_zones.available.names
-  public_subnets   = var.public_subnet_cidrs
-  private_subnets  = var.private_subnet_cidrs
-  database_subnets = var.database_subnet_cidrs
+  name                  = "${local.cluster_id}-vpc"
+  cidr                  = var.vpc_cidr
+  azs                   = data.aws_availability_zones.available.names
+  public_subnets        = var.public_subnet_cidrs
+  private_subnets       = var.private_subnet_cidrs
+  database_subnets      = var.database_subnet_cidrs
+  public_subnet_names   = (length(var.public_subnet_names) == length(var.public_subnet_cidrs)) ? var.public_subnet_names : null
+  private_subnet_names  = (length(var.private_subnet_names) == length(var.private_subnet_cidrs)) ? var.private_subnet_names : null
+  database_subnet_names = (length(var.database_subnet_names) == length(var.database_subnet_cidrs)) ? var.database_subnet_names : null
 
   secondary_cidr_blocks   = var.secondary_cidr_blocks
   map_public_ip_on_launch = var.map_public_ip_on_launch
@@ -74,7 +77,7 @@ module "vpc" {
   flow_log_traffic_type             = (var.create_vpc_flow_logs) ? var.flow_log_traffic_type : null
   flow_log_file_format              = (var.create_vpc_flow_logs) ? var.flow_log_file_format : null
   flow_log_destination_arn          = (var.create_vpc_flow_logs) ? (var.create_flow_log_s3_bucket ? module.s3_bucket[0].s3_bucket_arn : "arn:aws:s3:::${var.flow_log_s3_bucket_name}") : null
-  
+
   vpc_flow_log_tags = merge(
     {
       Name        = "${local.cluster_id}-vpc-flow-logs"

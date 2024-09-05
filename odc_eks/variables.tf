@@ -125,6 +125,12 @@ variable "public_subnet_cidrs" {
   default     = []
 }
 
+variable "public_subnet_names" {
+  type        = list(string)
+  description = "list of public subnet names to use"
+  default     = []
+}
+
 variable "map_public_ip_on_launch" {
   description = "Should be false if you do not want to auto-assign public IP on launch"
   type        = bool
@@ -137,9 +143,21 @@ variable "private_subnet_cidrs" {
   default     = []
 }
 
+variable "private_subnet_names" {
+  type        = list(string)
+  description = "list of private subnet names to use"
+  default     = []
+}
+
 variable "database_subnet_cidrs" {
   description = "List of database cidrs, for all available availability zones. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = list(string)
+  default     = []
+}
+
+variable "database_subnet_names" {
+  type        = list(string)
+  description = "list of database subnet names to use"
   default     = []
 }
 
