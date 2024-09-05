@@ -72,7 +72,7 @@ module "vpc" {
 
   enable_flow_log                   = var.create_vpc_flow_logs
   flow_log_destination_type         = "s3"
-  flow_log_max_agreegation_interval = (var.create_vpc_flow_logs) ? var.flow_log_max_agg_interval : null
+  flow_log_max_aggregation_interval = (var.create_vpc_flow_logs) ? var.flow_log_max_aggregation_interval : null
   flow_log_traffic_type             = (var.create_vpc_flow_logs) ? var.flow_log_traffic_type : null
   flow_log_file_format              = (var.create_vpc_flow_logs) ? var.flow_log_log_format : null
   flow_log_destination_arn          = (var.create_vpc_flow_logs) ? "arn:aws:s3:::${var.flow_log_s3_bucket_name}" : null
