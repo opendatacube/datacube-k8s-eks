@@ -1,10 +1,6 @@
 ################################################################################
 # Supporting Resources
 ################################################################################
-locals {
-  log_destination = split(",", var.flow_log_destination)
-}
-
 resource "random_pet" "this" {
   length = 2
 }
