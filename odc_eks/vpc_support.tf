@@ -18,7 +18,7 @@ module "s3_bucket" {
 }
 
 data "aws_iam_policy_document" "flow_log_s3" {
-  count  = (var.create_vpc_flow_logs && var.create_flow_log_s3_bucket) ? 1 : 0
+  count = (var.create_vpc_flow_logs && var.create_flow_log_s3_bucket) ? 1 : 0
   statement {
     sid = "AWSLogDeliveryWrite"
 
