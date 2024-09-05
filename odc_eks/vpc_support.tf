@@ -14,7 +14,7 @@ module "s3_bucket" {
   bucket = var.flow_log_s3_bucket_name
   policy = data.aws_iam_policy_document.flow_log_s3[0].json
 
-  force_destroy = false
+  force_destroy = true
 
   tags = var.tags
 }
