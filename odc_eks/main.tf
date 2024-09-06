@@ -72,6 +72,8 @@ module "vpc" {
   manage_default_network_acl    = false
   manage_default_route_table    = false
 
+  tags = local.tags
+
   enable_flow_log                   = var.create_vpc_flow_logs
   flow_log_destination_type         = "s3"
   flow_log_max_aggregation_interval = (var.create_vpc_flow_logs) ? var.flow_log_max_aggregation_interval : null
