@@ -7,7 +7,7 @@ resource "random_pet" "this" {
 
 # S3 Bucket
 module "s3_bucket" {
-  count   = (var.create_vpc_flow_logs && var.create_flow_log_s3_bucket) ? 1 : 0
+  count   = (var.create_flow_log && var.create_flow_log_s3_bucket) ? 1 : 0
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
@@ -21,7 +21,7 @@ module "s3_bucket" {
 }
 
 data "aws_iam_policy_document" "flow_log_s3" {
-  count = (var.create_vpc_flow_logs && var.create_flow_log_s3_bucket) ? 1 : 0
+  count = (var.create_flow_log && var.create_flow_log_s3_bucket) ? 1 : 0
   statement {
     sid = "AWSLogDeliveryWrite"
 
