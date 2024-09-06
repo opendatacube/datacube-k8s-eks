@@ -64,6 +64,7 @@ module "vpc" {
   enable_dns_support   = true
 
   enable_nat_gateway           = var.enable_nat_gateway
+  single_nat_gateway           = var.single_nat_gateway
   create_igw                   = var.create_igw
   create_database_subnet_group = true
 

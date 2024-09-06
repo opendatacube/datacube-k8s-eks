@@ -185,6 +185,12 @@ variable "enable_nat_gateway" {
   default     = true
 }
 
+variable "single_nat_gateway" {
+  description = "Should be true if you want to provision a single shared NAT Gateway across all of your private networks"
+  type        = bool
+  default     = false
+}
+
 variable "create_igw" {
   type        = bool
   description = "Whether to provision an Internet Gateway in the VPC. Default is true (False for private routing)"
