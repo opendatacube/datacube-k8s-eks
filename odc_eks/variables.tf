@@ -197,7 +197,7 @@ variable "create_igw" {
   default     = true
 }
 
-variable "create_vpc_flow_logs" {
+variable "create_flow_log" {
   type        = bool
   description = "Whether to create VPC flow logs. Default is set to 'false'"
   default     = false

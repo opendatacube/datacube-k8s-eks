@@ -100,7 +100,7 @@ module "odc_eks" {
   waf_url_whitelist_url_host                = app.example.domain.com
 
   # VPC Flow Logs
-  create_vpc_flow_logs              = true
+  create_flow_log                   = true
   flow_log_max_aggregation_interval = 60
   flow_log_traffic_type             = "ALL"
   flow_log_file_format              = "plain-text"
@@ -170,7 +170,7 @@ module "odc_eks" {
 | enable_custom_cluster_log_group   | Create a custom CloudWatch Log Group for the cluster. If you supply `enabled_cluster_log_types` but leave this false, EKS will create a log group automatically with default retention values.                         | bool         | false                                                           | No       |
 | log_retention_period              | Specifies the number of days to retain cluster log event in CloudWatch, if enabled by `enable_custom_cluster_log_group`                                                                                                | number       | 30                                                              | No       |
 | metadata_options                  | Metadata options for the EKS node launch templates. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#metadata-options.                                                  | map(any)     | {}                                                              | No       |
-| create_vpc_flow_logs              | Whether to create VPC flow logs.                                                                                                                                                                                       | bool         | false                                                           | No       |
+| create_flow_log                   | Whether to create VPC flow logs.                                                                                                                                                                                       | bool         | false                                                           | No       |
 | flow_log_max_aggregation_interval | The maximum interval of time during which a flow of packets is captured and aggregated into a flow log record. Valid Values: `60` seconds or `600` seconds                                                             | number       | 600                                                             | No       |
 | flow_log_traffic_type             | The type of traffic to capture. Valid values: ACCEPT, REJECT, ALL                                                                                                                                                      | string       | ALL                                                             | No       |     
 | flow_log_file_format              | The format for the flow log. Valid values: `plain-text`, `parquet`                                                                                                                                                     | string       | plain-text                                                      | No       |    
