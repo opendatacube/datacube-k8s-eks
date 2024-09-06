@@ -233,6 +233,12 @@ variable "flow_log_s3_bucket_name" {
   default     = ""
 }
 
+variable "flow_log_s3_bucket_prefix" {
+  description = "The name of the prefix used to store the logs on S3"
+  type        = string
+  default     = ""
+}
+
 
 # EC2 Worker Roles
 # ==================

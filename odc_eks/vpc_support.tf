@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "flow_log_s3" {
 
     actions = ["s3:PutObject"]
 
-    resources = ["arn:aws:s3:::${var.flow_log_s3_bucket_name}/AWSLogs/*"]
+    resources = ["arn:aws:s3:::${var.flow_log_s3_bucket_name}/${var.flow_log_s3_bucket_prefix}/AWSLogs/*"]
   }
 
   statement {
