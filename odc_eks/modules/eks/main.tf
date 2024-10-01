@@ -31,6 +31,14 @@ resource "aws_eks_cluster" "eks" {
     },
     var.tags
   )
+
+  lifecycle {
+    ignore_changes = [
+      # When the access_config was added recently it defaulted to false but didn't affect the cluster setting.
+      # Changing this from false to true will cause and existing cluster to be recreated so let's ignore this change to avoid that.
+      access_config[0].bootstrap_cluster_creator_admin_permissions,
+    ]
+  }
 }
 
 resource "null_resource" "wait_for_cluster" {
