@@ -46,3 +46,29 @@ Follow our [Getting Started Guide](docs/getting_started.md) to deploy your first
 * odc_role - ODC supporting module that creates IAM role for cluster pods
 * odc_user - ODC supporting module that creates IAM user for cluster pods
 * .circleci - TFLint CI automation
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+No inputs.
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->
