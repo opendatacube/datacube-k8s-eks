@@ -2,6 +2,10 @@ output "node_instance_profile" {
   value = aws_iam_instance_profile.eks_node.id
 }
 
+output "cluster_security_group" {
+  value = aws_eks_cluster.eks.vpc_config.cluster_security_group_id
+}
+
 output "node_security_group" {
   value = aws_security_group.eks_node.id
 }
