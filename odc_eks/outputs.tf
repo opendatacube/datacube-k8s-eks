@@ -35,6 +35,10 @@ output "node_role_arn" {
   value = module.eks.node_role_arn
 }
 
+output "cluster_security_group" {
+  value = module.eks.cluster_security_group
+}
+
 output "node_security_group" {
   value = module.eks.node_security_group
 }
