@@ -333,6 +333,12 @@ USERDATA
 
 }
 
+variable "enable_ecr_pullthough_cache_permissions" {
+  type        = bool
+  description = "Create additional cluster node IAM permissions to allow cluster to use ecr pull-through cache rules."
+  default     = false
+}
+
 variable "tags" {
   type        = map(string)
   description = "Additional tags(e.g. `map('StackName','XYZ')`"
