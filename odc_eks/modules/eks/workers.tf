@@ -25,10 +25,7 @@ resource "aws_autoscaling_group" "nodes" {
         namespace   = var.namespace
         owner       = var.owner
 
-        "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks.id}"    = "owned"
-        "k8s.io/cluster-autoscaler/enabled"                      = "true"
-        "k8s.io/cluster-autoscaler/node-template/label/nodetype" = "ondemand"
-        "kubernetes.io/cluster/${aws_eks_cluster.eks.id}"        = "owned"
+        "kubernetes.io/cluster/${aws_eks_cluster.eks.id}" = "owned"
       },
       var.tags,
       var.node_extra_tags
