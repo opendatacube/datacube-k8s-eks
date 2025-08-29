@@ -154,6 +154,7 @@ module "eks" {
   volume_size                  = var.volume_size
   volume_type                  = var.volume_type
   spot_volume_size             = var.spot_volume_size
+  update_default_version       = var.update_default_version
 
   # Default Tags
   owner       = var.owner

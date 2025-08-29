@@ -380,3 +380,9 @@ variable "metadata_options" {
     error_message = "If http_tokens is required for nodes then http_endpoint must be enabled."
   }
 }
+
+variable "update_default_version" {
+  description = "Automatically switch to newest launch template version"
+  type        = string
+  default     = "false"
+}
