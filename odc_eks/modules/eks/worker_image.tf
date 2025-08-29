@@ -44,10 +44,11 @@ USERDATA
 }
 
 resource "aws_launch_template" "node" {
-  name_prefix   = aws_eks_cluster.eks.id
-  image_id      = local.ami_id
-  user_data     = base64encode(local.eks-node-userdata)
-  instance_type = var.default_worker_instance_type
+  name_prefix            = aws_eks_cluster.eks.id
+  image_id               = local.ami_id
+  user_data              = base64encode(local.eks-node-userdata)
+  instance_type          = var.default_worker_instance_type
+  update_default_version = var.update_default_version
 
   metadata_options {
     http_endpoint               = lookup(var.metadata_options, "http_endpoint", null)

@@ -185,3 +185,9 @@ variable "metadata_options" {
   type        = map(any)
   default     = {}
 }
+
+variable "update_default_version" {
+  description = "Automatically switch to newest launch template version"
+  type        = string
+  default     = "false"
+}
