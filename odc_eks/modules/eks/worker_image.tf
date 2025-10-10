@@ -17,7 +17,10 @@ locals {
   # return first non-empty value
   ami_id = coalesce(var.ami_image_id, data.aws_ami.eks_worker.id)
 
-  eks-node-userdata = <<USERDATA
+  eks-node-userdata = var.al2023_enabled ? local.al2023_node_userdata : local.al2_node_userdata
+  eks-spot-userdata = var.al2023_enabled ? local.al2023_spot_userdata : local.al2_spot_userdata
+
+  al2_node_userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
 # Get instance and ami id from the aws ec2 metadate endpoint
@@ -29,7 +32,7 @@ ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
 ${var.extra_userdata}
 USERDATA
 
-  eks-spot-userdata = <<USERDATA
+  al2_spot_userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
 # Get instance and ami id from the aws ec2 metadate endpoint
@@ -38,6 +41,72 @@ ami=$(curl http://169.254.169.254/latest/meta-data/ami-id -s)
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.id}' ${var.extra_bootstrap_args} \
   --kubelet-extra-args "--node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$id,ami-id=$ami \
   ${var.extra_kubelet_args}"
+${var.extra_userdata}
+USERDATA
+
+  al2023_node_userdata = <<USERDATA
+#!/bin/bash
+set -o xtrace
+# Get IMDSv2 token and instance/AMI IDs
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
+AWS_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id -s)
+AMI_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id -s)
+echo "Instance ID: $AWS_INSTANCE_ID, AMI ID: $ami"
+
+# Create nodeadm configuration file with correct indentation
+cat <<EOF >/tmp/nodeadm.yaml
+apiVersion: node.eks.aws/v1alpha1
+kind: NodeConfig
+spec:
+  cluster:
+    name: '${aws_eks_cluster.eks.id}'
+    apiServerEndpoint: '${aws_eks_cluster.eks.endpoint}'
+    certificateAuthorityData: '${aws_eks_cluster.eks.certificate_authority[0].data}'
+  kubelet:
+    flags:
+      - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=\$AWS_INSTANCE_ID,ami-id=\$AMI_ID${var.extra_kubelet_args}
+EOF
+
+echo "Running nodeadm initialization..."
+if command -v /usr/bin/nodeadm >/dev/null 2>&1; then
+  /usr/bin/nodeadm init --config-source file:///tmp/nodeadm.yaml --development 2>&1 | tee /tmp/nodeadm.log
+else
+  echo "ERROR: /usr/bin/nodeadm not found in this AMI" | tee /tmp/nodeadm.log
+fi
+
+${var.extra_userdata}
+USERDATA
+
+  al2023_spot_userdata = <<USERDATA
+#!/bin/bash
+set -o xtrace
+# Get IMDSv2 token and instance/AMI IDs
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
+AWS_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id -s)
+AMI_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id -s)
+echo "Instance ID: $AWS_INSTANCE_ID, AMI ID: $ami"
+
+# Create nodeadm configuration file with correct indentation
+cat <<EOF >/tmp/nodeadm.yaml
+apiVersion: node.eks.aws/v1alpha1
+kind: NodeConfig
+spec:
+  cluster:
+    name: '${aws_eks_cluster.eks.id}'
+    apiServerEndpoint: '${aws_eks_cluster.eks.endpoint}'
+    certificateAuthorityData: '${aws_eks_cluster.eks.certificate_authority[0].data}'
+  kubelet:
+    flags:
+      - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=\$AWS_INSTANCE_ID,ami-id=\$AMI_ID${var.extra_kubelet_args}
+EOF
+
+echo "Running nodeadm initialization..."
+if command -v /usr/bin/nodeadm >/dev/null 2>&1; then
+  /usr/bin/nodeadm init --config-source file:///tmp/nodeadm.yaml --development 2>&1 | tee /tmp/nodeadm.log
+else
+  echo "ERROR: /usr/bin/nodeadm not found in this AMI" | tee /tmp/nodeadm.log
+fi
+
 ${var.extra_userdata}
 USERDATA
 

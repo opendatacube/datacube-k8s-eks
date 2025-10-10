@@ -312,6 +312,12 @@ variable "spot_volume_size" {
   type    = number
 }
 
+variable "al2023_enabled" {
+  description = "Set true if using AL2023 based AMI (nodeadm), false for AL2 (bootstrap.sh)"
+  type        = bool
+  default     = false
+}
+
 variable "extra_kubelet_args" {
   type        = string
   description = "Additional kubelet command-line arguments (e.g. '--arg1=value --arg2')"
