@@ -34,7 +34,7 @@ spec:
   cluster:
     name: ${aws_eks_cluster.eks.id}
     apiServerEndpoint: ${aws_eks_cluster.eks.endpoint}
-    certificateAuthorityData: ${aws_eks_cluster.eks.certificate_authority[0].data}
+    certificateAuthority: ${aws_eks_cluster.eks.certificate_authority[0].data}
     cidr: ${aws_eks_cluster.eks.kubernetes_network_config[0].service_ipv4_cidr}
   kubelet:
     flags:
@@ -64,7 +64,7 @@ spec:
   cluster:
     name: ${aws_eks_cluster.eks.id}
     apiServerEndpoint: ${aws_eks_cluster.eks.endpoint}
-    certificateAuthorityData: ${aws_eks_cluster.eks.certificate_authority[0].data}
+    certificateAuthority: ${aws_eks_cluster.eks.certificate_authority[0].data}
     cidr: ${aws_eks_cluster.eks.kubernetes_network_config[0].service_ipv4_cidr}
   kubelet:
     flags:
