@@ -38,6 +38,11 @@ variable "admin_access_CIDRs" {
   default = {}
 }
 
+variable "cluster_cidr" {
+  type        = string
+  description = "Cluster service CIDR, required for nodeadm on AL2023"
+}
+
 variable "user_custom_policy" {
   description = "The IAM custom policy to create and attach to EKS user role"
   type        = string
