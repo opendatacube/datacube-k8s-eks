@@ -24,7 +24,7 @@ set -o xtrace
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
 AWS_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id -s)
 AMI_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id -s)
-echo "Instance ID: $AWS_INSTANCE_ID, AMI ID: $ami"
+echo "Instance ID: $AWS_INSTANCE_ID, AMI ID: $AMI_ID"
 
 # Create nodeadm configuration file with correct indentation
 cat <<EOF >/tmp/nodeadm.yaml
@@ -32,12 +32,12 @@ apiVersion: node.eks.aws/v1alpha1
 kind: NodeConfig
 spec:
   cluster:
-    name: '${aws_eks_cluster.eks.id}'
-    apiServerEndpoint: '${aws_eks_cluster.eks.endpoint}'
-    certificateAuthorityData: '${aws_eks_cluster.eks.certificate_authority[0].data}'
+    name: ${aws_eks_cluster.eks.id}
+    apiServerEndpoint: ${aws_eks_cluster.eks.endpoint}
+    certificateAuthorityData: ${aws_eks_cluster.eks.certificate_authority[0].data}
   kubelet:
     flags:
-      - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=\$AWS_INSTANCE_ID,ami-id=\$AMI_ID${var.extra_kubelet_args}
+      - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=$AWS_INSTANCE_ID,ami-id=$AMI_ID ${var.extra_kubelet_args}
 EOF
 
 # Run nodeadm
@@ -53,7 +53,7 @@ set -o xtrace
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
 AWS_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id -s)
 AMI_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id -s)
-echo "Instance ID: $AWS_INSTANCE_ID, AMI ID: $ami"
+echo "Instance ID: $AWS_INSTANCE_ID, AMI ID: $AMI_ID"
 
 # Create nodeadm configuration file with correct indentation
 cat <<EOF >/tmp/nodeadm.yaml
@@ -61,12 +61,12 @@ apiVersion: node.eks.aws/v1alpha1
 kind: NodeConfig
 spec:
   cluster:
-    name: '${aws_eks_cluster.eks.id}'
-    apiServerEndpoint: '${aws_eks_cluster.eks.endpoint}'
-    certificateAuthorityData: '${aws_eks_cluster.eks.certificate_authority[0].data}'
+    name: ${aws_eks_cluster.eks.id}
+    apiServerEndpoint: ${aws_eks_cluster.eks.endpoint}
+    certificateAuthorityData: ${aws_eks_cluster.eks.certificate_authority[0].data}
   kubelet:
     flags:
-      - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=\$AWS_INSTANCE_ID,ami-id=\$AMI_ID${var.extra_kubelet_args}
+      - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$AWS_INSTANCE_ID,ami-id=$AMI_ID ${var.extra_kubelet_args}
 EOF
 
 # Run nodeadm
