@@ -23,12 +23,11 @@ resource "aws_eks_cluster" "eks" {
 
   tags = merge(
     {
-      Name         = var.cluster_id
-      cluster      = var.cluster_id
-      owner        = var.owner
-      namespace    = var.namespace
-      environment  = var.environment
-      cluster_cidr = var.cluster_cidr
+      Name        = var.cluster_id
+      cluster     = var.cluster_id
+      owner       = var.owner
+      namespace   = var.namespace
+      environment = var.environment
     },
     var.tags
   )

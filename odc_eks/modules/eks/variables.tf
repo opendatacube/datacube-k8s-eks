@@ -12,11 +12,6 @@ variable "admin_access_CIDRs" {
   type        = map(string)
 }
 
-variable "cluster_cidr" {
-  type        = string
-  description = "Cluster service CIDR, required for nodeadm on AL2023"
-}
-
 variable "vpc_id" {
   type        = string
   description = "ID of the VPC to place EKS in"
