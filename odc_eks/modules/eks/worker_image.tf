@@ -35,6 +35,7 @@ spec:
     name: ${aws_eks_cluster.eks.id}
     apiServerEndpoint: ${aws_eks_cluster.eks.endpoint}
     certificateAuthorityData: ${aws_eks_cluster.eks.certificate_authority[0].data}
+    cidr: ${var.cluster_cidr}
   kubelet:
     flags:
       - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=ondemand,instance-id=$AWS_INSTANCE_ID,ami-id=$AMI_ID ${var.extra_kubelet_args}
@@ -64,6 +65,7 @@ spec:
     name: ${aws_eks_cluster.eks.id}
     apiServerEndpoint: ${aws_eks_cluster.eks.endpoint}
     certificateAuthorityData: ${aws_eks_cluster.eks.certificate_authority[0].data}
+    cidr: ${var.cluster_cidr}
   kubelet:
     flags:
       - --node-labels=cluster=${aws_eks_cluster.eks.id},nodegroup=${var.node_group_name},nodetype=spot,instance-id=$AWS_INSTANCE_ID,ami-id=$AMI_ID ${var.extra_kubelet_args}
