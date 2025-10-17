@@ -99,6 +99,12 @@ variable "spot_volume_size" {
   default = 20
 }
 
+variable "al2023_enabled" {
+  type        = bool
+  default     = false
+  description = "If true, use AL2023-style nodeadm userdata. If false, use legacy AL2 bootstrap userdata."
+}
+
 variable "extra_kubelet_args" {
   type        = string
   description = "Additional kubelet command-line arguments (e.g. '--arg1=value --arg2')"
