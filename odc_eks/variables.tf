@@ -250,8 +250,8 @@ variable "enable_ec2_ssm" {
 # Node configuration
 # ===================
 variable "ami_image_id" {
-  type        = string
-  description = "AMI ID for worker nodes"
+  default     = ""
+  description = "Overwrites the default ami (latest Amazon EKS)"
 }
 
 variable "node_group_name" {

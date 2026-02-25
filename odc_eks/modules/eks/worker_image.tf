@@ -1,3 +1,13 @@
+data "aws_ami" "eks_worker" {
+  filter {
+    name   = "name"
+    values = ["amazon-eks-node-al2023-x86_64-standard-${var.cluster_version}-v*"]
+  }
+
+  most_recent = true
+  owners      = ["602401143452", "877085696533"] # Amazon EKS AMI Account ID
+}
+
 # EKS currently documents this required userdata for EKS worker nodes to
 # properly configure Kubernetes applications on the EC2 instance.
 # We utilize a Terraform local here to simplify Base64 encoding this
@@ -5,7 +15,7 @@
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
   # return first non-empty value
-  ami_id = var.ami_image_id
+  ami_id = coalesce(var.ami_image_id, data.aws_ami.eks_worker.id)
 
   al2_node_userdata = <<USERDATA
 #!/bin/bash
